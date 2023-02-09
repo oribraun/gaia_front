@@ -13,6 +13,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { PromptOptimizerComponent } from './components/prompt-optimizer/prompt-optimizer.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { AnalyzerComponent } from './components/analyzer/analyzer.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 // import {APP_BASE_HREF} from "@angular/common";
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AnalyzerComponent } from './components/analyzer/analyzer.component';
         LoginComponent,
         PromptOptimizerComponent,
         DragAndDropDirective,
-        AnalyzerComponent
+        AnalyzerComponent,
+        SafeHtmlPipe
     ],
     imports: [
         BrowserModule,
