@@ -22,7 +22,11 @@ export class PromptOptimizerComponent implements OnInit {
     async submitPrompt() {
         if (this.promptValue) {
             const response: any = await this.apiService.promptOptimizer(this.promptValue).toPromise()
-            this.resultsData = new resultsDataClass(response.results)
+            if (!response.err) {
+                this.resultsData = new resultsDataClass(response.results)
+            } else {
+                console.log('response.errMessage', response.errMessage)
+            }
         }
     }
 
@@ -30,14 +34,14 @@ export class PromptOptimizerComponent implements OnInit {
 
 class resultsDataClass {
     input: string = '';
-    select_model: string = '';
+    selected_model: string = '';
     selected_ai_model: string = '';
     output: string = '';
 
     constructor(obj?: any) {
         if (obj) {
             for (let key in obj) {
-                if (key in this && obj[key] !== undefined && obj[key] !== null) {
+                if (obj[key] !== undefined && obj[key] !== null) {
                     // @ts-ignore
                     this[key] = obj[key];
                 }

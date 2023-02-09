@@ -1,16 +1,18 @@
-<div class="container d-flex justify-content-between">
-    <div class="left-area p-3">
-        <h3>Prompt Input:</h3>
-        <input [(ngModel)]="promptValue" class="form-control" placeholder="Enter prompt here">
-
-        <div class="text-center my-3">
-            <button class="btn btn-primary" (click)="submitPrompt()">Submit</button>
+<div class="my-container container">
+    <div class="row row-top">
+        <div class="col-12 inner-scroll">
+            <h3>Results Data:</h3>
+            <div *ngIf="resultsData" class="p-2 bg-light">
+                <pre>{{ resultsData | json }}</pre>
+            </div>
         </div>
     </div>
-    <div class="right-area p-3">
-        <h3>Results Data:</h3>
-        <div *ngIf="resultsData" class="p-2 bg-light">
-            <pre>{{ resultsData | json }}</pre>
+    <div class="row row-bottom">
+        <div class="col-12">
+            <div class="my-input-group">
+                <div class="addon" (click)="submitPrompt()"><i class="bi bi-send-fill"></i></div>
+                <input type="text" class="form-control"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">
+            </div>
         </div>
     </div>
 </div>

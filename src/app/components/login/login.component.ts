@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'app-login',
@@ -10,7 +10,8 @@ import {Router} from "@angular/router";
     styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
-    formType = 'login'
+    formType = 'login';
+    formTypeOptions = ['login', 'register', 'forgot'];
     email: string = '';
     password: string = '';
     username: string = '';
@@ -21,12 +22,18 @@ export class LoginComponent implements OnInit {
         private http: HttpClient,
         private config: Config,
         private apiService: ApiService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {
     }
 
     ngOnInit(): void {
-
+        this.route.paramMap.subscribe((paramMap) => {
+            const type = paramMap.get('type')
+            if (type && this.formTypeOptions.indexOf(type) > -1) {
+                this.formType = type;
+            }
+        })
     }
 
     async login() {
@@ -42,7 +49,7 @@ export class LoginComponent implements OnInit {
     async register() {
         try {
             const response = await this.apiService.register(this.email, this.username, this.password).toPromise();
-            console.log(response);
+            // console.log(response);
             this.setupUser(response);
             this.router.navigate(['/'])
         } catch (error) {
@@ -52,8 +59,10 @@ export class LoginComponent implements OnInit {
 
     async forgot() {
         try {
-            const response = await this.apiService.forgotPassword(this.email).toPromise();
-            console.log(response);
+            const response: any = await this.apiService.forgotPassword(this.email).toPromise();
+            if (!response.err) {
+                console.log('email sent successfully, please check your email')
+            }
         } catch (error) {
             console.error(error);
         }
@@ -63,6 +72,17 @@ export class LoginComponent implements OnInit {
         this.user = response;
         this.config.user = response.user;
         this.config.token = response.token;
+        this.config.csrf_token = this.getCookie('csrftoken');
+    }
+
+    getCookie(name: string) {
+        const value = `; ${document.cookie}`;
+        const parts: any = value.split(`; ${name}=`);
+        if (parts && parts.length === 2) {
+            return parts.pop().split(';').shift();
+        } else {
+            return '';
+        }
     }
 
 }

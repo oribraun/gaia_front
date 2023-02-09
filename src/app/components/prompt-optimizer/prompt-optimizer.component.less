@@ -1,10 +1,37 @@
-.container {
-    display: flex;
-    justify-content: space-between;
-}
-.left-area {
-    width: 40%;
-}
-.right-area {
-    width: 60%;
+.my-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    .row-top {
+        position:relative;
+        height: 79%;
+        .inner-scroll {
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    }
+    .row-bottom {
+        position:relative;
+        height: 21%;
+        .my-input-group {
+            position: relative;
+            input {
+                outline: none;
+                padding-right: 25px;
+            }
+            .addon {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                padding: .8%;
+                z-index: 1;
+                cursor: pointer;
+                &:hover {
+                    color: #0b5ed7;
+                }
+            }
+        }
+    }
 }
