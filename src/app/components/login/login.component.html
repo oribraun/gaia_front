@@ -1,0 +1,37 @@
+<div class="login container my-5">
+    <div class="form-group">
+        <form [ngSwitch]="formType">
+            <div *ngSwitchCase="'login'">
+                <h3>Login</h3>
+                <label for="email">Email Or Username</label>
+                <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                <br>
+                <button class="btn btn-primary" (click)="login()">Login</button>
+                <p>Don't have an account? <a (click)="formType='register'">Register</a></p>
+                <p><a (click)="formType='forgot'">Forgot Password</a></p>
+            </div>
+            <div *ngSwitchCase="'register'">
+                <h3>Register</h3>
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" [(ngModel)]="username" required>
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                <br>
+                <button class="btn btn-primary" (click)="register()">Register</button>
+                <p>Already have an account? <a (click)="formType='login'">Login</a></p>
+            </div>
+            <div *ngSwitchCase="'forgot'">
+                <h3>Forgot Password</h3>
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                <br>
+                <button class="btn btn-primary" (click)="forgot()">Submit</button>
+                <p>Remember your password? <a (click)="formType='login'">Login</a></p>
+            </div>
+        </form>
+    </div>
+</div>

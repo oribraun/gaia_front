@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center">
+      <div class="drop-area" appDragAndDrop (fileDropped)="filesDropped($event)">
+        <div class="dashed-area">
+          Drop files here
+        </div>
+          <div class="file-path" *ngIf="uploadFilePath">
+              <h6>uploaded file path</h6>
+              <div>{{uploadFilePath}}</div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

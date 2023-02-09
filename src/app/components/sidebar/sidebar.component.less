@@ -1,0 +1,41 @@
+.sidebar {
+    position: relative;
+    z-index: 9999;
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    .sidebar-inner {
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+        max-width: 49.5px;
+        overflow: hidden;
+        -webkit-transition: max-width .3s ease-in-out;
+        -moz-transition: max-width .3s ease-in-out;
+        -ms-transition: max-width .3s ease-in-out;
+        -o-transition: max-width .3s ease-in-out;
+        transition: max-width .3s ease-in-out;
+        &:hover {
+            max-width: 160px;
+        }
+        a {
+            white-space: nowrap;
+            text-align: left;
+            //padding: 8px;
+            padding: 0.7rem 0.9rem 0.7rem 0.3rem;
+            .bi {
+                min-width: 40px;
+                display: inline-block;
+                text-align: center;
+            }
+            span {
+                padding-left: 15px;
+                //display: none;
+            }
+        }
+        a.dropdown-toggle {
+            padding: 0.7rem 0.3rem;
+        }
+    }
+}
