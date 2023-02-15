@@ -21,15 +21,21 @@ export class ApiService {
         })
         this.config.token_subject.subscribe((token) => {
             delete this.headers['Authorization']
-            if (!environment.production) {
-                delete this.headers['X-CSRFToken']
-                if (token) {
-                    this.headers['X-CSRFToken'] = token;
-                }
-                if (token) {
-                    this.headers['Authorization'] = 'Token ' + token;
-                }
+            if (token) {
+                this.headers['Authorization'] = 'Token ' + token;
             }
+        })
+        this.config.token_subject.subscribe((token) => {
+            // delete this.headers['Authorization']
+            // if (!environment.production) {
+            // delete this.headers['X-CSRFToken']
+            // if (token) {
+            //     this.headers['X-CSRFToken'] = token;
+            // }
+            // if (token) {
+            //     this.headers['Authorization'] = 'Token ' + token;
+            // }
+            // }
         })
     }
 
@@ -80,6 +86,12 @@ export class ApiService {
 
     analyze(filePath: string) {
         return this.http.post(this.serverBase + this.baseApi + 'analyze', {'file_path': filePath},
+            {headers: this.headers}
+        )
+    }
+
+    privacyModel(prompt: string) {
+        return this.http.post(this.serverBase + this.baseApi + 'public', {'prompt': prompt},
             {headers: this.headers}
         )
     }

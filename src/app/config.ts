@@ -1,12 +1,13 @@
 import {Subject} from "rxjs";
 
 export class Config {
-  private _user: any = '';
-  private _token: string = '';
-  private _csrf_token: string = '';
-  private _user_subject: Subject<any> = new Subject<any>();
-  private _token_subject: Subject<string> = new Subject<string>();
-  private _csrf_token_subject: Subject<string> = new Subject<string>();
+    private _user: any = '';
+    private _server_host: string = '';
+    private _token: string = '';
+    private _csrf_token: string = '';
+    private _user_subject: Subject<any> = new Subject<any>();
+    private _token_subject: Subject<string> = new Subject<string>();
+    private _csrf_token_subject: Subject<string> = new Subject<string>();
 
     get user(): any {
         return this._user;
@@ -60,8 +61,32 @@ export class Config {
         this._csrf_token_subject = value;
     }
 
+
+    get server_host(): string {
+        return this._server_host;
+    }
+
+    set server_host(value: string) {
+        this._server_host = value;
+    }
+
     resetUserCreds() {
         this.user = '';
         this.token = '';
+    }
+
+    getCookie(name: string) {
+        const value = `; ${document.cookie}`;
+        const parts: any = value.split(`; ${name}=`);
+        if (parts && parts.length === 2) {
+            return parts.pop().split(';').shift();
+        } else {
+            return '';
+        }
+    }
+
+    setCookie(name: string, val: string, exp: Date) {
+        var c_value = val + "; expires=" + exp.toUTCString();
+        document.cookie = name + "=" + c_value;
     }
 }

@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch : 'full' },
   { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
   { path: 'prompt-optimizer', component: PromptOptimizerComponent, pathMatch : 'full', canActivate: [AuthGuard]},
+  { path: 'prompt-optimizer2', component: PromptOptimizerComponent, pathMatch : 'full'},
   { path: 'analyzer', component: AnalyzerComponent, pathMatch : 'full', canActivate: [AuthGuard] },
   // { path: 'test', component: TestComponent, pathMatch : 'full' },
   // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },

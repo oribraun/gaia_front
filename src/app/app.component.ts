@@ -4,6 +4,7 @@ import {Config} from "./config";
 // declare var STATIC_URL: any;
 declare var USER: any;
 declare var TOKEN: any;
+declare var HOST: any;
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -35,6 +36,19 @@ export class AppComponent implements OnInit {
         if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
             this.config.csrf_token = TOKEN;
         }
+        if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
+            this.config.server_host = HOST;
+        }
+        if (this.config.getCookie('csrftoken')) {
+            this.config.csrf_token = this.config.getCookie('csrftoken');
+        }
+        if (this.config.getCookie('token')) {
+            this.config.token = this.config.getCookie('token');
+        }
+        if (this.config.getCookie('user')) {
+            this.config.user = JSON.parse(this.config.getCookie('user'));
+        }
+
     }
 
 }

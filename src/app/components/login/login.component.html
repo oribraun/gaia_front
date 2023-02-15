@@ -7,10 +7,11 @@
                 <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                <div class="text-center text-danger" *ngIf="loginErr" [innerHTML]="loginErr"></div>
                 <br>
                 <button class="btn btn-primary" (click)="login()">Login</button>
-                <p>Don't have an account? <a (click)="formType='register'">Register</a></p>
-                <p><a (click)="formType='forgot'">Forgot Password</a></p>
+                <p>Don't have an account? <a (click)="formType='register'; loginErr = '';">Register</a></p>
+                <p><a (click)="formType='forgot'; loginErr = '';">Forgot Password</a></p>
             </div>
             <div *ngSwitchCase="'register'">
                 <h3>Register</h3>
@@ -20,9 +21,10 @@
                 <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                <div class="text-center text-danger" *ngIf="loginErr" [innerHTML]="loginErr"></div>
                 <br>
                 <button class="btn btn-primary" (click)="register()">Register</button>
-                <p>Already have an account? <a (click)="formType='login'">Login</a></p>
+                <p>Already have an account? <a (click)="formType='login'; loginErr = '';">Login</a></p>
             </div>
             <div *ngSwitchCase="'forgot'">
                 <h3>Forgot Password</h3>
@@ -30,7 +32,7 @@
                 <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                 <br>
                 <button class="btn btn-primary" (click)="forgot()">Submit</button>
-                <p>Remember your password? <a (click)="formType='login'">Login</a></p>
+                <p>Remember your password? <a (click)="formType='login'; loginErr = '';">Login</a></p>
             </div>
         </form>
     </div>
