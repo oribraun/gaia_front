@@ -15,7 +15,7 @@ export class ApiService {
         private http: HttpClient,
         private config: Config
     ) {
-        this.headers['TEMBEL-AI-TOKEN'] = 'user token test'
+        this.headers['GAIA-AI-TOKEN'] = 'user token test'
         this.config.csrf_token_subject.subscribe((csrf_token) => {
             this.headers['X-CSRFToken'] = csrf_token;
         })
@@ -91,7 +91,13 @@ export class ApiService {
     }
 
     privacyModel(prompt: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'public', {'prompt': prompt},
+        return this.http.post(this.serverBase + this.baseApi + 'privacy-model', {'prompt': prompt},
+            {headers: this.headers}
+        )
+    }
+
+    collectUserPrompt(prompt: string) {
+        return this.http.post(this.serverBase + this.baseApi + 'collect-user-prompt', {'prompt': prompt},
             {headers: this.headers}
         )
     }

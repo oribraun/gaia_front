@@ -1,4 +1,7 @@
 import {Subject} from "rxjs";
+import * as CryptoJS from 'crypto-js';
+
+const key = "My Secret Passphrase";
 
 export class Config {
     private _user: any = '';
@@ -79,14 +82,15 @@ export class Config {
         const value = `; ${document.cookie}`;
         const parts: any = value.split(`; ${name}=`);
         if (parts && parts.length === 2) {
-            return parts.pop().split(';').shift();
+            const value = parts.pop().split(';').shift();
+            return CryptoJS.AES.decrypt(value, key).toString(CryptoJS.enc.Utf8);
         } else {
             return '';
         }
     }
 
     setCookie(name: string, val: string, exp: Date) {
-        var c_value = val + "; expires=" + exp.toUTCString();
+        var c_value = CryptoJS.AES.encrypt(val, key).toString() + "; expires=" + exp.toUTCString();
         document.cookie = name + "=" + c_value;
     }
 }

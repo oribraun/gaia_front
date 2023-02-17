@@ -91,51 +91,36 @@ export class LoginComponent implements OnInit {
         this.config.user = response.user;
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);
-        this.config.csrf_token = this.getCookie('csrftoken');
+        this.config.csrf_token = this.config.getCookie('csrftoken');
     }
 
     setCookiesAfterLogin(response: any) {
-        const csrftoken = this.getCookie('csrftoken')
+        const csrftoken = this.config.getCookie('csrftoken')
         const clientRunningOnServerHost = this.config.server_host === window.location.host;
         console.log('clientRunningOnServerHost', clientRunningOnServerHost)
         if (!csrftoken || !clientRunningOnServerHost) { // meaning it's not served by django server
             const csrftoken_exp = response.csrftoken_exp
             const csrftoken = response.csrftoken
             const d = new Date(csrftoken_exp)
-            this.setCookie('csrftoken', csrftoken, d);
+            this.config.setCookie('csrftoken', csrftoken, d);
         }
-        const token = this.getCookie('token')
+        const token = this.config.getCookie('token')
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
             const csrftoken_exp = response.csrftoken_exp
             const token = response.token
             const d = new Date(csrftoken_exp)
-            this.setCookie('token', token, d);
-            this.config.token = this.getCookie('token');
+            this.config.setCookie('token', token, d);
+            this.config.token = this.config.getCookie('token');
         }
 
-        const user = this.getCookie('user')
+        const user = this.config.getCookie('user')
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
             const csrftoken_exp = response.csrftoken_exp
             const user = response.user
             const d = new Date(csrftoken_exp)
-            this.setCookie('user', JSON.stringify(user), d);
-            this.config.user = JSON.parse(this.getCookie('user'));
+            this.config.setCookie('user', JSON.stringify(user), d);
+            this.config.user = JSON.parse(this.config.getCookie('user'));
         }
-    }
-
-    getCookie(name: string) {
-        const value = `; ${document.cookie}`;
-        const parts: any = value.split(`; ${name}=`);
-        if (parts && parts.length === 2) {
-            return parts.pop().split(';').shift();
-        } else {
-            return '';
-        }
-    }
-
-    setCookie(name: string, val: string, exp: Date) {
-        var c_value = val + "; expires=" + exp.toUTCString();
-        document.cookie = name + "=" + c_value;
     }
 
 }
