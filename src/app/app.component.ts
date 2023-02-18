@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
         } else {
             this.config.user_subject.next('');
         }
-        console.log('csrf_token', TOKEN)
+        // console.log('csrf_token', TOKEN)
         if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
             this.config.csrf_token = TOKEN;
         }
@@ -42,11 +42,11 @@ export class AppComponent implements OnInit {
         if (this.config.getCookie('csrftoken')) {
             this.config.csrf_token = this.config.getCookie('csrftoken');
         }
-        if (this.config.getCookie('token')) {
-            this.config.token = this.config.getCookie('token');
+        if (this.config.getCookie('token', true)) {
+            this.config.token = this.config.getCookie('token', true);
         }
-        if (this.config.getCookie('user')) {
-            this.config.user = JSON.parse(this.config.getCookie('user'));
+        if (this.config.getCookie('user', true)) {
+            this.config.user = JSON.parse(this.config.getCookie('user', true));
         }
 
     }

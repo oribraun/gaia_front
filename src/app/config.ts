@@ -78,19 +78,54 @@ export class Config {
         this.token = '';
     }
 
-    getCookie(name: string) {
+    getCookie(name: string, decrypt = false) {
         const value = `; ${document.cookie}`;
         const parts: any = value.split(`; ${name}=`);
         if (parts && parts.length === 2) {
-            const value = parts.pop().split(';').shift();
-            return CryptoJS.AES.decrypt(value, key).toString(CryptoJS.enc.Utf8);
+            let val = parts.pop().split(';').shift();
+            if (decrypt) {
+                try {
+                    val = this.Decrypt(val, key);
+                } catch (err) {
+                    val = '';
+                }
+            }
+            return val;
         } else {
             return '';
         }
     }
 
-    setCookie(name: string, val: string, exp: Date) {
-        var c_value = CryptoJS.AES.encrypt(val, key).toString() + "; expires=" + exp.toUTCString();
+    setCookie(name: string, val: string, exp: Date, encrypt=false) {
+        let final_val = val;
+        if (encrypt && val) {
+            try {
+                final_val = this.Encrypt(val, key).toString()
+            } catch (err) {
+                final_val = val;
+            }
+        }
+        var c_value = final_val + "; expires=" + exp.toUTCString();
         document.cookie = name + "=" + c_value;
+    }
+
+    Encrypt(word: string, key = 'share') {
+        let encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString()
+        let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson))
+        return encData
+    }
+
+    Decrypt(word: string, key = 'share') {
+        let decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8)
+        let bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8)
+        return JSON.parse(bytes)
+    }
+
+    resetCookies() {
+        const exp = new Date()
+        exp.setDate(exp.getDate()-5);
+        this.setCookie('user', '', exp);
+        this.setCookie('token', '', exp);
+        this.setCookie('csrftoken', '', exp);
     }
 }
