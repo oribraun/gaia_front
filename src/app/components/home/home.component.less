@@ -1,54 +1,70 @@
 .background-image {
-  position: absolute;
-  top: 0;
-  left:0;
-  bottom: 0;
-  right: 0;
-  //background: url(../assets/images/space.gif);
-  .background-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: -1;
-  }
-  img {
     position: absolute;
     top: 0;
-    left: 0;
+    left:0;
     bottom: 0;
     right: 0;
-  }
+    //background: url(../assets/images/space.gif);
+    .background-video {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+    .background {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+    .logo {
+        position: relative;
+        text-align: center;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .logo img {
+        position: relative;
+        max-width: 500px;
+        width: 100%;
+    }
 }
 .absolute-content {
-  position: absolute;
-  top: 0;
-  left:0;
-  bottom: 0;
-  right: 0;
-  .text {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    h1 {
-      margin: 0;
-      text-shadow: 1px 1px 5px #7d7fb8;
-      //color :#ffffff;
-      font-style: italic;
-      animation: pulse; /* referring directly to the animation's @keyframe declaration */
-      animation-duration: 4s; /* don't forget to set a duration! */
-      animation-iteration-count: infinite;
-      display: inline-block;
-      color: #fff;
+    top: 0;
+    left:0;
+    bottom: 0;
+    right: 0;
+    .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        h1 {
+            margin: 0;
+            text-shadow: 1px 1px 5px #7d7fb8;
+            //color :#ffffff;
+            font-style: italic;
+            animation: pulse; /* referring directly to the animation's @keyframe declaration */
+            animation-duration: 4s; /* don't forget to set a duration! */
+            animation-iteration-count: infinite;
+            display: inline-block;
+            color: #fff;
+        }
     }
-  }
 }
