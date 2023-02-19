@@ -42,7 +42,7 @@ export class ApiService {
     login(email: string, username: string, password: string) {
         return this.http.post(this.serverBase + this.baseApiAuth + 'login', {
                 email: email,
-                username: email,
+                // username: email,
                 password: password
             },
             {headers: this.headers}
