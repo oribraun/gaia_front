@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     async login() {
         try {
             this.loginErr = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.email,this.password));
+            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password));
             if (!response.err) {
                 const data = response.data;
                 this.setupUser(data);
