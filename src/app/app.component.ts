@@ -33,9 +33,9 @@ export class AppComponent implements OnInit {
             this.config.user_subject.next('');
         }
         // console.log('csrf_token', TOKEN)
-        if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
-            this.config.csrf_token = TOKEN;
-        }
+        // if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
+        //     this.config.csrf_token = TOKEN;
+        // }
         if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
             this.config.server_host = HOST;
         }

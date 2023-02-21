@@ -95,15 +95,15 @@ export class LoginComponent implements OnInit {
     }
 
     setCookiesAfterLogin(response: any) {
-        const csrftoken = this.config.getCookie('csrftoken')
+        // const csrftoken = this.config.getCookie('csrftoken')
         const clientRunningOnServerHost = this.config.server_host === window.location.host;
-        // console.log('clientRunningOnServerHost', clientRunningOnServerHost)
-        if (!csrftoken || !clientRunningOnServerHost) { // meaning it's not served by django server
-            const csrftoken_exp = response.csrftoken_exp
-            const csrftoken = response.csrftoken
-            const d = new Date(csrftoken_exp)
-            this.config.setCookie('csrftoken', csrftoken, d);
-        }
+        // // console.log('clientRunningOnServerHost', clientRunningOnServerHost)
+        // if (!csrftoken || !clientRunningOnServerHost) { // meaning it's not served by django server
+        //     const csrftoken_exp = response.csrftoken_exp
+        //     const csrftoken = response.csrftoken
+        //     const d = new Date(csrftoken_exp)
+        //     this.config.setCookie('csrftoken', csrftoken, d);
+        // }
         const token = this.config.getCookie('token', true)
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
             const csrftoken_exp = response.csrftoken_exp

@@ -43,6 +43,7 @@ export class SidebarComponent implements OnInit {
     async logout(e: Event) {
         e.preventDefault();
         const response = await this.apiService.logout().toPromise();
+        this.config.resetCookies();
         this.config.resetUserCreds();
         this.router.navigate(['/'])
     }
