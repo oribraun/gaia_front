@@ -31,14 +31,14 @@ export class ApiService {
             // this.headers['X-CSRFToken'] = csrf_token;
         })
         this.config.token_subject.subscribe((token) => {
-            if (!environment.production) {
+            // if (!environment.production) {
                 this.httpOptionsWithCreds.headers.delete('Authorization');
                 this.httpOptionsWithoutCreds.headers.delete('Authorization');
                 if (token) {
                     this.httpOptionsWithCreds.headers.set('Authorization', 'Token ' + token)
                     this.httpOptionsWithoutCreds.headers.set('Authorization', 'Token ' + token)
                 }
-            }
+            // }
         })
         this.config.token_subject.subscribe((token) => {
             // delete this.headers['Authorization']
