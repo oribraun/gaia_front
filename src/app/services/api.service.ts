@@ -7,7 +7,8 @@ import {environment} from "../../environments/environment";
     providedIn: 'root'
 })
 export class ApiService {
-    serverBase = 'http://localhost:8000/';
+    // serverBase = 'http://localhost:8000/';
+    serverBase = environment.serverUrl;
     baseApi = 'api/';
     baseApiAuth = 'api/auth/';
     headers: any = {}
