@@ -52,6 +52,10 @@ export class ApiService {
             // }
             // }
         })
+
+        if (this.config.server_host) {
+            this.serverBase = this.config.server_host;
+        }
     }
 
     login(email: string, password: string) {

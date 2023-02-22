@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
     staticUrl: '/static/client/',
-    serverUrl: 'http://13.230.105.89/'
+    serverUrl: 'http://43.206.228.120/'
 };
