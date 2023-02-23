@@ -34,9 +34,9 @@ export class ApiService {
         this.headers['GAIA-AI-TOKEN'] = 'user token test'
         this.config.csrf_token_subject.subscribe((csrf_token) => {
             // console.log('csrf_token', csrf_token)
-            if (environment.production) {
+            // if (environment.production) {
                 this.httpOptions.headers['X-CSRFToken'] = csrf_token;
-            }
+            // }
             // this.httpOptionsWithCreds.headers.set('X-CSRFToken', csrf_token)
         })
         this.config.token_subject.subscribe((token) => {
