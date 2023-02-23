@@ -8,6 +8,7 @@ export class Config {
     private _server_host: string = '';
     private _token: string = '';
     private _csrf_token: string = '';
+    private _server_host_subject: Subject<any> = new Subject<any>();
     private _user_subject: Subject<any> = new Subject<any>();
     private _token_subject: Subject<string> = new Subject<string>();
     private _csrf_token_subject: Subject<string> = new Subject<string>();
@@ -21,6 +22,14 @@ export class Config {
         this._user_subject.next(this.user);
     }
 
+    get server_host(): string {
+        return this._server_host;
+    }
+
+    set server_host(value: string) {
+        this._server_host = value;
+        this.server_host_subject.next(this.server_host)
+    }
     get token(): string {
         return this._token;
     }
@@ -48,6 +57,14 @@ export class Config {
         this._user_subject = value;
     }
 
+    get server_host_subject(): Subject<any> {
+        return this._server_host_subject;
+    }
+
+    set server_host_subject(value: Subject<any>) {
+        this._server_host_subject = value;
+    }
+
     get token_subject(): Subject<any> {
         return this._token_subject;
     }
@@ -64,14 +81,6 @@ export class Config {
         this._csrf_token_subject = value;
     }
 
-
-    get server_host(): string {
-        return this._server_host;
-    }
-
-    set server_host(value: string) {
-        this._server_host = value;
-    }
 
     resetUserCreds() {
         this.user = '';

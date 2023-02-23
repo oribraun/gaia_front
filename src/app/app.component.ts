@@ -5,6 +5,7 @@ import {Config} from "./config";
 declare var USER: any;
 declare var TOKEN: any;
 declare var HOST: any;
+declare var SCHEME: any;
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -14,13 +15,17 @@ export class AppComponent implements OnInit {
     title = 'frontend';
     constructor(
         private config: Config
-    ) {}
+    ) {
+        setTimeout(() => {
+            this.setupCredsFromServer();
+        })
+    }
 
     ngOnInit(): void {
         // setTimeout is because we need to wait for all components subscriptions to config changes
-        setTimeout(() => {
-            this.setupCredsFromServer()
-        })
+        // setTimeout(() => {
+        //     this.setupCredsFromServer()
+        // })
     }
 
     setupCredsFromServer() {
@@ -37,8 +42,9 @@ export class AppComponent implements OnInit {
         //     this.config.csrf_token = TOKEN;
         // }
         if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
-            this.config.server_host = HOST;
+            this.config.server_host = SCHEME + '://' + HOST + '/';
         }
+        console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
         if (this.config.getCookie('csrftoken')) {
             this.config.csrf_token = this.config.getCookie('csrftoken');
         }
