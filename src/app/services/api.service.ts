@@ -96,6 +96,13 @@ export class ApiService {
             this.httpOptions
         )
     }
+    resendVerifyEmail(email: string) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'resend_verify_email', {
+                email: email
+            },
+            this.httpOptions
+        )
+    }
 
     logout() {
         return this.http.post(this.serverBase + this.baseApiAuth + 'logout', {},

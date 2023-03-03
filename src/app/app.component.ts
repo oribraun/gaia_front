@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
         if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
             this.config.server_host = SCHEME + '://' + HOST + '/';
         }
-        console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
+        // console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
         if (this.config.getCookie('csrftoken')) {
             this.config.csrf_token = this.config.getCookie('csrftoken');
         }

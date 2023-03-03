@@ -16,9 +16,10 @@ export class LoginComponent implements OnInit {
     email: string = '';
     password: string = '';
     username: string = '';
-    baseApi = 'http://localhost:8000/api/auth/';
     user: any = {};
-    loginErr = '';
+    errMessage = '';
+    successMessage = '';
+    showVerify = false;
 
     constructor(
         private http: HttpClient,
@@ -39,15 +40,19 @@ export class LoginComponent implements OnInit {
     }
 
     async login() {
+        this.resetMessages();
         try {
-            this.loginErr = '';
+            this.errMessage = '';
             const response: any = await lastValueFrom(this.apiService.login(this.email,this.password));
+            const data = response.data;
             if (!response.err) {
-                const data = response.data;
                 this.setupUser(data);
                 this.router.navigate([''])
             } else {
-                this.loginErr = response.errMessage;
+                this.errMessage = response.errMessage;
+                if (data.verify) {
+                    this.showVerify = true;
+                }
             }
         } catch (error) {
             console.error(error);
@@ -55,19 +60,19 @@ export class LoginComponent implements OnInit {
     }
 
     async register() {
+        this.resetMessages();
         try {
-            this.loginErr = '';
+            this.errMessage = '';
             const response: any = await this.apiService.register(this.email, this.username, this.password).toPromise();
-            console.log('response', response);
             if (!response.err) {
                 const data = response.data;
-                this.setupUser(data);
-                this.router.navigate(['/'])
+                const success_message = data.message;
+                this.successMessage = success_message;
             } else {
                 if (Array.isArray(response.errMessage)) {
-                     this.loginErr = response.errMessage.join('</br>');
+                    this.errMessage = response.errMessage.join('</br>');
                 } else {
-                    this.loginErr = response.errMessage;
+                    this.errMessage = response.errMessage;
                 }
             }
         } catch (error) {
@@ -76,11 +81,32 @@ export class LoginComponent implements OnInit {
     }
 
     async forgot() {
+        this.resetMessages();
         try {
-            const response: any = await this.apiService.forgotPassword(this.email).toPromise();
+            const response: any = await lastValueFrom(this.apiService.forgotPassword(this.email));
             if (!response.err) {
-                console.log('email sent successfully, please check your email')
+                // console.log('email sent successfully, please check your email')
+                this.successMessage = 'email sent successfully, please check your email';
+            } else {
+                this.errMessage = response.errMessage;
             }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async resendVerifyEmail(event: Event) {
+        event.preventDefault();
+        this.resetMessages();
+        try {
+            const response: any = await lastValueFrom(this.apiService.resendVerifyEmail(this.email));
+            if (!response.err) {
+                // console.log('email sent successfully, please check your email')
+                this.successMessage = 'email sent successfully, please check your email';
+            } else {
+                this.errMessage = response.errMessage;
+            }
+            this.showVerify = false;
         } catch (error) {
             console.error(error);
         }
@@ -120,6 +146,12 @@ export class LoginComponent implements OnInit {
             this.config.setCookie('user', JSON.stringify(user), d, true);
             this.config.user = JSON.parse(this.config.getCookie('user', true));
         }
+    }
+
+    resetMessages() {
+        this.errMessage = '';
+        this.successMessage = ''
+        this.showVerify = false;
     }
 
 }
