@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
         setTimeout(() => {
             this.setupCredsFromServer();
         })
+        this.setupCredsFromServer();
     }
 
     ngOnInit(): void {

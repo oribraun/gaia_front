@@ -15,6 +15,7 @@ import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { AnalyzerComponent } from './components/analyzer/analyzer.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { AboutComponent } from './components/about/about.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 // import {APP_BASE_HREF} from "@angular/common";
 
 @NgModule({
@@ -28,7 +29,8 @@ import { AboutComponent } from './components/about/about.component';
         DragAndDropDirective,
         AnalyzerComponent,
         SafeHtmlPipe,
-        AboutComponent
+        AboutComponent,
+        DashboardComponent
     ],
     imports: [
         BrowserModule,

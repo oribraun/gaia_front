@@ -145,4 +145,9 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getDashboard() {
+        return this.http.post(this.serverBase + this.baseApi + 'get-dashboard', {},
+            this.httpOptions
+        )
+    }
 }
