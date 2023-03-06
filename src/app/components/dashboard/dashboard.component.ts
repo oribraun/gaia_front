@@ -3,6 +3,7 @@ import {ApiService} from "../../services/api.service";
 import {lastValueFrom} from "rxjs";
 import {Config} from "../../config";
 import { EChartsOption } from 'echarts';
+import {environment} from "../../../environments/environment";
 
 var light_grey = '#f9fafd';
 var grey = '#d8e2ef';
@@ -432,7 +433,13 @@ export class DashboardComponent implements OnInit {
         // for gaia admin only
         this.companies = response.companies;
 
-        for (let i = 0; i < 10; i++) {
+        this.setUpCharts();
+        this.initArray();
+    }
+
+    initArray() {
+        if (!environment.production) {
+            for (let i = 0; i < 10; i++) {
             if (this.company_users && this.company_users.length < 10) {
                 this.company_users.push({email: 'test'})
             }
@@ -446,8 +453,7 @@ export class DashboardComponent implements OnInit {
                 this.companies.push({name: 'test', domain: 'test.com'})
             }
         }
-
-        this.setUpCharts();
+        }
     }
 
 }
