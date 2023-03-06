@@ -456,4 +456,8 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    preventDefault(e: Event) {
+        e.preventDefault();
+    }
+
 }
