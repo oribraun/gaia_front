@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             this.applyTooltip()

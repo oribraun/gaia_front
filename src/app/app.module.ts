@@ -17,6 +17,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { AboutComponent } from './components/about/about.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 // import {APP_BASE_HREF} from "@angular/common";
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,15 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
         BrowserModule,
         FormsModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NgxEchartsModule.forRoot({
+            /**
+             * This will import all modules from echarts.
+             * If you only need custom modules,
+             * please refer to [Custom Build] section.
+             */
+            echarts: () => import('echarts'), // or import('./path-to-my-custom-echarts')
+        }),
     ],
     providers: [
         // {provide: APP_BASE_HREF, useValue: '/static/client/'},
