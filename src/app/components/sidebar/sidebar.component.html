@@ -7,28 +7,28 @@
         <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Home"
+                   data-toggle="tooltip" data-placement="right" title="Home" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-house-door"></i> <span>Home</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="About"
+                   data-toggle="tooltip" data-placement="right" title="About" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-info"></i> <span>Home</span>
+                    <i class="bi bi-info"></i> <span>About</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Dashboard"
+                   data-toggle="tooltip" data-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-clipboard2-pulse"></i> <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Privacy Policy"
+                   data-toggle="tooltip" data-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/privacy-policy']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-shield-lock-fill"></i> <span>Privacy Policy</span>
                 </a>
