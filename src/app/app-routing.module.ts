@@ -9,12 +9,14 @@ import {AuthGuard} from "./guards/auth.guard";
 import {AuthBasicGuard} from "./guards/auth_basic.guard";
 import {AboutComponent} from "./components/about/about.component";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
+import {PrivacyComponent} from "./components/privacy/privacy.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch : 'full' },
   { path: 'login', component: LoginComponent, pathMatch : 'full' },
   { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
   { path: 'about', component: AboutComponent, pathMatch : 'full' },
+  { path: 'privacy-policy', component: PrivacyComponent, pathMatch : 'full' },
   { path: 'prompt-optimizer', component: PromptOptimizerComponent, pathMatch : 'full', canActivate: [AuthGuard]},
   { path: 'prompt-optimizer2', component: PromptOptimizerComponent, pathMatch : 'full'},
   { path: 'analyzer', component: AnalyzerComponent, pathMatch : 'full', canActivate: [AuthGuard] },

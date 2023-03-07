@@ -18,6 +18,7 @@ import { AboutComponent } from './components/about/about.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 // import {APP_BASE_HREF} from "@angular/common";
 import { NgxEchartsModule } from 'ngx-echarts';
+import { PrivacyComponent } from './components/privacy/privacy.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
         AnalyzerComponent,
         SafeHtmlPipe,
         AboutComponent,
-        DashboardComponent
+        DashboardComponent,
+        PrivacyComponent
     ],
     imports: [
         BrowserModule,
