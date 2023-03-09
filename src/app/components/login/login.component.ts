@@ -4,6 +4,7 @@ import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {lastValueFrom} from "rxjs";
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: 'app-login',
@@ -11,6 +12,9 @@ import {lastValueFrom} from "rxjs";
     styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
+    imageUrl = environment.staticUrl + 'assets/images/Artificial-Intelligence-Trends-scaled-1.jpeg';
+    logoUrl = environment.staticUrl + 'assets/images/Gaia_blue_long_transparent.png';
+
     formType = 'login';
     formTypeOptions = ['login', 'register', 'forgot'];
     email: string = '';

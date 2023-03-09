@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {lastValueFrom} from "rxjs";
 import {Config} from "../../config";
@@ -14,7 +14,8 @@ var primary = '#2c7be5';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.less']
+    styleUrls: ['./dashboard.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class DashboardComponent implements OnInit {
@@ -27,8 +28,10 @@ export class DashboardComponent implements OnInit {
     results: any = [];
     results_type = '';
     company_total_prompts = -1;
+    company_total_privacy_model_prompts = -1;
     company_total_users = -1;
     total_user_prompts = -1;
+    total_companies = -1;
     user_prompts: any = [];
     company_users: any = [];
     company_top_prompt_users: any = [];
@@ -423,6 +426,7 @@ export class DashboardComponent implements OnInit {
 
         // for company admin or user only
         this.company_total_prompts = response.company_total_prompts;
+        this.company_total_privacy_model_prompts = response.company_total_privacy_model_prompts;
 
         // for company admin only
         this.company_total_users = response.company_total_users;
@@ -432,6 +436,7 @@ export class DashboardComponent implements OnInit {
 
         // for gaia admin only
         this.companies = response.companies;
+        this.total_companies = response.total_companies;
 
         this.setUpCharts();
         this.initArray();

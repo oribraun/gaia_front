@@ -1,0 +1,41 @@
+<div class="card" [ngClass]="class">
+    <div class="card-header bg-light">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="mb-0">{{header}}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of items; let i = index">
+            <ng-container *ngFor="let key of keysToShow; let j = index">
+                <div class="ps-x1 py-1 position-static"
+                     [ngClass]="cols[j]"
+                     *ngIf="keysToShow.length === 1 || j < keysToShow.length - 1">
+                    {{item[key]}}
+                </div>
+                <div class="pe-3"
+                     [ngClass]="cols[j]"
+                     *ngIf="keysToShow.length > 1 && j === keysToShow.length - 1">
+                    <div class="row flex-end-center g-0">
+                        {{item[key]}}
+                    </div>
+                </div>
+            </ng-container>
+
+            <!--            <div class="col pe-3">-->
+            <!--                <div class="row flex-end-center g-0">-->
+            <!--                    {{item.domain}}-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+        <div class="card-footer bg-light p-0">
+            <div class="pagination" *ngIf="showPagination">
+                <a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event); onNext();">
+                    Load More<i class="bi bi-arrow-right-short"></i>
+                </a>
+            </div>
+            <div class="btn btn-sm d-block w-100 py-2 no-pointer" *ngIf="!showPagination">&nbsp;</div>
+        </div>
+    </div>
+</div>
