@@ -11,6 +11,8 @@ var dark_grey = '#4d5969';
 var light_primary = '#27bcfd';
 var primary = '#2c7be5';
 
+declare var $: any;
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -22,6 +24,7 @@ export class DashboardComponent implements OnInit {
 
     user: any;
     company_admin = false;
+    gaia_admin = false;
 
     gettingDashboard = false;
 
@@ -31,17 +34,29 @@ export class DashboardComponent implements OnInit {
     company_total_privacy_model_prompts = -1;
     company_total_users = -1;
     total_user_prompts = -1;
+    total_user_privacy_model_prompts = -1;
     total_companies = -1;
     user_prompts: any = [];
+    userPromptsPaginationErrMessage: any;
+    user_privacy_model_prompts: any = [];
+    userPrivacyModelPromptsPaginationErrMessage: any;
     company_users: any = [];
+    companyUsersPaginationErrMessage: any;
     company_top_prompt_users: any = [];
     company_top_privacy_prompt_users: any = [];
     companies: any = [];
+    companiesPaginationErrMessage: any;
 
     weeklySalesOptions: EChartsOption = {};
     totalOrdersOptions: EChartsOption = {};
     marketShareOptions: EChartsOption = {};
     totalSalesOptions: EChartsOption = {};
+
+    paginationErrMessage: any;
+
+    selectedItem: any;
+    selectedItemResults: any;
+    selectedItemErrMessage: any;
 
     constructor(
         private config: Config,
@@ -414,15 +429,29 @@ export class DashboardComponent implements OnInit {
     }
     async getDashBoard() {
         this.gettingDashboard = true;
-        const response: any = await lastValueFrom(this.apiService.getDashboard());
+        const obj = {
+            user_prompts_offset: 0,
+            user_prompts_limit: 10,
+            user_privacy_model_prompts_offset: 0,
+            user_privacy_model_prompts_limit: 10,
+            company_users_offset: 0,
+            company_users_limit: 10,
+            admin_company_offset: 0,
+            admin_company_limit: 10
+        }
+        const response: any = await lastValueFrom(this.apiService.getDashboard(obj));
         this.gettingDashboard = false;
         console.log('response', response)
         this.results = response;
         this.total_user_prompts = response.total_user_prompts;
         this.user_prompts = response.user_prompts;
 
+        this.total_user_privacy_model_prompts = response.total_user_privacy_model_prompts;
+        this.user_privacy_model_prompts = response.user_privacy_model_prompts;
+
         this.results_type = response.results_type;
         this.company_admin = response.company_admin;
+        this.gaia_admin = response.gaia_admin;
 
         // for company admin or user only
         this.company_total_prompts = response.company_total_prompts;
@@ -439,26 +468,182 @@ export class DashboardComponent implements OnInit {
         this.total_companies = response.total_companies;
 
         this.setUpCharts();
-        this.initArray();
+        // this.initArray();
     }
 
     initArray() {
         if (!environment.production) {
             for (let i = 0; i < 10; i++) {
-            if (this.company_users && this.company_users.length < 10) {
-                this.company_users.push({email: 'test'})
-            }
-            if (this.company_top_prompt_users && this.company_top_prompt_users.length < 10) {
-                this.company_top_prompt_users.push({user__email: 'test', count: 1})
-            }
-            if (this.company_top_privacy_prompt_users && this.company_top_privacy_prompt_users.length < 10) {
-                this.company_top_privacy_prompt_users.push({user__email: 'test', count: 1})
-            }
-            if (this.companies && this.companies.length < 10) {
-                this.companies.push({name: 'test', domain: 'test.com'})
+                if (this.company_users && this.company_users.length < 10) {
+                    this.company_users.push({email: 'test'})
+                }
+                if (this.company_top_prompt_users && this.company_top_prompt_users.length < 10) {
+                    this.company_top_prompt_users.push({user__email: 'test', count: 1})
+                }
+                if (this.company_top_privacy_prompt_users && this.company_top_privacy_prompt_users.length < 10) {
+                    this.company_top_privacy_prompt_users.push({user__email: 'test', count: 1})
+                }
+                if (this.companies && this.companies.length < 10) {
+                    this.companies.push({name: 'test', domain: 'test.com'})
+                }
             }
         }
+    }
+
+    getUserPrompts(obj: any) {
+        console.log('obj', obj);
+        this.userPromptsPaginationErrMessage = null;
+        this.apiService.getUserPrompts(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.user_prompts = res.user_prompts;
+                this.userPromptsPaginationErrMessage = '';
+            } else {
+                this.userPromptsPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.userPromptsPaginationErrMessage = err;
+        })
+    }
+    getUserPrivacyModelPrompts(obj: any) {
+        console.log('obj', obj);
+        this.userPrivacyModelPromptsPaginationErrMessage = null;
+        this.apiService.getUserPrivacyModelPrompts(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.user_privacy_model_prompts = res.user_privacy_model_prompts;
+                this.userPrivacyModelPromptsPaginationErrMessage = '';
+            } else {
+                this.userPrivacyModelPromptsPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.userPrivacyModelPromptsPaginationErrMessage = err;
+        })
+    }
+    getCompanyUsers(obj: any) {
+        console.log('obj', obj);
+        this.companyUsersPaginationErrMessage = null;
+        this.apiService.getCompanyUsers(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.company_users = res.company_users;
+                this.companyUsersPaginationErrMessage = '';
+            } else {
+                this.companyUsersPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.companyUsersPaginationErrMessage = err;
+        })
+    }
+    getAdminCompanies(obj: any) {
+        console.log('obj', obj);
+        this.companiesPaginationErrMessage = null;
+        this.apiService.getAdminCompanies(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.companies = res.companies;
+                this.companiesPaginationErrMessage = '';
+            } else {
+                this.companyUsersPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.companiesPaginationErrMessage = err;
+        })
+    }
+    getCompanyUserInfo(obj: any) {
+        obj.type = 'getUserInfo';
+        if (obj.selectedItem.user__email) {
+            obj.selectedItem.email = obj.selectedItem.user__email;
         }
+        if (this.selectedItem?.selectedItem?.email === obj.selectedItem.email) {
+            this.showSelectedItemModel();
+            return;
+        }
+        console.log('obj', obj);
+        this.selectedItem = obj
+        this.companyUsersPaginationErrMessage = null;
+        this.selectedItemResults = null;
+        this.apiService.getCompanyUserInfo(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.selectedItemResults = res;
+                this.selectedItemErrMessage = '';
+                this.showSelectedItemModel();
+            } else {
+                this.selectedItemErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.selectedItemErrMessage = err;
+        })
+    }
+    getCompanyUserPrompts(obj: any) {
+        console.log('obj', obj);
+        this.selectedItemErrMessage = null;
+        obj.selectedItem = this.selectedItem;
+        const o = {
+            email: this.selectedItem.selectedItem.email,
+            offset: obj.offset,
+            limit: obj.limit
+        }
+        this.apiService.getCompanyUserPrompts(o).subscribe((res: any) => {
+            if (!res.err) {
+                this.selectedItemResults.user_prompts = res.user_prompts;
+                this.selectedItemErrMessage = '';
+            } else {
+                this.selectedItemErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.selectedItemErrMessage = err;
+        })
+    }
+
+    getCompanyUserPrivacyModelPrompts(obj: any) {
+        console.log('obj', obj);
+        this.selectedItemErrMessage = null;
+        obj.selectedItem = this.selectedItem;
+        const o = {
+            email: this.selectedItem.selectedItem.email,
+            offset: obj.offset,
+            limit: obj.limit
+        }
+        this.apiService.getCompanyUserPrivacyModelPrompts(o).subscribe((res: any) => {
+            if (!res.err) {
+                this.selectedItemResults.user_privacy_model_prompts = res.user_privacy_model_prompts;
+                this.selectedItemErrMessage = '';
+            } else {
+                this.selectedItemErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.selectedItemErrMessage = err;
+        })
+    }
+
+    getAdminCompany(obj: any) {
+        obj.type = 'getAdminCompany';
+        console.log('obj', obj);
+        if (this.selectedItem?.selectedItem?.domain === obj.selectedItem.domain) {
+            this.showSelectedItemModel();
+            return;
+        }
+        this.selectedItem = obj
+        const o = {
+            domain: this.selectedItem.selectedItem.domain,
+            offset: obj.offset,
+            limit: obj.limit
+        }
+        this.apiService.getAdminCompanyInfo(o).subscribe((res: any) => {
+            if (!res.err) {
+                this.selectedItemResults = res;
+                this.selectedItemErrMessage = '';
+                this.showSelectedItemModel();
+            } else {
+                this.selectedItemErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.selectedItemErrMessage = err;
+        })
+    }
+
+    showSelectedItemModel() {
+        $('#selectedItemModal').modal('show')
+    }
+    hideSelectedItemModel() {
+        $('#selectedItemModal').modal('hide')
     }
 
     preventDefault(e: Event) {

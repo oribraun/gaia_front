@@ -11,6 +11,9 @@ export class ApiService {
     serverBase = environment.serverUrl;
     baseApi = 'api/';
     baseApiAuth = 'api/auth/';
+    baseApiUser = 'api/us/';
+    baseApiCompany = 'api/co/';
+    baseApiAdmin = 'api/a/';
     headers: any = {}
     private httpOptionsWithCreds = {
         // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -111,42 +114,105 @@ export class ApiService {
     }
 
     promptOptimizer(prompt: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'prompt_optimizer', {
+        return this.http.post(this.serverBase + this.baseApiUser + 'prompt_optimizer', {
                 prompt: prompt
             },
             this.httpOptions
         )
     }
     upload(formData: FormData) {
-        return this.http.post(this.serverBase + this.baseApi + 'upload', formData,
+        return this.http.post(this.serverBase + this.baseApiUser + 'upload', formData,
             this.httpOptions
         )
     }
 
     analyze(filePath: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'analyze', {'file_path': filePath},
+        return this.http.post(this.serverBase + this.baseApiUser + 'analyze', {'file_path': filePath},
             this.httpOptions
         )
     }
 
     privacyModel(prompt: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'privacy-model', {'prompt': prompt},
+        return this.http.post(this.serverBase + this.baseApiUser + 'privacy-model', {'prompt': prompt},
             this.httpOptions
         )
     }
 
     collectUserPrompt(prompt: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'collect-user-prompt', {'prompt': prompt},
+        return this.http.post(this.serverBase + this.baseApiUser + 'collect-user-prompt', {'prompt': prompt},
             this.httpOptions
         )
     }
     getAnswer(prompt: string) {
-        return this.http.post(this.serverBase + this.baseApi + 'get-answer', {'prompt': prompt},
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-answer', {'prompt': prompt},
             this.httpOptions
         )
     }
-    getDashboard() {
-        return this.http.post(this.serverBase + this.baseApi + 'get-dashboard', {},
+    getAnswerStreaming(prompt: string) {
+        this.httpOptions['responseType'] = 'text';
+        this.httpOptions['observe'] = 'events';
+        this.httpOptions['reportProgress'] = true;
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-answer', {'prompt': prompt},
+            this.httpOptions
+        )
+    }
+    getSettings(key: string) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-settings', {key: key},
+            this.httpOptions
+        )
+    }
+    setSettings(key: string, data: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'set-settings', {key: key, data: data},
+            this.httpOptions
+        )
+    }
+    getDashboard(obj: any = {}) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-dashboard', obj,
+            this.httpOptions
+        )
+    }
+    getUserPrompts(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-user-prompts', obj,
+            this.httpOptions
+        )
+    }
+    getUserPrivacyModelPrompts(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-user-privacy-model-prompts', obj,
+            this.httpOptions
+        )
+    }
+    getCompanyUsers(obj: any) {
+        // company_users_offset
+        // company_users_limit
+        return this.http.post(this.serverBase + this.baseApiCompany + 'get-users', obj,
+            this.httpOptions
+        )
+    }
+    getCompanyUserInfo(obj: any) {
+        // user_email = request.data['user_email']
+        // user_prompts_offset = request.data['user_prompts_offset']
+        // user_prompts_limit = request.data['user_prompts_limit']
+        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-info', obj,
+            this.httpOptions
+        )
+    }
+    getCompanyUserPrompts(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-prompts', obj,
+            this.httpOptions
+        )
+    }
+    getCompanyUserPrivacyModelPrompts(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-privacy-model-prompts', obj,
+            this.httpOptions
+        )
+    }
+    getAdminCompanyInfo(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAdmin + 'get-company-info', obj,
+            this.httpOptions
+        )
+    }
+    getAdminCompanies(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAdmin + 'get-companies', obj,
             this.httpOptions
         )
     }

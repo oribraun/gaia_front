@@ -44,10 +44,17 @@
 
 <div class="dashboard" *ngIf="!gettingDashboard && user">
     <div class="row">
-        <div class="col-6 mb-3">
+        <div class="col-md-6 mb-3">
             <app-basic-card
                 [header]="'Your total prompts'"
                 [value]="total_user_prompts"
+                [badge]="'+3.5%'"
+                [chartOptions]="weeklySalesOptions"
+            ></app-basic-card>
+            <app-basic-card
+                [class]="'mt-3'"
+                [header]="'Your total privacy model prompts'"
+                [value]="total_user_privacy_model_prompts"
                 [badge]="'+3.5%'"
                 [chartOptions]="weeklySalesOptions"
             ></app-basic-card>
@@ -84,26 +91,29 @@
                     [keysToShow]="['email']"
                     [totalItems]="company_total_users"
                     [showPagination]="true"
+                    [paginationErrMessage]="companyUsersPaginationErrMessage"
+                    (onPagination)="getCompanyUsers($event)"
+                    (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
-<!--                <div class="card mt-3 overflow-hidden">-->
-<!--                    <div class="card-header bg-light">-->
-<!--                        <div class="row align-items-center">-->
-<!--                            <div class="col">-->
-<!--                                <h6 class="mb-0">Company Users</h6>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="card-body p-0">-->
-<!--                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of company_users">-->
-<!--                            <div class="col ps-x1 py-1 position-static">-->
-<!--                                {{item.email}}-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event);">Load More<svg class="svg-inline&#45;&#45;fa fa-chevron-right fa-w-10 ms-1 fs&#45;&#45;2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>&lt;!&ndash; <span class="fas fa-chevron-right ms-1 fs&#45;&#45;2"></span> Font Awesome fontawesome.com &ndash;&gt;</a></div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="card mt-3 overflow-hidden">-->
+                <!--                    <div class="card-header bg-light">-->
+                <!--                        <div class="row align-items-center">-->
+                <!--                            <div class="col">-->
+                <!--                                <h6 class="mb-0">Company Users</h6>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="card-body p-0">-->
+                <!--                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of company_users">-->
+                <!--                            <div class="col ps-x1 py-1 position-static">-->
+                <!--                                {{item.email}}-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event);">Load More<svg class="svg-inline&#45;&#45;fa fa-chevron-right fa-w-10 ms-1 fs&#45;&#45;2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>&lt;!&ndash; <span class="fas fa-chevron-right ms-1 fs&#45;&#45;2"></span> Font Awesome fontawesome.com &ndash;&gt;</a></div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
             </ng-container>
-            <ng-container *ngIf="results_type === 'gaia_admin'">
+            <ng-container *ngIf="gaia_admin">
                 <app-basic-card-list
                     [class]="' mt-3 overflow-hidden'"
                     [header]="'Companies'"
@@ -112,32 +122,35 @@
                     [keysToShow]="['name', 'domain']"
                     [totalItems]="total_companies"
                     [showPagination]="true"
+                    (onPagination)="getAdminCompanies($event)"
+                    [paginationErrMessage]="companiesPaginationErrMessage"
+                    (onSelectItem)="getAdminCompany($event)"
                 ></app-basic-card-list>
-<!--                <div class="card mt-3 overflow-hidden">-->
-<!--                    <div class="card-header bg-light">-->
-<!--                        <div class="row align-items-center">-->
-<!--                            <div class="col">-->
-<!--                                <h6 class="mb-0">Companies</h6>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="card-body p-0">-->
-<!--                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of companies">-->
-<!--                            <div class="col ps-x1 py-1 position-static">-->
-<!--                                {{item.name}}-->
-<!--                            </div>-->
-<!--                            <div class="col pe-3">-->
-<!--                                <div class="row flex-end-center g-0">-->
-<!--                                    {{item.domain}}-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event);">Load More<svg class="svg-inline&#45;&#45;fa fa-chevron-right fa-w-10 ms-1 fs&#45;&#45;2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>&lt;!&ndash; <span class="fas fa-chevron-right ms-1 fs&#45;&#45;2"></span> Font Awesome fontawesome.com &ndash;&gt;</a></div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="card mt-3 overflow-hidden">-->
+                <!--                    <div class="card-header bg-light">-->
+                <!--                        <div class="row align-items-center">-->
+                <!--                            <div class="col">-->
+                <!--                                <h6 class="mb-0">Companies</h6>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="card-body p-0">-->
+                <!--                        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of companies">-->
+                <!--                            <div class="col ps-x1 py-1 position-static">-->
+                <!--                                {{item.name}}-->
+                <!--                            </div>-->
+                <!--                            <div class="col pe-3">-->
+                <!--                                <div class="row flex-end-center g-0">-->
+                <!--                                    {{item.domain}}-->
+                <!--                                </div>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event);">Load More<svg class="svg-inline&#45;&#45;fa fa-chevron-right fa-w-10 ms-1 fs&#45;&#45;2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>&lt;!&ndash; <span class="fas fa-chevron-right ms-1 fs&#45;&#45;2"></span> Font Awesome fontawesome.com &ndash;&gt;</a></div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
             </ng-container>
         </div>
-        <div class="col-6 mb-3">
+        <div class="col-md-6 mb-3">
             <app-basic-card-list
                 [class]="'h-lg-100 overflow-hidden'"
                 [header]="'Your Prompts'"
@@ -146,6 +159,19 @@
                 [cols]="['col']"
                 [totalItems]="total_user_prompts"
                 [showPagination]="true"
+                [paginationErrMessage]="userPromptsPaginationErrMessage"
+                (onPagination)="getUserPrompts($event)"
+            ></app-basic-card-list>
+            <app-basic-card-list
+                [class]="'mt-3 h-lg-100 overflow-hidden'"
+                [header]="'Your Privacy Model Prompts'"
+                [items]="user_privacy_model_prompts"
+                [keysToShow]="['prompt']"
+                [cols]="['col']"
+                [totalItems]="total_user_privacy_model_prompts"
+                [showPagination]="true"
+                [paginationErrMessage]="userPrivacyModelPromptsPaginationErrMessage"
+                (onPagination)="getUserPrivacyModelPrompts($event)"
             ></app-basic-card-list>
             <ng-container *ngIf="company_admin">
                 <app-basic-card-list
@@ -156,6 +182,7 @@
                     [keysToShow]="['user__email', 'count']"
                     [totalItems]="company_total_users"
                     [showPagination]="true"
+                    (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
                 <app-basic-card-list
                     [class]="' mt-3 overflow-hidden'"
@@ -165,6 +192,7 @@
                     [keysToShow]="['user__email', 'count']"
                     [totalItems]="company_total_users"
                     [showPagination]="true"
+                    (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
             </ng-container>
         </div>
@@ -407,6 +435,129 @@
                     <!-- If you are not using gulp based workflow, you can find the transpiled code at: public\assets\js\theme.js-->
                     <div echarts [options]="totalSalesOptions" class="echart-line-total-sales">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="selectedItemModal" tabindex="-1" aria-labelledby="selectedItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" *ngIf="selectedItem?.type === 'getUserInfo'">
+                <div class="modal-header  text-center">
+                    <h5 class="modal-title" id="selectedItemModalLabel">
+                        {{selectedItem?.selectedItem?.email}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" *ngIf="selectedItemResults">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <app-basic-card
+                                [header]="'total prompts'"
+                                [value]="selectedItemResults?.total_user_prompts"
+                                [badge]="'+3.5%'"
+                                [chartOptions]="weeklySalesOptions"
+                            ></app-basic-card>
+                            <app-basic-card-list
+                                *ngIf="selectedItemResults"
+                                [class]="'h-lg-100 overflow-hidden mt-3'"
+                                [header]="'Prompts'"
+                                [items]="selectedItemResults?.user_prompts"
+                                [keysToShow]="['prompt']"
+                                [cols]="['col']"
+                                [totalItems]="selectedItemResults?.total_user_prompts"
+                                [showPagination]="true"
+                                [paginationErrMessage]="selectedItemErrMessage"
+                                (onPagination)="getCompanyUserPrompts($event)"
+                            ></app-basic-card-list>
+                        </div>
+                        <div class="col-md-6">
+                            <app-basic-card
+                                [class]="''"
+                                [header]="'Your total privacy model prompts'"
+                                [value]="selectedItemResults?.total_user_privacy_model_prompts"
+                                [badge]="'+3.5%'"
+                                [chartOptions]="weeklySalesOptions"
+                            ></app-basic-card>
+                            <app-basic-card-list
+                                [class]="'mt-3 h-lg-100 overflow-hidden'"
+                                [header]="'Privacy Model Prompts'"
+                                [items]="selectedItemResults?.user_privacy_model_prompts"
+                                [keysToShow]="['prompt']"
+                                [cols]="['col']"
+                                [totalItems]="selectedItemResults?.total_user_privacy_model_prompts"
+                                [showPagination]="true"
+                                [paginationErrMessage]="selectedItemErrMessage"
+                                (onPagination)="getCompanyUserPrivacyModelPrompts($event)"
+                            ></app-basic-card-list>
+                        </div>
+                    </div>
+                    <!--                    {{selectedItemResults | json}}-->
+                </div>
+            </div>
+            <div class="modal-content" *ngIf="selectedItem?.type === 'getAdminCompany'">
+                <div class="modal-header  text-center">
+                    <h5 class="modal-title" id="selectedItemModalLabel">
+                        {{selectedItem?.selectedItem?.domain}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" *ngIf="selectedItemResults">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <app-basic-card
+                                *ngIf="company_admin"
+                                [class]="'mt-3'"
+                                [header]="'Total Users'"
+                                [value]="selectedItemResults?.company_total_users"
+                                [caret]="'13.6%'"
+                                [chartOptions]="totalOrdersOptions"
+                            ></app-basic-card>
+                        </div>
+                        <div class="col-lg-4">
+                            <app-basic-card
+                                [class]="'mt-3'"
+                                [header]="'Total Prompts'"
+                                [value]="selectedItemResults?.company_total_prompts"
+                                [caret]="'13.6%'"
+                                [chartOptions]="totalOrdersOptions"
+                            ></app-basic-card>
+                        </div>
+                        <div class="col-lg-4">
+                            <app-basic-card
+                                [class]="'mt-3'"
+                                [header]="'Total Privacy Model Prompts'"
+                                [value]="selectedItemResults?.company_total_privacy_model_prompts"
+                                [caret]="'13.6%'"
+                                [chartOptions]="totalOrdersOptions"
+                            ></app-basic-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <app-basic-card-list
+                                [class]="' mt-3 overflow-hidden'"
+                                [header]="'Privacy model Prompts Top Users'"
+                                [items]="selectedItemResults?.company_top_privacy_prompt_users"
+                                [cols]="['col', 'col']"
+                                [keysToShow]="['user__email', 'count']"
+                                [totalItems]="selectedItemResults?.company_total_users"
+                                [showPagination]="true"
+                            ></app-basic-card-list>
+                        </div>
+                        <div class="col-md-6">
+                            <app-basic-card-list
+                                [class]="' mt-3 overflow-hidden'"
+                                [header]="'Prompts Top Users'"
+                                [items]="selectedItemResults?.company_top_prompt_users"
+                                [cols]="['col', 'col']"
+                                [keysToShow]="['user__email', 'count']"
+                                [totalItems]="selectedItemResults?.company_total_users"
+                                [showPagination]="true"
+                            ></app-basic-card-list>
+                        </div>
+                    </div>
+                    <!--                    {{selectedItemResults | json}}-->
                 </div>
             </div>
         </div>

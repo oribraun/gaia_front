@@ -1,0 +1,72 @@
+.card {
+    .card-header {
+
+    }
+    .card-body {
+        position: relative;
+        .loader-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            text-align: center;
+            background: #ffffffb5;
+            .loader {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .no-wrap {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 100%;
+            display: block;
+        }
+        .row {
+            cursor: pointer;
+        }
+        .row-active {
+            background: #0d6efd;
+            color: #fff;
+        }
+    }
+    .c-footer {
+        .pagination {
+            margin: 0;
+
+            .page-item {
+                &.active {
+                    .page-link {
+                        color: #0d6efd;
+                        transform: scale(1.2) translateY(-2px);
+                    }
+                }
+
+                .page-link {
+                    transition: none;
+                    -webkit-user-select: none; /* Safari */
+                    -ms-user-select: none; /* IE 10 and IE 11 */
+                    user-select: none; /* Standard syntax */
+                    border: none;
+                    background: none;
+                    padding: 0.457rem 0.75rem;
+                    color: #515151;
+                }
+
+                .input {
+                    box-shadow: none;
+                    outline: none;
+                    border-bottom: 1px solid #ccc;
+                    border-radius: 0;
+                    padding: 0 0 0.2rem 0.3rem;
+                    margin-top: 0.4rem;
+                    line-height: 1;
+                }
+            }
+        }
+    }
+}

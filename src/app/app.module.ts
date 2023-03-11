@@ -21,6 +21,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { BasicCardComponent } from './components/dashboard/basic-card/basic-card.component';
 import { BasicCardListComponent } from './components/dashboard/basic-card-list/basic-card-list.component';
+import {RangePipe} from "./pipes/range/range.pipe";
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { BasicCardListComponent } from './components/dashboard/basic-card-list/b
         DragAndDropDirective,
         AnalyzerComponent,
         SafeHtmlPipe,
+        RangePipe,
         AboutComponent,
         DashboardComponent,
         PrivacyComponent,

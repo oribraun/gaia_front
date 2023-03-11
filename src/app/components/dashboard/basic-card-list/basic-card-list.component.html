@@ -1,4 +1,4 @@
-<div class="card" [ngClass]="class">
+<div class="card" [ngClass]="class" #element>
     <div class="card-header bg-light">
         <div class="row align-items-center">
             <div class="col">
@@ -7,35 +7,66 @@
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200" *ngFor="let item of items; let i = index">
-            <ng-container *ngFor="let key of keysToShow; let j = index">
-                <div class="ps-x1 py-1 position-static"
-                     [ngClass]="cols[j]"
-                     *ngIf="keysToShow.length === 1 || j < keysToShow.length - 1">
-                    {{item[key]}}
-                </div>
-                <div class="pe-3"
-                     [ngClass]="cols[j]"
-                     *ngIf="keysToShow.length > 1 && j === keysToShow.length - 1">
-                    <div class="row flex-end-center g-0">
-                        {{item[key]}}
+        <ng-container *ngFor="let item of items; let i = index">
+            <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200"
+                 [ngClass]="{'row-active': item === this.selectedItem}"
+            (click)="selectItem(item)">
+                <ng-container *ngFor="let key of keysToShow; let j = index">
+                    <div class="ps-x1 py-1 position-static {{cols[j]}}"
+                         [title]="item[key]"
+                         [ngClass]="{'pe-3': keysToShow.length === 1}"
+                         *ngIf="keysToShow.length === 1 || j < keysToShow.length - 1">
+                        <span *ngIf="item[key]" class="no-wrap">{{item[key]}}</span>
+                        <span *ngIf="!item[key]">-</span>
+                    </div>
+                    <div class="pe-3"
+                         [title]="item[key]"
+                         [ngClass]="cols[j]"
+                         *ngIf="keysToShow.length > 1 && j === keysToShow.length - 1">
+                        <div class="row flex-end-center text-end g-0">
+                            <span *ngIf="item[key]" class="no-wrap">{{item[key]}}</span>
+                            <span *ngIf="!item[key]">-</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="loader-wrapper" *ngIf="gettingItems">
+                <div class="loader">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-            </ng-container>
-
-            <!--            <div class="col pe-3">-->
-            <!--                <div class="row flex-end-center g-0">-->
-            <!--                    {{item.domain}}-->
-            <!--                </div>-->
-            <!--            </div>-->
-        </div>
-        <div class="card-footer bg-light p-0">
-            <div class="pagination" *ngIf="showPagination">
-                <a class="btn btn-sm btn-link d-block w-100 py-2" href="#!" (click)="preventDefault($event); onNext();">
-                    Load More<i class="bi bi-arrow-right-short"></i>
-                </a>
             </div>
-            <div class="btn btn-sm d-block w-100 py-2 no-pointer" *ngIf="!showPagination">&nbsp;</div>
+        </ng-container>
+    </div>
+    <div class="c-footer">
+        <div class=" p-0">
+            <nav aria-label="Page navigation" *ngIf="showPagination && pagination.pages > 1">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link pointer" aria-label="Previous" (click)="prevPage()">
+                            <span aria-hidden="true">&laquo;</span>
+                            <!--                                <span class="sr-only">Previous</span>-->
+                        </a>
+                    </li>
+                    <li class="page-item" (click)="setPage(num)" [ngClass]="{'active': pagination.current === num}" *ngFor="let num of ([] | range :pagination.start :pagination.end :1)"><a class="page-link pointer">{{num}}</a></li>
+                    <li class="page-item">
+                        <a class="page-link pointer" aria-label="Next" (click)="nextPage()">
+                            <span aria-hidden="true">&raquo;</span>
+                            <!--                                <span class="sr-only">Next</span>-->
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <form action="" (submit)="setPage(input); input = ''">
+                            <input class="page-link input" name="input" [(ngModel)]="input" type="text" size="1" placeholder="page">
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+            <!--                <a class="btn btn-sm btn-link d-block w-100 py-2" href="#" (click)="preventDefault($event);">-->
+            <!--                    Load More<i class="bi bi-arrow-right-short"></i>-->
+            <!--                </a>-->
+            <div class="btn btn-sm d-block w-100 py-2 no-pointer" *ngIf="!showPagination || pagination.pages <= 1">&nbsp;</div>
         </div>
     </div>
 </div>
