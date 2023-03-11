@@ -225,10 +225,10 @@ export class BasicCardListComponent implements OnInit, OnChanges {
             this.setPages();
         }
         if (changes['paginationErrMessage'] && !changes['paginationErrMessage'].firstChange) {
-            this.gettingItems = false;
             if (!this.paginationErrMessage) {
                 this.checkMinItems();
             } else {
+                this.gettingItems = false;
                 this.pagination = {...this.paginationLastState};
                 this.paginationLastState = null;
                 this.paginationError = this.paginationErrMessage;

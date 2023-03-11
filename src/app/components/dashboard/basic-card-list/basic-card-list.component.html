@@ -10,13 +10,13 @@
         <ng-container *ngFor="let item of items; let i = index">
             <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200"
                  [ngClass]="{'row-active': item === this.selectedItem}"
-            (click)="selectItem(item)">
+                 (click)="selectItem(item)">
                 <ng-container *ngFor="let key of keysToShow; let j = index">
                     <div class="ps-x1 py-1 position-static {{cols[j]}}"
                          [title]="item[key]"
                          [ngClass]="{'pe-3': keysToShow.length === 1}"
                          *ngIf="keysToShow.length === 1 || j < keysToShow.length - 1">
-                        <span *ngIf="item[key]" class="no-wrap">{{item[key]}}</span>
+                        <span *ngIf="item[key]" class="no-wrap">{{item[key].toString().substring(0, 100)}}</span>
                         <span *ngIf="!item[key]">-</span>
                     </div>
                     <div class="pe-3"
@@ -24,20 +24,20 @@
                          [ngClass]="cols[j]"
                          *ngIf="keysToShow.length > 1 && j === keysToShow.length - 1">
                         <div class="row flex-end-center text-end g-0">
-                            <span *ngIf="item[key]" class="no-wrap">{{item[key]}}</span>
+                            <span *ngIf="item[key]" class="no-wrap">{{item[key].toString().substring(0, 100)}}</span>
                             <span *ngIf="!item[key]">-</span>
                         </div>
                     </div>
                 </ng-container>
             </div>
-            <div class="loader-wrapper" *ngIf="gettingItems">
-                <div class="loader">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+        </ng-container>
+        <div class="loader-wrapper" *ngIf="gettingItems">
+            <div class="loader">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
-        </ng-container>
+        </div>
     </div>
     <div class="c-footer">
         <div class=" p-0">

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {lastValueFrom} from "rxjs";
 import {Config} from "../../config";
@@ -20,7 +20,7 @@ declare var $: any;
     encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
     user: any;
     company_admin = false;
@@ -670,5 +670,21 @@ export class DashboardComponent implements OnInit {
     preventDefault(e: Event) {
         e.preventDefault();
     }
+
+    ngOnDestroy(): void {
+        // this.hideSelectedItemModel();
+        // $('.modal-backdrop').remove();
+        $( '.modal' ).remove();
+        $( '.modal-backdrop' ).remove();
+        const body = $( 'body' );
+        if (body.hasClass("modal-open")) {
+            body.removeClass("modal-open");
+            body.css('overflow', '');
+            body.css('padding-right', '');
+        }
+
+    }
+
+
 
 }
