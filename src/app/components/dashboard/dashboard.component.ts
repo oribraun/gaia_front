@@ -58,6 +58,8 @@ export class DashboardComponent implements OnInit {
     selectedItemResults: any;
     selectedItemErrMessage: any;
 
+    clearSelectedItem = false;
+
     constructor(
         private config: Config,
         private apiService: ApiService
@@ -441,7 +443,7 @@ export class DashboardComponent implements OnInit {
         }
         const response: any = await lastValueFrom(this.apiService.getDashboard(obj));
         this.gettingDashboard = false;
-        console.log('response', response)
+        // console.log('response', response)
         this.results = response;
         this.total_user_prompts = response.total_user_prompts;
         this.user_prompts = response.user_prompts;
@@ -551,11 +553,15 @@ export class DashboardComponent implements OnInit {
         if (obj.selectedItem.user__email) {
             obj.selectedItem.email = obj.selectedItem.user__email;
         }
+        this.clearSelectedItem = true;
         if (this.selectedItem?.selectedItem?.email === obj.selectedItem.email) {
+            setTimeout(() => {
+                this.clearSelectedItem = false;
+            })
             this.showSelectedItemModel();
             return;
         }
-        console.log('obj', obj);
+        this.resetSelectedItem();
         this.selectedItem = obj
         this.companyUsersPaginationErrMessage = null;
         this.selectedItemResults = null;
@@ -567,12 +573,14 @@ export class DashboardComponent implements OnInit {
             } else {
                 this.selectedItemErrMessage = res.errMessage;
             }
+            this.clearSelectedItem = false;
         }, (err) => {
             this.selectedItemErrMessage = err;
+            this.clearSelectedItem = false;
         })
     }
     getCompanyUserPrompts(obj: any) {
-        console.log('obj', obj);
+        // console.log('obj', obj);
         this.selectedItemErrMessage = null;
         obj.selectedItem = this.selectedItem;
         const o = {
@@ -593,7 +601,7 @@ export class DashboardComponent implements OnInit {
     }
 
     getCompanyUserPrivacyModelPrompts(obj: any) {
-        console.log('obj', obj);
+        // console.log('obj', obj);
         this.selectedItemErrMessage = null;
         obj.selectedItem = this.selectedItem;
         const o = {
@@ -615,11 +623,16 @@ export class DashboardComponent implements OnInit {
 
     getAdminCompany(obj: any) {
         obj.type = 'getAdminCompany';
-        console.log('obj', obj);
+        // console.log('obj', obj);
+        this.clearSelectedItem = true;
         if (this.selectedItem?.selectedItem?.domain === obj.selectedItem.domain) {
+            setTimeout(() => {
+                this.clearSelectedItem = false;
+            })
             this.showSelectedItemModel();
             return;
         }
+        this.resetSelectedItem();
         this.selectedItem = obj
         const o = {
             domain: this.selectedItem.selectedItem.domain,
@@ -630,15 +643,23 @@ export class DashboardComponent implements OnInit {
             if (!res.err) {
                 this.selectedItemResults = res;
                 this.selectedItemErrMessage = '';
+                this.clearSelectedItem = false;
                 this.showSelectedItemModel();
             } else {
                 this.selectedItemErrMessage = res.errMessage;
+                this.clearSelectedItem = false;
             }
         }, (err) => {
             this.selectedItemErrMessage = err;
+            this.clearSelectedItem = false;
         })
     }
 
+    resetSelectedItem() {
+        this.selectedItem = null;
+        this.selectedItemResults = null;
+        this.selectedItemErrMessage = null;
+    }
     showSelectedItemModel() {
         $('#selectedItemModal').modal('show')
     }

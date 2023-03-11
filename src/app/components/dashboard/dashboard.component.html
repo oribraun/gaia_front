@@ -93,6 +93,7 @@
                     [showPagination]="true"
                     [paginationErrMessage]="companyUsersPaginationErrMessage"
                     (onPagination)="getCompanyUsers($event)"
+                    [clearSelectedItem]="clearSelectedItem"
                     (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
                 <!--                <div class="card mt-3 overflow-hidden">-->
@@ -124,6 +125,7 @@
                     [showPagination]="true"
                     (onPagination)="getAdminCompanies($event)"
                     [paginationErrMessage]="companiesPaginationErrMessage"
+                    [clearSelectedItem]="clearSelectedItem"
                     (onSelectItem)="getAdminCompany($event)"
                 ></app-basic-card-list>
                 <!--                <div class="card mt-3 overflow-hidden">-->
@@ -182,6 +184,7 @@
                     [keysToShow]="['user__email', 'count']"
                     [totalItems]="company_total_users"
                     [showPagination]="true"
+                    [clearSelectedItem]="clearSelectedItem"
                     (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
                 <app-basic-card-list
@@ -192,6 +195,7 @@
                     [keysToShow]="['user__email', 'count']"
                     [totalItems]="company_total_users"
                     [showPagination]="true"
+                    [clearSelectedItem]="clearSelectedItem"
                     (onSelectItem)="getCompanyUserInfo($event)"
                 ></app-basic-card-list>
             </ng-container>

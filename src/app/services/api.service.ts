@@ -13,7 +13,7 @@ export class ApiService {
     baseApiAuth = 'api/auth/';
     baseApiUser = 'api/us/';
     baseApiCompany = 'api/co/';
-    baseApiAdmin = 'api/a/';
+    baseApiAdmin = 'api/adm/';
     headers: any = {}
     private httpOptionsWithCreds = {
         // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

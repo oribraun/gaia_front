@@ -23,6 +23,7 @@ export class BasicCardListComponent implements OnInit, OnChanges {
     @Input('items') items: any = [];
     @Input('keysToShow') keysToShow: any = [];
     @Input('cols') cols: any = [];
+    @Input('clearSelectedItem') clearSelectedItem: boolean = false;
     @Input('showPagination') showPagination: boolean = true;
     @Output() onPagination: EventEmitter<any> = new EventEmitter<any>();
     @Output() onSelectItem: EventEmitter<any> = new EventEmitter<any>();
@@ -30,6 +31,7 @@ export class BasicCardListComponent implements OnInit, OnChanges {
     @Input('paginationLastState') paginationLastState: any;
     paginationError = '';
     selectedItem: any;
+    selectedItemClicked = false;
 
     public gettingItems = false;
     public input = '';
@@ -55,7 +57,7 @@ export class BasicCardListComponent implements OnInit, OnChanges {
     }
 
     checkMinItems() {
-        console.log('this.items', this.items)
+        // console.log(this.header + ' this.items', this.items)
         for (let i = this.items.length; i < this.pagination.limit; i++) {
             this.items.push({})
         }
@@ -100,7 +102,7 @@ export class BasicCardListComponent implements OnInit, OnChanges {
         if (this.pagination.current > this.pagination.end) {
             this.pagination.current = this.pagination.end;
         }
-        console.log('this.pagination', this.pagination)
+        // console.log('this.pagination', this.pagination)
     }
 
     nextPage() {
@@ -188,6 +190,7 @@ export class BasicCardListComponent implements OnInit, OnChanges {
         if (this.onSelectItem.observers.length) {
             this.selectedItem = item;
             this.onSelectItem.emit({selectedItem: this.selectedItem, offset: 0, limit: this.pagination.limit});
+            this.selectedItemClicked = true;
         }
     }
 
@@ -229,8 +232,16 @@ export class BasicCardListComponent implements OnInit, OnChanges {
                 this.pagination = {...this.paginationLastState};
                 this.paginationLastState = null;
                 this.paginationError = this.paginationErrMessage;
-                console.log('this.paginationError', this.paginationError)
+                // console.log('this.paginationError', this.paginationError)
             }
+        }
+        if (changes['clearSelectedItem'] && !changes['clearSelectedItem'].firstChange) {
+            // console.log(this.header + ' changes[\'clearSelectedItem\']', this.selectedItemClicked)
+            if (!this.selectedItemClicked && this.clearSelectedItem) {
+                this.selectedItem = null;
+                // console.log(this.header + ' this.selectedItem', this.selectedItem)
+            }
+            this.selectedItemClicked = false;
         }
     }
 
