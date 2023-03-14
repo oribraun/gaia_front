@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     @ViewChild('videoplayer') videoplayer!: ElementRef;
     videoUrl = environment.staticUrl + 'assets/videos/loop_video..mp4';
     imageUrl = environment.staticUrl + 'assets/images/Artificial-Intelligence-Trends-scaled-1.jpeg';
-    logoUrl = environment.staticUrl + 'assets/images/Gaia_blue_long_transparent.png';
+    logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_White_Logo.png';
     title = 'frontend';
     staticServerPath = '';
     constructor() {}

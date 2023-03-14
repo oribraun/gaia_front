@@ -13,7 +13,8 @@ import {environment} from "../../../environments/environment";
 })
 export class LoginComponent implements OnInit {
     imageUrl = environment.staticUrl + 'assets/images/Artificial-Intelligence-Trends-scaled-1.jpeg';
-    logoUrl = environment.staticUrl + 'assets/images/Gaia_blue_long_transparent.png';
+    logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_Logo.png';
+    whiteLogoUrl = environment.staticUrl + 'assets/images/Generative_Ai_White_Logo.png';
 
     formType = 'login';
     formTypeOptions = ['login', 'register', 'forgot'];
