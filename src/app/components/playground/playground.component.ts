@@ -13,7 +13,7 @@ export class PlaygroundComponent implements OnInit {
     @ViewChild('chat_results_scroll') chatResultsScroll: ElementRef;
 
     promptValue = '';
-    models = ['chatGpt', 'Cohere'];
+    models = ['chatGpt', 'Co:here'];
     selectedModel = 'chatGpt';
     chat: any = [];
     chatLimit = 50;
@@ -44,7 +44,7 @@ export class PlaygroundComponent implements OnInit {
             this.chat.push({text: text, model: this.selectedModel, done: true})
             this.chat.push({text: '', model: this.selectedModel, done: false})
             this.submitInProgress = true;
-            if (this.selectedModel === 'Cohere') {
+            if (this.selectedModel === 'Co:here') {
                 this.apiService.getAnswerCohereStreaming(text).subscribe((event: any) => {
                     this.handleSubmit(event);
                 }, (err) => {
