@@ -22,6 +22,7 @@ import { PrivacyComponent } from './components/privacy/privacy.component';
 import { BasicCardComponent } from './components/dashboard/basic-card/basic-card.component';
 import { BasicCardListComponent } from './components/dashboard/basic-card-list/basic-card-list.component';
 import {RangePipe} from "./pipes/range/range.pipe";
+import { PlaygroundComponent } from './components/playground/playground.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import {RangePipe} from "./pipes/range/range.pipe";
         DashboardComponent,
         PrivacyComponent,
         BasicCardComponent,
-        BasicCardListComponent
+        BasicCardListComponent,
+        PlaygroundComponent
     ],
     imports: [
         BrowserModule,

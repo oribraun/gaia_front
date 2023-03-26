@@ -156,6 +156,14 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getAnswerCohereStreaming(prompt: string) {
+        this.httpOptions['responseType'] = 'text';
+        this.httpOptions['observe'] = 'events';
+        this.httpOptions['reportProgress'] = true;
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-answer-c', {'prompt': prompt},
+            this.httpOptions
+        )
+    }
     getSettings(key: string) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-settings', {key: key},
             this.httpOptions
