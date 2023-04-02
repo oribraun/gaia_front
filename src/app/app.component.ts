@@ -4,6 +4,8 @@ import {Config} from "./config";
 // declare var STATIC_URL: any;
 declare var USER: any;
 declare var TOKEN: any;
+declare var HOST: any;
+declare var SCHEME: any;
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -13,13 +15,18 @@ export class AppComponent implements OnInit {
     title = 'frontend';
     constructor(
         private config: Config
-    ) {}
+    ) {
+        setTimeout(() => {
+            this.setupCredsFromServer();
+        })
+        this.setupCredsFromServer();
+    }
 
     ngOnInit(): void {
         // setTimeout is because we need to wait for all components subscriptions to config changes
-        setTimeout(() => {
-            this.setupCredsFromServer()
-        })
+        // setTimeout(() => {
+        //     this.setupCredsFromServer()
+        // })
     }
 
     setupCredsFromServer() {
@@ -31,10 +38,24 @@ export class AppComponent implements OnInit {
         } else {
             this.config.user_subject.next('');
         }
-        console.log('csrf_token', TOKEN)
-        if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
-            this.config.csrf_token = TOKEN;
+        // console.log('csrf_token', TOKEN)
+        // if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
+        //     this.config.csrf_token = TOKEN;
+        // }
+        if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
+            this.config.server_host = SCHEME + '://' + HOST + '/';
         }
+        // console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
+        if (this.config.getCookie('csrftoken')) {
+            this.config.csrf_token = this.config.getCookie('csrftoken');
+        }
+        if (this.config.getCookie('token', true)) {
+            this.config.token = this.config.getCookie('token', true);
+        }
+        if (this.config.getCookie('user', true)) {
+            this.config.user = JSON.parse(this.config.getCookie('user', true));
+        }
+
     }
 
 }

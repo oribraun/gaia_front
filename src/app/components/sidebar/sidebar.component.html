@@ -7,26 +7,54 @@
         <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Home"
+                   data-toggle="tooltip" data-placement="right" title="Home" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-house-door"></i> <span>Home</span>
                 </a>
             </li>
-            <ng-container *ngIf="this.user">
-                <li>
-                    <a href="#" class="nav-link border-bottom rounded-0"
-                       data-toggle="tooltip" data-placement="right" title="Prompt Optimizer"
-                       [routerLink]="['/prompt-optimizer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">
-                        <i class="bi bi-speedometer2"></i> <span>Prompt Optimizer</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link border-bottom rounded-0"
-                       data-toggle="tooltip" data-placement="right" title="Analyzer"
-                        [routerLink]="['/analyzer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">
-                        <i class="bi bi-table"></i> <span>Analyzer</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link border-bottom rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="About" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-info"></i> <span>About</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user">
+                <a class="nav-link border-bottom rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-clipboard2-pulse"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user">
+                <a class="nav-link border-bottom rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/playground']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-dpad"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link border-bottom rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/privacy-policy']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-shield-lock-fill"></i> <span>Privacy Policy</span>
+                </a>
+            </li>
+<!--            <ng-container *ngIf="this.user">-->
+<!--                <li>-->
+<!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+<!--                       data-toggle="tooltip" data-placement="right" title="Prompt Optimizer"-->
+<!--                       [routerLink]="['/prompt-optimizer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
+<!--                        <i class="bi bi-speedometer2"></i> <span>Prompt Optimizer</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+<!--                       data-toggle="tooltip" data-placement="right" title="Analyzer"-->
+<!--                        [routerLink]="['/analyzer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
+<!--                        <i class="bi bi-table"></i> <span>Analyzer</span>-->
+<!--                    </a>-->
+<!--                </li>-->
 <!--                <li>-->
 <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
 <!--                       data-toggle="tooltip" data-placement="right" title="Products">-->
@@ -39,7 +67,7 @@
 <!--                        <i class="bi bi-person-circle"></i> <span>Customers</span>-->
 <!--                    </a>-->
 <!--                </li>-->
-            </ng-container>
+<!--            </ng-container>-->
         </ul>
         <div class="dropdown border-top dropend" bis_skin_checked="1">
             <a href="#" class="d-flex align-items-center justify-content-center link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,10 +84,10 @@
                 <ng-container *ngIf="user">
                     <h6 class="dropdown-header">Hello {{user.username}}</h6>
                     <div class="dropdown-divider"></div>
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><hr class="dropdown-divider"></li>
+<!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Settings</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
+<!--                    <li><hr class="dropdown-divider"></li>-->
                     <li><a class="dropdown-item" href="#" (click)="logout($event)">Sign out</a></li>
                 </ng-container>
             </ul>

@@ -1,12 +1,17 @@
 import {Subject} from "rxjs";
+import * as CryptoJS from 'crypto-js';
+
+const key = "My Secret Passphrase";
 
 export class Config {
-  private _user: any = '';
-  private _token: string = '';
-  private _csrf_token: string = '';
-  private _user_subject: Subject<any> = new Subject<any>();
-  private _token_subject: Subject<string> = new Subject<string>();
-  private _csrf_token_subject: Subject<string> = new Subject<string>();
+    private _user: any = '';
+    private _server_host: string = '';
+    private _token: string = '';
+    private _csrf_token: string = '';
+    private _server_host_subject: Subject<any> = new Subject<any>();
+    private _user_subject: Subject<any> = new Subject<any>();
+    private _token_subject: Subject<string> = new Subject<string>();
+    private _csrf_token_subject: Subject<string> = new Subject<string>();
 
     get user(): any {
         return this._user;
@@ -17,6 +22,14 @@ export class Config {
         this._user_subject.next(this.user);
     }
 
+    get server_host(): string {
+        return this._server_host;
+    }
+
+    set server_host(value: string) {
+        this._server_host = value;
+        this.server_host_subject.next(this.server_host)
+    }
     get token(): string {
         return this._token;
     }
@@ -44,6 +57,14 @@ export class Config {
         this._user_subject = value;
     }
 
+    get server_host_subject(): Subject<any> {
+        return this._server_host_subject;
+    }
+
+    set server_host_subject(value: Subject<any>) {
+        this._server_host_subject = value;
+    }
+
     get token_subject(): Subject<any> {
         return this._token_subject;
     }
@@ -60,8 +81,60 @@ export class Config {
         this._csrf_token_subject = value;
     }
 
+
     resetUserCreds() {
         this.user = '';
         this.token = '';
+    }
+
+    getCookie(name: string, decrypt = false) {
+        const value = `; ${document.cookie}`;
+        const parts: any = value.split(`; ${name}=`);
+        if (parts && parts.length === 2) {
+            let val = parts.pop().split(';').shift();
+            if (decrypt) {
+                try {
+                    val = this.Decrypt(val, key);
+                } catch (err) {
+                    val = '';
+                }
+            }
+            return val;
+        } else {
+            return '';
+        }
+    }
+
+    setCookie(name: string, val: string, exp: Date, encrypt=false) {
+        let final_val = val;
+        if (encrypt && val) {
+            try {
+                final_val = this.Encrypt(val, key).toString()
+            } catch (err) {
+                final_val = val;
+            }
+        }
+        var c_value = final_val + "; expires=" + exp.toUTCString();
+        document.cookie = name + "=" + c_value;
+    }
+
+    Encrypt(word: string, key = 'share') {
+        let encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString()
+        let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson))
+        return encData
+    }
+
+    Decrypt(word: string, key = 'share') {
+        let decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8)
+        let bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8)
+        return JSON.parse(bytes)
+    }
+
+    resetCookies() {
+        const exp = new Date()
+        exp.setDate(exp.getDate()-5);
+        this.setCookie('user', '', exp);
+        this.setCookie('token', '', exp);
+        this.setCookie('csrftoken', '', exp);
     }
 }

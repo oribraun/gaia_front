@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             this.applyTooltip()
@@ -43,6 +44,7 @@ export class SidebarComponent implements OnInit {
     async logout(e: Event) {
         e.preventDefault();
         const response = await this.apiService.logout().toPromise();
+        this.config.resetCookies();
         this.config.resetUserCreds();
         this.router.navigate(['/'])
     }
