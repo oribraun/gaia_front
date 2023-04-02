@@ -2,23 +2,25 @@
     <div class="row row-top">
         <div class="col-12 inner-scroll" #chat_results_scroll>
             <div class="box bg-light" *ngFor="let item of chat; let i = index" [ngClass]="{'box-colored': i % 2}">
+                <div class="inner-box">
                     <span class="prompt-icon">
                         <i *ngIf="!(i % 2)" class="bi bi-person"></i>
                         <i *ngIf="(i % 2)" class="bi bi-laptop" [title]="item.model"></i>
                     </span>
-                <span class="prompt pre-wrap" [ngClass]="{'computer-prompt': (i % 2)}" [innerHTML]="item.text"></span>
-                <div class="spinner-border" role="status" *ngIf="!item.text && submitInProgress">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" *ngIf="(i % 2) && chatProgress > -1 && !item.text && submitInProgress"
-                     [attr.progress]="chatProgress + '%'"
-                     [ngStyle]="{'width': chatProgress + '%'}"
-                ></div>
-                <div class="clipboard-wrapper"
-                     *ngIf="(item.text && !(i % 2)) || (item.text && (i % 2) && item.done)">
-                    <div class="clipboard bg-light">
-                        <i class="bi bi-clipboard pointer" (click)="copyText(item.text, i)" *ngIf="copyTextSuccess === -1 || copyTextSuccess !== i"></i>
-                        <i class="bi bi-hand-thumbs-up text-success" *ngIf="copyTextSuccess !== -1 && copyTextSuccess === i"></i>
+                    <span class="prompt pre-wrap" [ngClass]="{'computer-prompt': (i % 2)}" [innerHTML]="item.text"></span>
+                    <div class="spinner-border" role="status" *ngIf="!item.text && submitInProgress">
+                        <span class="sr-only"></span>
+                    </div>
+                    <div class="progress-bar" *ngIf="(i % 2) && chatProgress > -1 && !item.text && submitInProgress"
+                         [attr.progress]="chatProgress + '%'"
+                         [ngStyle]="{'width': chatProgress + '%'}"
+                    ></div>
+                    <div class="clipboard-wrapper"
+                         *ngIf="(item.text && !(i % 2)) || (item.text && (i % 2) && item.done)">
+                        <div class="clipboard bg-light">
+                            <i class="bi bi-clipboard pointer" (click)="copyText(item.text, i)" *ngIf="copyTextSuccess === -1 || copyTextSuccess !== i"></i>
+                            <i class="bi bi-hand-thumbs-up text-success" *ngIf="copyTextSuccess !== -1 && copyTextSuccess === i"></i>
+                        </div>
                     </div>
                 </div>
             </div>

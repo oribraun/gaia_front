@@ -27,37 +27,45 @@
                 box-shadow: 0 6px 8px -4px #d0d0d0;
                 //transform: translate(-4px, 0px);
                 margin-right: 8px;
-                .clipboard-wrapper {
-                    position: absolute;
-                    bottom: 0;
-                    padding: 0 5px;
-                    opacity: 1;
-                    right: -4px;
-                    .clipboard {
-                        //position: relative;
-                        //top: 50%;
-                        //transform: translate(0, -50%);
-                        //background: #fff;
-                        &:hover {
-                            color: #696969;
+                .inner-box {
+                    overflow: hidden;
+                    .clipboard-wrapper {
+                        position: absolute;
+                        bottom: 0;
+                        padding: 0 5px;
+                        opacity: 1;
+                        right: -4px;
+
+                        .clipboard {
+                            //position: relative;
+                            //top: 50%;
+                            //transform: translate(0, -50%);
+                            //background: #fff;
+                            &:hover {
+                                color: #696969;
+                            }
                         }
                     }
-                }
-                .clipboard-wrapper-left {
-                    left: -5px;
-                    right: auto;
-                    .clipboard {
-                        position: absolute;
-                        top: 50%;
-                        transform: translate(-50%, -50%);
-                        background: #ececec;
+
+                    .clipboard-wrapper-left {
+                        left: -5px;
+                        right: auto;
+
+                        .clipboard {
+                            position: absolute;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            background: #ececec;
+                        }
                     }
-                }
-                .prompt-icon {
-                    margin-right: 5px;
-                }
-                .prompt {
-                    //white-space: pre-wrap;
+
+                    .prompt-icon {
+                        margin-right: 5px;
+                    }
+
+                    .prompt {
+                        //white-space: pre-wrap;
+                    }
                 }
             }
             .box-colored {

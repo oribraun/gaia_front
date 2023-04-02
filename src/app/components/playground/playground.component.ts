@@ -10,7 +10,7 @@ import {lastValueFrom} from "rxjs";
 })
 export class PlaygroundComponent implements OnInit {
 
-    @ViewChild('chat_results_scroll') chatResultsScroll: ElementRef;
+    @ViewChild('chat_results_scroll') chatResultsScroll: ElementRef | undefined;
 
     promptValue = '';
     models = ['chatGpt', 'Co:here'];
