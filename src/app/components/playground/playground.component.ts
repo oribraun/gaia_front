@@ -61,7 +61,7 @@ export class PlaygroundComponent implements OnInit {
     }
 
     handleSubmit(event: any) {
-        console.log('event', event)
+        // console.log('event', event)
         if (event.type === HttpEventType.DownloadProgress) {
             const partialText = event.partialText;
             if (partialText) {
@@ -71,7 +71,7 @@ export class PlaygroundComponent implements OnInit {
         }
         if (event.type === HttpEventType.Response) {
             const body = event.body;
-            console.log('body', body)
+            // console.log('body', body)
             this.submitInProgress = false;
         }
     }
