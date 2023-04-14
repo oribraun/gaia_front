@@ -1,0 +1,40 @@
+<div class="my-container container">
+    <div class="row row-top">
+        <div class="col-12 inner-scroll" #chat_results_scroll>
+            <div class="loader-wrapper" *ngIf="submitInProgress">
+                <div class="loader">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box bg-light" *ngIf="results">
+                <div *ngFor="let r of results">
+                    <div class="vendors" [ngStyle]="{'width': (100 / vendors.length) + '%'}" *ngFor="let v of vendors">
+                        <h4 class="text-center">{{v}}</h4>
+                        <p>{{r[v]}}</p>
+                        <p>took - {{r[v + '_took']}} Seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row row-bottom">
+        <div class="col-12">
+            <div class="three-input-group">
+                <textarea class="item first" placeholder="Prompt Input" aria-label="Prompt Input"
+                          (keydown)="preventTextAreaEnter($event)"
+                          (keydown.enter)="submitPrompt()"
+                          cols="1" rows="1" style="resize: none;"
+                          [(ngModel)]="promptValue"></textarea>
+                <!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
+                <div class="item last addon pointer" (click)="submitPrompt()">
+                    <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>
+                    <div class="spinner-border" role="status" *ngIf="submitInProgress">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

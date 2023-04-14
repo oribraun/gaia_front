@@ -166,6 +166,11 @@ export class ApiService {
             httpOptions
         )
     }
+    compareVendors(prompt: string) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'compare-vendors', {'prompt': prompt},
+            this.httpOptions
+        )
+    }
     getSettings(key: string) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-settings', {key: key},
             this.httpOptions

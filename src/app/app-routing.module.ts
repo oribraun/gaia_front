@@ -11,6 +11,7 @@ import {AboutComponent} from "./components/about/about.component";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PrivacyComponent} from "./components/privacy/privacy.component";
 import {PlaygroundComponent} from "./components/playground/playground.component";
+import {CompareVendorsComponent} from "./components/compare-vendors/compare-vendors.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'analyzer', component: AnalyzerComponent, pathMatch : 'full', canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthGuard] },
   { path: 'playground', component: PlaygroundComponent, pathMatch : 'full', canActivate: [AuthGuard] },
+  { path: 'compare-vendors', component: CompareVendorsComponent, pathMatch : 'full', canActivate: [AuthGuard] },
   // { path: 'test', component: TestComponent, pathMatch : 'full' },
   // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
   { path: '**', redirectTo: '' }
