@@ -446,6 +446,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.results = response;
         this.company_total_prompts = response.company_total_prompts;
         this.company_prompts = response.company_prompts;
+        for (let i in this.company_prompts) {
+            this.company_prompts[i].cost_estimate = parseFloat(this.company_prompts[i].cost_estimate)
+        }
         this.company_total_cost = response.company_total_cost;
 
         this.setUpCharts();

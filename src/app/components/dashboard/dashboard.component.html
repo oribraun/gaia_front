@@ -26,11 +26,11 @@
             <div class="col-12 mt-3">
                 <app-basic-card-list
                     [class]="'h-lg-100 overflow-hidden'"
-                    [tableHeaders]="['input', 'output', 'time sec']"
+                    [tableHeaders]="['input', 'output', 'took', '$ cost']"
                     [itemsAddOns]="['', '', 's']"
                     [items]="company_prompts"
-                    [keysToShow]="['input_prompt','output_prompt', 'took_sec']"
-                    [cols]="['col-4','col-4','col-4']"
+                    [keysToShow]="['input_prompt','output_prompt', 'took_sec', 'cost_estimate']"
+                    [cols]="['col-3','col-3','col-3 text-center', 'col-3 text-center']"
                     [totalItems]="company_total_prompts"
                     [showPagination]="true"
                     [paginationErrMessage]="userPromptsPaginationErrMessage"
