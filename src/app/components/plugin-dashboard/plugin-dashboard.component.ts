@@ -1,10 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {EChartsOption} from "echarts";
+import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
 import {lastValueFrom} from "rxjs";
-import {Config} from "../../config";
-import { EChartsOption } from 'echarts';
 import {environment} from "../../../environments/environment";
-import {User} from "../../entities/user";
 
 var light_grey = '#f9fafd';
 var grey = '#d8e2ef';
@@ -15,15 +14,13 @@ var primary = '#2c7be5';
 declare var $: any;
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.less'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'app-plugin-dashboard',
+  templateUrl: './plugin-dashboard.component.html',
+  styleUrls: ['./plugin-dashboard.component.less']
 })
+export class PluginDashboardComponent implements OnInit {
 
-export class DashboardComponent implements OnInit, OnDestroy {
-
-    user!: User;
+  user: any;
     company_admin = false;
     gaia_admin = false;
 
@@ -32,18 +29,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     results: any = [];
     results_type = '';
     company_total_prompts = -1;
-    company_prompts: any = [];
-    company_total_cost = -1;
-    // total_user_privacy_model_prompts = -1;
-    // total_companies = -1;
+    company_total_privacy_model_prompts = -1;
+    company_total_users = -1;
+    total_user_prompts = -1;
+    total_user_privacy_model_prompts = -1;
+    total_companies = -1;
+    user_prompts: any = [];
     userPromptsPaginationErrMessage: any;
-    // user_privacy_model_prompts: any = [];
-    // userPrivacyModelPromptsPaginationErrMessage: any;
-    // company_users: any = [];
-    // companyUsersPaginationErrMessage: any;
-    // company_top_prompt_users: any = [];
-    // company_top_privacy_prompt_users: any = [];
-    // companies: any = [];
+    user_privacy_model_prompts: any = [];
+    userPrivacyModelPromptsPaginationErrMessage: any;
+    company_users: any = [];
+    companyUsersPaginationErrMessage: any;
+    company_top_prompt_users: any = [];
+    company_top_privacy_prompt_users: any = [];
+    companies: any = [];
     companiesPaginationErrMessage: any;
 
     weeklySalesOptions: EChartsOption = {};
@@ -431,25 +430,72 @@ export class DashboardComponent implements OnInit, OnDestroy {
     async getDashBoard() {
         this.gettingDashboard = true;
         const obj = {
-            company_prompt_offset: 0,
-            company_prompt_limit: 10,
+            user_prompts_offset: 0,
+            user_prompts_limit: 10,
+            user_privacy_model_prompts_offset: 0,
+            user_privacy_model_prompts_limit: 10,
+            company_users_offset: 0,
+            company_users_limit: 10,
+            admin_company_offset: 0,
+            admin_company_limit: 10
         }
-        const response: any = await lastValueFrom(this.apiService.getDashboard(obj));
+        const response: any = await lastValueFrom(this.apiService.getPluginDashboard(obj));
         this.gettingDashboard = false;
         // console.log('response', response)
         this.results = response;
+        this.total_user_prompts = response.total_user_prompts;
+        this.user_prompts = response.user_prompts;
+
+        this.total_user_privacy_model_prompts = response.total_user_privacy_model_prompts;
+        this.user_privacy_model_prompts = response.user_privacy_model_prompts;
+
+        this.results_type = response.results_type;
+        this.company_admin = response.company_admin;
+        this.gaia_admin = response.gaia_admin;
+
+        // for company admin or user only
         this.company_total_prompts = response.company_total_prompts;
-        this.company_prompts = response.company_prompts;
-        this.company_total_cost = response.company_total_cost;
+        this.company_total_privacy_model_prompts = response.company_total_privacy_model_prompts;
+
+        // for company admin only
+        this.company_total_users = response.company_total_users;
+        this.company_users = response.company_users;
+        this.company_top_prompt_users = response.company_top_prompt_users;
+        this.company_top_privacy_prompt_users = response.company_top_privacy_prompt_users;
+
+        // for gaia admin only
+        this.companies = response.companies;
+        this.total_companies = response.total_companies;
 
         this.setUpCharts();
+        // this.initArray();
     }
 
-    getCompanyPrompts(obj: any) {
+    initArray() {
+        if (!environment.production) {
+            for (let i = 0; i < 10; i++) {
+                if (this.company_users && this.company_users.length < 10) {
+                    this.company_users.push({email: 'test'})
+                }
+                if (this.company_top_prompt_users && this.company_top_prompt_users.length < 10) {
+                    this.company_top_prompt_users.push({user__email: 'test', count: 1})
+                }
+                if (this.company_top_privacy_prompt_users && this.company_top_privacy_prompt_users.length < 10) {
+                    this.company_top_privacy_prompt_users.push({user__email: 'test', count: 1})
+                }
+                if (this.companies && this.companies.length < 10) {
+                    this.companies.push({name: 'test', domain: 'test.com'})
+                }
+            }
+        }
+    }
+
+    getUserPrompts(obj: any) {
+        console.log('obj', obj);
         this.userPromptsPaginationErrMessage = null;
-        this.apiService.getDashboard(obj).subscribe((res: any) => {
+        this.apiService.getUserPrompts(obj).subscribe((res: any) => {
             if (!res.err) {
-                this.company_prompts = res.company_prompts;
+                this.user_prompts = res.user_prompts;
                 this.userPromptsPaginationErrMessage = '';
             } else {
                 this.userPromptsPaginationErrMessage = res.errMessage;
@@ -458,7 +504,79 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.userPromptsPaginationErrMessage = err;
         })
     }
-
+    getUserPrivacyModelPrompts(obj: any) {
+        console.log('obj', obj);
+        this.userPrivacyModelPromptsPaginationErrMessage = null;
+        this.apiService.getUserPrivacyModelPrompts(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.user_privacy_model_prompts = res.user_privacy_model_prompts;
+                this.userPrivacyModelPromptsPaginationErrMessage = '';
+            } else {
+                this.userPrivacyModelPromptsPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.userPrivacyModelPromptsPaginationErrMessage = err;
+        })
+    }
+    getCompanyUsers(obj: any) {
+        console.log('obj', obj);
+        this.companyUsersPaginationErrMessage = null;
+        this.apiService.getCompanyUsers(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.company_users = res.company_users;
+                this.companyUsersPaginationErrMessage = '';
+            } else {
+                this.companyUsersPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.companyUsersPaginationErrMessage = err;
+        })
+    }
+    getAdminCompanies(obj: any) {
+        console.log('obj', obj);
+        this.companiesPaginationErrMessage = null;
+        this.apiService.getAdminCompanies(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.companies = res.companies;
+                this.companiesPaginationErrMessage = '';
+            } else {
+                this.companyUsersPaginationErrMessage = res.errMessage;
+            }
+        }, (err) => {
+            this.companiesPaginationErrMessage = err;
+        })
+    }
+    getCompanyUserInfo(obj: any) {
+        obj.type = 'getUserInfo';
+        if (obj.selectedItem.user__email) {
+            obj.selectedItem.email = obj.selectedItem.user__email;
+        }
+        this.clearSelectedItem = true;
+        if (this.selectedItem?.selectedItem?.email === obj.selectedItem.email) {
+            setTimeout(() => {
+                this.clearSelectedItem = false;
+            })
+            this.showSelectedItemModel();
+            return;
+        }
+        this.resetSelectedItem();
+        this.selectedItem = obj
+        this.companyUsersPaginationErrMessage = null;
+        this.selectedItemResults = null;
+        this.apiService.getCompanyUserInfo(obj).subscribe((res: any) => {
+            if (!res.err) {
+                this.selectedItemResults = res;
+                this.selectedItemErrMessage = '';
+                this.showSelectedItemModel();
+            } else {
+                this.selectedItemErrMessage = res.errMessage;
+            }
+            this.clearSelectedItem = false;
+        }, (err) => {
+            this.selectedItemErrMessage = err;
+            this.clearSelectedItem = false;
+        })
+    }
     getCompanyUserPrompts(obj: any) {
         // console.log('obj', obj);
         this.selectedItemErrMessage = null;
@@ -564,7 +682,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
 
     }
-
-
 
 }

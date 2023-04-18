@@ -1,0 +1,17 @@
+<form class="container">
+    <div *ngIf="company">
+        <h2 class="text-center">Settings</h2>
+        <div class="mb-3">
+            <label for="exampleInputOpenAiKey" class="form-label">Open Ai Key</label>
+            <input type="text" name="open_ai_key" class="form-control" id="exampleInputOpenAiKey" [(ngModel)]="company.open_ai_key">
+            <div id="emailHelp" class="form-text">We'll never share your open ai key.</div>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="saveCompanySettings()">Save</button>
+    </div>
+    <div class="text-center text-danger" *ngIf="errMessage">
+        {{errMessage}}
+    </div>
+    <div class="text-center text-success" *ngIf="successMessage">
+        {{successMessage}}
+    </div>
+</form>

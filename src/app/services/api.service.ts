@@ -13,6 +13,8 @@ export class ApiService {
     baseApiAuth = 'api/auth/';
     baseApiUser = 'api/us/';
     baseApiCompany = 'api/co/';
+    baseApiCompanyAdmin = 'api/coa/';
+    baseApiCompanyToken = 'api/ct/';
     baseApiAdmin = 'api/adm/';
     headers: any = {}
     private httpOptionsWithCreds = {
@@ -181,8 +183,8 @@ export class ApiService {
             this.httpOptions
         )
     }
-    getDashboard(obj: any = {}) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-dashboard', obj,
+    getPluginDashboard(obj: any = {}) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-plugin-dashboard', obj,
             this.httpOptions
         )
     }
@@ -199,7 +201,7 @@ export class ApiService {
     getCompanyUsers(obj: any) {
         // company_users_offset
         // company_users_limit
-        return this.http.post(this.serverBase + this.baseApiCompany + 'get-users', obj,
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-users', obj,
             this.httpOptions
         )
     }
@@ -207,18 +209,48 @@ export class ApiService {
         // user_email = request.data['user_email']
         // user_prompts_offset = request.data['user_prompts_offset']
         // user_prompts_limit = request.data['user_prompts_limit']
-        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-info', obj,
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-user-info', obj,
             this.httpOptions
         )
     }
     getCompanyUserPrompts(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-prompts', obj,
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-user-prompts', obj,
             this.httpOptions
         )
     }
     getCompanyUserPrivacyModelPrompts(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiCompany + 'get-user-privacy-model-prompts', obj,
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-user-privacy-model-prompts', obj,
             this.httpOptions
+        )
+    }
+    getDashboard(obj: any = {}) {
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-dashboard', obj,
+            this.httpOptions
+        )
+    }
+    getCompanyPrompts(obj: any = {}) {
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-company-prompts', obj,
+            this.httpOptions
+        )
+    }
+    getCompany(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-company', obj,
+            this.httpOptions
+        )
+    }
+    setCompany(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'set-company', obj,
+            this.httpOptions
+        )
+    }
+    getSmartRouter(prompt: string, gaia_token = '') {
+        const httpOptions = {...this.httpOptions}
+        httpOptions['responseType'] = 'text';
+        httpOptions['observe'] = 'events';
+        httpOptions['reportProgress'] = true;
+        httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token;
+        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'smart-router', {'prompt': prompt},
+            httpOptions
         )
     }
     getAdminCompanyInfo(obj: any) {

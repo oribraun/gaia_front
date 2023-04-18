@@ -19,6 +19,8 @@ export class BasicCardListComponent implements OnInit, OnChanges {
 
     @Input('class') class: string = '';
     @Input('header') header: string = '';
+    @Input('tableHeaders') tableHeaders: string[] = [];
+    @Input('itemsAddOns') itemsAddOns: string[] = [];
     @Input('totalItems') totalItems: number = 0;
     @Input('items') items: any = [];
     @Input('keysToShow') keysToShow: any = [];

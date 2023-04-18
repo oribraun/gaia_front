@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {IsActiveMatchOptions, Router} from "@angular/router";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
+import {User} from "../../entities/user";
 
 declare var $: any;
 @Component({
@@ -17,7 +18,7 @@ export class SidebarComponent implements OnInit {
         queryParams: 'subset',
         matrixParams: 'subset'
     }
-    user: any;
+    user!: User;
     constructor(
         private config: Config,
         private apiService: ApiService,

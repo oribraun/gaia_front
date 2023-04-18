@@ -1,10 +1,11 @@
 import {Subject} from "rxjs";
 import * as CryptoJS from 'crypto-js';
+import {User} from "./entities/user";
 
 const key = "My Secret Passphrase";
 
 export class Config {
-    private _user: any = '';
+    private _user: User = new User();
     private _server_host: string = '';
     private _token: string = '';
     private _csrf_token: string = '';
@@ -13,12 +14,12 @@ export class Config {
     private _token_subject: Subject<string> = new Subject<string>();
     private _csrf_token_subject: Subject<string> = new Subject<string>();
 
-    get user(): any {
+    get user(): User {
         return this._user;
     }
 
     set user(value: any) {
-        this._user = value;
+        this._user = new User(value);
         this._user_subject.next(this.user);
     }
 

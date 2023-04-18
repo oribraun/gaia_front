@@ -19,11 +19,14 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 // import {APP_BASE_HREF} from "@angular/common";
 import { NgxEchartsModule } from 'ngx-echarts';
 import { PrivacyComponent } from './components/privacy/privacy.component';
-import { BasicCardComponent } from './components/dashboard/basic-card/basic-card.component';
-import { BasicCardListComponent } from './components/dashboard/basic-card-list/basic-card-list.component';
+import { BasicCardComponent } from './components/shared/basic-card/basic-card.component';
+import { BasicCardListComponent } from './components/shared/basic-card-list/basic-card-list.component';
 import {RangePipe} from "./pipes/range/range.pipe";
 import { PlaygroundComponent } from './components/playground/playground.component';
 import { CompareVendorsComponent } from './components/compare-vendors/compare-vendors.component';
+import { PluginDashboardComponent } from './components/plugin-dashboard/plugin-dashboard.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { SmartRouterComponent } from './components/smart-router/smart-router.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +46,10 @@ import { CompareVendorsComponent } from './components/compare-vendors/compare-ve
         BasicCardComponent,
         BasicCardListComponent,
         PlaygroundComponent,
-        CompareVendorsComponent
+        CompareVendorsComponent,
+        PluginDashboardComponent,
+        SettingsComponent,
+        SmartRouterComponent
     ],
     imports: [
         BrowserModule,

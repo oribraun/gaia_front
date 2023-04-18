@@ -19,21 +19,28 @@
                     <i class="bi bi-info"></i> <span>About</span>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="user">
+            <li class="nav-item" *ngIf="user.id && user.company_name && user.company_admin">
                 <a class="nav-link border-bottom rounded-0"
                    data-toggle="tooltip" data-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-clipboard2-data"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user.id">
+                <a class="nav-link border-bottom rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Plugin Dashboard" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/plugin-dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-clipboard2-pulse"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="user">
+            <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
                    data-toggle="tooltip" data-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/playground']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-dpad"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="user">
+            <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
                    data-toggle="tooltip" data-placement="right" title="Compare Vendors" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/compare-vendors']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
@@ -82,17 +89,21 @@
                 <i class="bi bi-no-min bi-person-add"></i>
             </a>
             <ul class="dropdown-menu text-small shadow">
-                <ng-container *ngIf="!user">
+                <ng-container *ngIf="!user.id">
                     <li>
                         <a class="dropdown-item" href="#"
                            [routerLink]="['/login']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">Sign in</a>
                     </li>
                 </ng-container>
-                <ng-container *ngIf="user">
+                <ng-container *ngIf="user.id">
                     <h6 class="dropdown-header">Hello {{user.username}}</h6>
                     <div class="dropdown-divider"></div>
                     <!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
-                    <!--                    <li><a class="dropdown-item" href="#">Settings</a></li>-->
+                    <li *ngIf="user.id && user.company_admin"><a class="dropdown-item"
+                           [routerLink]="['/settings']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">Settings</a></li>
+
+                    <li *ngIf="user && user.company_admin"><a class="dropdown-item"
+                           [routerLink]="['/smart-router']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">Smart router</a></li>
                     <!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
                     <!--                    <li><hr class="dropdown-divider"></li>-->
                     <li><a class="dropdown-item" href="#" (click)="logout($event)">Sign out</a></li>

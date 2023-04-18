@@ -6,7 +6,7 @@ import {Config} from "../config";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthCompanyAdminGuard implements CanActivate {
 
     constructor(
         private config: Config,
@@ -26,10 +26,11 @@ export class AuthGuard implements CanActivate {
         //     }
         // })
         // return true
-        if (this.config.user) {
+        const user = this.config.user;
+        if (user && user.company_admin) {
             return true;
         } else {
-            this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }})
+            this.router.navigate([user ? '/' : '/login'], { queryParams: { returnUrl: state.url }})
             return false;
         }
     }

@@ -52,7 +52,8 @@ export class LoginComponent implements OnInit {
             const data = response.data;
             if (!response.err) {
                 this.setupUser(data);
-                this.router.navigate([''])
+                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+                this.router.navigateByUrl(returnUrl);
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {

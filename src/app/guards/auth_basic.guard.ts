@@ -26,7 +26,7 @@ export class AuthBasicGuard implements CanActivate {
             if (this.config.user && 'role' in this.config.user && this.config.user.role >= this.TRAIL) {
                 return true;
             } else {
-                this.router.navigate([''])
+                this.router.navigate([''], { queryParams: { returnUrl: state.url }})
                 return false;
             }
         })
