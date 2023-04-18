@@ -28,8 +28,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     gaia_admin = false;
 
     gettingDashboard = false;
+    gettingDashboardErr = '';
 
-    results: any = [];
+    results: any;
     results_type = '';
     company_total_prompts = -1;
     company_prompts: any = [];
@@ -435,6 +436,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             company_prompt_limit: 10,
         }
         const response: any = await lastValueFrom(this.apiService.getDashboard(obj));
+        if (response.err) {
+            this.gettingDashboardErr = response.errMessage;
+            this.gettingDashboard = false;
+            return
+        }
         this.gettingDashboard = false;
         // console.log('response', response)
         this.results = response;
@@ -459,80 +465,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
     }
 
-    getCompanyUserPrompts(obj: any) {
-        // console.log('obj', obj);
-        this.selectedItemErrMessage = null;
-        obj.selectedItem = this.selectedItem;
-        const o = {
-            email: this.selectedItem.selectedItem.email,
-            offset: obj.offset,
-            limit: obj.limit
-        }
-        this.apiService.getCompanyUserPrompts(o).subscribe((res: any) => {
-            if (!res.err) {
-                this.selectedItemResults.user_prompts = res.user_prompts;
-                this.selectedItemErrMessage = '';
-            } else {
-                this.selectedItemErrMessage = res.errMessage;
-            }
-        }, (err) => {
-            this.selectedItemErrMessage = err;
-        })
-    }
-
-    getCompanyUserPrivacyModelPrompts(obj: any) {
-        // console.log('obj', obj);
-        this.selectedItemErrMessage = null;
-        obj.selectedItem = this.selectedItem;
-        const o = {
-            email: this.selectedItem.selectedItem.email,
-            offset: obj.offset,
-            limit: obj.limit
-        }
-        this.apiService.getCompanyUserPrivacyModelPrompts(o).subscribe((res: any) => {
-            if (!res.err) {
-                this.selectedItemResults.user_privacy_model_prompts = res.user_privacy_model_prompts;
-                this.selectedItemErrMessage = '';
-            } else {
-                this.selectedItemErrMessage = res.errMessage;
-            }
-        }, (err) => {
-            this.selectedItemErrMessage = err;
-        })
-    }
-
-    getAdminCompany(obj: any) {
-        obj.type = 'getAdminCompany';
-        // console.log('obj', obj);
-        this.clearSelectedItem = true;
-        if (this.selectedItem?.selectedItem?.domain === obj.selectedItem.domain) {
-            setTimeout(() => {
-                this.clearSelectedItem = false;
-            })
-            this.showSelectedItemModel();
-            return;
-        }
+    getRowInfo(obj: any) {
+        obj.type = 'getRowInfo';
         this.resetSelectedItem();
         this.selectedItem = obj
-        const o = {
-            domain: this.selectedItem.selectedItem.domain,
-            offset: obj.offset,
-            limit: obj.limit
-        }
-        this.apiService.getAdminCompanyInfo(o).subscribe((res: any) => {
-            if (!res.err) {
-                this.selectedItemResults = res;
-                this.selectedItemErrMessage = '';
-                this.clearSelectedItem = false;
-                this.showSelectedItemModel();
-            } else {
-                this.selectedItemErrMessage = res.errMessage;
-                this.clearSelectedItem = false;
-            }
-        }, (err) => {
-            this.selectedItemErrMessage = err;
-            this.clearSelectedItem = false;
-        })
+        this.showSelectedItemModel();
     }
 
     resetSelectedItem() {
