@@ -22,14 +22,14 @@
                  (click)="selectItem(item)">
                 <ng-container *ngFor="let key of keysToShow; let j = index">
                     <div class="ps-x1 py-1 position-static {{cols[j]}}"
-                         [title]="item[key] + (itemsAddOns[j] ? ' ' + itemsAddOns[j] : '')"
+                         [title]="item[key] ? item[key] + (itemsAddOns[j] ? ' ' + itemsAddOns[j] : '') : ''"
                          [ngClass]="{'pe-3': keysToShow.length === 1}"
                          *ngIf="keysToShow.length === 1 || j < keysToShow.length - 1">
                         <span *ngIf="item[key]" class="no-wrap">{{item[key].toString().substring(0, 100)}} <small>{{(itemsAddOns[j] ? ' ' + itemsAddOns[j] : '')}}</small></span>
                         <span *ngIf="!item[key]">-</span>
                     </div>
                     <div class="pe-3"
-                         [title]="item[key] + (itemsAddOns[j] ? ' ' + itemsAddOns[j] : '')"
+                         [title]="item[key] ? item[key] + (itemsAddOns[j] ? ' ' + itemsAddOns[j] : '') : ''"
                          [ngClass]="cols[j]"
                          *ngIf="keysToShow.length > 1 && j === keysToShow.length - 1">
                         <div class="row flex-end-center text-end g-0">
