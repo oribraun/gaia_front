@@ -243,13 +243,13 @@ export class ApiService {
             this.httpOptions
         )
     }
-    getSmartRouter(prompt: string, gaia_token = '') {
+    getSmartRouter(prompt: string, stream: boolean, gaia_token = '') {
         const httpOptions = {...this.httpOptions}
         httpOptions['responseType'] = 'text';
         httpOptions['observe'] = 'events';
         httpOptions['reportProgress'] = true;
         httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token;
-        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'smart-router', {'prompt': prompt},
+        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'smart-router', {'prompt': prompt, stream: stream},
             httpOptions
         )
     }

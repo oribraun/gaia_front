@@ -80,8 +80,9 @@ export class SmartRouterComponent implements OnInit {
             //         this.submitInProgress = false;
             //     })
             // }
-            this.apiService.getSmartRouter(text, this.company.api_token).subscribe((event: any) => {
-                this.handleSubmit(event);
+            const stream = true;
+            this.apiService.getSmartRouter(text, stream, this.company.api_token).subscribe((event: any) => {
+                this.handleSubmit(event, stream);
             }, (err) => {
                 this.resultsError = err
                 this.submitInProgress = false;
@@ -89,12 +90,24 @@ export class SmartRouterComponent implements OnInit {
         }
     }
 
-    handleSubmit(event: any) {
+    handleSubmit(event: any, stream:boolean) {
         // console.log('event', event)
         if (event.type === HttpEventType.DownloadProgress) {
             const partialText = event.partialText;
             if (partialText) {
-                this.chat[this.chat.length - 1].text =  partialText;
+                if (stream) {
+                    this.chat[this.chat.length - 1].text = partialText;
+                } else {
+                    let text = 'Something Went Wrong';
+                    try {
+                        const response = JSON.parse(partialText)
+                        text = response.data;
+                        if (response.err) {
+                            text = response.errMessage;
+                        }
+                    } catch (e) {}
+                    this.chat[this.chat.length - 1].text = text;
+                }
                 this.scrollToBottom();
             }
         }
