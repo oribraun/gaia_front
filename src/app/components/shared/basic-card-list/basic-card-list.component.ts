@@ -190,9 +190,11 @@ export class BasicCardListComponent implements OnInit, OnChanges {
 
     selectItem(item: any) {
         if (this.onSelectItem.observers.length) {
-            this.selectedItem = item;
-            this.onSelectItem.emit({selectedItem: this.selectedItem, offset: 0, limit: this.pagination.limit});
-            this.selectedItemClicked = true;
+            if (item && JSON.stringify(item) !== '{}') {
+                this.selectedItem = item;
+                this.onSelectItem.emit({selectedItem: this.selectedItem, offset: 0, limit: this.pagination.limit});
+                this.selectedItemClicked = true;
+            }
         }
     }
 
