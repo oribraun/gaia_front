@@ -18,7 +18,7 @@
     <div class="card-body p-0">
         <ng-container *ngFor="let item of items; let i = index">
             <div class="row g-0 align-items-center py-2 position-relative border-bottom border-200"
-                 [ngClass]="{'row-active': item === this.selectedItem}"
+                 [ngClass]="{'row-active': item === this.selectedItem, 'pointer': (item | json) != '{}'}"
                  (click)="selectItem(item)">
                 <ng-container *ngFor="let key of keysToShow; let j = index">
                     <div class="ps-x1 py-1 position-static {{cols[j]}}"
