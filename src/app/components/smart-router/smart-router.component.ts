@@ -146,6 +146,9 @@ export class SmartRouterComponent implements OnInit {
         if (event.type === HttpEventType.Response) {
             const body = event.body;
             // console.log('body', body)
+            if (this.chat[this.chat.length - 1]) {
+                this.chat[this.chat.length - 1].done = true;
+            }
             this.submitInProgress = false;
         }
     }
