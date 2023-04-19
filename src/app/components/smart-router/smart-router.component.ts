@@ -4,6 +4,7 @@ import {ApiService} from "../../services/api.service";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
 import {lastValueFrom} from "rxjs";
+const { v5: uuidv5 } = require('uuid');
 
 @Component({
   selector: 'app-smart-router',
@@ -81,7 +82,8 @@ export class SmartRouterComponent implements OnInit {
             //     })
             // }
             const stream = true;
-            this.apiService.getSmartRouter(text, stream, this.company.api_token).subscribe((event: any) => {
+            const conversation_id = this.createEmailUuid();
+            this.apiService.getSmartRouter(text, conversation_id, stream, this.company.api_token).subscribe((event: any) => {
                 this.handleSubmit(event, stream);
             }, (err) => {
                 this.resultsError = err
@@ -179,6 +181,18 @@ export class SmartRouterComponent implements OnInit {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
         }
+    }
+
+    uuidv5(str: string) {
+        // @ts-ignore
+        const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+        const u = uuidv5(str, MY_NAMESPACE);
+        return u;
+    };
+
+    createEmailUuid() {
+        const email = this.user.email;
+        return this.uuidv5(email)
     }
 
 }
