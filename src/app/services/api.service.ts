@@ -243,6 +243,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getConversationHistory(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-conversation-history', obj,
+            this.httpOptions
+        )
+    }
     getSmartRouter(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
         const httpOptions = {...this.httpOptions}
         httpOptions['responseType'] = 'text';

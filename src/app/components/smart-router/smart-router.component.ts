@@ -14,6 +14,7 @@ const { v5: uuidv5 } = require('uuid');
 export class SmartRouterComponent implements OnInit {
 
     user!: User;
+    conversation_id = '';
     company: any;
     @ViewChild('chat_results_scroll') chatResultsScroll: ElementRef | undefined;
 
@@ -38,16 +39,46 @@ export class SmartRouterComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
+        this.conversation_id = this.createEmailUuid();
         this.config.user_subject.subscribe((user) => {
             this.user = user;
+            this.conversation_id = this.createEmailUuid();
         });
         this.getCompany()
+        this.getConversationHistory()
     }
 
     async getCompany() {
         const response: any = await lastValueFrom(this.apiService.getCompany({}));
         if (!response.err) {
             this.company = response.data;
+        } else {
+            // this.errMessage = response.errMessage;
+        }
+    }
+
+    async getConversationHistory() {
+        const obj = {
+            limit: this.chatLimit / 2,
+            conversation_id: this.conversation_id
+        }
+        const response: any = await lastValueFrom(this.apiService.getConversationHistory(obj));
+        if (!response.err) {
+            const data = response.data;
+            const chat = [];
+            for (let o of data) {
+                chat.push({
+                    text: o.input_prompt,
+                    model: this.selectedModel,
+                    done: true
+                })
+                chat.push({
+                    text: o.output_prompt,
+                    model: this.selectedModel,
+                    done: true
+                })
+            }
+            this.chat = chat;
         } else {
             // this.errMessage = response.errMessage;
         }
@@ -82,8 +113,7 @@ export class SmartRouterComponent implements OnInit {
             //     })
             // }
             const stream = true;
-            const conversation_id = this.createEmailUuid();
-            this.apiService.getSmartRouter(text, conversation_id, stream, this.company.api_token).subscribe((event: any) => {
+            this.apiService.getSmartRouter(text, this.conversation_id, stream, this.company.api_token).subscribe((event: any) => {
                 this.handleSubmit(event, stream);
             }, (err) => {
                 this.resultsError = err
