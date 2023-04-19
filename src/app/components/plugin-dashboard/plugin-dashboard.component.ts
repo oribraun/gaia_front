@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {EChartsOption} from "echarts";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
@@ -14,13 +14,14 @@ var primary = '#2c7be5';
 declare var $: any;
 
 @Component({
-  selector: 'app-plugin-dashboard',
-  templateUrl: './plugin-dashboard.component.html',
-  styleUrls: ['./plugin-dashboard.component.less']
+    selector: 'app-plugin-dashboard',
+    templateUrl: './plugin-dashboard.component.html',
+    styleUrls: ['./plugin-dashboard.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PluginDashboardComponent implements OnInit {
 
-  user: any;
+    user: any;
     company_admin = false;
     gaia_admin = false;
 
@@ -68,7 +69,7 @@ export class PluginDashboardComponent implements OnInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.getDashBoard();
+        this.getPluginDashBoard();
     }
 
     setUpCharts() {
@@ -427,7 +428,7 @@ export class PluginDashboardComponent implements OnInit {
             }
         }
     }
-    async getDashBoard() {
+    async getPluginDashBoard() {
         this.gettingDashboard = true;
         const obj = {
             user_prompts_offset: 0,
