@@ -248,7 +248,7 @@ export class ApiService {
         httpOptions['responseType'] = 'text';
         httpOptions['observe'] = 'events';
         httpOptions['reportProgress'] = true;
-        httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? '' : '';
+        httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? gaia_token : '';
         return this.http.post(this.serverBase + this.baseApiCompanyToken + 'smart-router', {'prompt': prompt, stream: stream},
             httpOptions
         )
