@@ -79,6 +79,9 @@ export class SmartRouterComponent implements OnInit {
                 })
             }
             this.chat = chat;
+            setTimeout(() => {
+                this.scrollToBottom(true);
+            })
         } else {
             // this.errMessage = response.errMessage;
         }
