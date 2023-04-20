@@ -12,8 +12,12 @@
                 <div *ngFor="let r of results">
                     <div class="vendors" [ngStyle]="{'width': (100 / vendors.length) + '%'}" *ngFor="let v of vendors">
                         <h4 class="text-center">{{v}}</h4>
-                        <p>{{r[v]}}</p>
+                        <p>Cost {{r[v].cost}}$</p>
+                        <p>Tokens {{r[v].total_tokens}}</p>
                         <p>took - {{r[v + '_took']}} Seconds</p>
+                        <pre class="pre-inline">
+                            {{r[v].text}}
+                        </pre>
                     </div>
                 </div>
             </div>

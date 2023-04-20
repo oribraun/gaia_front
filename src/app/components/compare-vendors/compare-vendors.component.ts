@@ -12,11 +12,11 @@ export class CompareVendorsComponent implements OnInit {
     @ViewChild('chat_results_scroll') chatResultsScroll: ElementRef | undefined;
 
     promptValue = '';
-    models = ['chatGpt', 'Co:here'];
+    models = ['ChatGpt', 'Co:here'];
     selectedModel = 'chatGpt';
     chat: any = [];
     results: any = null;
-    vendors = ['chatGpt', 'coHere'];
+    vendors = ['ChatGpt', 'CoHere'];
     resultsError = null;
     chatLimit = 50;
     copyTextTimeout:any;
