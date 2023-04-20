@@ -30,7 +30,7 @@ export class AuthCompanyAdminGuard implements CanActivate {
         if (user && user.company_admin) {
             return true;
         } else {
-            this.router.navigate([user ? '/' : '/login'], { queryParams: { returnUrl: state.url }})
+            this.router.navigate([user.id ? '/' : '/login'], { queryParams: { returnUrl: state.url }})
             return false;
         }
     }
