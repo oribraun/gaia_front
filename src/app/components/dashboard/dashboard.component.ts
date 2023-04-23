@@ -432,8 +432,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     async getDashBoard() {
         this.gettingDashboard = true;
         const obj = {
-            company_prompt_offset: 0,
-            company_prompt_limit: 10,
+            offset: 0,
+            limit: 10,
         }
         const response: any = await lastValueFrom(this.apiService.getDashboard(obj));
         if (response.err) {
