@@ -1,17 +1,25 @@
 <form class="container">
     <div *ngIf="company">
+        {{company | json}}
         <h2 class="text-center">Settings</h2>
         <div class="mb-3">
             <label for="exampleInputOpenAiKey" class="form-label">Open Ai Key</label>
-            <input type="text" name="open_ai_key" class="form-control" id="exampleInputOpenAiKey" [(ngModel)]="company.open_ai_key">
+            <input type="text" name="open_ai_key" class="form-control" id="exampleInputOpenAiKey" [(ngModel)]="company.open_ai_key" (ngModelChange)="setHowToImplement()">
             <div id="emailHelp" class="form-text">We'll never share your open ai key.</div>
         </div>
+        <textarea name="pre_prompt" class="mb-3 form-control" id="" rows="10" [(ngModel)]="company.pre_prompt"></textarea>
         <button type="submit" class="btn btn-primary" (click)="saveCompanySettings()">Save</button>
-    </div>
-    <div class="text-center text-danger" *ngIf="errMessage">
-        {{errMessage}}
-    </div>
-    <div class="text-center text-success" *ngIf="successMessage">
-        {{successMessage}}
+        <div class="text-center text-danger" *ngIf="errMessage">
+            {{errMessage}}
+        </div>
+        <div class="text-center text-success" *ngIf="successMessage">
+            {{successMessage}}
+        </div>
+        <pre class="mt-3 pre-inline">
+            How to implement:
+            <div class="code-wrapper">
+                <div class="code code-wrap">{{howToImplement}}</div>
+            </div>
+        </pre>
     </div>
 </form>
