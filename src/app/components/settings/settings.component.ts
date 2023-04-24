@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
     .then(response => response.json());
 }
 
-token = '${this.company.open_ai_key}'
+token = '${this.company.api_token}'
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
 url = '${environment.serverUrl}api/ct/smart-router'
 postData(url, data, token)
