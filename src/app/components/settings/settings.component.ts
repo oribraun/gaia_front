@@ -62,9 +62,16 @@ export class SettingsComponent implements OnInit {
     .then(response => response.json());
 }
 
+# send question:
 token = '${this.company.api_token}'
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
 url = '${environment.serverUrl}api/ct/smart-router'
+postData(url, data, token)
+
+# get conversation history:
+token = '${this.company.api_token}'
+data = {conversation_id: 'some_conversation_id'}
+url = '${environment.serverUrl}api/ct/get-conversation-history'
 postData(url, data, token)
 `;
     }
