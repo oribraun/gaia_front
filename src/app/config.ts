@@ -89,10 +89,14 @@ export class Config {
     }
 
     getCookie(name: string, decrypt = false) {
-        const value = `; ${document.cookie}`;
-        const parts: any = value.split(`; ${name}=`);
-        if (parts && parts.length === 2) {
-            let val = parts.pop().split(';').shift();
+        const value = `${document.cookie}`;
+        // console.log('value', value)
+        const parts: any = value.split(`; `);
+        // console.log('parts', parts)
+        const str_search = name + '=';
+        const found = parts.find((v: any) => (v.includes(name)));
+        if (found) {
+            let val = found.replace(str_search, '')
             if (decrypt) {
                 try {
                     val = this.Decrypt(val, key);

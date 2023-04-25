@@ -21,9 +21,9 @@
             </li>
             <li class="nav-item" *ngIf="user.id && user.company_name && user.company_admin">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-clipboard2-data"></i> <span>Dashboard</span>
+                   data-toggle="tooltip" data-placement="right" title="Company Admin" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/company-admin']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
+                    <i class="bi bi-person-fill-gear"></i> <span>Company Admin</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
@@ -99,11 +99,6 @@
                     <h6 class="dropdown-header">Hello {{user.username}}</h6>
                     <div class="dropdown-divider"></div>
                     <!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
-                    <li *ngIf="user.id && user.company_admin"><a class="dropdown-item"
-                           [routerLink]="['/settings']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">Settings</a></li>
-
-                    <li *ngIf="user && user.company_admin"><a class="dropdown-item"
-                           [routerLink]="['/smart-router']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">Smart router</a></li>
                     <!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
                     <!--                    <li><hr class="dropdown-divider"></li>-->
                     <li><a class="dropdown-item" href="#" (click)="logout($event)">Sign out</a></li>

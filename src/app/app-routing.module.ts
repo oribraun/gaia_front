@@ -8,14 +8,16 @@ import {AnalyzerComponent} from "./components/analyzer/analyzer.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {AuthBasicGuard} from "./guards/auth_basic.guard";
 import {AboutComponent} from "./components/about/about.component";
-import {DashboardComponent} from "./components/dashboard/dashboard.component";
+import {DashboardComponent} from "./components/company-admin/dashboard/dashboard.component";
 import {PrivacyComponent} from "./components/privacy/privacy.component";
 import {PlaygroundComponent} from "./components/playground/playground.component";
 import {CompareVendorsComponent} from "./components/compare-vendors/compare-vendors.component";
 import {PluginDashboardComponent} from "./components/plugin-dashboard/plugin-dashboard.component";
 import {AuthCompanyAdminGuard} from "./guards/auth-company-admin.guard";
-import {SettingsComponent} from "./components/settings/settings.component";
-import {SmartRouterComponent} from "./components/smart-router/smart-router.component";
+import {SettingsComponent} from "./components/company-admin/settings/settings.component";
+import {SmartRouterComponent} from "./components/company-admin/smart-router/smart-router.component";
+import {CompanyAdminComponent} from "./components/company-admin/company-admin.component";
+import {HowToImplementComponent} from "./components/company-admin/how-to-implement/how-to-implement.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -29,9 +31,37 @@ const routes: Routes = [
     { path: 'plugin-dashboard', component: PluginDashboardComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     { path: 'playground', component: PlaygroundComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     { path: 'compare-vendors', component: CompareVendorsComponent, pathMatch : 'full', canActivate: [AuthGuard] },
-    { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
-    { path: 'settings', component: SettingsComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
-    { path: 'smart-router', component: SmartRouterComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
+    // { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
+    // { path: 'settings', component: SettingsComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
+    // { path: 'smart-router', component: SmartRouterComponent, pathMatch : 'full', canActivate: [AuthCompanyAdminGuard] },
+    { path: 'company-admin', component: CompanyAdminComponent, canActivate: [AuthCompanyAdminGuard], children: [
+            {
+                path: 'settings',
+                component: SettingsComponent,
+                pathMatch : 'full',
+                canActivate: [AuthCompanyAdminGuard]
+            },
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                pathMatch : 'full',
+                canActivate: [AuthCompanyAdminGuard]
+            },
+            {
+                path: 'playground',
+                component: SmartRouterComponent,
+                pathMatch : 'full',
+                canActivate: [AuthCompanyAdminGuard]
+            },
+            {
+                path: 'how-to-implement',
+                component: HowToImplementComponent,
+                pathMatch : 'full',
+                canActivate: [AuthCompanyAdminGuard]
+            },
+            { path: '**', redirectTo: 'settings' }
+        ]
+    },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
     { path: '**', redirectTo: '' }

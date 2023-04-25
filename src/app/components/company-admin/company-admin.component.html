@@ -1,0 +1,48 @@
+<div class="company-admin">
+    <div class="header" #header>
+        <h2 class="text-center">{{user.company_name | titlecase}} Admin</h2>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Settings" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/company-admin/settings']" [routerLinkActive]="'border-bottom'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/company-admin/dashboard']" [routerLinkActive]="'border-bottom'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/company-admin/playground']" [routerLinkActive]="'border-bottom'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <span>Playground</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0"
+                   data-toggle="tooltip" data-placement="right" title="How To Implement" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/company-admin/how-to-implement']" [routerLinkActive]="'border-bottom'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <span>Implementation</span>
+                </a>
+            </li>
+            <!--  <li class="nav-item">-->
+            <!--    <a class="nav-link" href="#">Link</a>-->
+            <!--  </li>-->
+            <!--  <li class="nav-item">-->
+            <!--    <a class="nav-link" href="#">Link</a>-->
+            <!--  </li>-->
+            <!--  <li class="nav-item">-->
+            <!--    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+            <!--  </li>-->
+        </ul>
+    </div>
+    <div class="main" #main>
+        <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+    </div>
+</div>
+

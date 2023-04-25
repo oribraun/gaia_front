@@ -15,7 +15,7 @@ import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { AnalyzerComponent } from './components/analyzer/analyzer.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { AboutComponent } from './components/about/about.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardComponent } from './components/company-admin/dashboard/dashboard.component';
 // import {APP_BASE_HREF} from "@angular/common";
 import { NgxEchartsModule } from 'ngx-echarts';
 import { PrivacyComponent } from './components/privacy/privacy.component';
@@ -25,8 +25,10 @@ import {RangePipe} from "./pipes/range/range.pipe";
 import { PlaygroundComponent } from './components/playground/playground.component';
 import { CompareVendorsComponent } from './components/compare-vendors/compare-vendors.component';
 import { PluginDashboardComponent } from './components/plugin-dashboard/plugin-dashboard.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { SmartRouterComponent } from './components/smart-router/smart-router.component';
+import { SettingsComponent } from './components/company-admin/settings/settings.component';
+import { SmartRouterComponent } from './components/company-admin/smart-router/smart-router.component';
+import { CompanyAdminComponent } from './components/company-admin/company-admin.component';
+import { HowToImplementComponent } from './components/company-admin/how-to-implement/how-to-implement.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +51,9 @@ import { SmartRouterComponent } from './components/smart-router/smart-router.com
         CompareVendorsComponent,
         PluginDashboardComponent,
         SettingsComponent,
-        SmartRouterComponent
+        SmartRouterComponent,
+        CompanyAdminComponent,
+        HowToImplementComponent
     ],
     imports: [
         BrowserModule,

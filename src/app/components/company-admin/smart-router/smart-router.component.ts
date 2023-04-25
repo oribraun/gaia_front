@@ -1,15 +1,15 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpEventType} from "@angular/common/http";
-import {ApiService} from "../../services/api.service";
-import {User} from "../../entities/user";
-import {Config} from "../../config";
+import {ApiService} from "../../../services/api.service";
+import {User} from "../../../entities/user";
+import {Config} from "../../../config";
 import {lastValueFrom} from "rxjs";
-const { v5: uuidv5 } = require('uuid');
+const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 @Component({
-  selector: 'app-smart-router',
-  templateUrl: './smart-router.component.html',
-  styleUrls: ['./smart-router.component.less']
+    selector: 'app-smart-router',
+    templateUrl: './smart-router.component.html',
+    styleUrls: ['./smart-router.component.less']
 })
 export class SmartRouterComponent implements OnInit {
 
@@ -39,10 +39,14 @@ export class SmartRouterComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
-        this.conversation_id = this.createEmailUuid();
+        if (this.user) {
+            this.conversation_id = this.createEmailUuid();
+        }
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            this.conversation_id = this.createEmailUuid();
+            if (this.user) {
+                this.conversation_id = this.createEmailUuid();
+            }
         });
         this.getCompany()
         this.getConversationHistory()
@@ -219,16 +223,30 @@ export class SmartRouterComponent implements OnInit {
         }
     }
 
-    uuidv5(str: string) {
+    create_uuidv5(str: string = '', hash: string = '') {
         // @ts-ignore
-        const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+        let MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+        if (hash) {
+            MY_NAMESPACE = hash
+        }
         const u = uuidv5(str, MY_NAMESPACE);
         return u;
     };
 
     createEmailUuid() {
         const email = this.user.email;
-        return this.uuidv5(email)
+        return this.create_uuidv5(email)
+    }
+
+    createEmailUuid4() {
+        const email = this.user.email;
+        const hash = uuidv4();
+        return this.create_uuidv5(email, hash)
+    }
+
+    clearConversation() {
+        this.conversation_id = this.createEmailUuid4()
+        this.getConversationHistory();
     }
 
 }

@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {ApiService} from "../../services/api.service";
+import {ApiService} from "../../../services/api.service";
 import {lastValueFrom} from "rxjs";
-import {Config} from "../../config";
+import {Config} from "../../../config";
 import { EChartsOption } from 'echarts';
-import {environment} from "../../../environments/environment";
-import {User} from "../../entities/user";
+import {environment} from "../../../../environments/environment";
+import {User} from "../../../entities/user";
 
 var light_grey = '#f9fafd';
 var grey = '#d8e2ef';

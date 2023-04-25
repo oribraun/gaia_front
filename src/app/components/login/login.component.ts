@@ -145,12 +145,15 @@ export class LoginComponent implements OnInit {
         }
 
         const user = this.config.getCookie('user', true)
-        if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
+        if (!user || !clientRunningOnServerHost) { // meaning it's not served by django server
             const csrftoken_exp = response.csrftoken_exp
             const user = response.user
             const d = new Date(csrftoken_exp)
             this.config.setCookie('user', JSON.stringify(user), d, true);
-            this.config.user = JSON.parse(this.config.getCookie('user', true));
+            const new_user = this.config.getCookie('user', true)
+            this.config.user = JSON.parse(new_user);
+        } else {
+            this.config.user = JSON.parse(user);
         }
     }
 

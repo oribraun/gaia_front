@@ -18,6 +18,12 @@ export class SidebarComponent implements OnInit {
         queryParams: 'subset',
         matrixParams: 'subset'
     }
+    routerLinkActiveOptionsWithChildrens: IsActiveMatchOptions = {
+        fragment: "exact",
+        paths: "subset",
+        queryParams: 'subset',
+        matrixParams: 'subset'
+    }
     user!: User;
     constructor(
         private config: Config,

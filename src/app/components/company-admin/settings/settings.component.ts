@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {User} from "../../entities/user";
-import {Config} from "../../config";
-import {ApiService} from "../../services/api.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {User} from "../../../entities/user";
+import {Config} from "../../../config";
+import {ApiService} from "../../../services/api.service";
 import {lastValueFrom} from "rxjs";
-import {environment} from "../../../environments/environment";
+import {environment} from "../../../../environments/environment";
 
 @Component({
     selector: 'app-settings',
@@ -17,17 +17,23 @@ export class SettingsComponent implements OnInit {
     errMessage = '';
     successMessage = '';
     howToImplement = '';
+    // @Input() company: any;
     constructor(
         private config: Config,
         private apiService: ApiService
     ) { }
 
     ngOnInit(): void {
+        console.log('company', this.company)
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.getCompanySettings()
+        // this.getCompanySettings()
+    }
+
+    getCompanyFromParent() {
+
     }
 
     async getCompanySettings() {

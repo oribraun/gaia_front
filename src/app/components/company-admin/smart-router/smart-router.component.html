@@ -28,15 +28,22 @@
     </div>
     <div class="row row-bottom">
         <div class="col-12">
-            <div class="three-input-group">
+            <div class="my-input-group three-input-group-first">
                 <textarea class="item first" placeholder="Prompt Input" aria-label="Prompt Input"
                            (keydown)="preventTextAreaEnter($event)"
                            (keydown.enter)="submitPrompt()"
                            cols="1" rows="1" style="resize: none;"
                            [(ngModel)]="promptValue"></textarea>
 <!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
-                <div class="item last addon pointer" (click)="submitPrompt()">
+                <div class="item second addon pointer" (click)="submitPrompt()">
                     <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>
+                    <div class="spinner-border" role="status" *ngIf="submitInProgress">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="item last addon pointer" (click)="clearConversation()"
+                 title="Start Temp Conversation" data-bs-custom-class="gaia-tooltip">
+                    <i *ngIf="!submitInProgress" class="bi bi-eraser-fill"></i>
                     <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="sr-only"></span>
                     </div>
