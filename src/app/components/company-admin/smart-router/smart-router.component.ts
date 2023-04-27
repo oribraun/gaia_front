@@ -32,6 +32,8 @@ export class SmartRouterComponent implements OnInit {
     chatProgress:number = -1;
     submitInProgress = false;
     scrollInProgress = false;
+
+    tooltipTimeout: any = null;
     constructor(
         private config: Config,
         private http: HttpClient,
@@ -55,9 +57,16 @@ export class SmartRouterComponent implements OnInit {
     }
 
     applyTooltip() {
-        $(function () {
-            $('[data-bs-toggle="tooltip"]').tooltip({
+        $(() => {
+            const e = $('[data-bs-toggle="tooltip"]');
+            e.tooltip({
                 trigger : 'hover'
+            })
+            e.on('click', () => {
+                clearInterval(this.tooltipTimeout)
+                this.tooltipTimeout = setTimeout(() => {
+                    e.tooltip('hide')
+                }, 300)
             })
         })
     }

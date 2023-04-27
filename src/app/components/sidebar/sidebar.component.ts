@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
         matrixParams: 'subset'
     }
     user!: User;
+    tooltipTimeout: any = null;
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -41,9 +42,16 @@ export class SidebarComponent implements OnInit {
     }
 
     applyTooltip() {
-        $(function () {
-            $('[data-bs-toggle="tooltip"]').tooltip({
+        $(() => {
+            const e = $('[data-bs-toggle="tooltip"]');
+            e.tooltip({
                 trigger : 'hover'
+            })
+            e.on('click', () => {
+                clearInterval(this.tooltipTimeout)
+                this.tooltipTimeout = setTimeout(() => {
+                    e.tooltip('hide')
+                }, 300)
             })
         })
     }
