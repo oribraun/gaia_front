@@ -66,7 +66,7 @@ export class SmartRouterComponent implements OnInit {
                 clearInterval(this.tooltipTimeout)
                 this.tooltipTimeout = setTimeout(() => {
                     e.tooltip('hide')
-                }, 300)
+                }, 1000)
             })
         })
     }

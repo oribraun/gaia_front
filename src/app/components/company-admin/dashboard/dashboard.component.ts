@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 clearInterval(this.tooltipTimeout)
                 this.tooltipTimeout = setTimeout(() => {
                     e.tooltip('hide')
-                }, 300)
+                }, 1000)
             })
         })
     }
