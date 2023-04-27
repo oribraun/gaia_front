@@ -35,14 +35,15 @@
                            cols="1" rows="1" style="resize: none;"
                            [(ngModel)]="promptValue"></textarea>
 <!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
-                <div class="item second addon pointer" (click)="submitPrompt()">
+                <div class="item second addon pointer" (click)="submitPrompt()"
+                title="Send" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
                     <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>
                     <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="sr-only"></span>
                     </div>
                 </div>
                 <div class="item last addon pointer" (click)="clearConversation()"
-                 title="Start Temp Conversation" data-bs-custom-class="gaia-tooltip">
+                 title="Start Temp Conversation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
                     <i *ngIf="!submitInProgress" class="bi bi-eraser-fill"></i>
                     <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="sr-only"></span>

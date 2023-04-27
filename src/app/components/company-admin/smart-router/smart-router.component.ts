@@ -6,6 +6,7 @@ import {Config} from "../../../config";
 import {lastValueFrom} from "rxjs";
 const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
+declare var $: any;
 @Component({
     selector: 'app-smart-router',
     templateUrl: './smart-router.component.html',
@@ -50,6 +51,15 @@ export class SmartRouterComponent implements OnInit {
         });
         this.getCompany()
         this.getConversationHistory()
+        this.applyTooltip()
+    }
+
+    applyTooltip() {
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger : 'hover'
+            })
+        })
     }
 
     async getCompany() {

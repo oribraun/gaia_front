@@ -1,55 +1,55 @@
 <main class="sidebar d-flex flex-nowrap">
     <div class=" sidebar-inner d-flex flex-column flex-shrink-0 bg-light" bis_skin_checked="1">
-        <a href="/" class="d-block link-dark text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+        <a href="/" class="d-block link-dark text-decoration-none">
             <svg class="bi pe-none" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
             <span class="visually-hidden">Icon-only</span>
         </a>
         <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Home" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Home" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-house-door"></i> <span>Home</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="About" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="About" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-info"></i> <span>About</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id && user.company_name && user.company_admin">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Company Admin" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Company Admin" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/company-admin']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
                     <i class="bi bi-person-fill-gear"></i> <span>Company Admin</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Plugin Dashboard" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Plugin Dashboard" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/plugin-dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-clipboard2-pulse"></i> <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/playground']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-dpad"></i> <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Compare Vendors" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Compare Vendors" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/compare-vendors']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-bezier2"></i> <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
-                   data-toggle="tooltip" data-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/privacy-policy']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-shield-lock-fill"></i> <span>Privacy Policy</span>
                 </a>
@@ -57,27 +57,27 @@
             <!--            <ng-container *ngIf="this.user">-->
             <!--                <li>-->
             <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
-            <!--                       data-toggle="tooltip" data-placement="right" title="Prompt Optimizer"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Prompt Optimizer"-->
             <!--                       [routerLink]="['/prompt-optimizer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
             <!--                        <i class="bi bi-speedometer2"></i> <span>Prompt Optimizer</span>-->
             <!--                    </a>-->
             <!--                </li>-->
             <!--                <li>-->
             <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
-            <!--                       data-toggle="tooltip" data-placement="right" title="Analyzer"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Analyzer"-->
             <!--                        [routerLink]="['/analyzer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
             <!--                        <i class="bi bi-table"></i> <span>Analyzer</span>-->
             <!--                    </a>-->
             <!--                </li>-->
             <!--                <li>-->
             <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
-            <!--                       data-toggle="tooltip" data-placement="right" title="Products">-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Products">-->
             <!--                        <i class="bi bi-grid"></i> <span>Products</span>-->
             <!--                    </a>-->
             <!--                </li>-->
             <!--                <li>-->
             <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
-            <!--                       data-toggle="tooltip" data-placement="right" title="Customers">-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Customers">-->
             <!--                        <i class="bi bi-person-circle"></i> <span>Customers</span>-->
             <!--                    </a>-->
             <!--                </li>-->

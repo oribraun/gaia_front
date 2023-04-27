@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
 
     applyTooltip() {
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip({
+            $('[data-bs-toggle="tooltip"]').tooltip({
                 trigger : 'hover'
             })
         })

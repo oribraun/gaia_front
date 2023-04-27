@@ -73,6 +73,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.getDashBoard();
     }
 
+    applyTooltip() {
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger : 'hover'
+            })
+        })
+    }
+
     setUpCharts() {
         var getPosition = function getPosition(pos: any, params: any, dom: any, rect: any, size: any) {
             return {
@@ -452,6 +460,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.company_total_cost = response.company_total_cost;
 
         this.setUpCharts();
+        this.applyTooltip();
     }
 
     getCompanyPrompts(obj: any) {
