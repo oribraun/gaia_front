@@ -3,6 +3,7 @@ import {IsActiveMatchOptions, Router} from "@angular/router";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
 import {User} from "../../entities/user";
+import {HelperService} from "../../services/helper.service";
 
 declare var $: any;
 @Component({
@@ -30,30 +31,16 @@ export class SidebarComponent implements OnInit {
         private config: Config,
         private apiService: ApiService,
         private router: Router,
+        private helperService: HelperService,
     ) { }
 
     ngOnInit(): void {
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            this.applyTooltip()
+            this.helperService.applyTooltip()
         });
-        this.applyTooltip()
-    }
-
-    applyTooltip() {
-        $(() => {
-            const e = $('[data-bs-toggle="tooltip"]');
-            e.tooltip({
-                trigger : 'hover'
-            })
-            e.on('click', () => {
-                clearInterval(this.tooltipTimeout)
-                this.tooltipTimeout = setTimeout(() => {
-                    e.tooltip('hide')
-                }, 1000)
-            })
-        })
+        this.helperService.applyTooltip()
     }
 
     async logout(e: Event) {

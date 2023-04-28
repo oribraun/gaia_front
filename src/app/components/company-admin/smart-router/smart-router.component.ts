@@ -4,6 +4,7 @@ import {ApiService} from "../../../services/api.service";
 import {User} from "../../../entities/user";
 import {Config} from "../../../config";
 import {lastValueFrom} from "rxjs";
+import {HelperService} from "../../../services/helper.service";
 const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 declare var $: any;
@@ -37,7 +38,8 @@ export class SmartRouterComponent implements OnInit {
     constructor(
         private config: Config,
         private http: HttpClient,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private helperService: HelperService,
     ) { }
 
     ngOnInit(): void {
@@ -53,22 +55,7 @@ export class SmartRouterComponent implements OnInit {
         });
         this.getCompany()
         this.getConversationHistory()
-        this.applyTooltip()
-    }
-
-    applyTooltip() {
-        $(() => {
-            const e = $('[data-bs-toggle="tooltip"]');
-            e.tooltip({
-                trigger : 'hover'
-            })
-            e.on('click', () => {
-                clearInterval(this.tooltipTimeout)
-                this.tooltipTimeout = setTimeout(() => {
-                    e.tooltip('hide')
-                }, 1000)
-            })
-        })
+        this.helperService.applyTooltip()
     }
 
     async getCompany() {

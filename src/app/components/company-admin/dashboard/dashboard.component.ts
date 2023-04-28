@@ -5,6 +5,7 @@ import {Config} from "../../../config";
 import { EChartsOption } from 'echarts';
 import {environment} from "../../../../environments/environment";
 import {User} from "../../../entities/user";
+import {HelperService} from "../../../services/helper.service";
 
 var light_grey = '#f9fafd';
 var grey = '#d8e2ef';
@@ -64,7 +65,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private config: Config,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private helperService: HelperService,
     ) { }
 
     ngOnInit(): void {
@@ -73,21 +75,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.user = user;
         });
         this.getDashBoard();
-    }
-
-    applyTooltip() {
-        $(() => {
-            const e = $('[data-bs-toggle="tooltip"]');
-            e.tooltip({
-                trigger : 'hover'
-            })
-            e.on('click', () => {
-                clearInterval(this.tooltipTimeout)
-                this.tooltipTimeout = setTimeout(() => {
-                    e.tooltip('hide')
-                }, 1000)
-            })
-        })
     }
 
     setUpCharts() {
@@ -105,6 +92,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }).join('<br/>');
         }
         this.weeklySalesOptions= {
+            tooltip: {
+                triggerOn: 'mousemove',
+                trigger: 'axis',
+                padding: [7, 10],
+                formatter: '{b0}: {c0}',
+                backgroundColor: light_grey,
+                borderColor: grey,
+                textStyle: {
+                    color: dark_grey
+                },
+                borderWidth: 1,
+                transitionDuration: 0,
+                position: function position(pos, params, dom, rect, size) {
+                    return getPosition(pos, params, dom, rect, size);
+                }
+            },
             xAxis: {
                 type: 'category',
                 data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -163,7 +166,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ],
             grid: {
                 right: 5,
-                left: 10,
+                left: 5,
                 top: 0,
                 bottom: 0
             }
@@ -264,10 +267,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             }],
             grid: {
-                bottom: '2%',
+                bottom: '0%',
                 top: '0%',
-                right: '10px',
-                left: '10px'
+                right: '0%',
+                left: '0%'
             }
         }
         this.marketShareOptions = {
@@ -466,10 +469,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         for (let i in this.company_prompts) {
             this.company_prompts[i].cost_estimate = parseFloat(this.company_prompts[i].cost_estimate)
         }
-        this.company_total_cost = response.company_total_cost;
+        this.company_total_cost = parseFloat(response.company_total_cost.toFixed(5));
 
         this.setUpCharts();
-        this.applyTooltip();
+        this.helperService.applyTooltip();
     }
 
     getCompanyPrompts(obj: any) {

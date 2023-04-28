@@ -87,6 +87,22 @@ export class PluginDashboardComponent implements OnInit {
             }).join('<br/>');
         }
         this.weeklySalesOptions= {
+            tooltip: {
+                triggerOn: 'mousemove',
+                trigger: 'axis',
+                padding: [7, 10],
+                formatter: '{b0}: {c0}',
+                backgroundColor: light_grey,
+                borderColor: grey,
+                textStyle: {
+                    color: dark_grey
+                },
+                borderWidth: 1,
+                transitionDuration: 0,
+                position: function position(pos, params, dom, rect, size) {
+                    return getPosition(pos, params, dom, rect, size);
+                }
+            },
             xAxis: {
                 type: 'category',
                 data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -145,7 +161,7 @@ export class PluginDashboardComponent implements OnInit {
             ],
             grid: {
                 right: 5,
-                left: 10,
+                left: 5,
                 top: 0,
                 bottom: 0
             }
@@ -246,10 +262,10 @@ export class PluginDashboardComponent implements OnInit {
                 }
             }],
             grid: {
-                bottom: '2%',
+                bottom: '0%',
                 top: '0%',
-                right: '10px',
-                left: '10px'
+                right: '0',
+                left: '0'
             }
         }
         this.marketShareOptions = {
