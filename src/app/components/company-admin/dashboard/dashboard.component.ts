@@ -19,7 +19,6 @@ declare var $: any;
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.less'],
-    encapsulation: ViewEncapsulation.None
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {

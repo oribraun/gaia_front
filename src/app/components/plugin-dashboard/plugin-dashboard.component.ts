@@ -16,8 +16,7 @@ declare var $: any;
 @Component({
     selector: 'app-plugin-dashboard',
     templateUrl: './plugin-dashboard.component.html',
-    styleUrls: ['./plugin-dashboard.component.less'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./plugin-dashboard.component.less']
 })
 export class PluginDashboardComponent implements OnInit {
 
