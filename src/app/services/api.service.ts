@@ -173,6 +173,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    compareVendorsUpload(formData: FormData) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'compare-vendors-upload', formData,
+            this.httpOptions
+        )
+    }
     getSettings(key: string) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-settings', {key: key},
             this.httpOptions

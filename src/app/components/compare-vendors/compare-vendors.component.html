@@ -1,38 +1,119 @@
 <div class="my-container container">
     <div class="row row-top">
         <div class="col-12 inner-scroll" #chat_results_scroll>
+            <div class="vertical-align-middle" *ngIf="!submitInProgress && resultsError">
+                <div class="message">
+                    <div *ngIf="resultsError" class="text-danger">
+                        {{resultsError}}
+                    </div>
+                </div>
+            </div>
+            <div class="vertical-align-middle" *ngIf="!resultsError && !submitInProgress && !results">
+                <div class="message">
+                    <div class="board">
+                        <p>Compare prompt or upload csv file with "prompt" column<br/>(up to 10 prompts)</p>
+                    </div>
+                </div>
+            </div>
             <div class="loader-wrapper" *ngIf="submitInProgress">
                 <div class="loader">
-                    <div class="spinner-border" role="status">
+                    <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
-            <div class="box bg-light" *ngIf="results">
-                <div *ngFor="let r of results">
-                    <div class="vendors" [ngStyle]="{'width': (100 / vendors.length) + '%'}" *ngFor="let v of vendors">
-                        <h4 class="text-center">{{v}}</h4>
-                        <p>Cost {{r[v].cost}}$</p>
-                        <p>Tokens {{r[v].total_tokens}}</p>
-                        <p>took - {{r[v + '_took']}} Seconds</p>
-                        <pre class="pre-inline">
-                            {{r[v].text}}
-                        </pre>
+            <div class="results" *ngIf="results">
+                <div class="row" *ngIf="resultsTime">
+                    <div class="col-12">
+                        <div class="text-center">
+                            Took - {{resultsTime}}
+                        </div>
                     </div>
                 </div>
+                <div class="table-responsive">
+                    <table class="table table-striped align-top">
+                    <thead>
+                        <tr>
+                            <th class="input-col input-col-sticky" scope="col">Input</th>
+                            <th class="output-col" scope="col" *ngFor="let v of vendors">{{v}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let r of results; let last = last">
+                            <th class="input-col input-col-sticky" scope="row">{{r.input}}</th>
+                            <td class="output-col" *ngFor="let v of vendors">
+                                <b>Cost</b> - {{r[v].cost}}$<br/>
+                                <b>Tokens</b> - {{r[v].total_tokens}}<br/>
+                                <b>took</b> - {{r[v + '_took']}} Seconds<br/>
+                                <b>Output</b>:
+                                <pre class="pre-inline">
+                                    {{r[v].text}}
+                                </pre>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+<!--                <div class="row">-->
+<!--                    &lt;!&ndash;                    <div class="vendors col-6" [ngStyle]="{'width': (100 / vendors.length) + '%'}" *ngFor="let v of vendors">&ndash;&gt;-->
+<!--                    <div class="vendors col-6" *ngFor="let v of vendors">-->
+<!--                        <div class="box bg-light">-->
+<!--                            <h4 class="text-center">{{v}}</h4>-->
+<!--                            <div *ngFor="let r of results; let last = last">-->
+<!--                                <p><b>Input</b> - {{r.input}}</p>-->
+<!--                                <p><b>Cost</b> - {{r[v].cost}}$</p>-->
+<!--                                <p><b>Tokens</b> - {{r[v].total_tokens}}</p>-->
+<!--                                <p><b>took</b> - {{r[v + '_took']}} Seconds</p>-->
+<!--                                <pre class="pre-inline">-->
+<!--                                    {{r[v].text}}-->
+<!--                                </pre>-->
+<!--&lt;!&ndash;                                <hr *ngIf="!last">&ndash;&gt;-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
     <div class="row row-bottom">
         <div class="col-12">
-            <div class="three-input-group">
-                <textarea class="item first" placeholder="Prompt Input" aria-label="Prompt Input"
+            <!--            <div class="my-input-group two-input-group">-->
+            <!--                <textarea class="item first" placeholder="Prompt Input" aria-label="Prompt Input"-->
+            <!--                          (keydown)="preventTextAreaEnter($event)"-->
+            <!--                          (keydown.enter)="submitPrompt()"-->
+            <!--                          cols="1" rows="1" style="resize: none;"-->
+            <!--                          [(ngModel)]="promptValue"></textarea>-->
+            <!--                &lt;!&ndash;                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">&ndash;&gt;-->
+            <!--                <div class="item last addon pointer" (click)="submitPrompt()">-->
+            <!--                    <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>-->
+            <!--                    <div class="spinner-border" role="status" *ngIf="submitInProgress">-->
+            <!--                        <span class="sr-only"></span>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <div class="my-input-group three-input-group-middle">
+                <div class="item first pointer"
+                title="Upload Csv" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
+                    <div class="drag-drop drag-drop-responsive">
+                        <div class="drop-area drop-area-no-dash" appDragAndDrop (fileDropped)="filesDropped($event)">
+                            <div class="dashed-area">
+                                <div class="header">
+                                    <i class="bi bi-upload"></i>
+                                </div>
+                                <!--                                Drop files here or click to select-->
+                                <input class="file-input" type="file" title="" accept=".csv" (change)="uploadFiles($event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <textarea class="item second" placeholder="Prompt Input" aria-label="Prompt Input"
                           (keydown)="preventTextAreaEnter($event)"
                           (keydown.enter)="submitPrompt()"
                           cols="1" rows="1" style="resize: none;"
                           [(ngModel)]="promptValue"></textarea>
                 <!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
-                <div class="item last addon pointer" (click)="submitPrompt()">
+                <div class="item last addon pointer" (click)="submitPrompt()"
+                title="Send" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
                     <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>
                     <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="sr-only"></span>

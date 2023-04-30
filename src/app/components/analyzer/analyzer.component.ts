@@ -10,6 +10,7 @@ import {ApiService} from "../../services/api.service";
 export class AnalyzerComponent implements OnInit {
 
     uploadFilePath = ''
+    fileUploadErr = ''
     analyzeFilePath = 'media/uploads/'
     constructor(
         private http: HttpClient,
@@ -31,16 +32,23 @@ export class AnalyzerComponent implements OnInit {
         const target = event.target as HTMLInputElement;
         const files = target.files as FileList;
         this.filesDropped(files);
+        target.value = ''
     }
 
     async filesDropped(files: FileList) {
+        const file = files[0];
+        if (file.type !== 'text/plain') {
+            this.fileUploadErr = 'please upload txt file only';
+            return;
+        }
         const formData = new FormData();
-        formData.append('file', files[0], files[0].name);
-        this.apiService.upload(formData).subscribe((res: any) => {
-            console.log('res', res)
+        formData.append('file', file, file.name);
+        this.apiService.compareVendorsUpload(formData).subscribe((res: any) => {
+            // console.log('res', res)
             this.uploadFilePath = res.file_path;
         }, (err) => {
-            console.log('err', err)
+            // console.log('err', err)
+            this.fileUploadErr = err.stack;
         })
     }
 
