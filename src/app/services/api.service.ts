@@ -267,11 +267,11 @@ export class ApiService {
             httpOptions
         )
     }
-    sendToChatBot(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
+    sendToChatBot(prompt: string, conversation_id: string, stream: boolean, api_token = '') {
         const httpOptions: any = {
             // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
             headers: {
-                'GAIA-AI-TOKEN': gaia_token ? gaia_token : ''
+                'GAIA-AI-TOKEN': api_token ? api_token : ''
             },
             responseType: 'text',
             observe: 'events',
@@ -281,7 +281,7 @@ export class ApiService {
         // httpOptions['responseType'] = 'text';
         // httpOptions['observe'] = 'events';
         // httpOptions['reportProgress'] = true;
-        // httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? gaia_token : '';
+        // httpOptions.headers['GAIA-AI-TOKEN'] = api_token ? api_token : '';
         const body: any = {
             prompt: prompt,
             conversation_id: conversation_id,

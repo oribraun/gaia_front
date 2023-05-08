@@ -93,24 +93,25 @@ export class CompanyAdminComponent implements OnInit {
     .then(response => response.json());
 }
 
-# send question:
+# your GAIA API token:
 api_token = '${this.company.api_token}'
+
+# send question:
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
 url = '${environment.serverUrl}api/ct/chatbot'
 postData(url, data, api_token)
 
 # get conversation history:
-api_token = '${this.company.api_token}'
 data = {conversation_id: 'some_conversation_id'}
 url = '${environment.serverUrl}api/ct/get-conversation-history'
 postData(url, data, api_token)
 
 *Angular Example:
 
-sendToChatBot(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
+sendToChatBot(prompt: string, conversation_id: string, stream: boolean, api_token = '') {
     const httpOptions: any = {
         headers: {
-            'GAIA-AI-TOKEN': gaia_token ? gaia_token : ''
+            'GAIA-AI-TOKEN': api_token ? api_token : ''
         },
         responseType: 'text',
         observe: 'events',
