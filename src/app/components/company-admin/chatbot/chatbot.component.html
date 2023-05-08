@@ -30,23 +30,30 @@
         <div class="col-12">
             <div class="my-input-group three-input-group-first">
                 <textarea class="item first" placeholder="Prompt Input" aria-label="Prompt Input"
-                           (keydown)="preventTextAreaEnter($event)"
-                           (keydown.enter)="submitPrompt()"
-                           cols="1" rows="1" style="resize: none;"
-                           [(ngModel)]="promptValue"></textarea>
-<!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
+                          (keydown)="preventTextAreaEnter($event)"
+                          (keydown.enter)="submitPrompt()"
+                          cols="1" rows="1" style="resize: none;"
+                          [(ngModel)]="promptValue"></textarea>
+                <!--                <input type="text" class="item second" (keydown.enter)="submitPrompt()"  [(ngModel)]="promptValue" placeholder="Prompt Input" aria-label="Prompt Input">-->
                 <div class="item second addon pointer" (click)="submitPrompt()"
-                title="Send" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
+                     title="Send" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
                     <i *ngIf="!submitInProgress" class="bi bi-send-fill"></i>
+<!--                    <div class="spinner-border" role="status" *ngIf="submitInProgress">-->
+<!--                        <span class="sr-only"></span>-->
+<!--                    </div>-->
+                </div>
+                <div class="item last addon pointer" (click)="!submitInProgress && clearConversation()"
+                     title="Start Temp Conversation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
+                    <i *ngIf="!submitInProgress" class="bi bi-eraser-fill"></i>
                     <div class="spinner-border" role="status" *ngIf="submitInProgress">
                         <span class="sr-only"></span>
                     </div>
                 </div>
-                <div class="item last addon pointer" (click)="clearConversation()"
-                 title="Start Temp Conversation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="gaia-tooltip">
-                    <i *ngIf="!submitInProgress" class="bi bi-eraser-fill"></i>
-                    <div class="spinner-border" role="status" *ngIf="submitInProgress">
-                        <span class="sr-only"></span>
+                <div class="stop-button" *ngIf="submitInProgress">
+                    <div class="text-center">
+                        <a class="pointer btn btn-outline-secondary" (click)="stopChatBotStreaming()">
+                            <i class="bi bi-stop-fill"></i>
+                        </a>
                     </div>
                 </div>
             </div>

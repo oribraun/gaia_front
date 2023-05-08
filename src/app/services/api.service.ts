@@ -40,7 +40,7 @@ export class ApiService {
         this.config.csrf_token_subject.subscribe((csrf_token) => {
             // console.log('csrf_token', csrf_token)
             // if (environment.production) {
-                this.httpOptions.headers['X-CSRFToken'] = csrf_token;
+            this.httpOptions.headers['X-CSRFToken'] = csrf_token;
             // }
             // this.httpOptionsWithCreds.headers.set('X-CSRFToken', csrf_token)
         })
@@ -57,16 +57,16 @@ export class ApiService {
             }
         })
         // this.config.token_subject.subscribe((token) => {
-            // delete this.headers['Authorization']
-            // if (!environment.production) {
-            // delete this.headers['X-CSRFToken']
-            // if (token) {
-            //     this.headers['X-CSRFToken'] = token;
-            // }
-            // if (token) {
-            //     this.headers['Authorization'] = 'Token ' + token;
-            // }
-            // }
+        // delete this.headers['Authorization']
+        // if (!environment.production) {
+        // delete this.headers['X-CSRFToken']
+        // if (token) {
+        //     this.headers['X-CSRFToken'] = token;
+        // }
+        // if (token) {
+        //     this.headers['Authorization'] = 'Token ' + token;
+        // }
+        // }
         // })
         this.config.server_host_subject.subscribe((host) => {
             this.serverBase = this.config.server_host;
@@ -268,16 +268,26 @@ export class ApiService {
         )
     }
     sendToChatBot(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
-        const httpOptions = {...this.httpOptions}
-        httpOptions['responseType'] = 'text';
-        httpOptions['observe'] = 'events';
-        httpOptions['reportProgress'] = true;
-        httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? gaia_token : '';
-        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'chatbot', {
-                prompt: prompt,
-                conversation_id: conversation_id,
-                stream: stream
+        const httpOptions: any = {
+            // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            headers: {
+                'GAIA-AI-TOKEN': gaia_token ? gaia_token : ''
             },
+            responseType: 'text',
+            observe: 'events',
+            reportProgress: true,
+            // withCredentials: true // Whether this request should be sent with outgoing credentials
+        }
+        // httpOptions['responseType'] = 'text';
+        // httpOptions['observe'] = 'events';
+        // httpOptions['reportProgress'] = true;
+        // httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? gaia_token : '';
+        const body: any = {
+            prompt: prompt,
+            conversation_id: conversation_id,
+            stream: stream
+        }
+        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'chatbot', body,
             httpOptions
         )
     }

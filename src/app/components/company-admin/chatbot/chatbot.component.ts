@@ -35,6 +35,8 @@ export class ChatbotComponent implements OnInit {
     scrollInProgress = false;
 
     tooltipTimeout: any = null;
+
+    chatSubscribe: any = null;
     constructor(
         private config: Config,
         private http: HttpClient,
@@ -126,7 +128,7 @@ export class ChatbotComponent implements OnInit {
             //     })
             // }
             const stream = true;
-            this.apiService.sendToChatBot(text, this.conversation_id, stream, this.company.api_token).subscribe((event: any) => {
+            this.chatSubscribe = this.apiService.sendToChatBot(text, this.conversation_id, stream, this.company.api_token).subscribe((event: any) => {
                 this.handleSubmit(event, stream);
             }, (err) => {
                 this.resultsError = err
@@ -253,6 +255,16 @@ export class ChatbotComponent implements OnInit {
     clearConversation() {
         this.conversation_id = this.createEmailUuid4()
         this.getConversationHistory();
+    }
+
+    stopChatBotStreaming() {
+        if (this.chatSubscribe) {
+            this.chatSubscribe.unsubscribe();
+            if (!this.chat[this.chat.length - 1].text) {
+                this.chat[this.chat.length - 1].text = "Aborted.";
+            }
+            this.submitInProgress = false;
+        }
     }
 
 }

@@ -82,6 +82,7 @@
         position:relative;
         height: 6.5%;
         .my-input-group {
+            position: relative;
             display: flex;
             .item {
                 padding: 0.375rem 0.75rem;
@@ -196,6 +197,21 @@
                 &:hover {
                     color: #0b5ed7;
                 }
+            }
+        }
+        .stop-button {
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            padding: 3px 9px;
+            a {
+                line-height: 1;
+                padding: 2px;
+                border-color: #d0d0d0;
+                color: red;
+                background: #fff;
+                animation: float 6s ease-in-out infinite;
+                font-size: 1.2em;
             }
         }
     }
