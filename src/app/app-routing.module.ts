@@ -15,7 +15,7 @@ import {CompareVendorsComponent} from "./components/compare-vendors/compare-vend
 import {PluginDashboardComponent} from "./components/plugin-dashboard/plugin-dashboard.component";
 import {AuthCompanyAdminGuard} from "./guards/auth-company-admin.guard";
 import {SettingsComponent} from "./components/company-admin/settings/settings.component";
-import {SmartRouterComponent} from "./components/company-admin/smart-router/smart-router.component";
+import {ChatbotComponent} from "./components/company-admin/chatbot/chatbot.component";
 import {CompanyAdminComponent} from "./components/company-admin/company-admin.component";
 import {HowToImplementComponent} from "./components/company-admin/how-to-implement/how-to-implement.component";
 
@@ -49,7 +49,7 @@ const routes: Routes = [
             },
             {
                 path: 'playground',
-                component: SmartRouterComponent,
+                component: ChatbotComponent,
                 pathMatch : 'full',
                 canActivate: [AuthCompanyAdminGuard]
             },

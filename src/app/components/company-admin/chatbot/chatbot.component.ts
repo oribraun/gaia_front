@@ -9,11 +9,11 @@ const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 declare var $: any;
 @Component({
-    selector: 'app-smart-router',
-    templateUrl: './smart-router.component.html',
-    styleUrls: ['./smart-router.component.less']
+    selector: 'app-chatbot',
+    templateUrl: './chatbot.component.html',
+    styleUrls: ['./chatbot.component.less']
 })
-export class SmartRouterComponent implements OnInit {
+export class ChatbotComponent implements OnInit {
 
     user!: User;
     conversation_id = '';
@@ -126,7 +126,7 @@ export class SmartRouterComponent implements OnInit {
             //     })
             // }
             const stream = true;
-            this.apiService.getSmartRouter(text, this.conversation_id, stream, this.company.api_token).subscribe((event: any) => {
+            this.apiService.sendToChatBot(text, this.conversation_id, stream, this.company.api_token).subscribe((event: any) => {
                 this.handleSubmit(event, stream);
             }, (err) => {
                 this.resultsError = err

@@ -267,6 +267,20 @@ export class ApiService {
             httpOptions
         )
     }
+    sendToChatBot(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
+        const httpOptions = {...this.httpOptions}
+        httpOptions['responseType'] = 'text';
+        httpOptions['observe'] = 'events';
+        httpOptions['reportProgress'] = true;
+        httpOptions.headers['GAIA-AI-TOKEN'] = gaia_token ? gaia_token : '';
+        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'chatbot', {
+                prompt: prompt,
+                conversation_id: conversation_id,
+                stream: stream
+            },
+            httpOptions
+        )
+    }
     getAdminCompanyInfo(obj: any) {
         return this.http.post(this.serverBase + this.baseApiAdmin + 'get-company-info', obj,
             this.httpOptions

@@ -96,7 +96,7 @@ export class CompanyAdminComponent implements OnInit {
 # send question:
 token = '${this.company.api_token}'
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
-url = '${environment.serverUrl}api/ct/smart-router'
+url = '${environment.serverUrl}api/ct/chatbot'
 postData(url, data, token)
 
 # get conversation history:

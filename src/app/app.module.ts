@@ -26,7 +26,7 @@ import { PlaygroundComponent } from './components/playground/playground.componen
 import { CompareVendorsComponent } from './components/compare-vendors/compare-vendors.component';
 import { PluginDashboardComponent } from './components/plugin-dashboard/plugin-dashboard.component';
 import { SettingsComponent } from './components/company-admin/settings/settings.component';
-import { SmartRouterComponent } from './components/company-admin/smart-router/smart-router.component';
+import { ChatbotComponent } from './components/company-admin/chatbot/chatbot.component';
 import { CompanyAdminComponent } from './components/company-admin/company-admin.component';
 import { HowToImplementComponent } from './components/company-admin/how-to-implement/how-to-implement.component';
 
@@ -51,7 +51,7 @@ import { HowToImplementComponent } from './components/company-admin/how-to-imple
         CompareVendorsComponent,
         PluginDashboardComponent,
         SettingsComponent,
-        SmartRouterComponent,
+        ChatbotComponent,
         CompanyAdminComponent,
         HowToImplementComponent
     ],

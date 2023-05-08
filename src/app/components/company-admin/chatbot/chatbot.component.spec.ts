@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmartRouterComponent } from './smart-router.component';
+import { ChatbotComponent } from './smart-router.component';
 
 describe('SmartRouterComponent', () => {
-  let component: SmartRouterComponent;
-  let fixture: ComponentFixture<SmartRouterComponent>;
+  let component: ChatbotComponent;
+  let fixture: ComponentFixture<ChatbotComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SmartRouterComponent ]
+      declarations: [ ChatbotComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SmartRouterComponent);
+    fixture = TestBed.createComponent(ChatbotComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
