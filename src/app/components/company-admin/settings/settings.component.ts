@@ -87,6 +87,7 @@ postData(url, data, token)
         const obj = {
             id: this.company.id,
             open_ai_key: this.company.open_ai_key,
+            open_ai_model: this.company.open_ai_model,
             pre_prompt: this.company.pre_prompt
         }
         const response: any = await lastValueFrom(this.apiService.setCompany(obj));

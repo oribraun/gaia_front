@@ -6,6 +6,11 @@
             <input type="text" name="open_ai_key" class="form-control" id="exampleInputOpenAiKey" [(ngModel)]="company.open_ai_key" (ngModelChange)="setHowToImplement()">
             <div id="emailHelp" class="form-text">We'll never share your open ai key.</div>
         </div>
+        <div class="mb-3">
+            <label for="" class="form-label">Open Ai Model</label>
+            <input type="text" name="open_ai_model" class="form-control" [(ngModel)]="company.open_ai_model">
+            <a href="https://platform.openai.com/docs/models/overview" target="_blank">model options</a>
+        </div>
         <textarea name="pre_prompt" class="mb-3 form-control" id="" rows="10" [(ngModel)]="company.pre_prompt"></textarea>
         <button type="submit" class="btn btn-primary" (click)="saveCompanySettings()">Save</button>
         <div class="text-center text-danger" *ngIf="errMessage">
