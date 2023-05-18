@@ -9,13 +9,15 @@ import {environment} from "../../environments/environment";
 export class ApiService {
     // serverBase = 'http://localhost:8000/';
     serverBase = environment.serverUrl;
-    baseApi = 'api/';
-    baseApiAuth = 'api/auth/';
-    baseApiUser = 'api/us/';
-    baseApiCompany = 'api/co/';
-    baseApiCompanyAdmin = 'api/coa/';
-    baseApiCompanyToken = 'api/ct/';
-    baseApiAdmin = 'api/adm/';
+    version = 'v1/';
+    baseApiOld = 'api/';
+    baseApi = 'api/' + this.version;
+    baseApiAuth = this.baseApi + 'auth/';
+    baseApiUser = this.baseApi + 'us/';
+    baseApiCompany = this.baseApi + 'co/';
+    baseApiCompanyAdmin = this.baseApi + 'coa/';
+    baseApiCompanyToken = this.baseApiOld + 'ct/';
+    baseApiAdmin = this.baseApi + 'adm/';
     headers: any = {}
     private httpOptionsWithCreds = {
         // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

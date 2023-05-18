@@ -98,12 +98,12 @@ api_token = '${this.company.api_token}'
 
 # send question:
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
-url = '${environment.serverUrl}api/ct/chatbot'
+url = '${environment.serverUrl}${this.apiService.baseApi}ct/chatbot'
 postData(url, data, api_token)
 
 # get conversation history:
 data = {conversation_id: 'some_conversation_id'}
-url = '${environment.serverUrl}api/ct/get-conversation-history'
+url = '${environment.serverUrl}${this.apiService.baseApi}ct/get-conversation-history'
 postData(url, data, api_token)
 
 *Angular Example:
@@ -122,7 +122,7 @@ sendToChatBot(prompt: string, conversation_id: string, stream: boolean, api_toke
         conversation_id: conversation_id,
         stream: stream
     }
-    return this.http.post(this.serverBase + this.baseApiCompanyToken + 'chatbot', body,
+    return this.http.post('${environment.serverUrl}${this.apiService.baseApi}ct/chatbot', body,
         httpOptions
     )
 }
