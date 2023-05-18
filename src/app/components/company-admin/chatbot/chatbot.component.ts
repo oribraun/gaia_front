@@ -56,7 +56,6 @@ export class ChatbotComponent implements OnInit {
             }
         });
         this.getCompany()
-        this.getConversationHistory()
         this.helperService.applyTooltip()
     }
 
@@ -64,6 +63,7 @@ export class ChatbotComponent implements OnInit {
         const response: any = await lastValueFrom(this.apiService.getCompany({}));
         if (!response.err) {
             this.company = response.data;
+            this.getConversationHistory()
         } else {
             // this.errMessage = response.errMessage;
         }
@@ -74,7 +74,7 @@ export class ChatbotComponent implements OnInit {
             limit: this.chatLimit / 2,
             conversation_id: this.conversation_id
         }
-        const response: any = await lastValueFrom(this.apiService.getConversationHistory(obj));
+        const response: any = await lastValueFrom(this.apiService.getConversationHistory(obj, this.company.api_token));
         if (!response.err) {
             const data = response.data;
             const chat = [];

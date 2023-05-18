@@ -250,9 +250,14 @@ export class ApiService {
             this.httpOptions
         )
     }
-    getConversationHistory(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiCompanyAdmin + 'get-conversation-history', obj,
-            this.httpOptions
+    getConversationHistory(obj: any, api_token = '') {
+        const httpOptions: any = {
+            headers: {
+                'GAIA-AI-TOKEN': api_token ? api_token : ''
+            }
+        }
+        return this.http.post(this.serverBase + this.baseApiCompanyToken + 'get-conversation-history', obj,
+            httpOptions
         )
     }
     getSmartRouter(prompt: string, conversation_id: string, stream: boolean, gaia_token = '') {
