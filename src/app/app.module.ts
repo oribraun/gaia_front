@@ -29,6 +29,7 @@ import { SettingsComponent } from './components/company-admin/settings/settings.
 import { ChatbotComponent } from './components/company-admin/chatbot/chatbot.component';
 import { CompanyAdminComponent } from './components/company-admin/company-admin.component';
 import { HowToImplementComponent } from './components/company-admin/how-to-implement/how-to-implement.component';
+import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { HowToImplementComponent } from './components/company-admin/how-to-imple
         SettingsComponent,
         ChatbotComponent,
         CompanyAdminComponent,
-        HowToImplementComponent
+        HowToImplementComponent,
+        DatetimeFormatPipe
     ],
     imports: [
         BrowserModule,

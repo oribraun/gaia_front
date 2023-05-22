@@ -62,6 +62,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     tooltipTimeout: any = null;
 
+    copyTextSuccess: boolean = false
+    copyTextTimeout: any = null;
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -525,6 +528,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     }
 
+    copyText(text: string) {
+        this.copyTextSuccess = true;
+        if (navigator && navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+        }
+        clearTimeout(this.copyTextTimeout);
+        this.copyTextTimeout = setTimeout(() => {
+            this.copyTextSuccess = false;
+        }, 1000)
+    }
 
 
 }
