@@ -29,12 +29,14 @@ export class CompanyAdminComponent implements OnInit {
     successMessage = '';
     howToImplement = '';
     currentComponent: any;
+    host = ''
     constructor(
         private config: Config,
         private apiService: ApiService
     ) { }
 
     ngOnInit(): void {
+        this.host = this.config.server_host || environment.serverUrl
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
@@ -98,12 +100,12 @@ api_token = '${this.company.api_token}'
 
 # send question:
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
-url = '${this.config.server_host || environment.serverUrl}${this.apiService.baseApi}ct/chatbot'
+url = '${this.host}${this.apiService.baseApi}ct/chatbot'
 postData(url, data, api_token)
 
 # get conversation history:
 data = {conversation_id: 'some_conversation_id'}
-url = '${this.config.server_host || environment.serverUrl}${this.apiService.baseApi}ct/get-conversation-history'
+url = '${this.host}${this.apiService.baseApi}ct/get-conversation-history'
 postData(url, data, api_token)
 
 *Angular Example:
@@ -122,7 +124,7 @@ sendToChatBot(prompt: string, conversation_id: string, stream: boolean, api_toke
         conversation_id: conversation_id,
         stream: stream
     }
-    return this.http.post('${this.config.server_host || environment.serverUrl}${this.apiService.baseApi}ct/chatbot', body,
+    return this.http.post('${this.host}${this.apiService.baseApi}ct/chatbot', body,
         httpOptions
     )
 }
