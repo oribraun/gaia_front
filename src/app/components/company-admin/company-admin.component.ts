@@ -91,15 +91,6 @@ export class CompanyAdminComponent implements OnInit {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
-    })
-    .then((response) => {
-      if (response.body && typeof response.body.getReader === 'function') {
-        // Response is a ReadableStream, handle it accordingly
-        return handleStreamResponse(response);
-      } else {
-        // Response is not a ReadableStream, parse it as JSON
-        return response.json();
-      }
     });
 }
 
@@ -128,10 +119,16 @@ function handleStreamResponse(response) {
 api_token = '${this.company.api_token}'
 
 // send question:
-data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
+stream = false;
+data = {prompt: 'Hi', stream: stream, conversation_id: 'some_conversation_id'}
 url = '${this.host}${this.apiService.baseApi}ct/chatbot'
-postData(url, data, api_token).then((response) => {
-    console.log('Response:', response);
+postData(url, data, api_token).then(async (response) => {
+    if (!stream) {
+        const r = await response.json();
+        console.log('Response:', r);
+    } else {
+        this.handleStreamResponse(response)
+    }
   })
   .catch((error) => {
     console.error('Error:', error);
