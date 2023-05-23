@@ -92,23 +92,62 @@ export class CompanyAdminComponent implements OnInit {
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     })
-    .then(response => response.json());
+    .then((response) => {
+      if (response.body && typeof response.body.getReader === 'function') {
+        // Response is a ReadableStream, handle it accordingly
+        return handleStreamResponse(response);
+      } else {
+        // Response is not a ReadableStream, parse it as JSON
+        return response.json();
+      }
+    });
 }
 
-# your GAIA API token:
+function handleStreamResponse(response) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let result = '';
+
+  const read = () => {
+    return reader.read().then(({ done, value }) => {
+      if (done) {
+        return result;
+      }
+
+      const chunk = decoder.decode(value, { stream: true });
+      result += chunk;
+      console.log('handleStreamResponse', result)
+      return read();
+    });
+  };
+
+  return read();
+}
+
+// your GAIA API token:
 api_token = '${this.company.api_token}'
 
-# send question:
+// send question:
 data = {prompt: 'Hi', stream: false, conversation_id: 'some_conversation_id'}
 url = '${this.host}${this.apiService.baseApi}ct/chatbot'
-postData(url, data, api_token)
+postData(url, data, api_token).then((response) => {
+    console.log('Response:', response);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 
-# get conversation history:
+// get conversation history:
 data = {conversation_id: 'some_conversation_id'}
 url = '${this.host}${this.apiService.baseApi}ct/get-conversation-history'
-postData(url, data, api_token)
+postData(url, data, api_token).then((response) => {
+    console.log('Response:', response);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 
-*Angular Example:
+// Angular Example:
 
 sendToChatBot(prompt: string, conversation_id: string, stream: boolean, api_token = '') {
     const httpOptions: any = {
