@@ -18,7 +18,7 @@ export class AuthGaialabsCompanyGuard implements CanActivate {
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
         const user = this.config.user;
-        if (user && user.company_name && user.company_name === 'gaialabs') {
+        if (user && user.company_name && user.company_name.toLowerCase() === 'gaialabs') {
             return true;
         } else {
             const queryParams: any = {}

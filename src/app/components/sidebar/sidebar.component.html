@@ -47,7 +47,7 @@
                     <i class="bi bi-bezier2"></i> <span>Compare Vendors</span>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="user.id  && user.company_name === 'gaialabs'">
+            <li class="nav-item" *ngIf="user.id  && user.company_name.toLowerCase() === 'gaialabs'">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Data Room" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/data-room']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
