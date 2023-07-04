@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
+import {User} from "./entities/user";
+import {ActivatedRoute, Params} from "@angular/router";
 
 // declare var STATIC_URL: any;
 declare var USER: any;
@@ -13,16 +15,23 @@ declare var SCHEME: any;
 })
 export class AppComponent implements OnInit {
     title = 'frontend';
+    user!: User;
     constructor(
-        private config: Config
+        private config: Config,
+        private route: ActivatedRoute
     ) {
         setTimeout(() => {
             this.setupCredsFromServer();
         })
         this.setupCredsFromServer();
+        this.closeOnGmailCallback();
     }
 
     ngOnInit(): void {
+        this.user = this.config.user;
+        this.config.user_subject.subscribe((user) => {
+            this.user = user;
+        });
         // setTimeout is because we need to wait for all components subscriptions to config changes
         // setTimeout(() => {
         //     this.setupCredsFromServer()
@@ -56,6 +65,17 @@ export class AppComponent implements OnInit {
             this.config.user = JSON.parse(this.config.getCookie('user', true));
         }
 
+    }
+
+    closeOnGmailCallback() {
+        this.route.queryParams
+            .subscribe((params: Params) => {
+                    const gmail_callback = params['gmail_callback'] === 'true'
+                    if (gmail_callback) {
+                        window.close()
+                    }
+                }
+            );
     }
 
 }

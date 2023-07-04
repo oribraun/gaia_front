@@ -1,0 +1,19 @@
+<section>
+    <button class="mt-3 btn btn-primary" (click)="user.gmail_auth ? getUserEmails() : getUserAuthUrl()">
+        {{user.gmail_auth ? 'Get Emails' : 'Gmail Auth'}}
+    </button>
+    <table class="table" *ngIf="userEmails && userEmails.length">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" *ngFor="let h of userEmailHeaders">{{h | titlecase}}</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of userEmails; let i = index">
+            <th scope="row">{{i}}</th>
+            <td *ngFor="let h of userEmailHeaders">{{item[h]}}</td>
+        </tr>
+        </tbody>
+    </table>
+</section>

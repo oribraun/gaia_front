@@ -30,6 +30,8 @@ import { ChatbotComponent } from './components/company-admin/chatbot/chatbot.com
 import { CompanyAdminComponent } from './components/company-admin/company-admin.component';
 import { HowToImplementComponent } from './components/company-admin/how-to-implement/how-to-implement.component';
 import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe';
+import { ChatComponent } from './components/chat/chat.component';
+import { GaiaDataRoomComponent } from './components/gaia-data-room/gaia-data-room.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +57,9 @@ import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe
         ChatbotComponent,
         CompanyAdminComponent,
         HowToImplementComponent,
-        DatetimeFormatPipe
+        DatetimeFormatPipe,
+        ChatComponent,
+        GaiaDataRoomComponent
     ],
     imports: [
         BrowserModule,

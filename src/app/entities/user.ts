@@ -6,6 +6,7 @@ export class User {
     role_display!: string;
     company_name!: string;
     company_admin!: boolean
+    gmail_auth!: boolean
 
     constructor(obj?: any) {
         if (obj) {

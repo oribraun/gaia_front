@@ -94,7 +94,8 @@ export class Config {
         const parts: any = value.split(`; `);
         // console.log('parts', parts)
         const str_search = name + '=';
-        const found = parts.find((v: any) => (v.includes(name)));
+        const found = parts.find((v: any) => (v.includes(str_search)));
+        // console.log(name, found)
         if (found) {
             let val = found.replace(str_search, '')
             if (decrypt) {
@@ -139,6 +140,7 @@ export class Config {
         const exp = new Date()
         exp.setDate(exp.getDate()-5);
         this.setCookie('user', '', exp);
+        this.setCookie('user-exp', '', exp);
         this.setCookie('token', '', exp);
         this.setCookie('csrftoken', '', exp);
     }

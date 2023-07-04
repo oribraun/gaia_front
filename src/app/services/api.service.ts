@@ -205,6 +205,26 @@ export class ApiService {
             this.httpOptions
         )
     }
+    sendToChatbot(question: string, chatbot: string) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'chatbots', {question: question, chatbot: chatbot},
+            this.httpOptions
+        )
+    }
+    getUserEmails(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'gmail-use', obj,
+            this.httpOptions
+        )
+    }
+    getUserAuthUrl(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'gmail-auth', obj,
+            this.httpOptions
+        )
+    }
+    checkUserAuth(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'gmail-auth-check', obj,
+            this.httpOptions
+        )
+    }
     getCompanyUsers(obj: any) {
         // company_users_offset
         // company_users_limit

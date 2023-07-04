@@ -150,6 +150,7 @@ export class LoginComponent implements OnInit {
             const user = response.user
             const d = new Date(csrftoken_exp)
             this.config.setCookie('user', JSON.stringify(user), d, true);
+            this.config.setCookie('user-exp', csrftoken_exp, d, true);
             const new_user = this.config.getCookie('user', true)
             this.config.user = JSON.parse(new_user);
         } else {

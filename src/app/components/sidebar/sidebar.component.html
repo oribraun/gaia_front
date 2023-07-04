@@ -30,21 +30,28 @@
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Plugin Dashboard" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/plugin-dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-clipboard2-pulse"></i> <span>Dashboard</span>
+                    <i class="bi bi-clipboard2-pulse"></i> <span>Plugin Dashboard</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/playground']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-dpad"></i> <span>Dashboard</span>
+                    <i class="bi bi-dpad"></i> <span>Playground</span>
                 </a>
             </li>
             <li class="nav-item" *ngIf="user.id">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Compare Vendors" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/compare-vendors']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-bezier2"></i> <span>Dashboard</span>
+                    <i class="bi bi-bezier2"></i> <span>Compare Vendors</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user.id  && user.company_name === 'gaialabs'">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Data Room" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/data-room']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-inboxes"></i> <span>Data Room</span>
                 </a>
             </li>
             <li class="nav-item">

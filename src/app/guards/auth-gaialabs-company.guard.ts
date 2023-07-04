@@ -6,7 +6,7 @@ import {Config} from "../config";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthCompanyAdminGuard implements CanActivate {
+export class AuthGaialabsCompanyGuard implements CanActivate {
 
     constructor(
         private config: Config,
@@ -17,17 +17,8 @@ export class AuthCompanyAdminGuard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-        // this.config.user_subject.subscribe((user) => {
-        //     if (this.config.user) {
-        //         return true;
-        //     } else {
-        //         this.router.navigate([''])
-        //         return false;
-        //     }
-        // })
-        // return true
         const user = this.config.user;
-        if (user && user.company_admin) {
+        if (user && user.company_name && user.company_name === 'gaialabs') {
             return true;
         } else {
             const queryParams: any = {}

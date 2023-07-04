@@ -18,6 +18,8 @@ import {SettingsComponent} from "./components/company-admin/settings/settings.co
 import {ChatbotComponent} from "./components/company-admin/chatbot/chatbot.component";
 import {CompanyAdminComponent} from "./components/company-admin/company-admin.component";
 import {HowToImplementComponent} from "./components/company-admin/how-to-implement/how-to-implement.component";
+import {GaiaDataRoomComponent} from "./components/gaia-data-room/gaia-data-room.component";
+import {AuthGaialabsCompanyGuard} from "./guards/auth-gaialabs-company.guard";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -62,6 +64,7 @@ const routes: Routes = [
             { path: '**', redirectTo: 'settings' }
         ]
     },
+    { path: 'data-room', component: GaiaDataRoomComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
     { path: '**', redirectTo: '' }
