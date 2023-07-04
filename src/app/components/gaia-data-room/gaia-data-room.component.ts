@@ -88,11 +88,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
                     }
                 }
             }, 500);
-            // popup.onunload = () => {
-            //     console.log('window closed')
-            // };
         }
-        return popup
     }
 
     clearErrMessage() {
@@ -103,11 +99,11 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         const new_user = this.config.getCookie('user', true)
         const user = JSON.parse(new_user);
         user.gmail_auth = gmail_auth;
-        console.log('user', user)
+        // console.log('user', user)
         const csrftoken_exp = this.config.getCookie('user-exp', true)
-        console.log('csrftoken_exp', csrftoken_exp)
+        // console.log('csrftoken_exp', csrftoken_exp)
         const d = new Date(csrftoken_exp)
-        console.log('user GaiaDataRoomComponent', user)
+        // console.log('user GaiaDataRoomComponent', user)
         this.config.setCookie('user', JSON.stringify(user), d, true);
         this.config.user = user;
     }
