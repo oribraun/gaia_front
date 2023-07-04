@@ -76,6 +76,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         var top = (screen.height/2)-(h/2);
         const popup = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
         if (popup) {
+            clearInterval(this.checkClosedInterval);
             this.checkClosedInterval = setInterval(async () => {
                 if (popup.closed) {
                     // Popup is closed
