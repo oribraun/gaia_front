@@ -3,6 +3,7 @@ import {ApiService} from "../../services/api.service";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
 import {lastValueFrom} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-gaia-data-room',
@@ -17,6 +18,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     errMessage = ''
     checkClosedInterval: any = null;
     constructor(
+        private router: Router,
         private config: Config,
         private apiService: ApiService
     ) { }
@@ -38,6 +40,9 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     }
 
     async getUserEmails() {
+        if (!this.checkCookies()) {
+            return;
+        }
         this.userEmails = [];
         this.clearErrMessage()
         const response: any = await lastValueFrom(this.apiService.getUserEmails({}));
@@ -63,6 +68,9 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     }
 
     async getUserAuthUrl() {
+        if (!this.checkCookies()) {
+            return;
+        }
         this.clearErrMessage()
         const response: any = await lastValueFrom(this.apiService.getUserAuthUrl({}));
         // console.log('response', response)
@@ -95,12 +103,35 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         this.errMessage = ''
     }
 
-    saveUserGmailAuth(gmail_auth: boolean) {
+    checkCookies() {
         const new_user = this.config.getCookie('user', true)
-        const user = JSON.parse(new_user);
-        user.gmail_auth = gmail_auth;
         // console.log('user', user)
         const csrftoken_exp = this.config.getCookie('user-exp', true)
+        const token = this.config.getCookie('token', true)
+        console.log('new_user',new_user)
+        console.log('csrftoken_exp',csrftoken_exp)
+        console.log('token',token)
+        if (!csrftoken_exp || !token || !new_user) {
+            this.config.resetCookies(false);
+            this.config.resetUserCreds();
+            this.router.navigate(['/login'])
+            return false;
+        }
+        return true;
+    }
+
+    saveUserGmailAuth(gmail_auth: boolean) {
+        const new_user = this.config.getCookie('user', true)
+        // console.log('user', user)
+        const csrftoken_exp = this.config.getCookie('user-exp', true)
+        const token = this.config.getCookie('token', true)
+        if (!csrftoken_exp || !token || !new_user) {
+            this.config.resetCookies(false);
+            this.config.resetUserCreds();
+            this.router.navigate(['/login'])
+        }
+        const user = JSON.parse(new_user);
+        user.gmail_auth = gmail_auth;
         // console.log('csrftoken_exp', csrftoken_exp)
         const d = new Date(csrftoken_exp)
         // console.log('user GaiaDataRoomComponent', user)

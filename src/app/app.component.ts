@@ -55,14 +55,22 @@ export class AppComponent implements OnInit {
             this.config.server_host = SCHEME + '://' + HOST + '/';
         }
         // console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
-        if (this.config.getCookie('csrftoken')) {
-            this.config.csrf_token = this.config.getCookie('csrftoken');
+        const csrftoken = this.config.getCookie('csrftoken');
+        if (csrftoken) {
+            this.config.csrf_token = csrftoken;
         }
-        if (this.config.getCookie('token', true)) {
-            this.config.token = this.config.getCookie('token', true);
+        const token = this.config.getCookie('token', true)
+        console.log('token', token)
+        if (token) {
+            this.config.token = token;
         }
-        if (this.config.getCookie('user', true)) {
-            this.config.user = JSON.parse(this.config.getCookie('user', true));
+        const user = this.config.getCookie('user', true)
+        if (user) {
+            this.config.user = JSON.parse(user);
+        }
+        if (!csrftoken || !token || !user) {
+            this.config.resetCookies(false);
+            this.config.resetUserCreds();
         }
 
     }

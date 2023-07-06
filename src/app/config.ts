@@ -94,7 +94,7 @@ export class Config {
         const parts: any = value.split(`; `);
         // console.log('parts', parts)
         const str_search = name + '=';
-        const found = parts.find((v: any) => (v.includes(str_search)));
+        const found = parts.find((v: any) => (v.startsWith(str_search)));
         // console.log(name, found)
         if (found) {
             let val = found.replace(str_search, '')
@@ -136,12 +136,14 @@ export class Config {
         return JSON.parse(bytes)
     }
 
-    resetCookies() {
+    resetCookies(clean_csrftoken=true) {
         const exp = new Date()
         exp.setDate(exp.getDate()-5);
         this.setCookie('user', '', exp);
         this.setCookie('user-exp', '', exp);
         this.setCookie('token', '', exp);
-        this.setCookie('csrftoken', '', exp);
+        if (clean_csrftoken) {
+            this.setCookie('csrftoken', '', exp);
+        }
     }
 }
