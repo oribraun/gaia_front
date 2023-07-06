@@ -79,7 +79,17 @@ export class AppComponent implements OnInit {
             .subscribe((params: Params) => {
                     const gmail_callback = params['gmail_callback'] === 'true'
                     if (gmail_callback) {
-                        window.close()
+                        console.log('setting up unload event', window.opener)
+                        if (window.opener) {
+                            window.opener.postMessage('popupClosed', window.location.origin);
+                        }
+                        // window.addEventListener('unload', function() {
+                        //     alert('sent message: popupClosed - ' + window.location.origin);
+                        //     if (window.opener) {
+                        //         window.opener.postMessage('popupClosed', window.location.origin);
+                        //     }
+                        // });
+                        // window.close()
                     }
                 }
             );

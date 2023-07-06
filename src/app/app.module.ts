@@ -32,6 +32,7 @@ import { HowToImplementComponent } from './components/company-admin/how-to-imple
 import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe';
 import { ChatComponent } from './components/chat/chat.component';
 import { GaiaDataRoomComponent } from './components/gaia-data-room/gaia-data-room.component';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { GaiaDataRoomComponent } from './components/gaia-data-room/gaia-data-roo
         HowToImplementComponent,
         DatetimeFormatPipe,
         ChatComponent,
-        GaiaDataRoomComponent
+        GaiaDataRoomComponent,
+        SafePipe
     ],
     imports: [
         BrowserModule,

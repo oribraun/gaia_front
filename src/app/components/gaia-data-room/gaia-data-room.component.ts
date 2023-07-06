@@ -17,6 +17,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     userEmailHeaders: string[] = []
     errMessage = ''
     checkClosedInterval: any = null;
+    iframeUrl = '';
     constructor(
         private router: Router,
         private config: Config,
@@ -84,19 +85,26 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         var top = (screen.height/2)-(h/2);
         const popup = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
         if (popup) {
-            clearInterval(this.checkClosedInterval);
-            this.checkClosedInterval = setInterval(async () => {
-                if (popup.closed) {
-                    // Popup is closed
-                    // console.log('Popup is closed')
-                    clearInterval(this.checkClosedInterval);
-                    // console.log('Popup closed');
-                    const response: any = await lastValueFrom(this.apiService.checkUserAuth({}))
-                    if (!response.err) {
-                        this.saveUserGmailAuth(response.gmail_auth)
-                    }
+            window.addEventListener('message', function(event) {
+                console.log('Received message:', event);
+                // Check the origin of the message to ensure it's from the popup window
+                if (event.origin === window.location.origin && event.data === 'popupClosed') {
+                    console.log('Popup is closed');
                 }
-            }, 500);
+            }, false);
+            // clearInterval(this.checkClosedInterval);
+            // this.checkClosedInterval = setInterval(async () => {
+            //     if (popup.closed) {
+            //         // Popup is closed
+            //         // console.log('Popup is closed')
+            //         clearInterval(this.checkClosedInterval);
+            //         // console.log('Popup closed');
+            //         const response: any = await lastValueFrom(this.apiService.checkUserAuth({}))
+            //         if (!response.err) {
+            //             this.saveUserGmailAuth(response.gmail_auth)
+            //         }
+            //     }
+            // }, 500);
         }
     }
 
