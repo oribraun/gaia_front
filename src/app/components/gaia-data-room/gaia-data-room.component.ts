@@ -88,6 +88,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
             this.checkClosedInterval = setInterval(async () => {
                 if (popup.closed) {
                     // Popup is closed
+                    // console.log('Popup is closed')
                     clearInterval(this.checkClosedInterval);
                     // console.log('Popup closed');
                     const response: any = await lastValueFrom(this.apiService.checkUserAuth({}))
@@ -108,9 +109,6 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         // console.log('user', user)
         const csrftoken_exp = this.config.getCookie('user-exp', true)
         const token = this.config.getCookie('token', true)
-        console.log('new_user',new_user)
-        console.log('csrftoken_exp',csrftoken_exp)
-        console.log('token',token)
         if (!csrftoken_exp || !token || !new_user) {
             this.config.resetCookies(false);
             this.config.resetUserCreds();

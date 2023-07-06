@@ -60,7 +60,6 @@ export class AppComponent implements OnInit {
             this.config.csrf_token = csrftoken;
         }
         const token = this.config.getCookie('token', true)
-        console.log('token', token)
         if (token) {
             this.config.token = token;
         }
