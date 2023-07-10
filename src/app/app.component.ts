@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
 import {User} from "./entities/user";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 // declare var STATIC_URL: any;
 declare var USER: any;
@@ -18,7 +18,8 @@ export class AppComponent implements OnInit {
     user!: User;
     constructor(
         private config: Config,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router,
     ) {
         setTimeout(() => {
             this.setupCredsFromServer();
@@ -77,19 +78,32 @@ export class AppComponent implements OnInit {
     closeOnGmailCallback() {
         this.route.queryParams
             .subscribe((params: Params) => {
+                    let redirect_to = params['redirect_to']
+                    let query_prams = params['query_prams']
                     const gmail_callback = params['gmail_callback'] === 'true'
-                    if (gmail_callback) {
-                        console.log('setting up unload event', window.opener)
-                        if (window.opener) {
-                            window.opener.postMessage('popupClosed', window.location.origin);
-                        }
-                        // window.addEventListener('unload', function() {
-                        //     alert('sent message: popupClosed - ' + window.location.origin);
-                        //     if (window.opener) {
-                        //         window.opener.postMessage('popupClosed', window.location.origin);
-                        //     }
-                        // });
-                        // window.close()
+                    // if (gmail_callback) {
+                    //     console.log('setting up unload event', window.opener)
+                    //     if (window.opener) {
+                    //         window.opener.postMessage('popupClosed', window.location.origin);
+                    //     }
+                    //     // window.addEventListener('unload', function() {
+                    //     //     alert('sent message: popupClosed - ' + window.location.origin);
+                    //     //     if (window.opener) {
+                    //     //         window.opener.postMessage('popupClosed', window.location.origin);
+                    //     //     }
+                    //     // });
+                    //     // window.close()
+                    // }
+                    if (redirect_to) {
+                        redirect_to = redirect_to.replace(/"/g, '');
+                        let queryParams = {}
+                        try {
+                            queryParams = JSON.parse(query_prams);
+                        } catch (e) {}
+                        // console.log('redirect_to', redirect_to)
+                        // console.log('query_prams', query_prams)
+                        // console.log('queryParams', queryParams)
+                        this.router.navigate([redirect_to], {queryParams: queryParams})
                     }
                 }
             );
