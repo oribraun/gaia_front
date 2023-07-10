@@ -3,7 +3,7 @@ import {ApiService} from "../../services/api.service";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
 import {lastValueFrom} from "rxjs";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
     selector: 'app-gaia-data-room',
@@ -21,6 +21,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private config: Config,
+        private route: ActivatedRoute,
         private apiService: ApiService
     ) { }
 
@@ -30,6 +31,13 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         // const d = new Date(csrftoken_exp)
         // console.log('csrftoken_exp', csrftoken_exp)
         // console.log('d', d)
+        this.route.queryParams
+            .subscribe((params: Params) => {
+                const check_user_params = params['check_user_params'] === 'true'
+                if (check_user_params) {
+                    this.checkUserAuth();
+                }
+            })
     }
 
     getUser() {
@@ -38,6 +46,14 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
             this.user = user;
             // console.log('this.user GaiaDataRoomComponent', this.user)
         });
+    }
+
+    async checkUserAuth() {
+        const response: any = await lastValueFrom(this.apiService.checkUserAuth({}))
+        if (!response.err) {
+            this.saveUserGmailAuth(response.gmail_auth)
+            this.router.navigate(['.'], {relativeTo: this.route});
+        }
     }
 
     async getUserEmails() {
@@ -76,7 +92,7 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         const response: any = await lastValueFrom(this.apiService.getUserAuthUrl({}));
         // console.log('response', response)
         // window.open(response.auth_url, "", "width=500,height=700");
-        this.popupWindowCenter(response.auth_url, "Gmail Auth", 500, 700)
+        this.redirectToAuthUrl(response.auth_url, "Gmail Auth", 500, 700)
 
     }
 
@@ -106,6 +122,10 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
             //     }
             // }, 500);
         }
+    }
+
+    redirectToAuthUrl(url: string, title: string, w: number, h: number) {
+        window.location.href = url
     }
 
     clearErrMessage() {
