@@ -2,6 +2,8 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
 import {User} from "./entities/user";
 import {ActivatedRoute, Params} from "@angular/router";
+import {WebSocketService} from "./services/web-sockets/web-socket.service";
+import {HelperService} from "./services/helper.service";
 
 // declare var STATIC_URL: any;
 declare var USER: any;
@@ -18,6 +20,8 @@ export class AppComponent implements OnInit {
     user!: User;
     constructor(
         private config: Config,
+        private webSocketService: WebSocketService,
+        private helperService: HelperService,
         private route: ActivatedRoute
     ) {
         setTimeout(() => {
@@ -79,17 +83,23 @@ export class AppComponent implements OnInit {
             .subscribe((params: Params) => {
                     const gmail_callback = params['gmail_callback'] === 'true'
                     if (gmail_callback) {
-                        console.log('setting up unload event', window.opener)
-                        if (window.opener) {
-                            window.opener.postMessage('popupClosed', window.location.origin);
-                        }
+                        // console.log('setting up unload event', window.opener)
+                        // if (window.opener) {
+                        //     window.opener.postMessage('popupClosed', window.location.origin);
+                        // }
+                        console.log('gmail_callback', gmail_callback)
+                        this.webSocketService.connect(this.helperService.create_user_socket_uuidv5(this.user.email))
+                        this.webSocketService.onConnect.subscribe((msg) => {
+                            console.log('onConnect msg', msg)
+                            this.webSocketService.sendMessage('auth-popup-closed', {'test': 'hi'})
+                            window.close()
+                        })
                         // window.addEventListener('unload', function() {
                         //     alert('sent message: popupClosed - ' + window.location.origin);
                         //     if (window.opener) {
                         //         window.opener.postMessage('popupClosed', window.location.origin);
                         //     }
                         // });
-                        // window.close()
                     }
                 }
             );

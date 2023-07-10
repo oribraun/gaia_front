@@ -4,6 +4,9 @@ import {User} from "../../entities/user";
 import {Config} from "../../config";
 import {lastValueFrom} from "rxjs";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
+import {WebSocketService} from "../../services/web-sockets/web-socket.service";
+import {HelperService} from "../../services/helper.service";
 
 @Component({
     selector: 'app-gaia-data-room',
@@ -21,15 +24,35 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private config: Config,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private webSocketService: WebSocketService,
+        private helperService: HelperService
     ) { }
 
     ngOnInit(): void {
         this.getUser();
+        this.webSocketService.connect(this.helperService.create_user_socket_uuidv5(this.user.email))
+        this.webSocketService.onConnect.subscribe((msg) => {
+            console.log('onConnect msg', msg)
+            this.webSocketService.sendMessage('hello', {'test': 'hi'})
+        })
+        // this.webSocketService.onError.subscribe((msg) => {
+        //     console.log('onError msg', msg)
+        // })
+        // this.webSocketService.onMessage.subscribe((msg) => {
+        //     console.log('onMessage msg', msg)
+        // })
+        // this.webSocketService.onDisconnect.subscribe((msg) => {
+        //     console.log('onDisconnect msg', msg)
+        // })
+        this.webSocketService.ListenFor('hello-back').subscribe((o) => {
+            console.log('hello-back message', o)
+        })
         // const csrftoken_exp = this.config.getCookie('user-exp', true)
         // const d = new Date(csrftoken_exp)
         // console.log('csrftoken_exp', csrftoken_exp)
         // console.log('d', d)
+
     }
 
     getUser() {
@@ -85,13 +108,20 @@ export class GaiaDataRoomComponent implements OnInit, OnDestroy {
         var top = (screen.height/2)-(h/2);
         const popup = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
         if (popup) {
-            window.addEventListener('message', function(event) {
-                console.log('Received message:', event);
-                // Check the origin of the message to ensure it's from the popup window
-                if (event.origin === window.location.origin && event.data === 'popupClosed') {
-                    console.log('Popup is closed');
-                }
-            }, false);
+            this.webSocketService.ListenFor('auth-popup-closed').subscribe((o) => {
+                lastValueFrom(this.apiService.checkUserAuth({})).then((response: any) => {
+                    if (!response.err) {
+                        this.saveUserGmailAuth(response.gmail_auth)
+                    }
+                })
+            })
+            // window.addEventListener('message', function(event) {
+            //     console.log('Received message:', event);
+            //     // Check the origin of the message to ensure it's from the popup window
+            //     if (event.origin === window.location.origin && event.data === 'popupClosed') {
+            //         console.log('Popup is closed');
+            //     }
+            // }, false);
             // clearInterval(this.checkClosedInterval);
             // this.checkClosedInterval = setInterval(async () => {
             //     if (popup.closed) {

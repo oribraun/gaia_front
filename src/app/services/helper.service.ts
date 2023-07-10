@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 declare var $: any;
 @Injectable({
@@ -25,4 +26,24 @@ export class HelperService {
             }
         })
     }
+
+    create_uuidv5(str: string = '', hash: string = '') {
+        // @ts-ignore
+        let MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+        if (hash) {
+            MY_NAMESPACE = hash
+        }
+        const u = uuidv5(str, MY_NAMESPACE);
+        return u;
+    };
+
+    create_user_socket_uuidv5(str: string = '', hash: string = '') {
+        // @ts-ignore
+        let MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3342';
+        if (hash) {
+            MY_NAMESPACE = hash
+        }
+        const u = uuidv5(str, MY_NAMESPACE);
+        return u;
+    };
 }
