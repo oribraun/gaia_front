@@ -1,0 +1,9 @@
+<div>
+    <div class="user-box">
+        <div class="user">
+            <div class="circle circle-animation"></div>
+        </div>
+    </div>
+  <button (click)="startRecordingStream()" [disabled]="isRecording">Start Recording</button>
+  <button (click)="stopRecordingStream()" [disabled]="!isRecording">Stop Recording</button>
+</div>

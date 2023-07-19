@@ -1,0 +1,51 @@
+.user-box {
+    padding: 50px;
+    .user {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        background: #ccc;
+        .circle {
+            position: absolute;
+            top:0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border-radius: 100%;
+            border: 1px solid #000;
+        }
+        .circle-animation {
+            -webkit-animation: growUp 1.5s infinite; /* You can remove 1.5s if you don't want delay */
+            -moz-animation: growUp 1.5s infinite;
+            -ms-animation: growUp 1.5s infinite;
+            -o-animation: growUp 1.5s infinite;
+            animation: growUp 1.5s infinite;
+        }
+    }
+}
+
+@-webkit-keyframes growUp {
+    0%  { -webkit-transform: scale(0); }
+    100% { -webkit-transform: scale(1); }
+}
+
+@-moz-keyframes growUp {
+    0%  { -moz-transform: scale(1); }
+    100% { -moz-transform: scale(1.5); }
+}
+
+@-o-keyframes growUp {
+    0%  { -o-transform: scale(1); }
+    100% { -o-transform: scale(1.5); }
+}
+
+@-ms-keyframes growUp {
+    0%  { -ms-transform: scale(1); }
+    100% { -ms-transform: scale(1.5); }
+}
+
+@keyframes growUp {
+    0%  { transform: scale(1); }
+    100% { transform: scale(1.5); }
+}
