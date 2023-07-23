@@ -225,6 +225,17 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-lessons', obj,
+            this.httpOptions
+        )
+    }
+    sendAnswer(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'save_class_page_answer', obj,
+            this.httpOptions
+        )
+    }
+
     getCompanyUsers(obj: any) {
         // company_users_offset
         // company_users_limit

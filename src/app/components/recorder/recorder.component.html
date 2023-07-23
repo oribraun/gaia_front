@@ -1,9 +1,66 @@
-<div>
-    <div class="user-box">
-        <div class="user">
-            <div class="circle circle-animation"></div>
+<!--<div>-->
+<!--    <div class="user-box">-->
+<!--        <div class="user">-->
+<!--            <div class="circle circle-animation"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--  <button (click)="startRecordingStream()" [disabled]="isRecording">Start Recording</button>-->
+<!--  <button (click)="stopRecordingStream()" [disabled]="!isRecording">Stop Recording</button>-->
+<!--</div>-->
+<section>
+    <div class="board">
+        <div class="objective">
+            <h2>{{lessons.objective.topic}}</h2>
+        </div>
+        <div class="lesson-parts">
+            <div class="box"
+                 [ngClass]="{'box-active': currentLessonIndex === i}"
+                 *ngFor="let lesson of lessons.lesson_parts; let i = index"
+                 (click)="selectLesson(i)">
+                <h4 class="title">{{lesson.title}}</h4>
+                <p class="desc">{{lesson.desc}}</p>
+                <p class="duration" *ngIf="lesson.duration"><small>{{lesson.duration}} min</small></p>
+                <img src="{{lesson.placeholder_image ? lesson.placeholder_image : 'assets/images/lesson_placeholder.jpg'}}" alt="" class="image">
+            </div>
+            <!--            <div class="box"></div>-->
+        </div>
+        <div class="interactive-parts">
+            <div class="white-board">
+                <div class="text">
+                    <p *ngIf="currentLesson && whiteBoardPage">
+                        {{currentLesson.id}}
+                        <b>{{whiteBoardPage.headline}}</b><br/>
+                        {{whiteBoardPage.text}}<br/>
+                        {{whiteBoardPage.question}}
+                    </p>
+                </div>
+                <div class="input">
+                    <div class="input-group mb-3">
+                      <select class="form-selectt input-group-text" id="inputGroupSelect02" [(ngModel)]="lang" (ngModelChange)="stopRecognition()">
+                        <option value="en-US">Lang Us</option>
+                        <option value="he">Lang He</option>
+                      </select>
+                      <input type="text" class="form-control" name="answer" placeholder="Your Answer" (keydown.enter)="sendAnswer()" [(ngModel)]="answer">
+                    </div>
+                </div>
+            </div>
+            <div class="cam-board">
+                <div class="teacher">
+                    <div class="user-box">
+                        <div class="user" #user>
+                            <div class="icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="student">
+                    <video #videoElement autoplay playsinline [muted]="'muted'"></video>
+                </div>
+                <div class="buttons">
+                    play/pause
+                </div>
+            </div>
         </div>
     </div>
-  <button (click)="startRecordingStream()" [disabled]="isRecording">Start Recording</button>
-  <button (click)="stopRecordingStream()" [disabled]="!isRecording">Stop Recording</button>
-</div>
+</section>
