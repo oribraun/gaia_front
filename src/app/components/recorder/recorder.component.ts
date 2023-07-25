@@ -150,6 +150,10 @@ export class RecorderComponent implements OnInit, OnDestroy {
     answer: string = '';
     lang: string = 'en-US';
     recognition: any;
+    recognitionCountWords = 0;
+    recognitionText = '';
+
+    speakInProgress = false;
 
     private socket!: WebSocket;
     private audioStreamSubscription: any;
@@ -177,7 +181,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         // this.setCurrentLesson();
         // this.setRandomCircleAnimation()
         this.speechRecognition()
-        // this.speechRecognitionHe()
+        // this.speechRecognitionHe()w
     }
 
     startVideo() {
@@ -192,6 +196,8 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     speechRecognition() {
+        this.recognitionText = '';
+        this.recognitionCountWords = 0;
         this.recognition =  new webkitSpeechRecognition();
         let text = '';
         let active = false;
@@ -199,39 +205,44 @@ export class RecorderComponent implements OnInit, OnDestroy {
         this.recognition.interimResults = true;
         this.recognition.lang = this.lang;
         let countWords = 0
-        let last_text = ''
-        this.recognition.addEventListener('result', (e: any) => {
-            const transcript = Array.from(e.results)
-                .map((result: any) => result[0])
-                .map((result) => result.transcript)
-                .join('');
-            text = transcript;
-            if (last_text !== text) {
-                last_text = text;
-                this.addCircle(this.user.nativeElement, countWords)
-                countWords++;
-                console.log('transcript ' + this.lang, text);
-            }
-        });
-        this.recognition.addEventListener('end', (condition: any) => {
-            if (active) {
-                this.recognition.stop();
-                active = false;
-                countWords = 0;
-                last_text = '';
-                this.answer = text;
-                console.log("End speech recognition EN")
-                this.recognition.start();
-                active = true;
-            } else {
-                // this.wordConcat()
-                const text = tempWords + '.';
-                console.log('text EN', text)
-                this.recognition.start();
-            }
-        });
+        this.recognition.addEventListener('result', this.onResultRecognition);
+        this.recognition.addEventListener('end', this.onEndRecognition);
+        this.recognition.stop();
         this.recognition.start();
         active = true;
+    }
+
+    onEndRecognition = (condition: any) => {
+        if (this.speakInProgress) {
+            return;
+        }
+        if (this.recognition) {
+            this.recognition.stop();
+        }
+        this.answer = this.recognitionText;
+        this.recognitionText = '';
+        this.recognitionCountWords = 0;
+        console.log("End speech recognition EN")
+        if (this.recognition) {
+            this.recognition.start();
+        }
+    }
+
+    onResultRecognition = (e: any) => {
+        if (this.speakInProgress) {
+            return;
+        }
+        const transcript = Array.from(e.results)
+            .map((result: any) => result[0])
+            .map((result) => result.transcript)
+            .join('');
+        const text = transcript;
+        if (this.recognitionText !== text) {
+            this.recognitionText = text;
+            this.addCircle(this.user.nativeElement, this.recognitionCountWords)
+            this.recognitionCountWords++;
+            console.log('transcript ' + this.lang, text);
+        }
     }
 
     stopRecognition() {
@@ -271,6 +282,32 @@ export class RecorderComponent implements OnInit, OnDestroy {
         });
         recognition.start();
         active = true;
+    }
+
+    textToVoice(text: string) {
+        if (this.speakInProgress) {
+            return;
+        }
+        this.speakInProgress = true;
+        // Create a new SpeechSynthesisUtterance object
+        let utterance = new SpeechSynthesisUtterance();
+
+        // Set the text and voice of the utterance
+        // console.log('text', text)
+        // console.log('window.speechSynthesis.getVoices()', window.speechSynthesis.getVoices())
+        const voices = window.speechSynthesis.getVoices();
+        const names = voices.map((o) => o.name);
+        const langs = voices.map((o) => o.lang);
+        // console.log('names', names)
+        // console.log('langs', langs)
+        utterance.text = text;
+        utterance.voice = window.speechSynthesis.getVoices()[0];
+        utterance.onend = () => {
+            this.speakInProgress = false;
+        }
+        // Speak the utterance
+        window.speechSynthesis.cancel()
+        window.speechSynthesis.speak(utterance);
     }
 
     setRandomCircleAnimation() {
@@ -366,6 +403,18 @@ export class RecorderComponent implements OnInit, OnDestroy {
         this.currentLessonIndex = index;
         this.currentLesson = this.lessons.lesson_parts[this.currentLessonIndex];
         this.whiteBoardPage = this.currentLesson.white_board_pages[0];
+        if (this.whiteBoardPage.question) {
+            const t = `${this.whiteBoardPage.headline}, ${this.whiteBoardPage.text}, ${this.whiteBoardPage.question}`;
+            if (window.speechSynthesis.getVoices().length) {
+                this.textToVoice(t);
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    setTimeout(() => {
+                        this.textToVoice(t);
+                    },1000);
+                }
+            }
+        }
     }
 
     selectLesson(index: number) {
@@ -422,7 +471,12 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.audioStreamSubscription.unsubscribe();
+        if (this.recognition) {
+            this.recognition.stop();
+            this.recognition.removeEventListener('result', this.onResultRecognition);
+            this.recognition.removeEventListener('end', this.onEndRecognition);
+        }
+        // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }
 
