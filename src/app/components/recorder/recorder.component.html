@@ -9,40 +9,84 @@
 <!--</div>-->
 <section>
     <div class="board">
-        <div class="objective">
-            <h2>{{lessons.objective.topic}}</h2>
-        </div>
-        <div class="lesson-parts">
-            <div class="box"
-                 [ngClass]="{'box-active': currentLessonIndex === i}"
-                 *ngFor="let lesson of lessons.lesson_parts; let i = index"
-                 (click)="selectLesson(i)">
-                <h4 class="title">{{lesson.title}}</h4>
-                <p class="desc">{{lesson.desc}}</p>
-                <p class="duration" *ngIf="lesson.duration"><small>{{lesson.duration}} min</small></p>
-                <img src="{{lesson.placeholder_image ? lesson.placeholder_image : 'assets/images/lesson_placeholder.jpg'}}" alt="" class="image">
-            </div>
+<!--        <div class="objective">-->
+<!--            <h2>{{lessons.objective.topic}}</h2>-->
+<!--        </div>-->
+        <div class="lesson-parts lesson-parts-he" [ngClass]="{'dir-rtl': currentLesson && currentLesson.native_lang === 'he'}">
+            <ng-container *ngIf="lessons">
+                <div class="box"
+                     [ngClass]="{
+                        'box-active': currentLessonIndex === i
+                     }"
+                     *ngFor="let lesson of lessons.lesson_parts; let i = index"
+                     (click)="selectLesson(i)">
+                    <h4 class="title">{{lesson.title}}</h4>
+                    <p class="desc">{{lesson.desc}}</p>
+                    <p class="duration" *ngIf="lesson.duration"><small>{{lesson.duration}} min</small></p>
+                    <img src="{{lesson.placeholder_image ? lesson.placeholder_image : 'assets/images/lesson_placeholder.jpg'}}" alt="" class="image">
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!lessons">
+                <div>Loading...</div>
+            </ng-container>
             <!--            <div class="box"></div>-->
         </div>
         <div class="interactive-parts">
-            <div class="white-board">
-                <div class="text">
-                    <p *ngIf="currentLesson && whiteBoardPage">
-                        {{currentLesson.id}}
-                        <b>{{whiteBoardPage.headline}}</b><br/>
-                        {{whiteBoardPage.text}}<br/>
-                        {{whiteBoardPage.question}}
-                    </p>
-                </div>
-                <div class="input">
-                    <div class="input-group mb-3">
-                      <select class="form-selectt input-group-text" id="inputGroupSelect02" [(ngModel)]="lang" (ngModelChange)="stopRecognition()">
-                        <option value="en-US">Lang Us</option>
-                        <option value="he">Lang He</option>
-                      </select>
-                      <input type="text" class="form-control" name="answer" placeholder="Your Answer" (keydown.enter)="sendAnswer()" [(ngModel)]="answer">
-                    </div>
-                </div>
+            <div class="white-board" [ngClass]="{'dir-rtl': currentLesson && currentLesson.native_lang === 'he'}">
+                <ng-container *ngIf="lessons">
+                    <ng-container *ngIf="whiteBoardPage.module_type === 'displayer'">
+                        <div [ngClass]="whiteBoardPage.module_type">
+                            <div class="title dir-ltr">{{whiteBoardPage.title}}</div>
+                            <div class="image">
+                                <img src="{{whiteBoardPage.image}}" alt="">
+                            </div>
+                            <div class="native">{{whiteBoardPage.native}}</div>
+                            <div class="help_text">{{whiteBoardPage.help_text}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="whiteBoardPage.module_type === 'repeater'">
+                        <div [ngClass]="whiteBoardPage.module_type">
+                            <div class="title dir-ltr">{{whiteBoardPage.title}}</div>
+                            <div class="image">
+                                <img src="{{whiteBoardPage.image}}" alt="">
+                            </div>
+                            <div class="native">{{whiteBoardPage.native}}</div>
+                            <div class="help_text">{{whiteBoardPage.help_text}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="whiteBoardPage.module_type === 'typewriter'">
+                        <div [ngClass]="whiteBoardPage.module_type">
+                            <div class="title dir-ltr">{{whiteBoardPage.title}}</div>
+                            <div class="image">
+                                <img src="{{whiteBoardPage.image}}" alt="">
+                            </div>
+                            <div class="native">{{whiteBoardPage.native}}</div>
+                            <div class="input">
+                                <input type="text" class="form-control" name="answer" (keydown.enter)="sendAnswer()" [placeholder]="whiteBoardPage.help_text" [(ngModel)]="answer">
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="whiteBoardPage.module_type === 'conversation'">
+                        <div [ngClass]="whiteBoardPage.module_type">
+                            <div class="text">
+                                <p *ngIf="currentLesson && whiteBoardPage">
+            <!--                        {{currentLesson.id}}-->
+            <!--                        <b>{{whiteBoardPage.headline}}</b><br/>-->
+            <!--                        {{whiteBoardPage.title}}<br/>-->
+                                </p>
+                            </div>
+                            <div class="input">
+                                <div class="input-group mb-3">
+                                  <select class="form-selectt input-group-text" id="inputGroupSelect02" [(ngModel)]="lang" (ngModelChange)="stopRecognition()">
+                                    <option value="en-US">Lang Us</option>
+                                    <option value="he">Lang He</option>
+                                  </select>
+                                  <input type="text" class="form-control" name="answer" placeholder="Your Answer" [(ngModel)]="answer">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
             </div>
             <div class="cam-board">
                 <div class="teacher">

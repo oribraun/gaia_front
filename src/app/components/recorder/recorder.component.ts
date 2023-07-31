@@ -2,7 +2,7 @@ import {Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild} 
 import {AudioRecordingService} from "../../services/audio-recorder/audio-recording.service";
 import { webSocket } from 'rxjs/webSocket';
 import {ApiService} from "../../services/api.service";
-import {lastValueFrom} from "rxjs";
+import {fromEvent, lastValueFrom} from "rxjs";
 import { DOCUMENT } from '@angular/common';
 
 declare var $: any;
@@ -17,59 +17,56 @@ export class RecorderComponent implements OnInit, OnDestroy {
     @ViewChild('videoElement', { static: true }) videoElement!: ElementRef;
     @ViewChild('user', { static: true }) user!: ElementRef;
 
-    lessons = {
-        "objective": {
-            "topic": "Messi Lesson",
-            "vocab": "",
-            "grammar": "",
-        },
+    speech = 'speechSynthesis' // speechSynthesis, audio
+    lessons: any = {
         "lesson_parts": [
             {
                 "id": 1,
-                "title": "title 1",
-                "desc": "desc 1",
+                "native_lang": "he",
+                "title": "אוצר מילים",
+                "desc": "בשיעור זה נלמד מילים פשוטות באנגלית",
                 "placeholder_image": "",
                 "vocab": "",
                 "duration": "3:01",
                 "white_board_pages": [
                     {
-                        "id": 0,
-                        "headline": "Introduction",
-                        "text": "Text",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
-                        "answers_options": ["a", "b"],
-                        "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
-                        }
+                        'item_id':0,
+                        'next_item_id':1,
+                        'module_type': 'displayer',
+                        'image': 'url',
+                        'title': 'Apple',
+                        'native': 'תפוח',
+                        'help_text': 'תפוח באנגלית זה apple',
+                        'instructions': ['apple', 'apple', 'apple'],
+                        'delay': '1',
+                        'help_sound_url': 'url',
+                        'section_ended': false
                     },
                     {
-                        "id": 1,
-                        "headline": "Introduction 1",
-                        "text": "Text 1",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
-                        "answers_options": ["a", "b"],
-                        "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
-                        }
+                        'item_id':1,
+                        'next_item_id':2,
+                        'module_type': 'repeater',
+                        'image': 'url',
+                        'title': 'Apple',
+                        'native': 'תפוח',
+                        'help_text': 'אתה צריך לומר מה אתה רואה',
+                        'instructions': ['what do you see ?', 'I see an apple', 'now you - what do you see ?'],
+                        'delay': '1',
+                        'help_sound_url': 'url',
+                        'section_ended': false
                     },
                     {
-                        "id": 2,
-                        "headline": "Introduction 2",
-                        "text": "Text 2",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
-                        "answers_options": ["a", "b"],
-                        "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
-                        }
+                        'item_id':2,
+                        'next_item_id':3,
+                        'module_type': 'typewriter',
+                        'image': 'url',
+                        'title': 'Apple',
+                        'native': 'תפוח',
+                        'help_text': 'אתה צריך לכתוב מה אתה רואה',
+                        'instructions': ['Type the word APPLE'],
+                        'delay':0,
+                        'help_sound_url': 'url',
+                        'section_ended': false
                     }
                 ]
             },
@@ -79,67 +76,44 @@ export class RecorderComponent implements OnInit, OnDestroy {
                 "desc": "desc 2",
                 "placeholder_image": "",
                 "vocab": "",
-                "duration": "3:02",
+                "duration": "3:01",
                 "white_board_pages": [
                     {
-                        "id": 0,
-                        "headline": "Introduction",
-                        "text": "Text",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
+                        'item_id':0,
+                        'next_item_id':1,
+                        'module_type': 'conversation',
+                        'image': '',
+                        'title': 'Introduction',
+                        'native': 'הוראות',
+                        'help_text': '',
+                        'instructions': ['Hi, my name is Nehama and I am your teacher for today, how are you today?'],
+                        'delay':0,
+                        'help_sound_url': 'url',
+                        'section_ended': false,
                         "answers_options": ["a", "b"],
                         "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
+                            "a": {"next_item_id": "1"},
+                            "b": {"next_item_id": "2"}
                         }
-                    }
-                ]
-            },
-            {
-                "id": 3,
-                "title": "title 3",
-                "desc": "desc 3",
-                "placeholder_image": "",
-                "vocab": "",
-                "duration": "3:03",
-                "white_board_pages": [
+                    },
                     {
-                        "id": 0,
-                        "headline": "Introduction",
-                        "text": "Text",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
+                        'item_id':0,
+                        'next_item_id':1,
+                        'module_type': 'conversation',
+                        'image': '',
+                        'title': 'Introduction',
+                        'native': 'הוראות',
+                        'help_text': '',
+                        'instructions': ['Hi, my name is Nehama and I am your teacher for today, how are you today?'],
+                        'delay':0,
+                        'help_sound_url': 'url',
+                        'section_ended': false,
                         "answers_options": ["a", "b"],
                         "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
+                            "a": {"next_item_id": "1"},
+                            "b": {"next_item_id": "2"}
                         }
-                    }
-                ]
-            },
-            {
-                "id": 4,
-                "title": "title 4",
-                "desc": "desc 4",
-                "placeholder_image": "",
-                "vocab": "",
-                "duration": "3:04",
-                "white_board_pages": [
-                    {
-                        "id": 0,
-                        "headline": "Introduction",
-                        "text": "Text",
-                        "image": "",
-                        "video": "",
-                        "question": "do you know who messi is?",
-                        "answers_options": ["a", "b"],
-                        "answers_map": {
-                            "a": {"next_page_id": "1"},
-                            "b": {"next_page_id": "2"}
-                        }
-                    }
+                    },
                 ]
             }
         ]
@@ -147,6 +121,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
     currentLessonIndex: number = -1;
     currentLesson: any = null;
     whiteBoardPage: any = null;
+    currentInstructions = [];
     answer: string = '';
     lang: string = 'en-US';
     recognition: any;
@@ -166,6 +141,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private renderer: Renderer2,
     ) {
+        this.lessons = null;
         this.socket = new WebSocket('ws://127.0.0.1:8000/ws/audio-upload/');
         this.socket.onopen = () => {
             console.log('WebSocket connection established.')
@@ -180,7 +156,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         this.getLessons();
         // this.setCurrentLesson();
         // this.setRandomCircleAnimation()
-        this.speechRecognition()
+        this.setUpSpeechRecognition()
         // this.speechRecognitionHe()w
     }
 
@@ -195,7 +171,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
     }
 
-    speechRecognition() {
+    setUpSpeechRecognition() {
         this.recognitionText = '';
         this.recognitionCountWords = 0;
         this.recognition =  new webkitSpeechRecognition();
@@ -207,24 +183,30 @@ export class RecorderComponent implements OnInit, OnDestroy {
         let countWords = 0
         this.recognition.addEventListener('result', this.onResultRecognition);
         this.recognition.addEventListener('end', this.onEndRecognition);
-        this.recognition.stop();
+    }
+
+    startSpeechRecognition() {
         this.recognition.start();
-        active = true;
+    }
+
+    stopSpeechRecognition() {
+        this.recognition.stop();
     }
 
     onEndRecognition = (condition: any) => {
         if (this.speakInProgress) {
             return;
         }
-        if (this.recognition) {
-            this.recognition.stop();
-        }
         this.answer = this.recognitionText;
-        this.recognitionText = '';
-        this.recognitionCountWords = 0;
-        console.log("End speech recognition EN")
-        if (this.recognition) {
-            this.recognition.start();
+        console.log("End speech recognition EN", this.answer)
+        if (this.answer) {
+            this.stopSpeechRecognition();
+            this.recognitionText = '';
+            this.recognitionCountWords = 0;
+            this.sendAnswer();
+        } else {
+            this.stopSpeechRecognition();
+            this.startSpeechRecognition();
         }
     }
 
@@ -284,10 +266,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         active = true;
     }
 
-    textToVoice(text: string) {
-        if (this.speakInProgress) {
-            return;
-        }
+    textToVoice(text: string, startRecognition=true) {
         this.speakInProgress = true;
         // Create a new SpeechSynthesisUtterance object
         let utterance = new SpeechSynthesisUtterance();
@@ -301,13 +280,62 @@ export class RecorderComponent implements OnInit, OnDestroy {
         // console.log('names', names)
         // console.log('langs', langs)
         utterance.text = text;
-        utterance.voice = window.speechSynthesis.getVoices()[0];
-        utterance.onend = () => {
-            this.speakInProgress = false;
-        }
+        utterance.voice = window.speechSynthesis.getVoices()[3];
+        fromEvent(utterance, 'end').subscribe((event) => {
+            this.onEndTextToVoice(startRecognition);
+        })
         // Speak the utterance
         window.speechSynthesis.cancel()
         window.speechSynthesis.speak(utterance);
+    }
+
+    onEndTextToVoice(startRecognition: boolean) {
+        if (this.currentInstructions && this.currentInstructions.length) {
+            const delay_s = this.whiteBoardPage.delay * 1000;
+            setTimeout(() => {
+                const t: any = this.currentInstructions.shift();
+                this.textToVoice(t);
+            }, delay_s)
+        } else {
+            const handled_module_type = this.handleWhiteBoardModuleType();
+            if (!handled_module_type) {
+                this.speakInProgress = false;
+                this.stopSpeechRecognition()
+                if (startRecognition) {
+                    if (this.whiteBoardPage.module_type != 'typewriter') {
+                        this.startSpeechRecognition()
+                    }
+                }
+            }
+        }
+    }
+
+    handleWhiteBoardModuleType() {
+        if (this.whiteBoardPage.section_ended) {
+            if (this.whiteBoardPage.module_type === 'displayer') {
+                const next_white_board_id = this.whiteBoardPage.next_item_id;
+                const map = this.currentLesson.white_board_pages.map((o: any) => o.item_id)
+                const index = map.indexOf(next_white_board_id);
+                if (index > -1) {
+                    this.setCurrentWhiteBoard(index);
+                } else {
+                    // what to do when no next item id.
+                }
+                return true;
+            }
+            if (this.whiteBoardPage.module_type === 'repeater') {
+                const next_white_board_id = this.whiteBoardPage.next_item_id;
+                const map = this.currentLesson.white_board_pages.map((o: any) => o.item_id)
+                const index = map.indexOf(next_white_board_id);
+                if (index > -1) {
+                    this.setCurrentWhiteBoard(index);
+                } else {
+                    // what to do when no next item id.
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     setRandomCircleAnimation() {
@@ -402,17 +430,46 @@ export class RecorderComponent implements OnInit, OnDestroy {
     setCurrentLesson(index: number = 0) {
         this.currentLessonIndex = index;
         this.currentLesson = this.lessons.lesson_parts[this.currentLessonIndex];
-        this.whiteBoardPage = this.currentLesson.white_board_pages[0];
-        if (this.whiteBoardPage.question) {
-            const t = `${this.whiteBoardPage.headline}, ${this.whiteBoardPage.text}, ${this.whiteBoardPage.question}`;
-            if (window.speechSynthesis.getVoices().length) {
-                this.textToVoice(t);
-            } else {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    setTimeout(() => {
+        this.setCurrentWhiteBoard(0);
+    }
+
+    setCurrentWhiteBoard(index: number) {
+        if (this.currentLesson.white_board_pages[index]) {
+            this.whiteBoardPage = this.currentLesson.white_board_pages[index];
+            this.currentInstructions = this.whiteBoardPage.instructions;
+            if (this.currentInstructions && this.currentInstructions.length) {
+                setTimeout(() => {
+                    this.startSpeakInstructions()
+                })
+            }
+        }
+    }
+
+    startSpeakInstructions() {
+        const t: any = this.currentInstructions.shift();
+        if (t) {
+            if (this.speech === 'speechSynthesis') {
+                if (window.speechSynthesis.getVoices().length) {
+                    this.textToVoice(t);
+                } else {
+                    fromEvent(speechSynthesis, 'voiceschanged').subscribe((event) => {
+                        this.speakInProgress = true;
                         this.textToVoice(t);
-                    },1000);
+                    })
                 }
+            } else if (this.speech === 'audio') {
+                const audio = new Audio();
+                audio.src = this.whiteBoardPage.help_sound_url;
+                audio.load();
+                audio.play();
+                audio.addEventListener('ended', (e) => {
+                    const handled_module_type = this.handleWhiteBoardModuleType();
+                    if (!handled_module_type) {
+                        this.speakInProgress = false;
+                        this.stopSpeechRecognition()
+                        this.startSpeechRecognition()
+                    }
+                })
             }
         }
     }
@@ -425,25 +482,75 @@ export class RecorderComponent implements OnInit, OnDestroy {
 
     async sendAnswer() {
         const answer = this.answer
-        this.answer = '';
         const response: any = await lastValueFrom(this.apiService.sendAnswer({
             "lesson_id": this.currentLesson.id,
-            "white_board_page_id": this.whiteBoardPage.id,
-            "question": this.whiteBoardPage.question,
+            "white_board_item_id": this.whiteBoardPage.item_id,
+            "module_type": this.whiteBoardPage.module_type,
+            "help_text": this.whiteBoardPage.help_text,
+            "instructions": this.whiteBoardPage.instructions,
+            "repeat_value": this.whiteBoardPage.repeat_value,
+            "repeat_failed": this.whiteBoardPage.repeat_failed,
+            "repeat_success": this.whiteBoardPage.repeat_success,
             "answer": answer
         }))
 
         if (response.err) {
             console.log('response err', response)
+            // setTimeout(() => {
+            //     this.startSpeechRecognition();
+            // },2000)
         } else {
-            console.log('this.currentLesson', this.currentLesson)
-            const next_page_id = response.data.next_page_id;
-            const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
-            const index = ids.indexOf(next_page_id);
-            if (index > -1) {
-                this.whiteBoardPage = this.currentLesson.white_board_pages[index];
+            this.handleOnAnswer(response)
+            // console.log('this.currentLesson', this.currentLesson)
+            // const next_page_id = response.data.next_page_id;
+            // const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
+            // const index = ids.indexOf(next_page_id);
+            // if (index > -1) {
+            //     this.whiteBoardPage = this.currentLesson.white_board_pages[index];
+            // }
+            // console.log('response', response)
+        }
+    }
+
+    handleOnAnswer(response: any) {
+        if (this.whiteBoardPage.module_type == 'conversation') {
+            this.whiteBoardPage.section_ended = response.data.section_ended;
+            const text = response.data.text;
+            this.answer = '';
+            this.whiteBoardPage.display_text = text;
+            this.textToVoice(text, !this.whiteBoardPage.section_ended);
+            if (this.whiteBoardPage.section_ended) {
+                console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
             }
-            console.log('response', response)
+        }
+        if (this.whiteBoardPage.module_type == 'repeater') {
+            this.whiteBoardPage.section_ended = response.data.section_ended;
+            this.answer = '';
+            if (this.whiteBoardPage.section_ended) {
+                const text = response.data.text;
+                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (this.whiteBoardPage.section_ended) {
+                    console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
+                }
+            } else {
+                const text = response.data.text;
+                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+            }
+        }
+        if (this.whiteBoardPage.module_type == 'typewriter') {
+            this.whiteBoardPage.section_ended = response.data.section_ended;
+            this.answer = '';
+            if (this.whiteBoardPage.section_ended) {
+                const text = response.data.text;
+                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (this.whiteBoardPage.section_ended) {
+                    console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
+                }
+            } else {
+                const text = response.data.text;
+                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                console.log('this.whiteBoardPage', this.whiteBoardPage)
+            }
         }
     }
 
