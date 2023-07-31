@@ -12,7 +12,7 @@
 <!--        <div class="objective">-->
 <!--            <h2>{{lessons.objective.topic}}</h2>-->
 <!--        </div>-->
-        <div class="lesson-parts lesson-parts-he" [ngClass]="{'dir-rtl': currentLesson && currentLesson.native_lang === 'he'}">
+        <div class="lesson-parts lesson-parts-he" [ngClass]="{'dir-rtl': currentLesson && currentLesson.text_native_lang === 'he'}">
             <ng-container *ngIf="lessons">
                 <div class="box"
                      [ngClass]="{
@@ -32,7 +32,7 @@
             <!--            <div class="box"></div>-->
         </div>
         <div class="interactive-parts">
-            <div class="white-board" [ngClass]="{'dir-rtl': currentLesson && currentLesson.native_lang === 'he'}">
+            <div class="white-board" [ngClass]="{'dir-rtl': currentLesson && currentLesson.text_native_lang === 'he'}">
                 <ng-container *ngIf="lessons">
                     <ng-container *ngIf="whiteBoardPage.module_type === 'displayer'">
                         <div [ngClass]="whiteBoardPage.module_type">
@@ -40,8 +40,8 @@
                             <div class="image">
                                 <img src="{{whiteBoardPage.image}}" alt="">
                             </div>
-                            <div class="native">{{whiteBoardPage.native}}</div>
-                            <div class="help_text">{{whiteBoardPage.help_text}}</div>
+                            <div class="text_native">{{whiteBoardPage.text_native}}</div>
+                            <div class="help_native">{{whiteBoardPage.help_native}}</div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="whiteBoardPage.module_type === 'repeater'">
@@ -50,8 +50,8 @@
                             <div class="image">
                                 <img src="{{whiteBoardPage.image}}" alt="">
                             </div>
-                            <div class="native">{{whiteBoardPage.native}}</div>
-                            <div class="help_text">{{whiteBoardPage.help_text}}</div>
+                            <div class="text_native">{{whiteBoardPage.text_native}}</div>
+                            <div class="help_native">{{whiteBoardPage.help_native}}</div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="whiteBoardPage.module_type === 'typewriter'">
@@ -60,9 +60,9 @@
                             <div class="image">
                                 <img src="{{whiteBoardPage.image}}" alt="">
                             </div>
-                            <div class="native">{{whiteBoardPage.native}}</div>
+                            <div class="text_native">{{whiteBoardPage.text_native}}</div>
                             <div class="input">
-                                <input type="text" class="form-control" name="answer" (keydown.enter)="sendAnswer()" [placeholder]="whiteBoardPage.help_text" [(ngModel)]="answer">
+                                <input type="text" class="form-control" name="answer" (keydown.enter)="sendAnswer()" [placeholder]="whiteBoardPage.help_native" [(ngModel)]="answer">
                             </div>
                         </div>
                     </ng-container>
