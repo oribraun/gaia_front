@@ -4,6 +4,7 @@ import { webSocket } from 'rxjs/webSocket';
 import {ApiService} from "../../services/api.service";
 import {fromEvent, lastValueFrom} from "rxjs";
 import { DOCUMENT } from '@angular/common';
+import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
 
 declare var $: any;
 declare var webkitSpeechRecognition: any;
@@ -140,6 +141,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         private audioRecordingService: AudioRecordingService,
         private apiService: ApiService,
         private renderer: Renderer2,
+        private speechRecognitionService: SpeechRecognitionService
     ) {
         this.lessons = null;
         this.socket = new WebSocket('ws://127.0.0.1:8000/ws/audio-upload/');
@@ -152,12 +154,34 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.speechRecognitionService.setupSpeechRecognition();
+        this.listenToSpeechRecognitionResults();
         this.startVideo()
         this.getLessons();
         // this.setCurrentLesson();
         // this.setRandomCircleAnimation()
-        this.setUpSpeechRecognition()
-        // this.speechRecognitionHe()w
+    }
+
+    listenToSpeechRecognitionResults() {
+        this.speechRecognitionService.onResults.subscribe((results) => {
+            this.recognitionText = results.text;
+            this.addCircle(this.user.nativeElement, this.recognitionCountWords)
+            this.recognitionCountWords++;
+            if (results.isFinal) {
+                this.answer = this.recognitionText;
+                console.log("End speech recognition EN", this.answer)
+                if (this.answer) {
+                    this.stopSpeechRecognition();
+                    this.recognitionText = '';
+                    this.recognitionCountWords = 0;
+                    this.sendAnswer();
+                } else {
+                    // this.stopSpeechRecognition();
+                    // this.startSpeechRecognition();
+                }
+            }
+            console.log('results', results)
+        })
     }
 
     startVideo() {
@@ -171,26 +195,12 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
     }
 
-    setUpSpeechRecognition() {
-        this.recognitionText = '';
-        this.recognitionCountWords = 0;
-        this.recognition =  new webkitSpeechRecognition();
-        let text = '';
-        let active = false;
-        let tempWords: any;
-        this.recognition.interimResults = true;
-        this.recognition.lang = this.lang;
-        let countWords = 0
-        this.recognition.addEventListener('result', this.onResultRecognition);
-        this.recognition.addEventListener('end', this.onEndRecognition);
-    }
-
     startSpeechRecognition() {
-        this.recognition.start();
+        this.speechRecognitionService.startListening()
     }
 
     stopSpeechRecognition() {
-        this.recognition.stop();
+        this.speechRecognitionService.stopListening()
     }
 
     onEndRecognition = (condition: any) => {
@@ -233,37 +243,6 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.recognition.stop();
         }
 
-    }
-
-    speechRecognitionHe() {
-        const recognition =  new webkitSpeechRecognition();
-        let active = false;
-        let tempWords: any;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-
-        recognition.addEventListener('result', (e: any) => {
-            const transcript = Array.from(e.results)
-                .map((result: any) => result[0])
-                .map((result) => result.transcript)
-                .join('');
-            tempWords = transcript;
-            console.log('transcript HE', transcript);
-        });
-        recognition.addEventListener('end', (condition: any) => {
-            if (active) {
-                recognition.stop();
-                console.log("End speech recognition HE")
-                recognition.start();
-            } else {
-                // this.wordConcat()
-                const text = tempWords + '.';
-                console.log('text HE', text)
-                recognition.start();
-            }
-        });
-        recognition.start();
-        active = true;
     }
 
     textToVoice(text: string, startRecognition=true) {
@@ -439,7 +418,11 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.currentInstructions = this.whiteBoardPage.instructions;
             if (this.currentInstructions && this.currentInstructions.length) {
                 setTimeout(() => {
-                    this.startSpeakInstructions()
+                    if (!this.whiteBoardPage.help_sound_url) {
+                        this.startSpeakInstructions()
+                    } else {
+                        this.playUsingAudio(this.whiteBoardPage.help_sound_url)
+                    }
                 })
             }
         }
@@ -448,30 +431,35 @@ export class RecorderComponent implements OnInit, OnDestroy {
     startSpeakInstructions() {
         const t: any = this.currentInstructions.shift();
         if (t) {
-            if (this.speech === 'speechSynthesis') {
-                if (window.speechSynthesis.getVoices().length) {
-                    this.textToVoice(t);
-                } else {
-                    fromEvent(speechSynthesis, 'voiceschanged').subscribe((event) => {
-                        this.speakInProgress = true;
-                        this.textToVoice(t);
-                    })
-                }
-            } else if (this.speech === 'audio') {
-                const audio = new Audio();
-                audio.src = this.whiteBoardPage.help_sound_url;
-                audio.load();
-                audio.play();
-                audio.addEventListener('ended', (e) => {
-                    const handled_module_type = this.handleWhiteBoardModuleType();
-                    if (!handled_module_type) {
-                        this.speakInProgress = false;
-                        this.stopSpeechRecognition()
-                        this.startSpeechRecognition()
-                    }
-                })
-            }
+            this.playUsingSpeechSynthesis(t);
         }
+    }
+
+    playUsingSpeechSynthesis(text: string) {
+        if (window.speechSynthesis.getVoices().length) {
+            this.textToVoice(text);
+        } else {
+            fromEvent(speechSynthesis, 'voiceschanged').subscribe((event) => {
+                this.speakInProgress = true;
+                this.textToVoice(text);
+            })
+        }
+    }
+
+    playUsingAudio(src_url: string) {
+        console.log('playing audion', src_url)
+        const audio = new Audio();
+        audio.src = src_url;
+        audio.load();
+        audio.play();
+        audio.addEventListener('ended', (e) => {
+            const handled_module_type = this.handleWhiteBoardModuleType();
+            if (!handled_module_type) {
+                this.speakInProgress = false;
+                this.stopSpeechRecognition()
+                this.startSpeechRecognition()
+            }
+        })
     }
 
     selectLesson(index: number) {
@@ -518,7 +506,11 @@ export class RecorderComponent implements OnInit, OnDestroy {
             const text = response.data.text;
             this.answer = '';
             this.whiteBoardPage.display_text = text;
-            this.textToVoice(text, !this.whiteBoardPage.section_ended);
+            if (response.data.help_sound_url) {
+                this.playUsingAudio(response.data.help_sound_url)
+            } else {
+                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+            }
             if (this.whiteBoardPage.section_ended) {
                 console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
             }
@@ -528,13 +520,21 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.answer = '';
             if (this.whiteBoardPage.section_ended) {
                 const text = response.data.text;
-                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (response.data.help_sound_url) {
+                    this.playUsingAudio(response.data.help_sound_url)
+                } else {
+                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                }
                 if (this.whiteBoardPage.section_ended) {
                     console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
                 }
             } else {
                 const text = response.data.text;
-                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (response.data.help_sound_url) {
+                    this.playUsingAudio(response.data.help_sound_url)
+                } else {
+                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                }
             }
         }
         if (this.whiteBoardPage.module_type == 'typewriter') {
@@ -542,13 +542,21 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.answer = '';
             if (this.whiteBoardPage.section_ended) {
                 const text = response.data.text;
-                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (response.data.help_sound_url) {
+                    this.playUsingAudio(response.data.help_sound_url)
+                } else {
+                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                }
                 if (this.whiteBoardPage.section_ended) {
                     console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
                 }
             } else {
                 const text = response.data.text;
-                this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                if (response.data.help_sound_url) {
+                    this.playUsingAudio(response.data.help_sound_url)
+                } else {
+                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
+                }
                 console.log('this.whiteBoardPage', this.whiteBoardPage)
             }
         }
