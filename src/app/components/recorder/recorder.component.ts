@@ -5,6 +5,7 @@ import {ApiService} from "../../services/api.service";
 import {fromEvent, lastValueFrom} from "rxjs";
 import { DOCUMENT } from '@angular/common';
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
+import {HttpEventType} from "@angular/common/http";
 
 declare var $: any;
 declare var webkitSpeechRecognition: any;
@@ -19,6 +20,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
     @ViewChild('user', { static: true }) user!: ElementRef;
 
     speech = 'speechSynthesis' // speechSynthesis, audio
+    audioChunks: Uint8Array[] = [];
     lessons: any = {
         "lesson_parts": [
             {
@@ -119,6 +121,168 @@ export class RecorderComponent implements OnInit, OnDestroy {
             }
         ]
     }
+    presentation: any = {
+        "sections": [
+            {
+                "section_title": "Greetings",
+                "section_topic": "Introduction and Lesson parts",
+                "slides": [
+                    {
+                        "slide_title": "",
+                        "slide_visual_description": "a slide with a teacher image and a text box with the teacher name and the topic of the lesson",
+                        "slide_type": "greeting",
+                        "slide_objectives": [
+                            "say hi and introduce yourself",
+                            "understand the student name if you are not aware of it",
+                            "explain the topic and purpose of the lesson"
+                        ],
+                        "full_screen": false,
+                        "estimated_duration": 90,
+                        "teacher_name": "Jenny",
+                        "teacher_image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg",
+                        "text": "Hello. I'm Jenny. \n                        Today we are going to learn about Colors and Animals for beginners. Let's get started!"
+                    },
+                    {
+                        "slide_title": "Colors and Animals for beginners",
+                        "slide_visual_description": "a slide with a list of the topics that will be covered in the lesson",
+                        "slide_type": "agenda",
+                        "slide_objectives": "go through the section of this lesson: ** Greetings** Volcubalry** Good Bye",
+                        "full_screen": false,
+                        "estimated_duration": 30,
+                        "text": "Today we will cover the following topics:** Greetings** Volcubalry** Good ByeLet's get started!"
+                    }
+                ]
+            },
+            {
+                "section_title": "Volcubalry",
+                "section_topic": "Learn new words",
+                "slides": [
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a dog ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "explain that this type of slide aim to enreach student vocabulary and pronunciation and he would need to repeat after you saying loudly the woed presented in the slide",
+                            "make the student repeat after you saying loudly and correctly the word dog"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "dog",
+                        "image_path": "https://www.thesprucepets.com/thmb/wdb0SmPvT4IjVLM7TdztfD_KAUs=/2144x0/filters:no_upscale():strip_icc()/AmericanEskimo-4293b26f3e044165959f6dbfd70214b2.jpg",
+                        "text": "dog"
+                    },
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a cat ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "make the student repeat after you saying loudly and correctly the word cat"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "cat",
+                        "image_path": "https://images.ctfassets.net/cnu0m8re1exe/qDQgxOUG5DNKlKH5TXsbo/813fa629fe33794c7ff439070fc31b89/shutterstock_603117302.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill",
+                        "text": "cat"
+                    },
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a bird ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "make the student repeat after you saying loudly and correctly the word bird"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "bird",
+                        "image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
+                        "text": "bird"
+                    },
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a white dog ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "make the student repeat after you saying loudly and correctly the word white dog"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "white dog",
+                        "image_path": "https://www.thesprucepets.com/thmb/wdb0SmPvT4IjVLM7TdztfD_KAUs=/2144x0/filters:no_upscale():strip_icc()/AmericanEskimo-4293b26f3e044165959f6dbfd70214b2.jpg",
+                        "text": "white dog"
+                    },
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a black cat ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "make the student repeat after you saying loudly and correctly the word black cat"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "black cat",
+                        "image_path": "https://images.ctfassets.net/cnu0m8re1exe/qDQgxOUG5DNKlKH5TXsbo/813fa629fe33794c7ff439070fc31b89/shutterstock_603117302.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill",
+                        "text": "black cat"
+                    },
+                    {
+                        "slide_title": "repeat after me:",
+                        "slide_visual_description": "a slide with a picture and a text of a red bird ",
+                        "slide_type": "word_repeater",
+                        "slide_objectives": [
+                            "make the student repeat after you saying loudly and correctly the word red bird"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 15,
+                        "word": "red bird",
+                        "image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
+                        "text": "red bird"
+                    },
+                    {
+                        "slide_title": "read the text below:",
+                        "slide_visual_description": "a slide with a text to be read by the student",
+                        "slide_type": "reading",
+                        "slide_objectives": [
+                            "explain the student that he needs to read the text loudly and correctly sentence by sentense",
+                            "the student read the text corrrectly"
+                        ],
+                        "full_screen": true,
+                        "estimated_duration": 120,
+                        "text": "\n                                Dogs say woof-woof. \n                                Cats say meow. \n                                Birds sing tweet-tweet.\n                            "
+                    }
+                ]
+            },
+            {
+                "section_title": "Good Bye",
+                "section_topic": "Say Good Bye",
+                "slides": [
+                    {
+                        "slide_title": "",
+                        "slide_visual_description": "a slide with a bye bye image that is related to the lesson",
+                        "slide_type": "ending",
+                        "slide_objectives": [
+                            "review the lesson topics",
+                            "say goodbye and thank the student for the lesson"
+                        ],
+                        "full_screen": false,
+                        "estimated_duration": 15,
+                        "image_path": "https://cdn2.vectorstock.com/i/1000x1000/72/36/basic-colors-educational-set-with-sea-animals-vector-22457236.jpg",
+                        "text": "Bye Bye.\n                        We will meet again soon!"
+                    }
+                ]
+            }
+        ],
+        "current_section_index": 0,
+        "current_slide_index": 0,
+        "current_objective_index": 0,
+        "estimated_duration": 345,
+        "teacher": {
+            "name": "Jenny",
+            "image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg",
+            "gender": "female",
+            "age": 25
+        },
+        "presentation_title": "Colors and Animals",
+        "presentation_topic": "Colors and Animals for beginners"
+    }
     currentLessonIndex: number = -1;
     currentLesson: any = null;
     whiteBoardPage: any = null;
@@ -138,19 +302,19 @@ export class RecorderComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(DOCUMENT) private document: Document,
-        private audioRecordingService: AudioRecordingService,
+        // private audioRecordingService: AudioRecordingService,
         private apiService: ApiService,
         private renderer: Renderer2,
         private speechRecognitionService: SpeechRecognitionService
     ) {
         this.lessons = null;
-        this.socket = new WebSocket('ws://127.0.0.1:8000/ws/audio-upload/');
-        this.socket.onopen = () => {
-            console.log('WebSocket connection established.')
-        };
-        this.socket.onerror = (err: any) => {
-            console.log('WebSocket err', err)
-        }
+        // this.socket = new WebSocket('ws://127.0.0.1:8000/ws/audio-upload/');
+        // this.socket.onopen = () => {
+        //     console.log('WebSocket connection established.')
+        // };
+        // this.socket.onerror = (err: any) => {
+        //     console.log('WebSocket err', err)
+        // }
     }
 
     ngOnInit(): void {
@@ -174,7 +338,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
                     this.stopSpeechRecognition();
                     this.recognitionText = '';
                     this.recognitionCountWords = 0;
-                    this.sendAnswer();
+                    this.sendAnswerStream();
                 } else {
                     // this.stopSpeechRecognition();
                     // this.startSpeechRecognition();
@@ -500,6 +664,82 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
     }
 
+    async sendAnswerStream() {
+        const answer = this.answer
+        const obj: any = {
+            "lesson_id": this.currentLesson.id,
+            "white_board_item_id": this.whiteBoardPage.item_id,
+            "module_type": this.whiteBoardPage.module_type,
+            "help_native": this.whiteBoardPage.help_native,
+            "instructions": this.whiteBoardPage.instructions,
+            "repeat_value": this.whiteBoardPage.repeat_value,
+            "repeat_failed": this.whiteBoardPage.repeat_failed,
+            "repeat_success": this.whiteBoardPage.repeat_success,
+            "answer": answer
+        }
+        this.audioChunks = []
+        this.apiService.sendAnswerStream(obj).subscribe((event: any) => {
+            if (event.type === HttpEventType.DownloadProgress) {
+                // Append received chunk to audioChunks and play it
+                console.log('event', event)
+                // const chunk = new Uint8Array(event.loaded - this.audioChunks.reduce((sum, chunk) => sum + chunk.length, 0));
+                // console.log('chunk', chunk)
+                // this.audioChunks.push(chunk);
+                // this.playAudioChunk(chunk);
+            } else if (event.type === HttpEventType.Response) {
+                // Audio data fully received, play the whole audio
+                // console.log('event 1', event)
+                const audioData = new Uint8Array(event.body);
+                this.audioChunks.push(audioData);
+                this.playAudio();
+            }
+        })
+
+        // if (response.err) {
+        //     console.log('response err', response)
+        //     // setTimeout(() => {
+        //     //     this.startSpeechRecognition();
+        //     // },2000)
+        // } else {
+        //     this.handleOnAnswer(response)
+        //     // console.log('this.currentLesson', this.currentLesson)
+        //     // const next_page_id = response.data.next_page_id;
+        //     // const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
+        //     // const index = ids.indexOf(next_page_id);
+        //     // if (index > -1) {
+        //     //     this.whiteBoardPage = this.currentLesson.white_board_pages[index];
+        //     // }
+        //     // console.log('response', response)
+        // }
+    }
+
+    playAudioChunk(chunk: Uint8Array) {
+        const audioContext = new AudioContext();
+        audioContext.decodeAudioData(chunk.buffer, (audioBuffer) => {
+            const audioSource = audioContext.createBufferSource();
+            audioSource.buffer = audioBuffer;
+            audioSource.connect(audioContext.destination);
+            audioSource.start();
+
+            audioSource.onended = () => {
+                audioSource.disconnect();
+            };
+        }, (error) => {
+            console.error('Error decoding audio:', error);
+        });
+    }
+
+    playAudio() {
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/mpeg' });
+        const audio = new Audio();
+        audio.src = URL.createObjectURL(audioBlob);
+        audio.play();
+
+        audio.onended = () => {
+            this.audioChunks = [];
+        };
+    }
+
     handleOnAnswer(response: any) {
         if (this.whiteBoardPage.module_type == 'conversation') {
             this.whiteBoardPage.section_ended = response.data.section_ended;
@@ -562,26 +802,37 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
     }
 
+    handleOnStream(response: any) {
+        const audioData = new Uint8Array(response);
+        const audioContext = new AudioContext();
+        audioContext.decodeAudioData(audioData.buffer).then((decodedData) => {
+            const source = audioContext.createBufferSource();
+            source.buffer = decodedData;
+            source.connect(audioContext.destination);
+            source.start();
+        });
+    }
+
     async startRecording() {
         this.isRecording = true;
-        await this.audioRecordingService.startRecording();
+        // await this.audioRecordingService.startRecording();
     }
 
     async stopRecording() {
         this.isRecording = false;
-        const audioBlob = await this.audioRecordingService.stopRecording();
+        // const audioBlob = await this.audioRecordingService.stopRecording();
         // Send the audioBlob to the Django backend.
     }
 
     async startRecordingStream() {
         this.isRecording = true;
-        await this.audioRecordingService.startRecordingStream();
+        // await this.audioRecordingService.startRecordingStream();
     }
 
     async stopRecordingStream() {
         this.isRecording = false;
-        const audioBlob = await this.audioRecordingService.stopRecordingStream();
-        console.log('audioBlob',audioBlob)
+        // const audioBlob = await this.audioRecordingService.stopRecordingStream();
+        // console.log('audioBlob',audioBlob)
         // this.socket.complete(); // Close the WebSocket connection after recording is complete
     }
 

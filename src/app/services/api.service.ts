@@ -235,6 +235,17 @@ export class ApiService {
             this.httpOptions
         )
     }
+    sendAnswerStream(obj: any) {
+        const httpOptions = {...this.httpOptions}
+        // httpOptions['responseType'] = 'arraybuffer' as 'json';
+        // httpOptions['observe'] = 'response' as 'body';
+        httpOptions['responseType'] = 'arraybuffer'; // Set the response type to arraybuffer
+        httpOptions['observe'] = 'events';
+        httpOptions['reportProgress'] = true;
+        return this.http.post(this.serverBase + this.baseApiUser + 'stream_audio', obj,
+            httpOptions,
+        )
+    }
 
     getCompanyUsers(obj: any) {
         // company_users_offset
