@@ -121,175 +121,23 @@ export class RecorderComponent implements OnInit, OnDestroy {
             }
         ]
     }
-    presentation: any = {
-        "sections": [
-            {
-                "section_title": "Greetings",
-                "section_topic": "Introduction and Lesson parts",
-                "slides": [
-                    {
-                        "slide_title": "",
-                        "slide_visual_description": "a slide with a teacher image and a text box with the teacher name and the topic of the lesson",
-                        "slide_type": "greeting",
-                        "slide_objectives": [
-                            "say hi and introduce yourself",
-                            "understand the student name if you are not aware of it",
-                            "explain the topic and purpose of the lesson"
-                        ],
-                        "full_screen": false,
-                        "estimated_duration": 90,
-                        "teacher_name": "Jenny",
-                        "teacher_image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg",
-                        "text": "Hello. I'm Jenny. \n                        Today we are going to learn about Colors and Animals for beginners. Let's get started!"
-                    },
-                    {
-                        "slide_title": "Colors and Animals for beginners",
-                        "slide_visual_description": "a slide with a list of the topics that will be covered in the lesson",
-                        "slide_type": "agenda",
-                        "slide_objectives": "go through the section of this lesson: ** Greetings** Volcubalry** Good Bye",
-                        "full_screen": false,
-                        "estimated_duration": 30,
-                        "text": "Today we will cover the following topics:** Greetings** Volcubalry** Good ByeLet's get started!"
-                    }
-                ]
-            },
-            {
-                "section_title": "Volcubalry",
-                "section_topic": "Learn new words",
-                "slides": [
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a dog ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "explain that this type of slide aim to enreach student vocabulary and pronunciation and he would need to repeat after you saying loudly the woed presented in the slide",
-                            "make the student repeat after you saying loudly and correctly the word dog"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "dog",
-                        "image_path": "https://www.thesprucepets.com/thmb/wdb0SmPvT4IjVLM7TdztfD_KAUs=/2144x0/filters:no_upscale():strip_icc()/AmericanEskimo-4293b26f3e044165959f6dbfd70214b2.jpg",
-                        "text": "dog"
-                    },
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a cat ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "make the student repeat after you saying loudly and correctly the word cat"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "cat",
-                        "image_path": "https://images.ctfassets.net/cnu0m8re1exe/qDQgxOUG5DNKlKH5TXsbo/813fa629fe33794c7ff439070fc31b89/shutterstock_603117302.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill",
-                        "text": "cat"
-                    },
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a bird ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "make the student repeat after you saying loudly and correctly the word bird"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "bird",
-                        "image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
-                        "text": "bird"
-                    },
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a white dog ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "make the student repeat after you saying loudly and correctly the word white dog"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "white dog",
-                        "image_path": "https://www.thesprucepets.com/thmb/wdb0SmPvT4IjVLM7TdztfD_KAUs=/2144x0/filters:no_upscale():strip_icc()/AmericanEskimo-4293b26f3e044165959f6dbfd70214b2.jpg",
-                        "text": "white dog"
-                    },
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a black cat ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "make the student repeat after you saying loudly and correctly the word black cat"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "black cat",
-                        "image_path": "https://images.ctfassets.net/cnu0m8re1exe/qDQgxOUG5DNKlKH5TXsbo/813fa629fe33794c7ff439070fc31b89/shutterstock_603117302.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill",
-                        "text": "black cat"
-                    },
-                    {
-                        "slide_title": "repeat after me:",
-                        "slide_visual_description": "a slide with a picture and a text of a red bird ",
-                        "slide_type": "word_repeater",
-                        "slide_objectives": [
-                            "make the student repeat after you saying loudly and correctly the word red bird"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 15,
-                        "word": "red bird",
-                        "image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
-                        "text": "red bird"
-                    },
-                    {
-                        "slide_title": "read the text below:",
-                        "slide_visual_description": "a slide with a text to be read by the student",
-                        "slide_type": "reading",
-                        "slide_objectives": [
-                            "explain the student that he needs to read the text loudly and correctly sentence by sentense",
-                            "the student read the text corrrectly"
-                        ],
-                        "full_screen": true,
-                        "estimated_duration": 120,
-                        "text": "\n                                Dogs say woof-woof. \n                                Cats say meow. \n                                Birds sing tweet-tweet.\n                            "
-                    }
-                ]
-            },
-            {
-                "section_title": "Good Bye",
-                "section_topic": "Say Good Bye",
-                "slides": [
-                    {
-                        "slide_title": "",
-                        "slide_visual_description": "a slide with a bye bye image that is related to the lesson",
-                        "slide_type": "ending",
-                        "slide_objectives": [
-                            "review the lesson topics",
-                            "say goodbye and thank the student for the lesson"
-                        ],
-                        "full_screen": false,
-                        "estimated_duration": 15,
-                        "image_path": "https://cdn2.vectorstock.com/i/1000x1000/72/36/basic-colors-educational-set-with-sea-animals-vector-22457236.jpg",
-                        "text": "Bye Bye.\n                        We will meet again soon!"
-                    }
-                ]
-            }
-        ],
-        "current_section_index": 0,
-        "current_slide_index": 0,
-        "current_objective_index": 0,
-        "estimated_duration": 345,
-        "teacher": {
-            "name": "Jenny",
-            "image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg",
-            "gender": "female",
-            "age": 25
-        },
-        "presentation_title": "Colors and Animals",
-        "presentation_topic": "Colors and Animals for beginners"
+    presentation: any = null;
+    currentSectionIndex: number = -1;
+    currentSlideIndex: number = -1;
+    currentObjectiveIndex: number = -1;
+    estimatedDuration: number = -1;
+    currentSection: any = null;
+    currentSlide: any = null;
+    currentObjective: any = null;
+    currentData: any = null;
+    sectionTitles = {
+        greeting: 'greeting',
+        reading: 'reading',
+        word_repeater: 'word_repeater',
+        agenda: 'agenda',
+        ending: 'ending'
     }
-    currentLessonIndex: number = -1;
-    currentLesson: any = null;
-    whiteBoardPage: any = null;
-    currentInstructions = [];
     answer: string = '';
-    lang: string = 'en-US';
-    recognition: any;
     recognitionCountWords = 0;
     recognitionText = '';
 
@@ -321,31 +169,34 @@ export class RecorderComponent implements OnInit, OnDestroy {
         this.speechRecognitionService.setupSpeechRecognition();
         this.listenToSpeechRecognitionResults();
         this.startVideo()
-        this.getLessons();
+        // this.getLessons();
+        this.getPresentation();
         // this.setCurrentLesson();
         // this.setRandomCircleAnimation()
     }
 
     listenToSpeechRecognitionResults() {
-        this.speechRecognitionService.onResults.subscribe((results) => {
-            this.recognitionText = results.text;
-            this.addCircle(this.user.nativeElement, this.recognitionCountWords)
-            this.recognitionCountWords++;
-            if (results.isFinal) {
-                this.answer = this.recognitionText;
-                console.log("End speech recognition EN", this.answer)
-                if (this.answer) {
-                    this.stopSpeechRecognition();
-                    this.recognitionText = '';
-                    this.recognitionCountWords = 0;
-                    this.sendAnswerStream();
-                } else {
-                    // this.stopSpeechRecognition();
-                    // this.startSpeechRecognition();
-                }
+        this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+    }
+
+    onRecognitionResults = (results: any) => {
+        this.recognitionText = results.text;
+        this.addCircle(this.user.nativeElement, this.recognitionCountWords)
+        this.recognitionCountWords++;
+        if (results.isFinal) {
+            this.answer = this.recognitionText;
+            console.log("End speech recognition", this.answer)
+            if (this.answer) {
+                this.stopSpeechRecognition();
+                this.recognitionText = '';
+                this.recognitionCountWords = 0;
+                this.getPresentationReplay();
+            } else {
+                // this.stopSpeechRecognition();
+                // this.startSpeechRecognition();
             }
-            console.log('results', results)
-        })
+        }
+        console.log('results', results)
     }
 
     startVideo() {
@@ -365,48 +216,6 @@ export class RecorderComponent implements OnInit, OnDestroy {
 
     stopSpeechRecognition() {
         this.speechRecognitionService.stopListening()
-    }
-
-    onEndRecognition = (condition: any) => {
-        if (this.speakInProgress) {
-            return;
-        }
-        this.answer = this.recognitionText;
-        console.log("End speech recognition EN", this.answer)
-        if (this.answer) {
-            this.stopSpeechRecognition();
-            this.recognitionText = '';
-            this.recognitionCountWords = 0;
-            this.sendAnswer();
-        } else {
-            this.stopSpeechRecognition();
-            this.startSpeechRecognition();
-        }
-    }
-
-    onResultRecognition = (e: any) => {
-        if (this.speakInProgress) {
-            return;
-        }
-        const transcript = Array.from(e.results)
-            .map((result: any) => result[0])
-            .map((result) => result.transcript)
-            .join('');
-        const text = transcript;
-        if (this.recognitionText !== text) {
-            this.recognitionText = text;
-            this.addCircle(this.user.nativeElement, this.recognitionCountWords)
-            this.recognitionCountWords++;
-            console.log('transcript ' + this.lang, text);
-        }
-    }
-
-    stopRecognition() {
-        if (this.recognition) {
-            this.recognition.lang = this.lang;
-            this.recognition.stop();
-        }
-
     }
 
     textToVoice(text: string, startRecognition=true) {
@@ -433,52 +242,24 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     onEndTextToVoice(startRecognition: boolean) {
-        if (this.currentInstructions && this.currentInstructions.length) {
-            const delay_s = this.whiteBoardPage.delay * 1000;
-            setTimeout(() => {
-                const t: any = this.currentInstructions.shift();
-                this.textToVoice(t);
-            }, delay_s)
-        } else {
-            const handled_module_type = this.handleWhiteBoardModuleType();
-            if (!handled_module_type) {
+        // if (this.currentInstructions && this.currentInstructions.length) {
+        //     const delay_s = this.whiteBoardPage.delay * 1000;
+        //     setTimeout(() => {
+        //         const t: any = this.currentInstructions.shift();
+        //         this.textToVoice(t);
+        //     }, delay_s)
+        // } else {
+        //     const handled_module_type = this.handleWhiteBoardModuleType();
+        //     if (!handled_module_type) {
                 this.speakInProgress = false;
                 this.stopSpeechRecognition()
                 if (startRecognition) {
-                    if (this.whiteBoardPage.module_type != 'typewriter') {
+                    // if (this.whiteBoardPage.module_type != 'typewriter') {
                         this.startSpeechRecognition()
-                    }
+                    // }
                 }
-            }
-        }
-    }
-
-    handleWhiteBoardModuleType() {
-        if (this.whiteBoardPage.section_ended) {
-            if (this.whiteBoardPage.module_type === 'displayer') {
-                const next_white_board_id = this.whiteBoardPage.next_item_id;
-                const map = this.currentLesson.white_board_pages.map((o: any) => o.item_id)
-                const index = map.indexOf(next_white_board_id);
-                if (index > -1) {
-                    this.setCurrentWhiteBoard(index);
-                } else {
-                    // what to do when no next item id.
-                }
-                return true;
-            }
-            if (this.whiteBoardPage.module_type === 'repeater') {
-                const next_white_board_id = this.whiteBoardPage.next_item_id;
-                const map = this.currentLesson.white_board_pages.map((o: any) => o.item_id)
-                const index = map.indexOf(next_white_board_id);
-                if (index > -1) {
-                    this.setCurrentWhiteBoard(index);
-                } else {
-                    // what to do when no next item id.
-                }
-                return true;
-            }
-        }
-        return false;
+            // }
+        // }
     }
 
     setRandomCircleAnimation() {
@@ -499,16 +280,6 @@ export class RecorderComponent implements OnInit, OnDestroy {
             },800)
         }
     }
-
-// loop(c: number) {
-//     const delay = this.randomIntFromInterval(0, 20)
-//     console.log('delay', delay)
-//     setTimeout(() => {
-//         this.addCircle(ele, c)
-//         c++;
-//         this.loop(c)
-//     }, delay * 1000)
-// }
 
     addCircle(elm: any, unique_num: number) {
         if (elm) {
@@ -557,45 +328,46 @@ export class RecorderComponent implements OnInit, OnDestroy {
         return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
-    async getLessons() {
-        const response: any = await lastValueFrom(this.apiService.getLessons({
+    async getPresentation() {
+        const response: any = await lastValueFrom(this.apiService.getPresentation({
             "type": "messi",
         }))
 
         if (response.err) {
             console.log('response err', response)
         } else {
-            this.lessons = response.lessons;
-            this.setCurrentLesson();
+            this.presentation = response.presentation;
+            this.currentSectionIndex = this.presentation.current_section_index;
+            this.currentSlideIndex = this.presentation.current_slide_index;
+            this.currentObjectiveIndex = this.presentation.current_objective_index;
+            this.estimatedDuration = this.presentation.estimated_duration;
+            this.setCurrentSection();
+            this.getPresentationReplay('hi');
         }
     }
 
-    setCurrentLesson(index: number = 0) {
-        this.currentLessonIndex = index;
-        this.currentLesson = this.lessons.lesson_parts[this.currentLessonIndex];
-        this.setCurrentWhiteBoard(0);
+    setCurrentSection(index: number = -1) {
+        if (index > -1) {
+            this.currentSection = this.presentation.sections[index];
+        } else {
+            this.currentSection = this.presentation.sections[this.currentSectionIndex];
+        }
+        this.setCurrentSlide();
+        this.setCurrentObjective();
     }
 
-    setCurrentWhiteBoard(index: number) {
-        if (this.currentLesson.white_board_pages[index]) {
-            this.whiteBoardPage = this.currentLesson.white_board_pages[index];
-            this.currentInstructions = this.whiteBoardPage.instructions;
-            if (this.currentInstructions && this.currentInstructions.length) {
-                setTimeout(() => {
-                    if (!this.whiteBoardPage.help_sound_url) {
-                        this.startSpeakInstructions()
-                    } else {
-                        this.playUsingAudio(this.whiteBoardPage.help_sound_url)
-                    }
-                })
-            }
+    setCurrentSlide(index: number = -1) {
+        if (index > -1) {
+            this.currentSlide = this.currentSection.slides[index];
+        } else {
+            this.currentSlide = this.currentSection.slides[this.currentSlideIndex];
         }
     }
-
-    startSpeakInstructions() {
-        const t: any = this.currentInstructions.shift();
-        if (t) {
-            this.playUsingSpeechSynthesis(t);
+    setCurrentObjective(index: number = -1) {
+        if (index > -1) {
+            this.currentObjective = this.currentSlide.slide_objectives[index];
+        } else {
+            this.currentObjective = this.currentSlide.slide_objectives[this.currentObjectiveIndex];
         }
     }
 
@@ -617,33 +389,75 @@ export class RecorderComponent implements OnInit, OnDestroy {
         audio.load();
         audio.play();
         audio.addEventListener('ended', (e) => {
-            const handled_module_type = this.handleWhiteBoardModuleType();
-            if (!handled_module_type) {
-                this.speakInProgress = false;
-                this.stopSpeechRecognition()
-                this.startSpeechRecognition()
-            }
+            // const handled_module_type = this.handleWhiteBoardModuleType();
+            // if (!handled_module_type) {
+            this.speakInProgress = false;
+            this.stopSpeechRecognition()
+            this.startSpeechRecognition()
+            // }
         })
     }
 
-    selectLesson(index: number) {
-        if (this.currentLessonIndex !== index) {
-            this.setCurrentLesson(index)
-        }
-    }
+    // async sendAnswerStream() {
+    //     const answer = this.answer
+    //     const obj: any = {
+    //         "lesson_id": this.currentLesson.id,
+    //         "white_board_item_id": this.whiteBoardPage.item_id,
+    //         "module_type": this.whiteBoardPage.module_type,
+    //         "help_native": this.whiteBoardPage.help_native,
+    //         "instructions": this.whiteBoardPage.instructions,
+    //         "repeat_value": this.whiteBoardPage.repeat_value,
+    //         "repeat_failed": this.whiteBoardPage.repeat_failed,
+    //         "repeat_success": this.whiteBoardPage.repeat_success,
+    //         "answer": answer
+    //     }
+    //     this.audioChunks = []
+    //     this.apiService.sendAnswerStream(obj).subscribe((event: any) => {
+    //         if (event.type === HttpEventType.DownloadProgress) {
+    //             // Append received chunk to audioChunks and play it
+    //             console.log('event', event)
+    //             // const chunk = new Uint8Array(event.loaded - this.audioChunks.reduce((sum, chunk) => sum + chunk.length, 0));
+    //             // console.log('chunk', chunk)
+    //             // this.audioChunks.push(chunk);
+    //             // this.playAudioChunk(chunk);
+    //         } else if (event.type === HttpEventType.Response) {
+    //             // Audio data fully received, play the whole audio
+    //             // console.log('event 1', event)
+    //             const audioData = new Uint8Array(event.body);
+    //             this.audioChunks.push(audioData);
+    //             this.playAudio();
+    //         }
+    //     })
+    //
+    //     // if (response.err) {
+    //     //     console.log('response err', response)
+    //     //     // setTimeout(() => {
+    //     //     //     this.startSpeechRecognition();
+    //     //     // },2000)
+    //     // } else {
+    //     //     this.handleOnAnswer(response)
+    //     //     // console.log('this.currentLesson', this.currentLesson)
+    //     //     // const next_page_id = response.data.next_page_id;
+    //     //     // const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
+    //     //     // const index = ids.indexOf(next_page_id);
+    //     //     // if (index > -1) {
+    //     //     //     this.whiteBoardPage = this.currentLesson.white_board_pages[index];
+    //     //     // }
+    //     //     // console.log('response', response)
+    //     // }
+    // }
 
-    async sendAnswer() {
+    async getPresentationReplay(text: string = '') {
+        let message = this.answer
+        if (text) {
+            message = text;
+        }
         const answer = this.answer
-        const response: any = await lastValueFrom(this.apiService.sendAnswer({
-            "lesson_id": this.currentLesson.id,
-            "white_board_item_id": this.whiteBoardPage.item_id,
-            "module_type": this.whiteBoardPage.module_type,
-            "help_native": this.whiteBoardPage.help_native,
-            "instructions": this.whiteBoardPage.instructions,
-            "repeat_value": this.whiteBoardPage.repeat_value,
-            "repeat_failed": this.whiteBoardPage.repeat_failed,
-            "repeat_success": this.whiteBoardPage.repeat_success,
-            "answer": answer
+        const response: any = await lastValueFrom(this.apiService.getPresentationReplay({
+            app_data: {
+                type:'student_reply',
+                student_text: message
+            }
         }))
 
         if (response.err) {
@@ -652,65 +466,33 @@ export class RecorderComponent implements OnInit, OnDestroy {
             //     this.startSpeechRecognition();
             // },2000)
         } else {
-            this.handleOnAnswer(response)
-            // console.log('this.currentLesson', this.currentLesson)
-            // const next_page_id = response.data.next_page_id;
-            // const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
-            // const index = ids.indexOf(next_page_id);
-            // if (index > -1) {
-            //     this.whiteBoardPage = this.currentLesson.white_board_pages[index];
-            // }
-            // console.log('response', response)
+            this.currentData = response.data;
+            this.handleOnPresentationReplay();
         }
     }
 
-    async sendAnswerStream() {
-        const answer = this.answer
-        const obj: any = {
-            "lesson_id": this.currentLesson.id,
-            "white_board_item_id": this.whiteBoardPage.item_id,
-            "module_type": this.whiteBoardPage.module_type,
-            "help_native": this.whiteBoardPage.help_native,
-            "instructions": this.whiteBoardPage.instructions,
-            "repeat_value": this.whiteBoardPage.repeat_value,
-            "repeat_failed": this.whiteBoardPage.repeat_failed,
-            "repeat_success": this.whiteBoardPage.repeat_success,
-            "answer": answer
+    handleOnPresentationReplay() {
+        const data = this.currentData
+        const presentation_index_updated = data.presentation_index_updated;
+        const presentation_content_updated = data.presentation_content_updated;
+        const presentation_done = data.presentation_done;
+        const text = data.text;
+        const help_sound_url = data.help_sound_url;
+        if (presentation_index_updated) {
+            this.currentSectionIndex = data.current_section_index;
+            this.currentSlideIndex = data.current_slide_index;
+            this.currentObjectiveIndex = data.current_objective_index;
+            this.setCurrentSection();
         }
-        this.audioChunks = []
-        this.apiService.sendAnswerStream(obj).subscribe((event: any) => {
-            if (event.type === HttpEventType.DownloadProgress) {
-                // Append received chunk to audioChunks and play it
-                console.log('event', event)
-                // const chunk = new Uint8Array(event.loaded - this.audioChunks.reduce((sum, chunk) => sum + chunk.length, 0));
-                // console.log('chunk', chunk)
-                // this.audioChunks.push(chunk);
-                // this.playAudioChunk(chunk);
-            } else if (event.type === HttpEventType.Response) {
-                // Audio data fully received, play the whole audio
-                // console.log('event 1', event)
-                const audioData = new Uint8Array(event.body);
-                this.audioChunks.push(audioData);
-                this.playAudio();
-            }
-        })
-
-        // if (response.err) {
-        //     console.log('response err', response)
-        //     // setTimeout(() => {
-        //     //     this.startSpeechRecognition();
-        //     // },2000)
-        // } else {
-        //     this.handleOnAnswer(response)
-        //     // console.log('this.currentLesson', this.currentLesson)
-        //     // const next_page_id = response.data.next_page_id;
-        //     // const ids = this.currentLesson.white_board_pages.map((o: any) => o.id)
-        //     // const index = ids.indexOf(next_page_id);
-        //     // if (index > -1) {
-        //     //     this.whiteBoardPage = this.currentLesson.white_board_pages[index];
-        //     // }
-        //     // console.log('response', response)
-        // }
+        if (presentation_content_updated) {
+            // TODO request presentation from server
+        }
+        if (presentation_done) {
+            // TODO show client presentation is done
+        }
+        if (help_sound_url) {
+            this.playUsingAudio(help_sound_url)
+        }
     }
 
     playAudioChunk(chunk: Uint8Array) {
@@ -738,68 +520,6 @@ export class RecorderComponent implements OnInit, OnDestroy {
         audio.onended = () => {
             this.audioChunks = [];
         };
-    }
-
-    handleOnAnswer(response: any) {
-        if (this.whiteBoardPage.module_type == 'conversation') {
-            this.whiteBoardPage.section_ended = response.data.section_ended;
-            const text = response.data.text;
-            this.answer = '';
-            this.whiteBoardPage.display_text = text;
-            if (response.data.help_sound_url) {
-                this.playUsingAudio(response.data.help_sound_url)
-            } else {
-                this.textToVoice(text, !this.whiteBoardPage.section_ended);
-            }
-            if (this.whiteBoardPage.section_ended) {
-                console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
-            }
-        }
-        if (this.whiteBoardPage.module_type == 'repeater') {
-            this.whiteBoardPage.section_ended = response.data.section_ended;
-            this.answer = '';
-            if (this.whiteBoardPage.section_ended) {
-                const text = response.data.text;
-                if (response.data.help_sound_url) {
-                    this.playUsingAudio(response.data.help_sound_url)
-                } else {
-                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
-                }
-                if (this.whiteBoardPage.section_ended) {
-                    console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
-                }
-            } else {
-                const text = response.data.text;
-                if (response.data.help_sound_url) {
-                    this.playUsingAudio(response.data.help_sound_url)
-                } else {
-                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
-                }
-            }
-        }
-        if (this.whiteBoardPage.module_type == 'typewriter') {
-            this.whiteBoardPage.section_ended = response.data.section_ended;
-            this.answer = '';
-            if (this.whiteBoardPage.section_ended) {
-                const text = response.data.text;
-                if (response.data.help_sound_url) {
-                    this.playUsingAudio(response.data.help_sound_url)
-                } else {
-                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
-                }
-                if (this.whiteBoardPage.section_ended) {
-                    console.log('this.whiteBoardPage.section_ended', this.whiteBoardPage.section_ended)
-                }
-            } else {
-                const text = response.data.text;
-                if (response.data.help_sound_url) {
-                    this.playUsingAudio(response.data.help_sound_url)
-                } else {
-                    this.textToVoice(text, !this.whiteBoardPage.section_ended);
-                }
-                console.log('this.whiteBoardPage', this.whiteBoardPage)
-            }
-        }
     }
 
     handleOnStream(response: any) {
@@ -837,11 +557,9 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.recognition) {
-            this.recognition.stop();
-            this.recognition.removeEventListener('result', this.onResultRecognition);
-            this.recognition.removeEventListener('end', this.onEndRecognition);
-        }
+        // if (this.recognition) {
+            this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+        // }
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }

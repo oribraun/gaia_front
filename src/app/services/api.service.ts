@@ -230,8 +230,18 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getPresentation(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation', obj,
+            this.httpOptions
+        )
+    }
     sendAnswer(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'save_class_page_answer', obj,
+            this.httpOptions
+        )
+    }
+    getPresentationReplay(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation-reply', obj,
             this.httpOptions
         )
     }
