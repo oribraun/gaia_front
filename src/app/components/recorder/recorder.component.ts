@@ -391,9 +391,11 @@ export class RecorderComponent implements OnInit, OnDestroy {
         audio.addEventListener('ended', (e) => {
             // const handled_module_type = this.handleWhiteBoardModuleType();
             // if (!handled_module_type) {
+            console.log('playUsingAudio ended')
             this.speakInProgress = false;
             this.stopSpeechRecognition()
             this.startSpeechRecognition()
+            
             // }
         })
     }

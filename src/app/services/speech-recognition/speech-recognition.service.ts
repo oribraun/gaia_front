@@ -22,7 +22,7 @@ export class SpeechRecognitionService {
             this.englishRecognition.continuous = true;
 
             this.hebrewRecognition = new webkitSpeechRecognition();
-            this.hebrewRecognition.lang = 'he-IL';
+            this.hebrewRecognition.lang = 'en-US';//he-IL
             this.hebrewRecognition.continuous = true;
 
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
