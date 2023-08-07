@@ -495,6 +495,22 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
     }
 
+    async resetPresentation() {
+        const response: any = await lastValueFrom(this.apiService.resetPresentation({}))
+
+        if (response.err) {
+            console.log('response err', response)
+            // setTimeout(() => {
+            //     this.startSpeechRecognition();
+            // },2000)
+        } else {
+            this.currentSectionIndex = 0;
+            this.currentSlideIndex = 0;
+            this.currentObjectiveIndex = 0;
+            this.setCurrentSection();
+        }
+    }
+
     playAudioChunk(chunk: Uint8Array) {
         const audioContext = new AudioContext();
         audioContext.decodeAudioData(chunk.buffer, (audioBuffer) => {

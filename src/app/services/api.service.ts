@@ -245,6 +245,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    resetPresentation(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'reset-presentation', obj,
+            this.httpOptions
+        )
+    }
     sendAnswerStream(obj: any) {
         const httpOptions = {...this.httpOptions}
         // httpOptions['responseType'] = 'arraybuffer' as 'json';
