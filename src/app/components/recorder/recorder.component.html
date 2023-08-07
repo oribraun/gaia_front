@@ -12,7 +12,7 @@
 <!--        <div class="objective">-->
 <!--            <h2>{{lessons.objective.topic}}</h2>-->
 <!--        </div>-->
-        <div class="lesson-parts lesson-parts-he" [ngClass]="{'dir-rtl': currentSection && currentSection.text_native_lang === 'he'}">
+        <div class="lesson-parts" [ngClass]="{'dir-rtl lesson-parts-he': currentSection && currentSection.text_native_lang === 'he'}">
             <ng-container *ngIf="presentation">
                 <div class="box"
                      [ngClass]="{
