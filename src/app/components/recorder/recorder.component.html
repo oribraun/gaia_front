@@ -45,8 +45,8 @@
                             <div class="image" *ngIf="currentSlide  && currentSlide.teacher_image_path">
                                 <img src="{{currentSlide.teacher_image_path}}" alt="">
                             </div>
-                            <div class="dir-rtl" *ngIf="currentData && currentData.native_language_text">
-                                {{currentData.native_language_text}}
+                            <div class="dir-rtl" *ngIf="currentSlide && currentSlide.native_language_text">
+                                {{currentSlide.native_language_text}}
                             </div>
     <!--                        <div class="input">-->
     <!--                            <div class="input-group mb-3">-->
@@ -62,12 +62,9 @@
                     <ng-container *ngIf="currentSlide.slide_type.toLowerCase() === sectionTitles.reading">
                         <div class="all-sections" [ngClass]="currentSection.section_title">
                             <h6>{{currentSection.section_topic}}</h6>
-                            <div class="text" *ngIf="currentData">
-                                <p *ngIf="currentData">
-                                    {{currentData.text}}
-                                </p>
-                                <p>
-                                    full screen: {{currentData.full_screen}}
+                            <div class="text">
+                                <p *ngIf="currentSlide">
+                                    {{currentSlide.text}}
                                 </p>
                             </div>
                         </div>
@@ -75,16 +72,15 @@
                     <ng-container *ngIf="currentSlide.slide_type.toLowerCase() === sectionTitles.word_repeater">
                         <div class="all-sections" [ngClass]="currentSection.section_title">
                             <h6>{{currentSection.section_topic}}</h6>
-                            <div class="text" *ngIf="currentData">
-                                <p *ngIf="currentData">
-                                    {{currentData.text}}
+                            
+                            <div class="text">
+                                <p *ngIf="currentSlide">
+                                    {{currentSlide.word}}
                                 </p>
-                                <p>
-                                    full screen: {{currentData.full_screen}}
-                                </p>
-                                <div class="image" *ngIf="currentData  && currentData.image_path">
-                                    <img src="{{currentData.image_path}}" alt="">
-                                </div>
+                            </div>
+                            {{currentSlide | json}}
+                            <div class="image" *ngIf="currentSlide  && currentSlide.word_image_path">
+                                <img src="{{currentSlide.word_image_path}}" alt="">
                             </div>
                         </div>
                     </ng-container>
@@ -107,12 +103,9 @@
                     <ng-container *ngIf="currentSlide.slide_type.toLowerCase() === sectionTitles.agenda">
                         <div class="all-sections" [ngClass]="currentSection.section_title">
                             <h6>{{currentSection.section_topic}}</h6>
-                            <div class="text" *ngIf="currentData">
-                                <p *ngIf="currentData">
-                                    {{currentData.text}}
-                                </p>
-                                <p>
-                                    full screen: {{currentData.full_screen}}
+                            <div class="text">
+                                <p *ngIf="currentSlide">
+                                    {{currentSlide.text}}
                                 </p>
                             </div>
                         </div>

@@ -383,20 +383,22 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     playUsingAudio(src_url: string) {
-        console.log('playing audion', src_url)
-        const audio = new Audio();
-        audio.src = src_url;
-        audio.load();
-        audio.play();
-        audio.addEventListener('ended', (e) => {
-            // const handled_module_type = this.handleWhiteBoardModuleType();
-            // if (!handled_module_type) {
-            console.log('playUsingAudio ended')
-            this.speakInProgress = false;
-            this.stopSpeechRecognition()
-            this.startSpeechRecognition()
-            
-            // }
+        return new Promise((resolve, reject) => {
+            console.log('playing audion', src_url)
+            const audio = new Audio();
+            audio.src = src_url;
+            audio.load();
+            audio.play();
+            audio.addEventListener('ended', (e) => {
+                // const handled_module_type = this.handleWhiteBoardModuleType();
+                // if (!handled_module_type) {
+                console.log('playUsingAudio ended')
+                this.speakInProgress = false;
+                this.stopSpeechRecognition()
+                this.startSpeechRecognition()
+                resolve(true)
+                // }
+            })
         })
     }
 
@@ -472,14 +474,17 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.handleOnPresentationReplay();
         }
     }
-
-    handleOnPresentationReplay() {
+    
+    async handleOnPresentationReplay() {
         const data = this.currentData
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
+        if (help_sound_url) {
+            const value = await this.playUsingAudio(help_sound_url)
+        }
         if (presentation_index_updated) {
             this.currentSectionIndex = data.current_section_index;
             this.currentSlideIndex = data.current_slide_index;
@@ -491,9 +496,6 @@ export class RecorderComponent implements OnInit, OnDestroy {
         }
         if (presentation_done) {
             // TODO show client presentation is done
-        }
-        if (help_sound_url) {
-            this.playUsingAudio(help_sound_url)
         }
     }
 
