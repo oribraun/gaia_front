@@ -140,8 +140,13 @@ export class RecorderComponent implements OnInit, OnDestroy {
     answer: string = '';
     recognitionCountWords = 0;
     recognitionText = '';
+    recognitionOnResultsSubscribe: any = null;
 
     speakInProgress = false;
+
+    noReplayInterval: any = null
+    noReplayCounter = 0;
+    noReplayTriggerOn = 5; // no replay will be called every 5 seconds
 
     private socket!: WebSocket;
     private audioStreamSubscription: any;
@@ -176,7 +181,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     listenToSpeechRecognitionResults() {
-        this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+        this.recognitionOnResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
     }
 
     onRecognitionResults = (results: any) => {
@@ -211,11 +216,31 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     startSpeechRecognition() {
-        this.speechRecognitionService.startListening()
+        this.speechRecognitionService.startListening();
+        this.stopIntervalNoReplay();
+        this.startIntervalNoReplay();
     }
 
     stopSpeechRecognition() {
-        this.speechRecognitionService.stopListening()
+        this.speechRecognitionService.stopListening();
+        this.stopIntervalNoReplay();
+    }
+
+    startIntervalNoReplay() {
+        this.noReplayInterval = setInterval(() => {
+            this.noReplayCounter++;
+            if (this.noReplayCounter === this.noReplayTriggerOn) {
+                this.noReplayCounter = 0;
+                this.getPresentationNoReplay('no audio')
+                this.stopIntervalNoReplay();
+            }
+        }, 1000)
+    }
+
+    stopIntervalNoReplay() {
+        if (this.noReplayInterval) {
+            clearInterval(this.noReplayInterval)
+        }
     }
 
     textToVoice(text: string, startRecognition=true) {
@@ -469,12 +494,41 @@ export class RecorderComponent implements OnInit, OnDestroy {
             // setTimeout(() => {
             //     this.startSpeechRecognition();
             // },2000)
+            this.speakInProgress = false;
+            this.stopSpeechRecognition()
+            this.startSpeechRecognition()
+            this.stopIntervalNoReplay();
+            this.startIntervalNoReplay();
         } else {
             this.currentData = response.data;
             this.handleOnPresentationReplay();
         }
     }
-    
+
+    async getPresentationNoReplay(reason: string = '') {
+        const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
+            app_data: {
+                type: reason,
+            }
+        }))
+
+        if (response.err) {
+            console.log('response err', response)
+            // setTimeout(() => {
+            //     this.startSpeechRecognition();
+            // },2000)
+            this.speakInProgress = false;
+            this.stopSpeechRecognition()
+            this.startSpeechRecognition()
+            this.stopIntervalNoReplay();
+            this.startIntervalNoReplay();
+        } else {
+            console.log('response', response)
+            // this.currentData = response.data;
+            this.handleOnPresentationReplay();
+        }
+    }
+
     async handleOnPresentationReplay() {
         const data = this.currentData
         const presentation_index_updated = data.presentation_index_updated;
@@ -497,6 +551,9 @@ export class RecorderComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
+
+        this.stopIntervalNoReplay();
+        this.startIntervalNoReplay();
     }
 
     async resetPresentation() {
@@ -577,9 +634,10 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // if (this.recognition) {
-            this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
-        // }
+        if (this.recognitionOnResultsSubscribe) {
+            this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+        }
+        this.stopIntervalNoReplay()
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }

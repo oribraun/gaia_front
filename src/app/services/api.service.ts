@@ -245,6 +245,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getPresentationNoReplay(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation-no-reply', obj,
+            this.httpOptions
+        )
+    }
     resetPresentation(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'reset-presentation', obj,
             this.httpOptions
