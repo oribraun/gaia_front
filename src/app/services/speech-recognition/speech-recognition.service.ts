@@ -93,6 +93,17 @@ export class SpeechRecognitionService {
             }
         }
     }
+    abortListening(): void {
+        if ('webkitSpeechRecognition' in window) {
+            try {
+                this.englishRecognition.abort();
+                this.hebrewRecognition.abort();
+                this.isListening = false;
+            } catch (e) {
+                console.log('stopListening Error', e)
+            }
+        }
+    }
 }
 
 class OnResults {

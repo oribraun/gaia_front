@@ -216,6 +216,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     startSpeechRecognition() {
+        console.log('startSpeechRecognition');
         this.speechRecognitionService.startListening();
         this.resetIntervalNoReplay();
         this.stopIntervalNoReplay();
@@ -223,17 +224,27 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     stopSpeechRecognition() {
-        this.speechRecognitionService.stopListening();
+        console.log('stopSpeechRecognition');
+        this.speechRecognitionService.abortListening();
         this.resetIntervalNoReplay();
         this.stopIntervalNoReplay();
     }
 
+    resetSpeechRecognition() {
+        this.stopSpeechRecognition()
+        setTimeout(() => {
+            this.startSpeechRecognition()
+        })
+    }
+
     startIntervalNoReplay() {
         this.noReplayInterval = setInterval(() => {
+            console.log('this.noReplayCounter', this.noReplayCounter)
             this.noReplayCounter++;
             if (this.noReplayCounter === this.noReplayTriggerOn) {
                 this.noReplayCounter = 0;
-                this.getPresentationNoReplay('no_audio')
+                this.getPresentationNoReplay('no audio')
+                this.resetIntervalNoReplay();
                 this.stopIntervalNoReplay();
             }
         }, 1000)
@@ -425,8 +436,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
                 // if (!handled_module_type) {
                 console.log('playUsingAudio ended')
                 this.speakInProgress = false;
-                this.stopSpeechRecognition()
-                this.startSpeechRecognition()
+                this.resetSpeechRecognition();
                 resolve(true)
                 // }
             })
@@ -529,11 +539,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
 
     handleOnReplayError() {
         this.speakInProgress = false;
-        this.stopSpeechRecognition()
-        this.startSpeechRecognition()
-        this.resetIntervalNoReplay();
-        this.stopIntervalNoReplay();
-        this.startIntervalNoReplay();
+        this.resetSpeechRecognition();
     }
 
     async handleOnPresentationReplay() {

@@ -43,6 +43,30 @@ html {
                 transform: translate(-50%, -50%);
             }
         }
+        .dir-rtl {
+            direction: rtl;
+        }
+        .dir-ltr {
+            direction: ltr;
+        }
+
+        .outer-scroller {
+            overflow: hidden;
+            height: 100%;
+            .inner-scroller {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                height: 100%;
+                margin-right: -19px;
+                white-space: initial;
+                overflow-wrap: break-word;
+                word-break: break-word;
+                &.dir-rtl {
+                    margin-right: 0;
+                    margin-left: -19px;
+                }
+            }
+        }
     }
 
     input:-webkit-autofill,

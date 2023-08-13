@@ -34,6 +34,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { GaiaDataRoomComponent } from './components/gaia-data-room/gaia-data-room.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { RecorderComponent } from './components/recorder/recorder.component';
+import { LessonComponent } from './components/lesson/lesson.component';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { RecorderComponent } from './components/recorder/recorder.component';
         ChatComponent,
         GaiaDataRoomComponent,
         SafePipe,
-        RecorderComponent
+        RecorderComponent,
+        LessonComponent,
     ],
     imports: [
         BrowserModule,

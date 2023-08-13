@@ -21,6 +21,7 @@ import {HowToImplementComponent} from "./components/company-admin/how-to-impleme
 import {GaiaDataRoomComponent} from "./components/gaia-data-room/gaia-data-room.component";
 import {AuthGaialabsCompanyGuard} from "./guards/auth-gaialabs-company.guard";
 import {RecorderComponent} from "./components/recorder/recorder.component";
+import {LessonComponent} from "./components/lesson/lesson.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -67,6 +68,7 @@ const routes: Routes = [
     },
     { path: 'data-room', component: GaiaDataRoomComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     { path: 'recorder', component: RecorderComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
+    { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
     { path: '**', redirectTo: '' }
