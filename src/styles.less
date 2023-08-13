@@ -67,6 +67,27 @@ html {
                 }
             }
         }
+        .generic-loader-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            background: rgba(255, 255,255, .8);
+            .loader {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .text-break-spaces {
+            white-space: break-spaces;
+        }
+        .text-pre-line {
+            white-space: pre-line;
+        }
     }
 
     input:-webkit-autofill,
