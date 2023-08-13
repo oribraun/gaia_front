@@ -217,12 +217,14 @@ export class RecorderComponent implements OnInit, OnDestroy {
 
     startSpeechRecognition() {
         this.speechRecognitionService.startListening();
+        this.resetIntervalNoReplay();
         this.stopIntervalNoReplay();
         this.startIntervalNoReplay();
     }
 
     stopSpeechRecognition() {
         this.speechRecognitionService.stopListening();
+        this.resetIntervalNoReplay();
         this.stopIntervalNoReplay();
     }
 
@@ -241,6 +243,10 @@ export class RecorderComponent implements OnInit, OnDestroy {
         if (this.noReplayInterval) {
             clearInterval(this.noReplayInterval)
         }
+    }
+
+    resetIntervalNoReplay() {
+        this.noReplayCounter = 0;
     }
 
     textToVoice(text: string, startRecognition=true) {
@@ -494,11 +500,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
             // setTimeout(() => {
             //     this.startSpeechRecognition();
             // },2000)
-            this.speakInProgress = false;
-            this.stopSpeechRecognition()
-            this.startSpeechRecognition()
-            this.stopIntervalNoReplay();
-            this.startIntervalNoReplay();
+            this.handleOnReplayError()
         } else {
             this.currentData = response.data;
             this.handleOnPresentationReplay();
@@ -517,16 +519,21 @@ export class RecorderComponent implements OnInit, OnDestroy {
             // setTimeout(() => {
             //     this.startSpeechRecognition();
             // },2000)
-            this.speakInProgress = false;
-            this.stopSpeechRecognition()
-            this.startSpeechRecognition()
-            this.stopIntervalNoReplay();
-            this.startIntervalNoReplay();
+            this.handleOnReplayError()
         } else {
             console.log('response', response)
             // this.currentData = response.data;
             this.handleOnPresentationReplay();
         }
+    }
+
+    handleOnReplayError() {
+        this.speakInProgress = false;
+        this.stopSpeechRecognition()
+        this.startSpeechRecognition()
+        this.resetIntervalNoReplay();
+        this.stopIntervalNoReplay();
+        this.startIntervalNoReplay();
     }
 
     async handleOnPresentationReplay() {
@@ -555,6 +562,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
             // TODO show client presentation is done
         }
 
+        this.resetIntervalNoReplay();
         this.stopIntervalNoReplay();
         this.startIntervalNoReplay();
     }
@@ -640,6 +648,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
         if (this.recognitionOnResultsSubscribe) {
             this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
         }
+        this.resetIntervalNoReplay()
         this.stopIntervalNoReplay()
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
