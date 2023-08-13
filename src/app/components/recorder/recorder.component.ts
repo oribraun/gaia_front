@@ -231,7 +231,7 @@ export class RecorderComponent implements OnInit, OnDestroy {
             this.noReplayCounter++;
             if (this.noReplayCounter === this.noReplayTriggerOn) {
                 this.noReplayCounter = 0;
-                this.getPresentationNoReplay('no audio')
+                this.getPresentationNoReplay('no_audio')
                 this.stopIntervalNoReplay();
             }
         }, 1000)
@@ -536,6 +536,9 @@ export class RecorderComponent implements OnInit, OnDestroy {
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
+        // if (presentation_index_updated) {
+        //     this.getPresentationNoReplay('new_slide')
+        // }
         if (help_sound_url) {
             const value = await this.playUsingAudio(help_sound_url)
         }
