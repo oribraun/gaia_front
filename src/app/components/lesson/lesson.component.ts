@@ -317,8 +317,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (!this.speakInProgress) {
                 const value = await this.playUsingAudio();
             }
-            this.speakInProgress = false;
-            this.resetSpeechRecognition();
         }
         if (presentation_index_updated) {
             this.currentSectionIndex = data.current_section_index;
@@ -326,6 +324,10 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
+        
+        this.speakInProgress = false;
+        this.resetSpeechRecognition();
+
         if (presentation_content_updated) {
             // TODO request presentation from server
         }
@@ -351,17 +353,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('reason',reason)
         console.log('data',data)
 
-        if (presentation_index_updated && reason !== 'new_slide') {
-            this.getPresentationNoReplay('new_slide')
-        }
         if (help_sound_url) {
             console.log('help_sound_url added to que', help_sound_url)
             this.audioQue.push(help_sound_url);
             if (!this.speakInProgress) {
                 const value = await this.playUsingAudio();
             }
-            this.speakInProgress = false;
-            this.resetSpeechRecognition();
         }
         if (help_sound_buffer) {
             console.log('array_buffer added to que')
@@ -378,7 +375,12 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentSlideIndex = data.current_slide_index;
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
+            await this.getPresentationNoReplay('new_slide');
+        } else {
+            this.speakInProgress = false;
+            this.resetSpeechRecognition(); 
         }
+        
         if (presentation_content_updated) {
             // TODO request presentation from server
         }
