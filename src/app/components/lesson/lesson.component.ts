@@ -56,7 +56,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.speechRecognitionService.setupSpeechRecognition();
         this.listenToSpeechRecognitionResults();
-        // this.startVideo()
+        this.startVideo()
         this.getPresentation();
     }
 
@@ -66,7 +66,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     onRecognitionResults = (results: any) => {
         this.recognitionText = results.text;
-        this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
+        // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
         this.recognitionCountWords++;
         if (results.isFinal) {
             this.recognitionCountWords = 0;
@@ -283,10 +283,15 @@ export class LessonComponent implements OnInit, OnDestroy {
                     audio.src = URL.createObjectURL(audioBlob);
                     audio.load();
                     audio.play();
+                    let count = 0;
+                    audio.addEventListener('timeupdate', () => {
+                        this.animationsService.addCircle(this.user.nativeElement, count);
+                        count++;
+                        if (count > 10) {
+                            count = 0;
+                        }
+                    });
                     audio.addEventListener('ended', (e) => {
-
-                    })
-                    audio.onended = () => {
                         const arrayBuffer: any = this.audioBlobQue.shift();
                         console.log('playUsingBlob ended arrayBuffer')
                         if (arrayBuffer) {
@@ -295,7 +300,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             this.speakInProgress = false;
                             resolve(true);
                         }
-                    };
+                    })
                 }
                 loop(arrayBuffer);
             }
