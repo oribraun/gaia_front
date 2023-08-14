@@ -47,7 +47,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     enableArrayBuffer = true;
     enableNoReplayInterval = true;
 
+    resetSpeechRecognitionTimeout: any = null;
+
     presentationReplayIsInProgress = false;
+    presentationResetIsInProgress = false;
     presentationNoReplayIsInProgress = false;
 
     constructor(
@@ -208,17 +211,24 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async resetPresentation(reason: string = '') {
+        if (this.presentationResetIsInProgress) {
+            return;
+        }
+        this.presentationResetIsInProgress = true;
         const response: any = await lastValueFrom(this.apiService.resetPresentation({
             app_data: {
                 type: reason,
                 array_buffer: this.enableArrayBuffer
             }
         }))
+        this.presentationResetIsInProgress = false;
 
         if (response.err) {
             console.log('response err', response)
         } else {
             console.log('response', response)
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
             this.getPresentationReplay('hi');
         }
     }
@@ -230,7 +240,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     resetSpeechRecognition() {
         this.stopSpeechRecognition()
-        setTimeout(() => {
+        clearTimeout(this.resetSpeechRecognitionTimeout);
+        this.resetSpeechRecognitionTimeout = setTimeout(() => {
             this.startSpeechRecognition()
         }, 100)
     }
@@ -368,7 +379,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.setCurrentSection();
         }
 
-        this.speakInProgress = false;
         this.resetSpeechRecognition();
 
         if (presentation_content_updated) {
@@ -410,6 +420,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
             this.audioBlobQue.push(arrayBuffer);
             if (!this.speakInProgress) {
+                console.log('this.audioBlobQue', this.audioBlobQue.length)
+                console.log('this.speakInProgress', this.speakInProgress)
                 const value = await this.playUsingBlob();
             }
         }
@@ -422,7 +434,6 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_slide_updated) {
             await this.getPresentationNoReplay('new_slide');
         } else {
-            this.speakInProgress = false;
             this.resetSpeechRecognition();
         }
 
