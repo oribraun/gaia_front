@@ -321,6 +321,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
+        const help_sound_buffer = data.help_sound_buffer;
         console.log('presentation_index_updated',presentation_index_updated)
         console.log('data',data)
 
@@ -329,6 +330,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.audioQue.push(help_sound_url);
             if (!this.speakInProgress) {
                 const value = await this.playUsingAudio();
+            }
+        }
+        if (help_sound_buffer) {
+            console.log('array_buffer added to que')
+            const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
+            this.audioBlobQue.push(arrayBuffer);
+            if (!this.speakInProgress) {
+                const value = await this.playUsingBlob();
             }
         }
         if (presentation_index_updated) {
