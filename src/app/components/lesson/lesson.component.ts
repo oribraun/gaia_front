@@ -191,6 +191,22 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
+    async resetPresentation(reason: string = '') {
+        const response: any = await lastValueFrom(this.apiService.resetPresentation({
+            app_data: {
+                type: reason,
+                array_buffer: this.arrayBuffer
+            }
+        }))
+
+        if (response.err) {
+            console.log('response err', response)
+            this.getPresentationReplay('hi');
+        } else {
+            console.log('response', response)
+        }
+    }
+
     handleOnReplayError() {
         this.speakInProgress = false;
         this.resetSpeechRecognition();
