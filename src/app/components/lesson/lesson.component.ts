@@ -444,7 +444,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.noReplayCounter++;
             if (this.noReplayCounter === this.noReplayTriggerOn) {
                 this.noReplayCounter = 0;
-                this.getPresentationNoReplay('no audio')
+                this.getPresentationNoReplay('no_audio')
                 this.resetIntervalNoReplay();
                 this.stopIntervalNoReplay();
             }
