@@ -367,8 +367,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (!this.speakInProgress) {
                 const value = await this.playUsingBlob();
             }
-            this.speakInProgress = false;
-            this.resetSpeechRecognition();
         }
         if (presentation_index_updated) {
             this.currentSectionIndex = data.current_section_index;
