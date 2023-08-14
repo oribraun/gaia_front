@@ -47,6 +47,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     enableArrayBuffer = true;
     enableNoReplayInterval = true;
 
+    presentationReplayIsInProgress = false;
+    presentationNoReplayIsInProgress = false;
+
     constructor(
         private apiService: ApiService,
         private animationsService: AnimationsService,
@@ -68,15 +71,16 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.recognitionText = results.text;
         // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
         this.recognitionCountWords++;
+        if (this.recognitionText) {
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+        }
         if (results.isFinal) {
             this.recognitionCountWords = 0;
             console.log("End speech recognition", this.recognitionText)
             if (this.recognitionText) {
                 //         this.stopSpeechRecognition();
                 this.getPresentationReplay();
-                this.resetRecognitionData();
-                this.resetIntervalNoReplay();
-                this.stopIntervalNoReplay();
             } else {
                 //         // this.stopSpeechRecognition();
                 //         // this.startSpeechRecognition();
@@ -148,10 +152,14 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationReplay(text: string = '') {
+        if (this.presentationNoReplayIsInProgress) {
+            return;
+        }
         let message = this.recognitionText
         if (text) {
             message = text;
         }
+        this.presentationReplayIsInProgress = true;
         const response: any = await lastValueFrom(this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
@@ -159,6 +167,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 array_buffer: this.enableArrayBuffer
             }
         }))
+        this.presentationReplayIsInProgress = false;
 
         if (response.err) {
             console.log('response err', response)
@@ -173,12 +182,17 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationNoReplay(reason: string = '') {
+        if (this.presentationReplayIsInProgress) {
+            return;
+        }
+        this.presentationNoReplayIsInProgress = true;
         const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
             app_data: {
                 type: reason,
                 array_buffer: this.enableArrayBuffer
             }
         }))
+        this.presentationNoReplayIsInProgress = false;
 
         if (response.err) {
             console.log('response err', response)
@@ -318,6 +332,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async handleOnPresentationNoReplay(data: any) {
+        if (this.presentationReplayIsInProgress) {
+            return;
+        }
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
@@ -360,7 +377,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval) {
+        if (this.enableNoReplayInterval && !this.speakInProgress && !this.presentationReplayIsInProgress) {
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
             this.startIntervalNoReplay();
@@ -415,7 +432,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval) {
+        if (this.enableNoReplayInterval && !this.speakInProgress) {
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
             this.startIntervalNoReplay();
