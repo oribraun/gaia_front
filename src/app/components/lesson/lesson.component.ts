@@ -201,9 +201,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         if (response.err) {
             console.log('response err', response)
-            this.getPresentationReplay('hi');
         } else {
             console.log('response', response)
+            this.getPresentationReplay('hi');
         }
     }
 
@@ -324,7 +324,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
-        
+
         this.speakInProgress = false;
         this.resetSpeechRecognition();
 
@@ -378,9 +378,9 @@ export class LessonComponent implements OnInit, OnDestroy {
             await this.getPresentationNoReplay('new_slide');
         } else {
             this.speakInProgress = false;
-            this.resetSpeechRecognition(); 
+            this.resetSpeechRecognition();
         }
-        
+
         if (presentation_content_updated) {
             // TODO request presentation from server
         }
