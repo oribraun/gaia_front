@@ -44,7 +44,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     audioQue: string[] = []
     audioBlobQue: any[] = []
-    arrayBuffer = true;
+    enableArrayBuffer = true;
     enableNoReplayInterval = false;
 
     constructor(
@@ -154,7 +154,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             app_data: {
                 type:'student_reply',
                 student_text: message,
-                array_buffer: this.arrayBuffer
+                array_buffer: this.enableArrayBuffer
             }
         }))
 
@@ -174,7 +174,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
             app_data: {
                 type: reason,
-                array_buffer: this.arrayBuffer
+                array_buffer: this.enableArrayBuffer
             }
         }))
 
@@ -195,7 +195,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const response: any = await lastValueFrom(this.apiService.resetPresentation({
             app_data: {
                 type: reason,
-                array_buffer: this.arrayBuffer
+                array_buffer: this.enableArrayBuffer
             }
         }))
 
