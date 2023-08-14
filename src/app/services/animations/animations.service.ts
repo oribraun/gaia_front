@@ -12,7 +12,7 @@ export class AnimationsService {
 
     addCircle(elm: any, unique_num: number) {
         if (elm) {
-            var randomColor = Math.floor(Math.random()*16777215).toString(16);
+            var randomColor = this.getRandomColor();
             const child = this.document.createElement('div');
             // const transformSpeed = this.randomIntFromInterval(1, 1.5)
             const transformSpeed = 1.5;
@@ -25,8 +25,9 @@ export class AnimationsService {
             child.style.opacity = "0";
             child.style.zIndex = "-1";
             child.style.borderRadius = "100%";
-            child.style.border = "1px solid " + "#" + randomColor;
-            child.style.transform = "scale(.9)";
+            console.log('randomColor', randomColor)
+            child.style.border = "1px solid " + randomColor;
+            child.style.transform = "scale(1)";
             child.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed}s ease-in-out`;
             elm.appendChild(child);
             this.animateAndRemoveCircle(child.id, transformSpeed)
@@ -37,7 +38,8 @@ export class AnimationsService {
         setTimeout(() => {
             const e = document.getElementById(id);
             if (e) {
-                const scale = this.randomIntFromInterval(1.4, 1.8)
+                const scale = this.getRandomFloat(1.1, 1.8)
+                console.log('scale', scale)
                 e.style.transform = `scale(${scale})`;
                 e.style.opacity = "1";
                 setTimeout(() => {
@@ -55,5 +57,16 @@ export class AnimationsService {
 
     randomIntFromInterval(min: number, max: number) { // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
+    getRandomFloat(min: number, max: number) {
+        return (Math.random() * (max - min) + min).toFixed(2);
+    }
+
+    getRandomColor() {
+        const red = Math.floor(Math.random() * 256); // Random value between 0 and 255
+        const green = Math.floor(Math.random() * 256); // Random value between 0 and 255
+        const blue = Math.floor(Math.random() * 256); // Random value between 0 and 255
+        return `rgb(${red},${green},${blue})`;
     }
 }

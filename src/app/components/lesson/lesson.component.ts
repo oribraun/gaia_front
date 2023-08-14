@@ -5,6 +5,8 @@ import {lastValueFrom} from "rxjs";
 import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
 
+declare var webkitSpeechRecognition:any;
+
 @Component({
     selector: 'app-lesson',
     templateUrl: './lesson.component.html',
@@ -64,6 +66,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
         this.recognitionCountWords++;
         if (results.isFinal) {
+            this.recognitionCountWords = 0;
             console.log("End speech recognition", this.recognitionText)
             if (this.recognitionText) {
         //         this.stopSpeechRecognition();
@@ -311,6 +314,25 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     resetIntervalNoReplay() {
         this.noReplayCounter = 0;
+    }
+
+    setRandomCircleAnimation() {
+        const ele = this.user.nativeElement;
+        let count = 0;
+        if (ele) {
+            setInterval(() => {
+                const delay = this.animationsService.randomIntFromInterval(0, 1)
+                setTimeout(() => {
+                    this.animationsService.addCircle(this.user.nativeElement, count)
+                    count++;
+                    if (count > 10) {
+                        count = 0;
+                    }
+                },delay * 1000)
+            },800)
+            this.animationsService.addCircle(this.user.nativeElement, count)
+            count++;
+        }
     }
 
 }

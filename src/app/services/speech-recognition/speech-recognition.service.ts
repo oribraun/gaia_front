@@ -20,10 +20,12 @@ export class SpeechRecognitionService {
             this.englishRecognition = new webkitSpeechRecognition();
             this.englishRecognition.lang = 'en-US';
             this.englishRecognition.continuous = true;
+            this.englishRecognition.interimResults = true
 
             this.hebrewRecognition = new webkitSpeechRecognition();
             this.hebrewRecognition.lang = 'en-US';//he-IL
             this.hebrewRecognition.continuous = true;
+            this.hebrewRecognition.interimResults = true
 
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
             // this.englishRecognition.addEventListener('end', this.onEndRecognitionEn);
