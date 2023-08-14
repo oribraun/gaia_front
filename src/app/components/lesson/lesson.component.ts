@@ -43,6 +43,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     noReplayTriggerOn = 5; // no replay will be called every 5 seconds
 
     audioQue: string[] = []
+    audioBlobQue: any[] = []
+    arrayBuffer = true;
+    enableNoReplayInterval = false;
 
     constructor(
         private apiService: ApiService,
@@ -53,7 +56,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.speechRecognitionService.setupSpeechRecognition();
         this.listenToSpeechRecognitionResults();
-        this.startVideo()
+        // this.startVideo()
         this.getPresentation();
     }
 
@@ -69,15 +72,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.recognitionCountWords = 0;
             console.log("End speech recognition", this.recognitionText)
             if (this.recognitionText) {
-        //         this.stopSpeechRecognition();
+                //         this.stopSpeechRecognition();
                 this.getPresentationReplay();
                 this.resetRecognitionData();
             } else {
-        //         // this.stopSpeechRecognition();
-        //         // this.startSpeechRecognition();
+                //         // this.stopSpeechRecognition();
+                //         // this.startSpeechRecognition();
             }
         }
-        console.log('results', results)
+        // console.log('results', results)
     }
 
     resetRecognitionData() {
@@ -150,7 +153,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         const response: any = await lastValueFrom(this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
-                student_text: message
+                student_text: message,
+                array_buffer: this.arrayBuffer
             }
         }))
 
@@ -170,6 +174,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
             app_data: {
                 type: reason,
+                array_buffer: this.arrayBuffer
             }
         }))
 
@@ -201,16 +206,20 @@ export class LessonComponent implements OnInit, OnDestroy {
     startSpeechRecognition() {
         console.log('startSpeechRecognition');
         this.speechRecognitionService.startListening();
-        // this.resetIntervalNoReplay();
-        // this.stopIntervalNoReplay();
-        // this.startIntervalNoReplay();
+        if (this.enableNoReplayInterval) {
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+            this.startIntervalNoReplay();
+        }
     }
 
     stopSpeechRecognition() {
         console.log('stopSpeechRecognition');
         this.speechRecognitionService.abortListening();
-        // this.resetIntervalNoReplay();
-        // this.stopIntervalNoReplay();
+        if (this.enableNoReplayInterval) {
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+        }
     }
 
     playUsingAudio() {
@@ -245,6 +254,38 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
+
+    playUsingBlob() {
+        return new Promise((resolve, reject) => {
+            if (this.audioBlobQue.length) {
+                const arrayBuffer: any = this.audioBlobQue.shift();
+                console.log('playUsingBlob arrayBuffer')
+                this.speakInProgress = true;
+                const loop = (blob: any) => {
+                    const audioBlob = new Blob([arrayBuffer], {type: 'audio/mpeg'});
+                    const audio = new Audio();
+                    audio.src = URL.createObjectURL(audioBlob);
+                    audio.load();
+                    audio.play();
+                    audio.addEventListener('ended', (e) => {
+
+                    })
+                    audio.onended = () => {
+                        const arrayBuffer: any = this.audioBlobQue.shift();
+                        console.log('playUsingBlob ended arrayBuffer')
+                        if (arrayBuffer) {
+                            loop(arrayBuffer)
+                        } else {
+                            this.speakInProgress = false;
+                            resolve(true);
+                        }
+                    };
+                }
+                loop(arrayBuffer);
+            }
+        });
+    }
+
     async handleOnPresentationNoReplay(data: any) {
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_content_updated = data.presentation_content_updated;
@@ -277,10 +318,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-
-        // this.resetIntervalNoReplay();
-        // this.stopIntervalNoReplay();
-        // this.startIntervalNoReplay();
+        if (this.enableNoReplayInterval) {
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+            this.startIntervalNoReplay();
+        }
     }
 
     async handleOnPresentationReplay(reason: string = '') {
@@ -290,6 +332,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
+        const help_sound_buffer = data.help_sound_buffer;
         console.log('presentation_index_updated',presentation_index_updated)
         console.log('reason',reason)
         console.log('data',data)
@@ -300,6 +343,16 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (!this.speakInProgress) {
                 const value = await this.playUsingAudio();
             }
+        }
+        if (help_sound_buffer) {
+            console.log('array_buffer added to que')
+            const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
+            this.audioBlobQue.push(arrayBuffer);
+            if (!this.speakInProgress) {
+                const value = await this.playUsingBlob();
+            }
+            this.speakInProgress = false;
+            this.resetSpeechRecognition();
         }
         if (presentation_index_updated) {
             this.currentSectionIndex = data.current_section_index;
@@ -318,18 +371,33 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
+        if (this.enableNoReplayInterval) {
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+            this.startIntervalNoReplay();
+        }
+    }
 
-        // this.resetIntervalNoReplay();
-        // this.stopIntervalNoReplay();
-        // this.startIntervalNoReplay();
+    base64ToArrayBuffer(base64: string): ArrayBuffer {
+        const binaryString = window.atob(base64);
+        const length = binaryString.length;
+        const bytes = new Uint8Array(length);
+
+        for (let i = 0; i < length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        return bytes.buffer;
     }
 
     ngOnDestroy() {
         if (this.recognitionOnResultsSubscribe) {
             this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
         }
-        // this.resetIntervalNoReplay()
-        // this.stopIntervalNoReplay()
+        if (this.enableNoReplayInterval) {
+            this.resetIntervalNoReplay()
+            this.stopIntervalNoReplay()
+        }
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }
