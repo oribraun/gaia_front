@@ -54,6 +54,13 @@
                     <i class="bi bi-inboxes"></i> <span>Data Room</span>
                 </a>
             </li>
+            <li class="nav-item" *ngIf="user.id  && user.company_name.toLowerCase() === 'gaialabs'">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-award-fill"></i> <span>Lesson</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"

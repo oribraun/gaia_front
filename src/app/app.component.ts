@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
 import {User} from "./entities/user";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {WebSocketService} from "./services/web-sockets/web-socket.service";
 import {HelperService} from "./services/helper.service";
 
@@ -18,11 +18,14 @@ declare var SCHEME: any;
 export class AppComponent implements OnInit {
     title = 'frontend';
     user!: User;
+
+    currentRoute = '';
     constructor(
         private config: Config,
         private webSocketService: WebSocketService,
         private helperService: HelperService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {
         setTimeout(() => {
             this.setupCredsFromServer();
@@ -36,6 +39,7 @@ export class AppComponent implements OnInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
+        this.getCurrentRoute();
         // setTimeout is because we need to wait for all components subscriptions to config changes
         // setTimeout(() => {
         //     this.setupCredsFromServer()
@@ -103,6 +107,18 @@ export class AppComponent implements OnInit {
                     }
                 }
             );
+    }
+
+    getCurrentRoute() {
+        this.router.events.subscribe((routerEvent) => {
+            if(routerEvent instanceof NavigationEnd) {
+                // Get your url
+                const l = routerEvent.url.split('/')
+                if (l && l.length > 1) {
+                    this.currentRoute = l[1];
+                }
+            }
+        });
     }
 
 }
