@@ -378,8 +378,12 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
-
-        this.resetSpeechRecognition();
+        
+        if (presentation_slide_updated) {
+            await this.getPresentationNoReplay('new_slide');
+        } else {
+            this.resetSpeechRecognition();
+        }
 
         if (presentation_content_updated) {
             // TODO request presentation from server
