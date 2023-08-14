@@ -317,11 +317,13 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async handleOnPresentationNoReplay(data: any) {
         const presentation_index_updated = data.presentation_index_updated;
+        const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
         const help_sound_buffer = data.help_sound_buffer;
+        console.log('presentation_slide_updated',presentation_slide_updated)
         console.log('presentation_index_updated',presentation_index_updated)
         console.log('data',data)
 
@@ -366,11 +368,13 @@ export class LessonComponent implements OnInit, OnDestroy {
     async handleOnPresentationReplay(reason: string = '') {
         const data = this.currentData
         const presentation_index_updated = data.presentation_index_updated;
+        const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const presentation_done = data.presentation_done;
         const text = data.text;
         const help_sound_url = data.help_sound_url;
         const help_sound_buffer = data.help_sound_buffer;
+        console.log('presentation_slide_updated',presentation_slide_updated)
         console.log('presentation_index_updated',presentation_index_updated)
         console.log('reason',reason)
         console.log('data',data)
@@ -395,6 +399,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentSlideIndex = data.current_slide_index;
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
+        }
+        if (presentation_slide_updated) {
             await this.getPresentationNoReplay('new_slide');
         } else {
             this.speakInProgress = false;
