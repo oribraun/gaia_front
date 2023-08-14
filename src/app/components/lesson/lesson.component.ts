@@ -333,7 +333,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }
         if (help_sound_buffer) {
-            console.log('array_buffer added to que')
+            console.log('help_sound_buffer added to que')
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
             this.audioBlobQue.push(arrayBuffer);
             if (!this.speakInProgress) {
@@ -383,7 +383,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }
         if (help_sound_buffer) {
-            console.log('array_buffer added to que')
+            console.log('help_sound_buffer added to que')
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
             this.audioBlobQue.push(arrayBuffer);
             if (!this.speakInProgress) {
