@@ -45,7 +45,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     audioQue: string[] = []
     audioBlobQue: any[] = []
     enableArrayBuffer = true;
-    enableNoReplayInterval = false;
+    enableNoReplayInterval = true;
 
     constructor(
         private apiService: ApiService,
@@ -75,6 +75,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                 //         this.stopSpeechRecognition();
                 this.getPresentationReplay();
                 this.resetRecognitionData();
+                this.resetIntervalNoReplay();
+                this.stopIntervalNoReplay();
             } else {
                 //         // this.stopSpeechRecognition();
                 //         // this.startSpeechRecognition();
@@ -444,7 +446,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.noReplayCounter++;
             if (this.noReplayCounter === this.noReplayTriggerOn) {
                 this.noReplayCounter = 0;
-                this.getPresentationNoReplay('no audio')
+                this.getPresentationNoReplay('no_audio')
                 this.resetIntervalNoReplay();
                 this.stopIntervalNoReplay();
             }
