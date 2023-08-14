@@ -284,11 +284,19 @@ export class LessonComponent implements OnInit, OnDestroy {
                     audio.load();
                     audio.play();
                     let count = 0;
+                    let lastLoggedTime = 0;
+                    this.animationsService.addCircle(this.user.nativeElement, count);
+                    count++;
                     audio.addEventListener('timeupdate', () => {
-                        this.animationsService.addCircle(this.user.nativeElement, count);
-                        count++;
-                        if (count > 10) {
-                            count = 0;
+                        const currentTime = audio.currentTime;
+                        const timeIntervalMilliseconds = 250; // 250 milliseconds
+                        if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
+                            this.animationsService.addCircle(this.user.nativeElement, count);
+                            count++;
+                            if (count > 10) {
+                                count = 0;
+                            }
+                            lastLoggedTime = currentTime;
                         }
                     });
                     audio.addEventListener('ended', (e) => {
