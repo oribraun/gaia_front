@@ -216,7 +216,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopSpeechRecognition()
         setTimeout(() => {
             this.startSpeechRecognition()
-        }, 50)
+        }, 100)
     }
 
     startSpeechRecognition() {
