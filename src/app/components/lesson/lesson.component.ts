@@ -182,7 +182,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             console.log('response', response)
             // this.currentData = response.data;
-            this.handleOnPresentationReplay(reason);
+            this.handleOnPresentationNoReplay(response.data);
         }
     }
 
@@ -245,6 +245,42 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
+    async handleOnPresentationNoReplay(data: any) {
+        const presentation_index_updated = data.presentation_index_updated;
+        const presentation_content_updated = data.presentation_content_updated;
+        const presentation_done = data.presentation_done;
+        const text = data.text;
+        const help_sound_url = data.help_sound_url;
+        console.log('presentation_index_updated',presentation_index_updated)
+        console.log('data',data)
+
+        if (help_sound_url) {
+            console.log('help_sound_url added to que', help_sound_url)
+            this.audioQue.push(help_sound_url);
+            if (!this.speakInProgress) {
+                const value = await this.playUsingAudio();
+            }
+            this.speakInProgress = false;
+            this.resetSpeechRecognition();
+        }
+        if (presentation_index_updated) {
+            this.currentSectionIndex = data.current_section_index;
+            this.currentSlideIndex = data.current_slide_index;
+            this.currentObjectiveIndex = data.current_objective_index;
+            this.setCurrentSection();
+        }
+        if (presentation_content_updated) {
+            // TODO request presentation from server
+        }
+        if (presentation_done) {
+            // TODO show client presentation is done
+        }
+
+        // this.resetIntervalNoReplay();
+        // this.stopIntervalNoReplay();
+        // this.startIntervalNoReplay();
+    }
+
     async handleOnPresentationReplay(reason: string = '') {
         const data = this.currentData
         const presentation_index_updated = data.presentation_index_updated;
@@ -253,6 +289,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         const text = data.text;
         const help_sound_url = data.help_sound_url;
         console.log('presentation_index_updated',presentation_index_updated)
+        console.log('reason',reason)
+        console.log('data',data)
+
         if (presentation_index_updated && reason !== 'new_slide') {
             this.getPresentationNoReplay('new_slide')
         }
