@@ -25,7 +25,6 @@ export class AnimationsService {
             child.style.opacity = "0";
             child.style.zIndex = "-1";
             child.style.borderRadius = "100%";
-            console.log('randomColor', randomColor)
             child.style.border = "1px solid " + randomColor;
             child.style.transform = "scale(1)";
             child.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed}s ease-in-out`;
@@ -39,7 +38,6 @@ export class AnimationsService {
             const e = document.getElementById(id);
             if (e) {
                 const scale = this.getRandomFloat(1.1, 1.8)
-                console.log('scale', scale)
                 e.style.transform = `scale(${scale})`;
                 e.style.opacity = "1";
                 setTimeout(() => {
