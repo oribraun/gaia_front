@@ -37,6 +37,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     recognitionText = '';
     recognitionOnResultsSubscribe: any = null;
     speakInProgress = false;
+    currentAudio: any = null;
 
     noReplayInterval: any = null
     noReplayCounter = 0;
@@ -55,6 +56,13 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     mobileWidth = 768; // pixels
     isMobile = false;
+
+    apiSubscriptions: any = {
+        get_presentation: null,
+        replay: null,
+        no_replay: null,
+        reset: null,
+    }
 
     constructor(
         private apiService: ApiService,
@@ -113,23 +121,28 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentation() {
         this.gettingPresentation = true;
-        const response: any = await lastValueFrom(this.apiService.getPresentation({
+        this.apiSubscriptions.get_presentation = this.apiService.getPresentation({
             "type": "messi",
-        }))
-
-        if (response.err) {
-            console.log('getPresentation err', response)
-        } else {
-            this.presentation = new Presentation(response.presentation);
-            console.log('this.presentation ', this.presentation )
-            this.currentSectionIndex = this.presentation.current_section_index;
-            this.currentSlideIndex = this.presentation.current_slide_index;
-            this.currentObjectiveIndex = this.presentation.current_objective_index;
-            this.estimatedDuration = this.presentation.estimated_duration;
-            this.setCurrentSection();
-            this.getPresentationReplay('hi');
-        }
-        this.gettingPresentation = false;
+        }).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('getPresentation err', response)
+                } else {
+                    this.presentation = new Presentation(response.presentation);
+                    console.log('this.presentation ', this.presentation )
+                    this.currentSectionIndex = this.presentation.current_section_index;
+                    this.currentSlideIndex = this.presentation.current_slide_index;
+                    this.currentObjectiveIndex = this.presentation.current_objective_index;
+                    this.estimatedDuration = this.presentation.estimated_duration;
+                    this.setCurrentSection();
+                    this.getPresentationReplay('hi');
+                }
+                this.gettingPresentation = false;
+            },
+            error: (error) => {
+                console.log('getPresentation error', error)
+            },
+        })
     }
 
     setCurrentSection(index: number = -1) {
@@ -166,25 +179,31 @@ export class LessonComponent implements OnInit, OnDestroy {
             message = text;
         }
         this.presentationReplayIsInProgress = true;
-        const response: any = await lastValueFrom(this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
                 student_text: message,
                 array_buffer: this.enableArrayBuffer
             }
-        }))
-        this.presentationReplayIsInProgress = false;
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationReplayIsInProgress = false;
 
-        if (response.err) {
-            console.log('response err', response)
-            // setTimeout(() => {
-            //     this.startSpeechRecognition();
-            // },2000)
-            this.handleOnReplayError()
-        } else {
-            this.currentData = response.data;
-            this.handleOnPresentationReplay();
-        }
+                if (response.err) {
+                    console.log('response err', response)
+                    // setTimeout(() => {
+                    //     this.startSpeechRecognition();
+                    // },2000)
+                    this.handleOnReplayError()
+                } else {
+                    this.currentData = response.data;
+                    this.handleOnPresentationReplay();
+                }
+            },
+            error: (error) => {
+                console.log('getPresentationReplay error', error)
+            },
+        })
     }
 
     async getPresentationNoReplay(reason: string = '') {
@@ -192,24 +211,30 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNoReplayIsInProgress = true;
-        const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
+        this.apiSubscriptions.no_replay = this.apiService.getPresentationNoReplay({
             app_data: {
                 type: reason,
                 array_buffer: this.enableArrayBuffer
             }
-        }))
-        this.presentationNoReplayIsInProgress = false;
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationNoReplayIsInProgress = false;
 
-        if (response.err) {
-            console.log('response err', response)
-            // setTimeout(() => {
-            //     this.startSpeechRecognition();
-            // },2000)
-            this.handleOnReplayError()
-        } else {
-            this.currentData = response.data;
-            this.handleOnPresentationReplay();
-        }
+                if (response.err) {
+                    console.log('response err', response)
+                    // setTimeout(() => {
+                    //     this.startSpeechRecognition();
+                    // },2000)
+                    this.handleOnReplayError()
+                } else {
+                    this.currentData = response.data;
+                    this.handleOnPresentationReplay();
+                }
+            },
+            error: (error) => {
+                console.log('getPresentationNoReplay error', error)
+            },
+        })
     }
 
     async resetPresentation(reason: string = '') {
@@ -217,23 +242,29 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationResetIsInProgress = true;
-        const response: any = await lastValueFrom(this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.resetPresentation({
             app_data: {
                 type: reason,
                 array_buffer: this.enableArrayBuffer
             }
-        }))
-        this.presentationResetIsInProgress = false;
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationResetIsInProgress = false;
 
-        if (response.err) {
-            console.log('response err', response)
-            this.handleOnReplayError();
-        } else {
-            console.log('response', response)
-            this.resetIntervalNoReplay();
-            this.stopIntervalNoReplay();
-            this.getPresentationReplay('hi');
-        }
+                if (response.err) {
+                    console.log('response err', response)
+                    this.handleOnReplayError();
+                } else {
+                    console.log('response', response)
+                    this.resetIntervalNoReplay();
+                    this.stopIntervalNoReplay();
+                    this.getPresentationReplay('hi');
+                }
+            },
+            error: (error) => {
+                console.log('resetPresentation error', error)
+            },
+        })
     }
 
     handleOnReplayError() {
@@ -282,11 +313,27 @@ export class LessonComponent implements OnInit, OnDestroy {
                 console.log('playUsingAudio src_url', src_url)
                 this.speakInProgress = true;
                 const loop = (src_url: string) => {
-                    const audio = new Audio();
-                    audio.src = src_url;
-                    audio.load();
-                    audio.play();
-                    audio.addEventListener('ended', (e) => {
+                    this.currentAudio = new Audio();
+                    this.currentAudio.src = src_url;
+                    this.currentAudio.load();
+                    this.currentAudio.play();
+                    let count = 0;
+                    let lastLoggedTime = 0;
+                    this.animationsService.addCircle(this.user.nativeElement, count);
+                    count++;
+                    this.currentAudio.addEventListener('timeupdate', () => {
+                        const currentTime = this.currentAudio.currentTime;
+                        const timeIntervalMilliseconds = 250; // 250 milliseconds
+                        if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
+                            this.animationsService.addCircle(this.user.nativeElement, count);
+                            count++;
+                            if (count > 10) {
+                                count = 0;
+                            }
+                            lastLoggedTime = currentTime;
+                        }
+                    });
+                    this.currentAudio.addEventListener('ended', (e: any) => {
                         // const handled_module_type = this.handleWhiteBoardModuleType();
                         // if (!handled_module_type) {
                         const src_url: any = this.audioQue.shift();
@@ -316,16 +363,16 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.speakInProgress = true;
                 const loop = (blob: any) => {
                     const audioBlob = new Blob([arrayBuffer], {type: 'audio/mpeg'});
-                    const audio = new Audio();
-                    audio.src = URL.createObjectURL(audioBlob);
-                    audio.load();
-                    audio.play();
+                    this.currentAudio = new Audio();
+                    this.currentAudio.src = URL.createObjectURL(audioBlob);
+                    this.currentAudio.load();
+                    this.currentAudio.play();
                     let count = 0;
                     let lastLoggedTime = 0;
                     this.animationsService.addCircle(this.user.nativeElement, count);
                     count++;
-                    audio.addEventListener('timeupdate', () => {
-                        const currentTime = audio.currentTime;
+                    this.currentAudio.addEventListener('timeupdate', () => {
+                        const currentTime = this.currentAudio.currentTime;
                         const timeIntervalMilliseconds = 250; // 250 milliseconds
                         if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
                             this.animationsService.addCircle(this.user.nativeElement, count);
@@ -336,7 +383,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             lastLoggedTime = currentTime;
                         }
                     });
-                    audio.addEventListener('ended', (e) => {
+                    this.currentAudio.addEventListener('ended', (e: any) => {
                         const arrayBuffer: any = this.audioBlobQue.shift();
                         console.log('playUsingBlob ended arrayBuffer')
                         if (arrayBuffer) {
@@ -484,12 +531,28 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.recognitionOnResultsSubscribe) {
             this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
         }
+        console.log('this.currentAudi', this.currentAudio);
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.src = '';
+        }
         if (this.enableNoReplayInterval) {
             this.resetIntervalNoReplay()
             this.stopIntervalNoReplay()
         }
+        this.stopSpeechRecognition();
+        this.unsubscribeAllHttpEvents();
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
+    }
+
+    unsubscribeAllHttpEvents() {
+        for (let key in this.apiSubscriptions) {
+            if (this.apiSubscriptions[key]) {
+                this.apiSubscriptions[key].unsubscribe();
+                this.apiSubscriptions[key] = null;
+            }
+        }
     }
 
     startIntervalNoReplay() {
