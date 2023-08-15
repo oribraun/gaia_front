@@ -322,5 +322,55 @@ section {
                 }
             }
         }
+        .carousel {
+            height: 100%;
+            .carousel-inner {
+                height: 100%;
+                .carousel-item {
+                    height: 100%;
+                    .white-board {
+                        width: 100%;
+                        .lesson-board {
+                            .outer-scroller {
+                                width: 100%;
+                                height: auto;
+                                float: none;
+                                display: block;
+                            }
+                            .image {
+                                width: 100%;
+                                height: auto;
+                                float: none;
+                                display: block;
+                                img {
+                                    transform: none;
+                                    top:0;
+                                    left:0;
+                                }
+                            }
+                        }
+                    }
+                    .right-panel {
+                        height: 100%;
+                        text-align: left;
+                    }
+                    &.center {
+                        text-align: center;
+                    }
+                }
+            }
+            .carousel-indicators {
+                margin-bottom: 0;
+                button {
+                    background-color: var(--blue-background-color);
+                    width: 15px;
+                    height: 15px;
+                    margin: 0 5px;
+                    border-radius: 100%;
+                    border-top: 3px solid transparent;
+                    border-bottom: 3px solid transparent;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,36 @@
+<div class="right-panel">
+    <div class="cam-board">
+        <div class="teacher">
+            <div class="user-box">
+                <div class="user" #user>
+                    <div class="icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="student">
+            <video #videoElement autoplay playsinline [muted]="'muted'"></video>
+        </div>
+        <div class="today-plan">
+            <h4 class="text-center">Today's plan</h4>
+            <div class="plan">
+                <div class="outer-scroller">
+                    <div class="inner-scroller">
+                        <!--                                <div class="table-line done">Greeting</div>-->
+                        <!--                                <div class="table-line active">Vocabulary</div>-->
+                        <div class="table-line"
+                             [ngClass]="{'active': currentSectionIndex == i}"
+                             *ngFor="let s of presentation.sections; let i = index">{{s.section_title}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="button">
+                    <img src="assets/images/icons/take_a_break_icon.png"> Take a break
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

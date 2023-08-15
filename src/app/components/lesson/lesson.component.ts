@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
 import {lastValueFrom} from "rxjs";
@@ -10,11 +10,15 @@ declare var webkitSpeechRecognition:any;
 @Component({
     selector: 'app-lesson',
     templateUrl: './lesson.component.html',
-    styleUrls: ['./lesson.component.less']
+    styleUrls: ['./lesson.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 export class LessonComponent implements OnInit, OnDestroy {
-    @ViewChild('videoElement', { static: true }) videoElement!: ElementRef;
-    @ViewChild('user', { static: true }) user!: ElementRef;
+    @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
+    @ViewChild('user', { static: false }) user!: ElementRef;
+
+    mediaStream: any;
+
     presentation: Presentation = new Presentation();
     gettingPresentation = false;
     currentSectionIndex: number = -1;
@@ -46,7 +50,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     audioQue: string[] = []
     audioBlobQue: any[] = []
     enableArrayBuffer = true;
-    enableNoReplayInterval = true;
+    enableNoReplayInterval = false;
 
     resetSpeechRecognitionTimeout: any = null;
 
@@ -71,10 +75,15 @@ export class LessonComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
+        this.triggerResize()
         this.speechRecognitionService.setupSpeechRecognition();
         this.listenToSpeechRecognitionResults();
-        this.startVideo()
         this.getPresentation();
+    }
+
+    triggerResize() {
+        const resizeEvent = new Event('resize');
+        window.dispatchEvent(resizeEvent);
     }
 
     listenToSpeechRecognitionResults() {
@@ -112,7 +121,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         try {
             navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((mediaStream) => {
                 // Display the stream in the video element
-                this.videoElement.nativeElement.srcObject = mediaStream;
+                this.mediaStream = mediaStream;
             })
         } catch (error) {
             console.error('Error accessing webcam:', error);
@@ -249,22 +258,26 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }).subscribe({
             next: (response: any) => {
-                this.presentationResetIsInProgress = false;
-
-                if (response.err) {
-                    console.log('response err', response)
-                    this.handleOnReplayError();
-                } else {
-                    console.log('response', response)
-                    this.resetIntervalNoReplay();
-                    this.stopIntervalNoReplay();
-                    this.getPresentationReplay('hi');
-                }
+                this.onResetPresentation(response)
             },
             error: (error) => {
                 console.log('resetPresentation error', error)
             },
         })
+    }
+
+    onResetPresentation(response: any) {
+        this.presentationResetIsInProgress = false;
+
+        if (response.err) {
+            console.log('response err', response)
+            this.handleOnReplayError();
+        } else {
+            console.log('response', response)
+            this.resetIntervalNoReplay();
+            this.stopIntervalNoReplay();
+            this.getPresentationReplay('hi');
+        }
     }
 
     handleOnReplayError() {
@@ -319,13 +332,13 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentAudio.play();
                     let count = 0;
                     let lastLoggedTime = 0;
-                    this.animationsService.addCircle(this.user.nativeElement, count);
+                    this.animationsService.triggerAddingCircle(count);
                     count++;
                     this.currentAudio.addEventListener('timeupdate', () => {
                         const currentTime = this.currentAudio.currentTime;
                         const timeIntervalMilliseconds = 250; // 250 milliseconds
                         if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
-                            this.animationsService.addCircle(this.user.nativeElement, count);
+                            this.animationsService.triggerAddingCircle(count);
                             count++;
                             if (count > 10) {
                                 count = 0;
@@ -369,13 +382,13 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentAudio.play();
                     let count = 0;
                     let lastLoggedTime = 0;
-                    this.animationsService.addCircle(this.user.nativeElement, count);
+                    this.animationsService.triggerAddingCircle(count);
                     count++;
                     this.currentAudio.addEventListener('timeupdate', () => {
                         const currentTime = this.currentAudio.currentTime;
                         const timeIntervalMilliseconds = 250; // 250 milliseconds
                         if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
-                            this.animationsService.addCircle(this.user.nativeElement, count);
+                            this.animationsService.triggerAddingCircle(count);
                             count++;
                             if (count > 10) {
                                 count = 0;
@@ -585,14 +598,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             setInterval(() => {
                 const delay = this.animationsService.randomIntFromInterval(0, 1)
                 setTimeout(() => {
-                    this.animationsService.addCircle(this.user.nativeElement, count)
+                    this.animationsService.triggerAddingCircle(count)
                     count++;
                     if (count > 10) {
                         count = 0;
                     }
                 },delay * 1000)
             },800)
-            this.animationsService.addCircle(this.user.nativeElement, count)
+            this.animationsService.triggerAddingCircle(count)
             count++;
         }
     }
@@ -600,10 +613,13 @@ export class LessonComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     windowResize(e: any) {
         if (e.target.innerWidth < this.mobileWidth) {
-            this.isMobile = true;
+            if (!this.isMobile) {
+                this.isMobile = true;
+            }
         } else {
-            this.isMobile = false;
+            if (this.isMobile) {
+                this.isMobile = false;
+            }
         }
     }
-
 }
