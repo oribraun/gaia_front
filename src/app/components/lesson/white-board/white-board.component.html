@@ -6,7 +6,7 @@
         <img src="assets/images/icons/exit_icon.png"> <span>Exit</span>
     </div>
 </div>
-<div class="white-board">
+<div class="white-board" [ngClass]="currentSlide.slide_type">
     <ng-container *ngIf="currentSlide.slide_type === sectionTitles.greeting">
         <div class="general-box lesson-board">
             <div class="outer-scroller">

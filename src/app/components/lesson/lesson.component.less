@@ -173,6 +173,21 @@ section {
             }
         }
 
+        .word_repeater, .reading {
+            position: relative;
+            .lesson-board {
+                .text {
+                    p {
+                        background: none;
+                        font-size: 1.55em;
+                        &:before {
+                            content: none !important;
+                        }
+                    }
+                }
+            }
+        }
+
         .right-panel {
             @cam-height: 180px;
             @button-height: 50px;
