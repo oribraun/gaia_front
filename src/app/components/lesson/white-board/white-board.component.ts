@@ -27,7 +27,7 @@ export class WhiteBoardComponent {
         private apiService: ApiService,
     ) {
         if (environment.production) {
-            this.imageSrc = 'client/'
+            this.imageSrc = 'static/client/'
         }
     }
     async resetPresentation(reason: string = '') {

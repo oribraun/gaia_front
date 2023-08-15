@@ -29,7 +29,7 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         this.listenToCircleAnimations();
 
         if (environment.production) {
-            this.imageSrc = 'client/'
+            this.imageSrc = 'static/client/'
         }
     }
 
