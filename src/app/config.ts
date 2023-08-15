@@ -13,6 +13,7 @@ export class Config {
     private _user_subject: Subject<any> = new Subject<any>();
     private _token_subject: Subject<string> = new Subject<string>();
     private _csrf_token_subject: Subject<string> = new Subject<string>();
+    private _staticImagePath = '';
 
     get user(): User {
         return this._user;
@@ -82,6 +83,14 @@ export class Config {
         this._csrf_token_subject = value;
     }
 
+
+    get staticImagePath(): string {
+        return this._staticImagePath;
+    }
+
+    set staticImagePath(value: string) {
+        this._staticImagePath = value;
+    }
 
     resetUserCreds() {
         this.user = '';

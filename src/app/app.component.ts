@@ -4,6 +4,7 @@ import {User} from "./entities/user";
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {WebSocketService} from "./services/web-sockets/web-socket.service";
 import {HelperService} from "./services/helper.service";
+import {environment} from "../environments/environment";
 
 // declare var STATIC_URL: any;
 declare var USER: any;
@@ -32,6 +33,10 @@ export class AppComponent implements OnInit {
         })
         this.setupCredsFromServer();
         this.closeOnGmailCallback();
+
+        if (environment.production) {
+            this.config.staticImagePath = 'static/client/'
+        }
     }
 
     ngOnInit(): void {

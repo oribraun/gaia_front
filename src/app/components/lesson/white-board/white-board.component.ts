@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
 import {environment} from "../../../../environments/environment";
+import {Config} from "../../../config";
 
 @Component({
     selector: 'app-white-board',
@@ -24,11 +25,10 @@ export class WhiteBoardComponent {
     imageSrc = ''
 
     constructor(
+        private config: Config,
         private apiService: ApiService,
     ) {
-        if (environment.production) {
-            this.imageSrc = 'static/client/'
-        }
+        this.imageSrc = this.config.staticImagePath
     }
     async resetPresentation(reason: string = '') {
         if (this.presentationResetIsInProgress) {

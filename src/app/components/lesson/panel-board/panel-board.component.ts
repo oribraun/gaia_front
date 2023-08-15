@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewC
 import {Presentation} from "../../../entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
 import {environment} from "../../../../environments/environment";
+import {Config} from "../../../config";
 
 @Component({
   selector: 'app-panel-board',
@@ -24,13 +25,12 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
     imageSrc = ''
 
     constructor(
-        private animationsService: AnimationsService
+        private config: Config,
+        private animationsService: AnimationsService,
     ) {
         this.listenToCircleAnimations();
 
-        if (environment.production) {
-            this.imageSrc = 'static/client/'
-        }
+        this.imageSrc = this.config.staticImagePath;
     }
 
     listenToCircleAnimations() {
