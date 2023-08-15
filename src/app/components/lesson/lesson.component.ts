@@ -40,7 +40,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     noReplayInterval: any = null
     noReplayCounter = 0;
-    noReplayTriggerOn = 5; // no replay will be called every 5 seconds
+    noReplayTriggerOn = 10; // no replay will be called every 5 seconds
 
     audioQue: string[] = []
     audioBlobQue: any[] = []
@@ -207,9 +207,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             // },2000)
             this.handleOnReplayError()
         } else {
-            console.log('response', response)
-            // this.currentData = response.data;
-            this.handleOnPresentationNoReplay(response.data);
+            this.currentData = response.data;
+            this.handleOnPresentationReplay();
         }
     }
 
@@ -243,6 +242,9 @@ export class LessonComponent implements OnInit, OnDestroy {
             && !this.presentationResetIsInProgress) {
             this.speakInProgress = false;
             this.resetSpeechRecognition();
+            // this.resetIntervalNoReplay();
+            // this.stopIntervalNoReplay();
+            // this.startIntervalNoReplay()
         }
     }
 
@@ -444,12 +446,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
-        if (presentation_slide_updated) {
-            await this.getPresentationNoReplay('new_slide');
-        }
-        if (!presentation_slide_updated) {
-            this.resetSpeechRecognition();
-        }
 
         if (presentation_content_updated) {
             // TODO request presentation from server
@@ -457,13 +453,18 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval &&
-            !this.speakInProgress &&
-            !this.presentationReplayIsInProgress &&
-            ! this.presentationNoReplayIsInProgress) {
-            this.resetIntervalNoReplay();
-            this.stopIntervalNoReplay();
-            this.startIntervalNoReplay();
+        if (presentation_slide_updated) {
+            this.getPresentationNoReplay('new_slide');
+        } else {
+            if (this.enableNoReplayInterval &&
+                !this.speakInProgress &&
+                !this.presentationReplayIsInProgress &&
+                ! this.presentationNoReplayIsInProgress) {
+                this.resetIntervalNoReplay();
+                this.stopIntervalNoReplay();
+                this.startIntervalNoReplay();
+            }
+            this.resetSpeechRecognition();
         }
     }
 
