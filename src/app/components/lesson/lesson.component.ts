@@ -378,7 +378,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
-        
+
         if (presentation_slide_updated) {
             await this.getPresentationNoReplay('new_slide');
         } else {
@@ -391,7 +391,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval && !this.speakInProgress && !this.presentationReplayIsInProgress) {
+        if (this.enableNoReplayInterval &&
+            !this.speakInProgress &&
+            !this.presentationReplayIsInProgress &&
+            ! this.presentationNoReplayIsInProgress) {
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
             this.startIntervalNoReplay();
@@ -447,7 +450,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval && !this.speakInProgress) {
+        if (this.enableNoReplayInterval &&
+            !this.speakInProgress &&
+            !this.presentationReplayIsInProgress &&
+            ! this.presentationNoReplayIsInProgress) {
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
             this.startIntervalNoReplay();
