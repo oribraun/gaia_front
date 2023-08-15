@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
 import {lastValueFrom} from "rxjs";
@@ -40,7 +40,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     noReplayInterval: any = null
     noReplayCounter = 0;
-    noReplayTriggerOn = 5; // no replay will be called every 5 seconds
+    noReplayTriggerOn = 10; // no replay will be called every 5 seconds
 
     audioQue: string[] = []
     audioBlobQue: any[] = []
@@ -52,6 +52,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
     presentationNoReplayIsInProgress = false;
+
+    mobileWidth = 768; // pixels
+    isMobile = false;
 
     constructor(
         private apiService: ApiService,
@@ -82,7 +85,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.recognitionCountWords = 0;
             console.log("End speech recognition", this.recognitionText)
             if (this.recognitionText) {
-                //         this.stopSpeechRecognition();
+                this.stopSpeechRecognition();
                 this.getPresentationReplay();
             } else {
                 //         // this.stopSpeechRecognition();
@@ -204,9 +207,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             // },2000)
             this.handleOnReplayError()
         } else {
-            console.log('response', response)
-            // this.currentData = response.data;
-            this.handleOnPresentationNoReplay(response.data);
+            this.currentData = response.data;
+            this.handleOnPresentationReplay();
         }
     }
 
@@ -230,6 +232,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         if (response.err) {
             console.log('response err', response)
+            this.handleOnReplayError();
         } else {
             console.log('response', response)
             this.resetIntervalNoReplay();
@@ -239,8 +242,15 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     handleOnReplayError() {
-        this.speakInProgress = false;
-        this.resetSpeechRecognition();
+        if (!this.presentationReplayIsInProgress
+            && !this.presentationNoReplayIsInProgress
+            && !this.presentationResetIsInProgress) {
+            this.speakInProgress = false;
+            this.resetSpeechRecognition();
+            // this.resetIntervalNoReplay();
+            // this.stopIntervalNoReplay();
+            // this.startIntervalNoReplay()
+        }
     }
 
     resetSpeechRecognition() {
@@ -384,9 +394,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.setCurrentSection();
         }
 
-        if (presentation_slide_updated) {
-            await this.getPresentationNoReplay('new_slide');
-        } else {
+        if (!this.speakInProgress) {
             this.resetSpeechRecognition();
         }
 
@@ -443,11 +451,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.currentObjectiveIndex = data.current_objective_index;
             this.setCurrentSection();
         }
-        if (presentation_slide_updated) {
-            await this.getPresentationNoReplay('new_slide');
-        } else {
-            this.resetSpeechRecognition();
-        }
 
         if (presentation_content_updated) {
             // TODO request presentation from server
@@ -455,13 +458,18 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             // TODO show client presentation is done
         }
-        if (this.enableNoReplayInterval &&
-            !this.speakInProgress &&
-            !this.presentationReplayIsInProgress &&
-            ! this.presentationNoReplayIsInProgress) {
-            this.resetIntervalNoReplay();
-            this.stopIntervalNoReplay();
-            this.startIntervalNoReplay();
+        if (presentation_slide_updated) {
+            this.getPresentationNoReplay('new_slide');
+        } else {
+            if (this.enableNoReplayInterval &&
+                !this.speakInProgress &&
+                !this.presentationReplayIsInProgress &&
+                ! this.presentationNoReplayIsInProgress) {
+                this.resetIntervalNoReplay();
+                this.stopIntervalNoReplay();
+                this.startIntervalNoReplay();
+            }
+            this.resetSpeechRecognition();
         }
     }
 
@@ -495,9 +503,9 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.noReplayCounter++;
             if (this.noReplayCounter === this.noReplayTriggerOn) {
                 this.noReplayCounter = 0;
-                this.getPresentationNoReplay('no_audio')
                 this.resetIntervalNoReplay();
                 this.stopIntervalNoReplay();
+                this.getPresentationNoReplay('no_audio')
             }
         }, 1000)
     }
@@ -528,6 +536,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             },800)
             this.animationsService.addCircle(this.user.nativeElement, count)
             count++;
+        }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    windowResize(e: any) {
+        if (e.target.innerWidth < this.mobileWidth) {
+            this.isMobile = true;
+        } else {
+            this.isMobile = false;
         }
     }
 
