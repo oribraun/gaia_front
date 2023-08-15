@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import {Config} from "../config";
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGaialabsCompanyGuard implements CanActivate {
+export class AuthGaialabsCompanyGuard  {
 
     constructor(
         private config: Config,

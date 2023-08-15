@@ -1,163 +1,41 @@
 <section>
-    <div class="board">
-        <div class="header">
-            <div class="logo">
-                <img src="assets/images/icons/logo.png">
+    <div class="board" *ngIf="isMobile">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
             </div>
-            <div class="exit" (click)="resetPresentation()">
-                <img src="assets/images/icons/exit_icon.png"> <span>Exit</span>
-            </div>
-        </div>
-        <div class="white-board">
-            <ng-container *ngIf="currentSlide.slide_type === sectionTitles.greeting">
-                <div class="general-box lesson-board">
-                    <div class="outer-scroller">
-                        <div class="inner-scroller">
-                            <div class="text text-pre-line">
-                                <p>{{currentSlide.text}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image" *ngIf="currentSlide.teacher_image_path">
-                        <img [src]="currentSlide.teacher_image_path">
-                    </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <app-white-board
+                        [currentSection]="currentSection"
+                        [currentSlide]="currentSlide"
+                        [sectionTitles]="sectionTitles"
+                        (onResetPresentation)="onResetPresentation($event)"
+                    ></app-white-board>
                 </div>
-                <div class="general-box text-board">
-                    <div class="text">
-                        <div class="outer-scroller">
-                            <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image">
-                        <img src="assets/images/icons/speak_icon.png">
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="currentSlide.slide_type === sectionTitles.reading">
-                <div class="general-box lesson-board">
-                    <div class="outer-scroller">
-                        <div class="inner-scroller">
-                            <div class="text text-pre-line">
-                                <p>{{currentSlide.text}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image" *ngIf="currentSlide.teacher_image_path">
-                        <img [src]="currentSlide.teacher_image_path">
-                    </div>
-                </div>
-                <div class="general-box text-board">
-                    <div class="text">
-                        <div class="outer-scroller">
-                            <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image">
-                        <img src="assets/images/icons/speak_icon.png">
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="currentSlide.slide_type === sectionTitles.word_repeater">
-                <div class="general-box lesson-board">
-                    <div class="outer-scroller">
-                        <div class="inner-scroller">
-                            <div class="text text-pre-line">
-                                <p>{{currentSlide.text}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image image-right" *ngIf="currentSlide.word_image_path">
-                        <img [src]="currentSlide.word_image_path">
-                    </div>
-                </div>
-                <div class="general-box text-board">
-                    <div class="text">
-                        <div class="outer-scroller">
-                            <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image">
-                        <img src="assets/images/icons/speak_icon.png">
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="currentSlide.slide_type === sectionTitles.agenda">
-                <div class="general-box lesson-board">
-                    <div class="outer-scroller">
-                        <div class="inner-scroller">
-                            <div class="text text-pre-line">
-                                <p>{{currentSlide.text}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image image-right" *ngIf="currentSlide.word_image_path">
-                        <img [src]="currentSlide.word_image_path">
-                    </div>
-                </div>
-                <div class="general-box text-board">
-                    <div class="text">
-                        <div class="outer-scroller">
-                            <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="image">
-                        <img src="assets/images/icons/speak_icon.png">
-                    </div>
-                </div>
-            </ng-container>
-        </div>
-        <div class="right-panel">
-            <div class="cam-board">
-                <div class="teacher">
-                    <div class="user-box">
-                        <div class="user" #user>
-                            <div class="icon">
-                                <i class="bi bi-person"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="student">
-                    <video #videoElement autoplay playsinline [muted]="'muted'"></video>
-                </div>
-                <div class="today-plan">
-                    <h4 class="text-center">Today's plan</h4>
-                    <div class="plan">
-                        <div class="outer-scroller">
-                            <div class="inner-scroller">
-<!--                                <div class="table-line done">Greeting</div>-->
-<!--                                <div class="table-line active">Vocabulary</div>-->
-                                <div class="table-line"
-                                     [ngClass]="{'active': currentSectionIndex == i}"
-                                     *ngFor="let s of presentation.sections; let i = index">{{s.section_title}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="buttons">
-                        <button class="button">
-                            <img src="assets/images/icons/take_a_break_icon.png"> Take a break
-                        </button>
-                    </div>
+                <div class="carousel-item center">
+                    <app-panel-board
+                        [presentation]="presentation"
+                        [currentSectionIndex]="currentSectionIndex"
+                        [isMobile]="isMobile"
+                    ></app-panel-board>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="board" *ngIf="!isMobile">
+        <app-white-board
+            [currentSection]="currentSection"
+            [currentSlide]="currentSlide"
+            [sectionTitles]="sectionTitles"
+            (onResetPresentation)="onResetPresentation($event)"
+        ></app-white-board>
+        <app-panel-board
+            [presentation]="presentation"
+            [currentSectionIndex]="currentSectionIndex"
+            [isMobile]="isMobile"
+        ></app-panel-board>
         <div class="generic-loader-wrapper" *ngIf="gettingPresentation">
             <div class="loader">
                 <div class="spinner-border">

@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import {EventEmitter, Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 
 @Injectable({
@@ -6,9 +6,15 @@ import {DOCUMENT} from "@angular/common";
 })
 export class AnimationsService {
 
+    onAddCircle: EventEmitter<any> = new EventEmitter<any>();
+
     constructor(
         @Inject(DOCUMENT) private document: Document,
     ) { }
+
+    triggerAddingCircle(unique_num: number) {
+        this.onAddCircle.emit({unique_num})
+    }
 
     addCircle(elm: any, unique_num: number) {
         if (elm) {

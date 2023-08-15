@@ -35,6 +35,8 @@ import { GaiaDataRoomComponent } from './components/gaia-data-room/gaia-data-roo
 import { SafePipe } from './pipes/safe.pipe';
 import { RecorderComponent } from './components/recorder/recorder.component';
 import { LessonComponent } from './components/lesson/lesson.component';
+import { WhiteBoardComponent } from './components/lesson/white-board/white-board.component';
+import { PanelBoardComponent } from './components/lesson/panel-board/panel-board.component';
 
 @NgModule({
     declarations: [
@@ -66,6 +68,8 @@ import { LessonComponent } from './components/lesson/lesson.component';
         SafePipe,
         RecorderComponent,
         LessonComponent,
+        WhiteBoardComponent,
+        PanelBoardComponent,
     ],
     imports: [
         BrowserModule,
