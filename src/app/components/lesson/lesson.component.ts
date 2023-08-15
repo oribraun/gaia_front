@@ -45,7 +45,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     audioQue: string[] = []
     audioBlobQue: any[] = []
     enableArrayBuffer = true;
-    enableNoReplayInterval = true;
+    enableNoReplayInterval = false;
 
     resetSpeechRecognitionTimeout: any = null;
 
@@ -221,6 +221,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                 array_buffer: this.enableArrayBuffer
             }
         }))
+        this.currentSectionIndex = 0;
+        this.currentSlideIndex = 0;
+        this.currentObjectiveIndex = 0;
+        this.setCurrentSection();
+        
         this.presentationResetIsInProgress = false;
 
         if (response.err) {
