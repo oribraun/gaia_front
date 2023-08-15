@@ -50,7 +50,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     audioQue: string[] = []
     audioBlobQue: any[] = []
     enableArrayBuffer = true;
-    enableNoReplayInterval = false;
+    enableNoReplayInterval = true;
 
     resetSpeechRecognitionTimeout: any = null;
 
