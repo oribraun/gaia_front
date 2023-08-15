@@ -119,4 +119,32 @@
             </div>
         </div>
     </ng-container>
+    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.ending">
+        <div class="general-box lesson-board">
+            <div class="outer-scroller">
+                <div class="inner-scroller">
+                    <div class="text text-pre-line">
+                        <p>{{currentSlide.text}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image image-right" *ngIf="currentSlide.word_image_path">
+                <img [src]="currentSlide.word_image_path">
+            </div>
+        </div>
+        <div class="general-box text-board">
+            <div class="text">
+                <div class="outer-scroller">
+                    <div class="inner-scroller dir-rtl">
+                        <span class="text">
+                            {{currentSlide.native_language_text.he}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="image">
+                <img src="assets/images/icons/speak_icon.png">
+            </div>
+        </div>
+    </ng-container>
 </div>
