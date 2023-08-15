@@ -1,6 +1,7 @@
 import {Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import {Presentation} from "../../../entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-panel-board',
@@ -20,10 +21,16 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
 
     subscribe: any;
 
+    imageSrc = ''
+
     constructor(
         private animationsService: AnimationsService
     ) {
         this.listenToCircleAnimations();
+
+        if (environment.production) {
+            this.imageSrc = 'client/'
+        }
     }
 
     listenToCircleAnimations() {
