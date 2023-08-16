@@ -41,11 +41,15 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
 
     startVideo() {
         try {
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((mediaStream) => {
-                // Display the stream in the video element
-                this.mediaStream = mediaStream;
-                this.setMediaStream();
-            })
+            if (navigator.mediaDevices) {
+                navigator.mediaDevices.getUserMedia({video: true, audio: true}).then((mediaStream) => {
+                    // Display the stream in the video element
+                    this.mediaStream = mediaStream;
+                    this.setMediaStream();
+                })
+            } else {
+                console.error('Webcam access not supported');
+            }
         } catch (error) {
             console.error('Error accessing webcam:', error);
         }

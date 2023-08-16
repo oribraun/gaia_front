@@ -6,7 +6,6 @@ import {Presentation, PresentationSection, PresentationSlide} from "../../entiti
 import {AnimationsService} from "../../services/animations/animations.service";
 
 declare var webkitSpeechRecognition:any;
-declare var $:any;
 
 @Component({
     selector: 'app-lesson',
@@ -80,33 +79,6 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.speechRecognitionService.setupSpeechRecognition();
         this.listenToSpeechRecognitionResults();
         this.getPresentation();
-        this.addTouchSwipe();
-    }
-
-    addTouchSwipe() {
-        $("#carouselExampleIndicators").swipe( {
-            //Generic swipe handler for all directions
-            swipe:function(event: any, direction: any, distance: any, duration: any, fingerCount: any, fingerData: any) {
-                $(this).text("You swiped " + direction );
-            }
-        });
-        $( ".carousel .carousel-inner" ).swipe( {
-            swipeLeft: function ( event: any, direction: any, distance: any, duration: any, fingerCount: any ) {
-                this.parent( ).carousel( 'next' );
-            },
-            swipeRight: function ( ) {
-                this.parent( ).carousel( 'prev' );
-            },
-            threshold: 0,
-            tap: function(event: any, target: any) {
-                window.location = $(this).find('.carousel-item.active a').attr('href');
-            },
-            excludedElements:"label, button, input, select, textarea, .noSwipe"
-        } );
-
-        $('.carousel .carousel-inner').on('dragstart', 'a', function () {
-            return false;
-        });
     }
 
     triggerResize() {
