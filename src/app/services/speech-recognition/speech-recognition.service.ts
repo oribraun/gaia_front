@@ -1,6 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 
 declare var webkitSpeechRecognition:any;
+declare var SpeechRecognition:any;
+
 @Injectable({
     providedIn: 'root'
 })
@@ -16,13 +18,19 @@ export class SpeechRecognitionService {
     constructor() {}
 
     setupSpeechRecognition() {
+        let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
-            this.englishRecognition = new webkitSpeechRecognition();
+            recognitionClass = webkitSpeechRecognition;
+        } else if ('SpeechRecognition' in window) {
+            recognitionClass = SpeechRecognition;
+        }
+        if (recognitionClass) {
+            this.englishRecognition = new recognitionClass();
             this.englishRecognition.lang = 'en-US';
             this.englishRecognition.continuous = false;
             this.englishRecognition.interimResults = true
 
-            this.hebrewRecognition = new webkitSpeechRecognition();
+            this.hebrewRecognition = new recognitionClass();
             this.hebrewRecognition.lang = 'en-US';//he-IL
             this.hebrewRecognition.continuous = false;
             this.hebrewRecognition.interimResults = true
@@ -73,37 +81,31 @@ export class SpeechRecognitionService {
     }
 
     startListening(): void {
-        if ('webkitSpeechRecognition' in window) {
-            try {
-                this.englishRecognition.start();
-                this.hebrewRecognition.start();
-                this.isListening = true;
-            } catch (e) {
-                console.log('startListening Error', e)
-            }
+        try {
+            this.englishRecognition.start();
+            this.hebrewRecognition.start();
+            this.isListening = true;
+        } catch (e) {
+            console.log('startListening Error', e)
         }
     }
 
     stopListening(): void {
-        if ('webkitSpeechRecognition' in window) {
-            try {
-                this.englishRecognition.stop();
-                this.hebrewRecognition.stop();
-                this.isListening = false;
-            } catch (e) {
-                console.log('stopListening Error', e)
-            }
+        try {
+            this.englishRecognition.stop();
+            this.hebrewRecognition.stop();
+            this.isListening = false;
+        } catch (e) {
+            console.log('stopListening Error', e)
         }
     }
     abortListening(): void {
-        if ('webkitSpeechRecognition' in window) {
-            try {
-                this.englishRecognition.abort();
-                this.hebrewRecognition.abort();
-                this.isListening = false;
-            } catch (e) {
-                console.log('stopListening Error', e)
-            }
+        try {
+            this.englishRecognition.abort();
+            this.hebrewRecognition.abort();
+            this.isListening = false;
+        } catch (e) {
+            console.log('stopListening Error', e)
         }
     }
 }
