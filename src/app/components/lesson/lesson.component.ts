@@ -1,11 +1,20 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
 import {lastValueFrom} from "rxjs";
 import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
 
-declare var webkitSpeechRecognition:any;
+declare var $:any;
 
 @Component({
     selector: 'app-lesson',
@@ -281,6 +290,19 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
             this.getPresentationReplay('hi');
+        }
+    }
+
+    onSwipeLeft() {
+        const ele = $('#lessonCarousel')
+        if (ele && ele.carousel) {
+            ele.carousel('next')
+        }
+    }
+    onSwipeRight() {
+        const ele = $('#lessonCarousel')
+        if (ele && ele.carousel) {
+            ele.carousel('prev')
         }
     }
 

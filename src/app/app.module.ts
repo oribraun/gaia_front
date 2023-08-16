@@ -37,6 +37,7 @@ import { RecorderComponent } from './components/recorder/recorder.component';
 import { LessonComponent } from './components/lesson/lesson.component';
 import { WhiteBoardComponent } from './components/lesson/white-board/white-board.component';
 import { PanelBoardComponent } from './components/lesson/panel-board/panel-board.component';
+import { SwipeDirective } from './directives/swipe.directive';
 
 @NgModule({
     declarations: [
@@ -70,6 +71,7 @@ import { PanelBoardComponent } from './components/lesson/panel-board/panel-board
         LessonComponent,
         WhiteBoardComponent,
         PanelBoardComponent,
+        SwipeDirective,
     ],
     imports: [
         BrowserModule,
