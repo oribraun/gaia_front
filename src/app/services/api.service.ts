@@ -255,6 +255,13 @@ export class ApiService {
             this.httpOptions
         )
     }
+    audioToText(obj: any) {
+        const httpOptions = {...this.httpOptions}
+        httpOptions['Content-Type'] = 'application/octet-stream';
+        return this.http.post(this.serverBase + this.baseApiUser + 'audio_to_text', obj,
+            httpOptions
+        )
+    }
     sendAnswerStream(obj: any) {
         const httpOptions = {...this.httpOptions}
         // httpOptions['responseType'] = 'arraybuffer' as 'json';
