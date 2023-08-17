@@ -85,9 +85,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.triggerResize()
-        this.speechRecognitionService.setupSpeechRecognition();
-        this.listenToSpeechRecognitionResults();
-        this.getPresentation();
+        // this.speechRecognitionService.setupSpeechRecognition();
+        // this.listenToSpeechRecognitionResults();
+        // this.getPresentation();
     }
 
     triggerResize() {
@@ -589,6 +589,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.currentAudio) {
             this.currentAudio.pause();
             this.currentAudio.src = '';
+            this.speakInProgress = false;
         }
     }
 
