@@ -291,7 +291,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.setCurrentSection();
             this.resetIntervalNoReplay();
             this.stopIntervalNoReplay();
-            this.getPresentationReplay('hi');
+            this.getPresentationNoReplay('new_slide');
         }
     }
 
