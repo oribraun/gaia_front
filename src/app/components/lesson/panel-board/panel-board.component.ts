@@ -1,4 +1,13 @@
-import {Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy, Output,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import {Presentation} from "../../../entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
 import {environment} from "../../../../environments/environment";
@@ -17,6 +26,8 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
 
     @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
     @ViewChild('user', { static: false }) user!: ElementRef;
+
+    @Output('onResults') onResults: EventEmitter<any> = new EventEmitter<any>();
 
     mediaStream: any;
 
@@ -69,7 +80,7 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
                         this.mediaStream = mediaStream;
                         // this.setUpRecorder();
                         // this.startRecording();
-                        // this.newSetup();
+                        this.setupContinuesRecordAudio();
                         resolve(true);
                     })
                 } else {
@@ -83,7 +94,7 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         })
     }
 
-    newSetup() {
+    setupContinuesRecordAudio() {
         let recordedChunks: any[] = [];
         const THREASHOLD = 0.1;
         const SILENCE_TIMEOUT = 1000;
@@ -94,7 +105,7 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
 
         // Create a ScriptProcessorNode to process audio data
         const scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
-
+        let once = false;
         // Callback function when audio data is available
         scriptNode.onaudioprocess = (event) => {
             const inputData = event.inputBuffer.getChannelData(0);
@@ -112,8 +123,21 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
                 if (ended - lastSpeak > SILENCE_TIMEOUT) {
                     if (recordedChunks.length) {
                         // console.log('recordedChunks', recordedChunks)
-                        const audioBuffer = this.convertToAudioBuffer(recordedChunks);
-                        this.playBuffer(audioBuffer);
+                        const audioBuffer: AudioBuffer = this.convertToAudioBuffer(recordedChunks);
+                        // const audioData = audioBuffer.getChannelData(0);
+                        // const audioArrayBuffer = audioData.buffer; // to send to server
+                        // const audioBase64: any = this.arrayBufferToBase64(audioArrayBuffer);
+                        // this.onResults.emit({audio_buffer: audioBase64})
+
+                        // const audioChannel = this.convertToAudioAudioChannel(recordedChunks);
+                        // const audioArrayBufferr = audioChannel.buffer;
+                        // const audioBase64: any = this.arrayBufferToBase64(audioArrayBufferr);
+                        if (!once) {
+                            const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
+                            // this.onResults.emit({audio_chunks: jsonData})
+                            // once = true;
+                        }
+                        // this.playBuffer(audioBuffer);
                         recordedChunks = [];
                     }
                 } else {
@@ -128,7 +152,7 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         scriptNode.connect(audioContext.destination);
     }
 
-    convertToAudioBuffer(recordedChunks: any) {
+    convertToAudioBuffer(recordedChunks: any): AudioBuffer {
         const audioContext = new AudioContext();
         const audioBuffer = audioContext.createBuffer(1, recordedChunks.length * 4096, audioContext.sampleRate);
         const audioChannel = audioBuffer.getChannelData(0);
@@ -141,6 +165,39 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         }
 
         return audioBuffer;
+    }
+
+    convertToAudioAudioChannel(recordedChunks: any) {
+        const audioContext = new AudioContext();
+        const audioBuffer = audioContext.createBuffer(1, recordedChunks.length * 4096, audioContext.sampleRate);
+        const audioChannel = audioBuffer.getChannelData(0);
+
+        // Concatenate recorded chunks
+        let offset = 0;
+        for (const chunk of recordedChunks) {
+            audioChannel.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        return audioChannel;
+    }
+
+    arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
+        const uint8Array = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < uint8Array.length; i++) {
+            binary += String.fromCharCode(uint8Array[i]);
+        }
+        return btoa(binary);
+    }
+
+    convertToBinaryData(audioBuffer: AudioBuffer) {
+        const channelData = audioBuffer.getChannelData(0);
+        const floatArray = new Float32Array(channelData.length);
+        for (let i = 0; i < channelData.length; i++) {
+            floatArray[i] = channelData[i];
+        }
+        return floatArray.buffer;
     }
 
     applyNoiseGate(audioBuffer: AudioBuffer, threshold: number) {

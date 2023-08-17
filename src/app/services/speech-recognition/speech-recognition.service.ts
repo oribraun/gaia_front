@@ -27,12 +27,12 @@ export class SpeechRecognitionService {
         if (recognitionClass) {
             this.englishRecognition = new recognitionClass();
             this.englishRecognition.lang = 'en-US';
-            this.englishRecognition.continuous = false;
+            this.englishRecognition.continuous = true;
             this.englishRecognition.interimResults = true
 
             this.hebrewRecognition = new recognitionClass();
             this.hebrewRecognition.lang = 'en-US';//he-IL
-            this.hebrewRecognition.continuous = false;
+            this.hebrewRecognition.continuous = true;
             this.hebrewRecognition.interimResults = true
 
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
