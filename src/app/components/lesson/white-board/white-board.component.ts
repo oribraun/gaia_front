@@ -41,6 +41,7 @@ export class WhiteBoardComponent {
             }
         }).subscribe({
             next: (response: any) => {
+                this.presentationResetIsInProgress = false;
                 this.onResetPresentation.emit(response)
             },
             error: (error) => {
