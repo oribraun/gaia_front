@@ -283,6 +283,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.handleOnReplayError();
         } else {
             console.log('response', response)
+            this.unsubscribeAllHttpEvents();
+            this.stopAudio();
             this.currentSectionIndex = 0;
             this.currentSlideIndex = 0;
             this.currentObjectiveIndex = 0;
@@ -291,6 +293,23 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopIntervalNoReplay();
             this.getPresentationReplay('hi');
         }
+    }
+
+    onResultsContinuesRecording(obj: any) {
+        console.log('obj', obj)
+        this.apiSubscriptions.replay = this.apiService.audioToText({
+            app_data: {
+                audio_chunks: obj['audio_chunks'],
+            }
+        }).subscribe({
+            next: (response: any) => {
+                console.log('onResultsContinuesRecording response', response)
+            },
+            error: (error) => {
+                console.log('onResultsContinuesRecording error', error)
+            },
+        })
+
     }
 
     onSwipeLeft() {
@@ -566,15 +585,19 @@ export class LessonComponent implements OnInit, OnDestroy {
         return bytes.buffer;
     }
 
+    stopAudio() {
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.src = '';
+        }
+    }
+
     ngOnDestroy() {
         if (this.recognitionOnResultsSubscribe) {
             this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
         }
         console.log('this.currentAudi', this.currentAudio);
-        if (this.currentAudio) {
-            this.currentAudio.pause();
-            this.currentAudio.src = '';
-        }
+        this.stopAudio();
         if (this.enableNoReplayInterval) {
             this.resetIntervalNoReplay()
             this.stopIntervalNoReplay()
