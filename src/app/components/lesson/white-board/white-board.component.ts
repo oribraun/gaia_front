@@ -14,6 +14,7 @@ export class WhiteBoardComponent {
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('sectionTitles') sectionTitles: any = {};
+    @Input('recognitionText') recognitionText: string = '';
     @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
 
     presentationResetIsInProgress = false;
