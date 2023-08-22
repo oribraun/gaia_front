@@ -35,6 +35,7 @@ export class WebSocketService {
 
     setUpSocket() {
         this.serverBase = this.serverBase.replace('http://', '')
+        this.serverBase = this.serverBase.replace('https://', '')
         this.socketUrl = "ws://" + this.serverBase + this.socket_path;
     }
 
