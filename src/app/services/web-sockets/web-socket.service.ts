@@ -34,9 +34,15 @@ export class WebSocketService {
     }
 
     setUpSocket() {
-        this.serverBase = this.serverBase.replace('http://', '')
+        let socketBase = "ws://";
+        if (this.serverBase.indexOf('http://') > -1) {
+            this.serverBase = this.serverBase.replace('http://', '')
+        } else if (this.serverBase.indexOf('https://') > -1) {
+            this.serverBase = this.serverBase.replace('https://', '')
+            socketBase = "wss://";
+        }
         this.serverBase = this.serverBase.replace('https://', '')
-        this.socketUrl = "ws://" + this.serverBase + this.socket_path;
+        this.socketUrl = socketBase + this.serverBase + this.socket_path;
     }
 
     connect(room_name: string) {
