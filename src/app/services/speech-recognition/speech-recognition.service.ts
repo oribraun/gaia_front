@@ -12,12 +12,14 @@ export class SpeechRecognitionService {
     isListening: boolean = false;
     englishText: string = '';
     hebrewText: string = '';
+    ASR_recognizing:boolean=false;
 
     public onResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
 
     constructor() {}
 
     setupSpeechRecognition() {
+        let self = this
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
             recognitionClass = webkitSpeechRecognition;
@@ -38,13 +40,30 @@ export class SpeechRecognitionService {
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
             // this.englishRecognition.addEventListener('end', this.onEndRecognitionEn);
 
+            this.englishRecognition.onstart = function () {
+                self.ASR_recognizing = true;
+                console.log('EN ASR ON START', self.ASR_recognizing)
+            };
+            this.englishRecognition.onend = function () {
+                self.ASR_recognizing = false;
+                console.log('EN ASR ON END', self.ASR_recognizing)
 
+            };
+            this.hebrewRecognition.onstart = function () {
+                self.ASR_recognizing = true;
+                console.log('HE ASR ON START', self.ASR_recognizing)
+            };
+            this.hebrewRecognition.onend = function () {
+                self.ASR_recognizing = false;
+                console.log('HE ASR ON END', self.ASR_recognizing)
+            };
             this.hebrewRecognition.addEventListener('result', this.onResultRecognitionHe);
             // this.hebrewRecognition.addEventListener('end', this.onEndRecognitionHe);
         } else {
             console.error('Speech recognition not supported in this browser.');
         }
     }
+ 
 
     onResultRecognitionEn = (event: any) => {
         const result = event.results[event.results.length - 1];
