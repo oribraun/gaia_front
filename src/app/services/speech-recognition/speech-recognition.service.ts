@@ -63,7 +63,7 @@ export class SpeechRecognitionService {
             console.error('Speech recognition not supported in this browser.');
         }
     }
- 
+
 
     onResultRecognitionEn = (event: any) => {
         const result = event.results[event.results.length - 1];
@@ -101,8 +101,10 @@ export class SpeechRecognitionService {
 
     startListening(): void {
         try {
-            this.englishRecognition.start();
-            this.hebrewRecognition.start();
+            if (this.englishRecognition)
+                this.englishRecognition.start();
+            if (this.hebrewRecognition)
+                this.hebrewRecognition.start();
             this.isListening = true;
         } catch (e) {
             console.log('startListening Error', e)
@@ -111,8 +113,10 @@ export class SpeechRecognitionService {
 
     stopListening(): void {
         try {
-            this.englishRecognition.stop();
-            this.hebrewRecognition.stop();
+            if (this.englishRecognition)
+                this.englishRecognition.stop();
+            if (this.hebrewRecognition)
+                this.hebrewRecognition.stop();
             this.isListening = false;
         } catch (e) {
             console.log('stopListening Error', e)
@@ -120,8 +124,10 @@ export class SpeechRecognitionService {
     }
     abortListening(): void {
         try {
-            this.englishRecognition.abort();
-            this.hebrewRecognition.abort();
+            if (this.englishRecognition)
+                this.englishRecognition.abort();
+            if (this.hebrewRecognition)
+                this.hebrewRecognition.abort();
             this.isListening = false;
         } catch (e) {
             console.log('stopListening Error', e)
