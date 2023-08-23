@@ -19,6 +19,8 @@ export class SocketSpeechRecognitionService {
     public onError: EventEmitter<any> = new EventEmitter<any>();
     public onDisconnect: EventEmitter<any> = new EventEmitter<any>();
 
+    startTime: any = null;
+
     constructor(
         private apiService: ApiService,
         private config: Config
@@ -61,8 +63,15 @@ export class SocketSpeechRecognitionService {
             if (message === 'got-audio-data') {
                 const transcript = data.transcript;
                 const is_final = data.is_final;
-                console.log('transcript',transcript)
-                console.log('is_final',is_final)
+                // console.log('transcript',transcript)
+                // console.log('is_final',is_final)
+                if (is_final) {
+                    const endTime = Date.now()
+                    const timeTakenMs = endTime - this.startTime;
+                    const timeTakenSec = timeTakenMs / 1000;
+                    console.log('Took from last sent chunk (seconds)', timeTakenSec.toFixed(3))
+                    this.startTime = null;
+                }
             }
             if (this.events[message]) {
                 this.Broadcast(message, data)
@@ -127,7 +136,7 @@ export class SocketSpeechRecognitionService {
                         const message = 'audio-data'
                         const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
                         const json = {message: message, data: jsonData}
-                        console.log('start', Date.now())
+                        this.startTime = Date.now()
                         this.sendMessage(message, jsonData)
                     }
                     recordedChunks = [];
