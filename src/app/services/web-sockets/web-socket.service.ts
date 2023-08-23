@@ -45,7 +45,7 @@ export class WebSocketService {
         this.socketUrl = socketBase + this.serverBase + this.socket_path;
     }
 
-    connect(room_name: string) {
+    connect(room_name: string = '') {
         const socketUrl = this.socketUrl + '/' +  room_name;
         this.socket = new WebSocket(socketUrl);
 
