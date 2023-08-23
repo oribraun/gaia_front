@@ -81,7 +81,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     hearBeatCounter: number = 0;
 
     sr_list:string[] = []
-    
+    last_sr_ts: number = 0;
+    last_speak_ts: number = 0;
+
     constructor(
         private apiService: ApiService,
         private animationsService: AnimationsService,
@@ -124,20 +126,19 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.recognitionCountWords++;
         if (this.recognitionText) {
             console.log('partial', this.recognitionText)
-
         }
         if (results.isFinal) {
             console.log('final', this.recognitionText)
             this.updateSrList(this.recognitionText)
             this.recognitionCountWords = 0;
-            console.log("End speech recognition", this.recognitionText)
-            if (this.recognitionText) {
-                this.stopSpeechRecognition();
+            // console.log("End speech recognition", this.recognitionText)
+            // if (this.recognitionText) {
+                // this.stopSpeechRecognition();
                 // this.getPresentationReplay();
-            } else {
+            // } else {
                 //         // this.stopSpeechRecognition();
                 //         // this.startSpeechRecognition();
-            }
+            // }
         }
         // console.log('results', results)
     }
@@ -148,7 +149,12 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     updateSrList(recognitionText: string) {
+        if(this.speakInProgress) {
+            console.log('updateSrList - SPEAK IN PROGRESS ABORTING Trigger')
+            return
+        }
         this.sr_list.push(recognitionText)
+        this.last_sr_ts = Date.now()
         this.heartBeatTrigger(true)
     }
 
@@ -160,10 +166,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('heartBeatTrigger', this.sr_list)
         if(reply){
             this.getPresentationReplay();
+        } else {
+            if (!this.speakInProgress){
+                this.getPresentationNoReplay('heartbeat')
+            }
         }
     }
 
-    heartBeatSequence(x:number=10){
+    heartBeatSequence(x:number=3){
         // increase the counter
         this.hearBeatCounter++;
         // make sure SR is active (if not actively playing sound)
@@ -176,36 +186,27 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     activateSR(){
         // Only enable when speak is not in progress
-        console.log('this.speakInProgress', this.speakInProgress)
-        if (!this.speakInProgress) {
+        console.log('speakInProgress', this.speakInProgress)
+        console.log('ASR_recognizing', this.speechRecognitionService.ASR_recognizing)
+        
+        if ((!this.speakInProgress) && (!this.speechRecognitionService.ASR_recognizing)){
             // make sure the service is off before starting it again
             try{
                 this.startSpeechRecognition();
                 console.log('Starting SR')
 
             }
-            catch{
+            catch (error) {
                 //line of code to stop the speech recognition
                 console.log('SR is already on')
             }
-        } else {
-             // make sure the service is on before turning it off it again
-            try{
-                this.stopSpeechRecognition();
-                console.log('Stopping SR')
-
-            }
-            catch{
-                //line of code to stop the speech recognition
-                console.log('SR is already onf')
-            }
-        }
+        } 
     }
 
     startHeartBeat(){
         this.heartBeatInterval =  setInterval(() => {
             this.heartBeatSequence()
-        }, 1000)
+        }, 5*1000)
     }
 
     stopHeartBeat(){
@@ -320,6 +321,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.no_replay = this.apiService.getPresentationNoReplay({
             app_data: {
                 type: reason,
+                last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
+                last_sr_ts:this.last_sr_ts,
+                last_speak_ts:this.last_speak_ts,
+                n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
+                n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
                 array_buffer: this.enableArrayBuffer
             }
         }).subscribe({
@@ -333,8 +339,14 @@ export class LessonComponent implements OnInit, OnDestroy {
                     // },2000)
                     this.handleOnReplayError()
                 } else {
-                    this.currentData = response.data;
-                    this.handleOnPresentationReplay();
+                    if (response.data.type == 'heartbeat'){
+                        console.log('HEARTBEAT RESP', response.data)
+                        this.currentData = response.data;
+                        this.handleOnPresentationReplay();
+                    } else {
+                        this.currentData = response.data;
+                        this.handleOnPresentationReplay();
+                    }
                 }
             },
             error: (error) => {
@@ -425,10 +437,11 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     resetSpeechRecognition() {
         this.stopSpeechRecognition()
+        this.last_speak_ts = Date.now()
         clearTimeout(this.resetSpeechRecognitionTimeout);
         this.resetSpeechRecognitionTimeout = setTimeout(() => {
             this.startSpeechRecognition()
-        }, 100)
+        }, 500)
     }
 
     startSpeechRecognition() {
@@ -476,7 +489,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                         if (src_url) {
                             loop(src_url)
                         } else {
-                            this.speakInProgress = false;
+                            setTimeout(() => {
+                                console.log('Reseting ASR')
+                                this.speakInProgress = false;
+                                this.resetSpeechRecognition();
+                            }, 200)
                             resolve(true)
                         }
                         // }
@@ -524,7 +541,12 @@ export class LessonComponent implements OnInit, OnDestroy {
                         if (arrayBuffer) {
                             loop(arrayBuffer)
                         } else {
-                            this.speakInProgress = false;
+                            setTimeout(() => {
+                                console.log('Reseting ASR')
+                                this.speakInProgress = false;
+                                this.resetSpeechRecognition();
+                            }, 200)
+                            // this.resetSpeechRecognition();
                             resolve(true);
                         }
                     })
@@ -586,7 +608,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_slide_updated) {
             this.getPresentationNoReplay('new_slide');
         } else {
-             this.resetSpeechRecognition();
+            // this.resetSpeechRecognition();
         }
     }
 
