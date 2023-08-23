@@ -41,7 +41,7 @@ export class WebSocketService {
             this.serverBase = this.serverBase.replace('https://', '')
             socketBase = "wss://";
         }
-        this.serverBase = this.serverBase.replace('https://', '')
+        // this.serverBase = this.serverBase.replace('https://', '')
         this.socketUrl = socketBase + this.serverBase + this.socket_path;
     }
 
