@@ -13,7 +13,10 @@ import {SpeechRecognitionService} from "../../services/speech-recognition/speech
 import {lastValueFrom} from "rxjs";
 import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
- 
+import {
+    SocketSpeechRecognitionService
+} from "../../services/socket-speech-recognition/socket-speech-recognition.service";
+
 declare var $:any;
 
 @Component({
@@ -23,7 +26,7 @@ declare var $:any;
     encapsulation: ViewEncapsulation.None
 })
 export class LessonComponent implements OnInit, OnDestroy {
-   
+
     @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
     @ViewChild('user', { static: false }) user!: ElementRef;
 
@@ -87,28 +90,17 @@ export class LessonComponent implements OnInit, OnDestroy {
     constructor(
         private apiService: ApiService,
         private animationsService: AnimationsService,
-        private speechRecognitionService: SpeechRecognitionService
+        private speechRecognitionService: SpeechRecognitionService,
+        private socketSpeechRecognitionService: SocketSpeechRecognitionService,
     ) { }
 
     ngOnInit(): void {
         this.triggerResize()
         this.speechRecognitionService.setupSpeechRecognition();
+        // this.setupSocketSpeechRecognition();
         this.listenToSpeechRecognitionResults();
         this.getPresentation();
         this.startHeartBeat()
-    }
-
-    ngOnDestroy() {
-        if (this.recognitionOnResultsSubscribe) {
-            this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
-        }
-        console.log('this.currentAudi', this.currentAudio);
-        this.stopAudio();
-        this.stopSpeechRecognition();
-        this.unsubscribeAllHttpEvents();
-        this.stopHeartBeat()
-        // this.audioStreamSubscription.unsubscribe();
-        // this.socket.complete();
     }
 
     triggerResize() {
@@ -133,11 +125,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.recognitionCountWords = 0;
             // console.log("End speech recognition", this.recognitionText)
             // if (this.recognitionText) {
-                // this.stopSpeechRecognition();
-                // this.getPresentationReplay();
+            // this.stopSpeechRecognition();
+            // this.getPresentationReplay();
             // } else {
-                //         // this.stopSpeechRecognition();
-                //         // this.startSpeechRecognition();
+            //         // this.stopSpeechRecognition();
+            //         // this.startSpeechRecognition();
             // }
         }
         // console.log('results', results)
@@ -159,8 +151,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     heartBeatTrigger(reply:boolean=false){
-        // Triger a standard request to the server 
-        // provide the following information 
+        // Triger a standard request to the server
+        // provide the following information
         // app data : slide index, cam snapshot, sr_len, last_sr, timestamp
         // response : instruction for the client how to proceed (i.e change slide, play audio ...)
         console.log('heartBeatTrigger', this.sr_list)
@@ -188,7 +180,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         // Only enable when speak is not in progress
         console.log('speakInProgress', this.speakInProgress)
         console.log('ASR_recognizing', this.speechRecognitionService.ASR_recognizing)
-        
+
         if ((!this.speakInProgress) && (!this.speechRecognitionService.ASR_recognizing)){
             // make sure the service is off before starting it again
             try{
@@ -200,7 +192,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 //line of code to stop the speech recognition
                 console.log('SR is already on')
             }
-        } 
+        }
     }
 
     startHeartBeat(){
@@ -592,7 +584,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();
             this.stopAudio();
-             return;
+            return;
         }
         if (presentation_index_updated) {
             this.currentSectionIndex = data.current_section_index;
@@ -632,7 +624,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    
+
 
     unsubscribeAllHttpEvents() {
         for (let key in this.apiSubscriptions) {
@@ -643,7 +635,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    
+
     setRandomCircleAnimation() {
         const ele = this.user.nativeElement;
         let count = 0;
@@ -674,5 +666,50 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.isMobile = false;
             }
         }
+    }
+
+    setupSocketSpeechRecognition() {
+        if (navigator.mediaDevices) {
+            const constraints = {
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true
+                },
+                video: true
+            };
+            navigator.mediaDevices.getUserMedia(constraints).then((mediaStream) => {
+                // Display the stream in the video element
+                this.socketSpeechRecognitionService.connect()
+                this.socketSpeechRecognitionService.onConnect.subscribe((msg) => {
+                    console.log('onConnect msg', msg)
+                    this.socketSpeechRecognitionService.sendMessage('hello', {'test': 'hi'})
+                    this.socketSpeechRecognitionService.setupContinuesRecordAudio(mediaStream)
+                })
+                this.socketSpeechRecognitionService.ListenFor('got-audio-data').subscribe((data) => {
+                    console.log('socketSpeechRecognitionService got-audio-data', data)
+                    if ( data.is_final) {
+                        this.onRecognitionResults({text: data.transcript})
+                    }
+                })
+                this.socketSpeechRecognitionService.ListenFor('hello-back').subscribe((data) => {
+                    console.log('socketSpeechRecognitionService hello-back', data)
+                })
+            })
+        } else {
+            console.error('Webcam access not supported');
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.recognitionOnResultsSubscribe) {
+            this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+        }
+        console.log('this.currentAudi', this.currentAudio);
+        this.stopAudio();
+        this.stopSpeechRecognition();
+        this.unsubscribeAllHttpEvents();
+        this.stopHeartBeat()
+        // this.audioStreamSubscription.unsubscribe();
+        // this.socket.complete();
     }
 }

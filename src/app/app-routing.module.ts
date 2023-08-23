@@ -68,7 +68,7 @@ const routes: Routes = [
     },
     { path: 'data-room', component: GaiaDataRoomComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     { path: 'recorder', component: RecorderComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
-    { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [] },
+    { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
     { path: '**', redirectTo: '' }

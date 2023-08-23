@@ -4,28 +4,32 @@ import {
     EventEmitter,
     Input,
     OnChanges,
-    OnDestroy, Output,
+    OnDestroy, OnInit,
+    Output,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
 import {Presentation} from "../../../entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
-import {environment} from "../../../../environments/environment";
 import {Config} from "../../../config";
+import {HelperService} from "../../../services/helper.service";
+import {
+    SocketSpeechRecognitionService
+} from "../../../services/socket-speech-recognition/socket-speech-recognition.service";
 
 @Component({
     selector: 'app-panel-board',
     templateUrl: './panel-board.component.html',
     styleUrls: ['./panel-board.component.less']
 })
-export class PanelBoardComponent implements OnChanges, OnDestroy {
+export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input('presentation') presentation: Presentation = new Presentation();
     @Input('currentSectionIndex') currentSectionIndex: number = -1;
     @Input('isMobile') isMobile: boolean = false;
 
     @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
-    @ViewChild('user', { static: false }) user!: ElementRef;
+    @ViewChild('user', { static: false }) userElement!: ElementRef;
 
     @Output('onResults') onResults: EventEmitter<any> = new EventEmitter<any>();
 
@@ -58,9 +62,13 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         })
     }
 
+    ngOnInit(): void {
+
+    }
+
     listenToCircleAnimations() {
         this.subscribe = this.animationsService.onAddCircle.subscribe((obj) => {
-            this.animationsService.addCircle(this.user.nativeElement, obj.unique_num)
+            this.animationsService.addCircle(this.userElement.nativeElement, obj.unique_num)
         })
     }
 
@@ -78,9 +86,6 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
                     navigator.mediaDevices.getUserMedia(constraints).then((mediaStream) => {
                         // Display the stream in the video element
                         this.mediaStream = mediaStream;
-                        // this.setUpRecorder();
-                        // this.startRecording();
-                        this.setupContinuesRecordAudio();
                         resolve(true);
                     })
                 } else {
@@ -92,143 +97,6 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
                 resolve(false);
             }
         })
-    }
-
-    setupContinuesRecordAudio() {
-        let recordedChunks: any[] = [];
-        const THREASHOLD = 0.1;
-        const SILENCE_TIMEOUT = 1000;
-        let lastSpeak: any = null
-        let endedSpeak: any = null
-        const audioContext = new AudioContext();
-        const source = audioContext.createMediaStreamSource(this.mediaStream);
-
-        // Create a ScriptProcessorNode to process audio data
-        const scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
-        let once = false;
-        // Callback function when audio data is available
-        scriptNode.onaudioprocess = (event) => {
-            const inputData = event.inputBuffer.getChannelData(0);
-
-            // Detect if the user is speaking
-            const isSpeaking = inputData.some(sample => Math.abs(sample) > THREASHOLD);
-
-            // If the user is speaking, store the audio chunk
-            if (isSpeaking) {
-                lastSpeak = new Date().getTime();
-                const chunk = new Float32Array(inputData);
-                recordedChunks.push(chunk);
-            } else {
-                const ended = new Date().getTime();
-                if (ended - lastSpeak > SILENCE_TIMEOUT) {
-                    if (recordedChunks.length) {
-                        // console.log('recordedChunks', recordedChunks)
-                        const audioBuffer: AudioBuffer = this.convertToAudioBuffer(recordedChunks);
-                        // const audioData = audioBuffer.getChannelData(0);
-                        // const audioArrayBuffer = audioData.buffer; // to send to server
-                        // const audioBase64: any = this.arrayBufferToBase64(audioArrayBuffer);
-                        // this.onResults.emit({audio_buffer: audioBase64})
-
-                        // const audioChannel = this.convertToAudioAudioChannel(recordedChunks);
-                        // const audioArrayBufferr = audioChannel.buffer;
-                        // const audioBase64: any = this.arrayBufferToBase64(audioArrayBufferr);
-                        if (!once) {
-                            const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
-                            // this.onResults.emit({audio_chunks: jsonData})
-                            // once = true;
-                        }
-                        // this.playBuffer(audioBuffer);
-                        recordedChunks = [];
-                    }
-                } else {
-                    const chunk = new Float32Array(inputData);
-                    recordedChunks.push(chunk);
-                }
-            }
-        };
-
-        // Connect the nodes
-        source.connect(scriptNode);
-        scriptNode.connect(audioContext.destination);
-    }
-
-    convertToAudioBuffer(recordedChunks: any): AudioBuffer {
-        const audioContext = new AudioContext();
-        const audioBuffer = audioContext.createBuffer(1, recordedChunks.length * 4096, audioContext.sampleRate);
-        const audioChannel = audioBuffer.getChannelData(0);
-
-        // Concatenate recorded chunks
-        let offset = 0;
-        for (const chunk of recordedChunks) {
-            audioChannel.set(chunk, offset);
-            offset += chunk.length;
-        }
-
-        return audioBuffer;
-    }
-
-    convertToAudioAudioChannel(recordedChunks: any) {
-        const audioContext = new AudioContext();
-        const audioBuffer = audioContext.createBuffer(1, recordedChunks.length * 4096, audioContext.sampleRate);
-        const audioChannel = audioBuffer.getChannelData(0);
-
-        // Concatenate recorded chunks
-        let offset = 0;
-        for (const chunk of recordedChunks) {
-            audioChannel.set(chunk, offset);
-            offset += chunk.length;
-        }
-
-        return audioChannel;
-    }
-
-    arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
-        const uint8Array = new Uint8Array(arrayBuffer);
-        let binary = '';
-        for (let i = 0; i < uint8Array.length; i++) {
-            binary += String.fromCharCode(uint8Array[i]);
-        }
-        return btoa(binary);
-    }
-
-    convertToBinaryData(audioBuffer: AudioBuffer) {
-        const channelData = audioBuffer.getChannelData(0);
-        const floatArray = new Float32Array(channelData.length);
-        for (let i = 0; i < channelData.length; i++) {
-            floatArray[i] = channelData[i];
-        }
-        return floatArray.buffer;
-    }
-
-    applyNoiseGate(audioBuffer: AudioBuffer, threshold: number) {
-        const audioData = audioBuffer.getChannelData(0);
-        for (let i = 0; i < audioData.length; i++) {
-            if (Math.abs(audioData[i]) < threshold) {
-                audioData[i] = 0; // Set low-amplitude samples to zero
-            }
-        }
-    }
-
-
-    convertToAudioBufferWithNoiseReduction(recordedChunks: any) {
-        const noiseThreshold = 0.5;
-        const audioContext = new AudioContext();
-        const audioBuffer = audioContext.createBuffer(1, recordedChunks.length * 4096, audioContext.sampleRate);
-        const audioChannel = audioBuffer.getChannelData(0);
-
-        this.applyNoiseGate(audioBuffer, noiseThreshold);
-        // Concatenate recorded chunks
-        let offset = 0;
-        for (const chunk of recordedChunks) {
-            const chunkCopy = new Float32Array(chunk); // Create a copy of the chunk
-            const chunkBuffer = audioContext.createBuffer(1, chunkCopy.length, audioContext.sampleRate);
-            chunkBuffer.copyToChannel(chunkCopy, 0); // Convert to an AudioBuffer
-            this.applyNoiseGate(chunkBuffer, noiseThreshold); // Apply noise reduction
-            audioChannel.set(chunkBuffer.getChannelData(0), offset);
-            offset += chunkBuffer.length;
-        }
-
-        return audioBuffer;
     }
 
     setUpRecorder() {
@@ -370,64 +238,6 @@ export class PanelBoardComponent implements OnChanges, OnDestroy {
         source.buffer = audioBuffer;
         source.connect(audioContext.destination);
         source.start();
-    }
-
-    async trimSilentParts(arrayBuffer: ArrayBuffer) {
-        const audioContext = new AudioContext();
-
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-        const audioData = audioBuffer.getChannelData(0); // Assuming mono audio
-
-        // Find non-silent regions
-        const threshold = 0.05; // Adjust this threshold as needed
-        let startIndex = 0;
-        let endIndex = audioData.length - 1;
-
-        // Find the start index of non-silent audio
-        for (let i = 0; i < audioData.length; i++) {
-            if (Math.abs(audioData[i]) > threshold) {
-                startIndex = i;
-                break;
-            }
-        }
-
-        // Find the end index of non-silent audio
-        for (let i = audioData.length - 1; i >= 0; i--) {
-            if (Math.abs(audioData[i]) > threshold) {
-                endIndex = i;
-                break;
-            }
-        }
-
-        const trimmedBuffer = audioContext.createBuffer(
-            audioBuffer.numberOfChannels,
-            endIndex - startIndex + 1,
-            audioBuffer.sampleRate
-        );
-        console.log('startIndex', startIndex)
-        console.log('endIndex', endIndex)
-
-        for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
-            const trimmedChannelData = audioData.subarray(startIndex, endIndex + 1);
-            trimmedBuffer.getChannelData(channel).set(trimmedChannelData);
-        }
-
-        // // Step 3: Create a new Float32Array containing non-silent audio
-        // const trimmedLength = endIndex - startIndex + 1;
-        // const trimmedFloat32Array = new Float32Array(trimmedLength);
-        //
-        // for (let i = startIndex, j = 0; i <= endIndex; i++, j++) {
-        //     trimmedFloat32Array[j] = audioData[i];
-        // }
-        // // Convert the trimmed Float32Array back to ArrayBuffer
-        // const outputArrayBuffer = new ArrayBuffer(trimmedFloat32Array.length * 4);
-        // const outputDataView = new DataView(outputArrayBuffer);
-        //
-        // for (let i = 0; i < trimmedFloat32Array.length; i++) {
-        //     outputDataView.setFloat32(i * 4, trimmedFloat32Array[i], true);
-        // }
-
-        return trimmedBuffer;
     }
 
     ngOnChanges(changes: SimpleChanges): void {

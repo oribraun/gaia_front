@@ -392,6 +392,64 @@ export class SocketSpeechRecognitionService {
         return audioBuffer;
     }
 
+    async trimSilentParts(arrayBuffer: ArrayBuffer) {
+        const audioContext = new AudioContext();
+
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const audioData = audioBuffer.getChannelData(0); // Assuming mono audio
+
+        // Find non-silent regions
+        const threshold = 0.05; // Adjust this threshold as needed
+        let startIndex = 0;
+        let endIndex = audioData.length - 1;
+
+        // Find the start index of non-silent audio
+        for (let i = 0; i < audioData.length; i++) {
+            if (Math.abs(audioData[i]) > threshold) {
+                startIndex = i;
+                break;
+            }
+        }
+
+        // Find the end index of non-silent audio
+        for (let i = audioData.length - 1; i >= 0; i--) {
+            if (Math.abs(audioData[i]) > threshold) {
+                endIndex = i;
+                break;
+            }
+        }
+
+        const trimmedBuffer = audioContext.createBuffer(
+            audioBuffer.numberOfChannels,
+            endIndex - startIndex + 1,
+            audioBuffer.sampleRate
+        );
+        console.log('startIndex', startIndex)
+        console.log('endIndex', endIndex)
+
+        for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+            const trimmedChannelData = audioData.subarray(startIndex, endIndex + 1);
+            trimmedBuffer.getChannelData(channel).set(trimmedChannelData);
+        }
+
+        // // Step 3: Create a new Float32Array containing non-silent audio
+        // const trimmedLength = endIndex - startIndex + 1;
+        // const trimmedFloat32Array = new Float32Array(trimmedLength);
+        //
+        // for (let i = startIndex, j = 0; i <= endIndex; i++, j++) {
+        //     trimmedFloat32Array[j] = audioData[i];
+        // }
+        // // Convert the trimmed Float32Array back to ArrayBuffer
+        // const outputArrayBuffer = new ArrayBuffer(trimmedFloat32Array.length * 4);
+        // const outputDataView = new DataView(outputArrayBuffer);
+        //
+        // for (let i = 0; i < trimmedFloat32Array.length; i++) {
+        //     outputDataView.setFloat32(i * 4, trimmedFloat32Array[i], true);
+        // }
+
+        return trimmedBuffer;
+    }
+
     /**
      * Broadcast - emmit specific event changes
      * param {string} eventName
