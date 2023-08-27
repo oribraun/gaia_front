@@ -3,6 +3,7 @@ import {environment} from "../../../environments/environment";
 import {Observable, Subject} from "rxjs";
 import {ApiService} from "../api.service";
 import {Config} from "../../config";
+import {EventsHashTable} from "../../interfaces/eventHashTable";
 
 @Injectable({
     providedIn: 'root'
@@ -505,8 +506,4 @@ export class SocketSpeechRecognitionService {
             delete this.events[name];
         }
     }
-}
-
-interface EventsHashTable<T> {
-    [key: string]: T;
 }

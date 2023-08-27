@@ -4,6 +4,8 @@ import {environment} from "../../../environments/environment";
 import {Config} from "../../config";
 import {Observable, Subject} from "rxjs";
 
+import {EventsHashTable} from "../../interfaces/eventHashTable";
+
 @Injectable({
     providedIn: 'root'
 })
@@ -132,8 +134,4 @@ export class WebSocketService {
             delete this.events[name];
         }
     }
-}
-
-interface EventsHashTable<T> {
-    [key: string]: T;
 }

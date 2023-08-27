@@ -16,6 +16,7 @@ import {AnimationsService} from "../../services/animations/animations.service";
 import {
     SocketSpeechRecognitionService
 } from "../../services/socket-speech-recognition/socket-speech-recognition.service";
+import {LessonService} from "../../services/lesson/lesson.service";
 
 declare var $:any;
 
@@ -94,17 +95,19 @@ export class LessonComponent implements OnInit, OnDestroy {
         private animationsService: AnimationsService,
         private speechRecognitionService: SpeechRecognitionService,
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
+        private lessonService: LessonService,
     ) { }
 
     ngOnInit(): void {
         this.triggerResize()
-        this.speechRecognitionService.setupSpeechRecognition();
+        // this.speechRecognitionService.setupSpeechRecognition();
         // this.setupSocketSpeechRecognition();
-        this.listenToSpeechRecognitionResults();
-        this.getPresentation();
-        this.startHeartBeat()
-        this.apiService.eventEmit.subscribe((obj:any) => {if (obj.type=="image_generator_button_click") {this.getPresentationEventReplay({"source": "image_generator_button_click", "selected_words": obj.selected_words})}});
-        // this.setupPresentationMock();
+        // this.listenToSpeechRecognitionResults();
+        // this.getPresentation();
+        // this.startHeartBeat()
+        this.listenForGenerateImageRequests()
+
+        this.setupPresentationMock();
     }
 
     triggerResize() {
@@ -114,6 +117,12 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenToSpeechRecognitionResults() {
         this.recognitionOnResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+    }
+
+    listenForGenerateImageRequests(){
+        this.lessonService.ListenFor("generateImage").subscribe((obj: any) => {
+            this.getPresentationEventReplay({"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        })
     }
 
     onRecognitionResults = (results: any) => {
@@ -277,7 +286,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.eventHandlingInProgress) {
             return;
         }
-        
+
         this.eventHandlingInProgress = true;
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
@@ -586,10 +595,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('data',data)
 
         if (additional_instructions) {
-            this.apiService.eventEmit.emit({'type': 'additional_instructions', 'data': additional_instructions})
+            const data = {'type': 'additional_instructions', 'data': additional_instructions}
+            this.lessonService.Broadcast("generateImagePath", data)
         }
-        
-        
+
+
         if (help_sound_url) {
             console.log('help_sound_url added to que', help_sound_url)
             this.audioQue.push(help_sound_url);
@@ -736,6 +746,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopSpeechRecognition();
         this.unsubscribeAllHttpEvents();
         this.stopHeartBeat()
+        this.lessonService.ClearAllEvents();
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }
@@ -758,7 +769,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 "say the topic of the lesson"
                             ],
                             "full_screen": false,
-                            "words": ['dog', 'cat'],
+                            "word_list": ['dog', 'cat'],
                             "estimated_duration": 90,
                             "native_language_text": {
                                 "he": "שלום! שמי ג׳ני "
