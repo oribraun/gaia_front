@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {ApiService} from "../../../../services/api.service";
@@ -11,6 +11,10 @@ import {ApiService} from "../../../../services/api.service";
 export class ImageGeneratorComponent {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+
+    @Output('onGenerateImage') onGenerateImage: EventEmitter<any> = new EventEmitter<any>();
+
+    @Output('generatingImageInProgress') generatingImageInProgress: boolean = false;
 
     imageSrc = ''
 
@@ -41,23 +45,7 @@ export class ImageGeneratorComponent {
         if (!this.wordsSelected.length){
             return;
         }
-        this.generatingImage = true;
-        console.log('this.wordsSelected',this.wordsSelected)
-        this.apiService.generateImage({words: this.wordsSelected}).subscribe({
-            next: (response: any) => {
-                if (!response.err) {
-                    this.imagePathGenerated = response.image_path
-                } else {
-                    console.log('generateImage response Error', response)
-                }
-                this.generatingImage = false;
-            },
-            error: (error: any) => {
-                console.log('generateImage Error', error)
-                this.generatingImage = false;
-            },
-        })
-
+        this.onGenerateImage.emit(this.wordsSelected)
     }
 
 }
