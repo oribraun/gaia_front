@@ -17,6 +17,7 @@ export class WhiteBoardComponent {
     @Input('recognitionText') recognitionText: string = '';
     @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
 
+    
     presentationResetIsInProgress = false;
 
     apiSubscriptions: any = {
@@ -32,8 +33,6 @@ export class WhiteBoardComponent {
         this.imageSrc = this.config.staticImagePath
     }
     async resetPresentation(reason: string = '') {
-        this.currentSlide.full_screen = !this.currentSlide.full_screen;
-        return;
         if (this.presentationResetIsInProgress) {
             return;
         }
@@ -48,6 +47,7 @@ export class WhiteBoardComponent {
                 this.onResetPresentation.emit(response)
             },
             error: (error) => {
+                this.presentationResetIsInProgress = false;
                 console.log('resetPresentation error', error)
             },
         })

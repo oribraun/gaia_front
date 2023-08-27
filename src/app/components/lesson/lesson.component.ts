@@ -71,6 +71,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
     presentationNoReplayIsInProgress = false;
+    eventHandlingInProgress = false;
 
     mobileWidth = 768; // pixels
     isMobile = false;
@@ -97,12 +98,13 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.triggerResize()
-        // this.speechRecognitionService.setupSpeechRecognition();
+        this.speechRecognitionService.setupSpeechRecognition();
         // this.setupSocketSpeechRecognition();
-        // this.listenToSpeechRecognitionResults();
-        // this.getPresentation();
-        // this.startHeartBeat()
-        this.setupPresentationMock();
+        this.listenToSpeechRecognitionResults();
+        this.getPresentation();
+        this.startHeartBeat()
+        this.apiService.eventEmit.subscribe((obj:any) => {if (obj.type=="image_generator_button_click") {this.getPresentationEventReplay({"source": "image_generator_button_click", "selected_words": obj.selected_words})}});
+        // this.setupPresentationMock();
     }
 
     triggerResize() {
@@ -272,11 +274,11 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationEventReplay(data:any={}) {
-        if (this.presentationNoReplayIsInProgress) {
+        if (this.eventHandlingInProgress) {
             return;
         }
         
-        this.presentationReplayIsInProgress = true;
+        this.eventHandlingInProgress = true;
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'event',
@@ -285,7 +287,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }).subscribe({
             next: (response: any) => {
-                this.presentationReplayIsInProgress = false;
+                this.eventHandlingInProgress = false;
 
                 if (response.err) {
                     console.log('response err', response)
@@ -300,6 +302,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log('getPresentationEventReplay error', error)
+                this.eventHandlingInProgress = false;
             },
         })
     }
@@ -336,6 +339,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log('getPresentationReplay error', error)
+                this.presentationReplayIsInProgress = false;
             },
         })
     }
@@ -377,30 +381,12 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             },
             error: (error) => {
+                this.presentationNoReplayIsInProgress = false;
                 console.log('getPresentationNoReplay error', error)
             },
         })
     }
 
-    async resetPresentation(reason: string = '') {
-        if (this.presentationResetIsInProgress) {
-            return;
-        }
-        this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
-            app_data: {
-                type: reason,
-                array_buffer: this.enableArrayBuffer
-            }
-        }).subscribe({
-            next: (response: any) => {
-                this.onResetPresentation(response)
-            },
-            error: (error) => {
-                console.log('resetPresentation error', error)
-            },
-        })
-    }
 
     onResetPresentation(response: any) {
         this.presentationResetIsInProgress = false;
@@ -586,6 +572,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async handleOnPresentationReplay(reason: string = '') {
         const data = this.currentData
+        const additional_instructions =data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
@@ -598,6 +585,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('reason',reason)
         console.log('data',data)
 
+        if (additional_instructions) {
+            this.apiService.eventEmit.emit({'type': 'additional_instructions', 'data': additional_instructions})
+        }
+        
+        
         if (help_sound_url) {
             console.log('help_sound_url added to que', help_sound_url)
             this.audioQue.push(help_sound_url);

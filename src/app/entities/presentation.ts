@@ -70,6 +70,7 @@ export class PresentationSlide {
     image_path!: string
     text!: string
     word!: string
+    word_list!: string[]
     words!: string[]
 
     constructor(obj?: any) {

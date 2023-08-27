@@ -1,3 +1,4 @@
+import {EventEmitter, Output} from '@angular/core';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Config} from "../config";
@@ -7,6 +8,8 @@ import {environment} from "../../environments/environment";
     providedIn: 'root'
 })
 export class ApiService {
+    eventEmit: EventEmitter<any> = new EventEmitter<any>();
+
     // serverBase = 'http://localhost:8000/';
     serverBase = environment.serverUrl;
     version = 'v1/';

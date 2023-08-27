@@ -2,7 +2,10 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
             <div class="choose-options">
-                <div class="form-check" *ngFor="let item of currentSlide.words">
+                <div *ngIf="currentSlide.hasOwnProperty('word_list')">
+                    {{currentSlide.word_list}}
+                </div>
+                <div class="form-check" *ngFor="let item of currentSlide.word_list">
                     <input class="form-check-input" type="checkbox" name="{{item}}" id="{{item}}"
                     (change)="onCheckboxChange(item, $event)">
                     <label class="form-check-label" for="{{item}}">
