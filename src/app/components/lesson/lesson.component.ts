@@ -269,6 +269,39 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
+    async getPresentationEventReplay(data:any={}) {
+        if (this.presentationNoReplayIsInProgress) {
+            return;
+        }
+        
+        this.presentationReplayIsInProgress = true;
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+            app_data: {
+                type:'event',
+                data: data,
+                array_buffer: this.enableArrayBuffer
+            }
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationReplayIsInProgress = false;
+
+                if (response.err) {
+                    console.log('response err', response)
+                    // setTimeout(() => {
+                    //     this.startSpeechRecognition();
+                    // },2000)
+                    this.handleOnReplayError()
+                } else {
+                    this.currentData = response.data;
+                    this.handleOnPresentationReplay();
+                }
+            },
+            error: (error) => {
+                console.log('getPresentationEventReplay error', error)
+            },
+        })
+    }
+
     async getPresentationReplay(text: string = '') {
         if (this.presentationNoReplayIsInProgress) {
             return;
