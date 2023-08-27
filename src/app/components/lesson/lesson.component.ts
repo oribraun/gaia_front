@@ -46,6 +46,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         greeting: 'greeting',
         reading: 'reading',
         word_repeater: 'word_repeater',
+        image_generator: 'image-generator',
         agenda: 'agenda',
         ending: 'ending'
     }
@@ -96,11 +97,12 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.triggerResize()
-        this.speechRecognitionService.setupSpeechRecognition();
+        // this.speechRecognitionService.setupSpeechRecognition();
         // this.setupSocketSpeechRecognition();
-        this.listenToSpeechRecognitionResults();
-        this.getPresentation();
-        this.startHeartBeat()
+        // this.listenToSpeechRecognitionResults();
+        // this.getPresentation();
+        // this.startHeartBeat()
+        this.setupPresentationMock();
     }
 
     triggerResize() {
@@ -744,5 +746,77 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopHeartBeat()
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
+    }
+
+    setupPresentationMock() {
+        const presentation = {
+            "sections": [
+                {
+                    "section_title": "Introduction",
+                    "section_topic": "get to know each other and what we will do today",
+                    "slides": [
+                        {
+                            "slide_title": "",
+                            "slide_visual_description": "a slide with a teacher image and a text box with the teacher name and the topic of the lesson",
+                            "remarks": "",
+                            "n_failures_allowed": 3,
+                            "slide_type": "image-generator",
+                            "slide_objectives": [
+                                "say hi and introduce yourself as the english teacher",
+                                "say the topic of the lesson"
+                            ],
+                            "full_screen": false,
+                            "words": ['dog', 'cat'],
+                            "estimated_duration": 90,
+                            "native_language_text": {
+                                "he": "שלום! שמי ג׳ני "
+                            },
+                            "starting_responses": [
+                                {
+                                    "teacher_text": "Hi! My name is Jenny and I'm your English teacher. How are you today? MAA SHLOMECHAA?",
+                                    "is_mission_accomplished": true
+                                },
+                                {
+                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today. Are you excited?",
+                                    "is_mission_accomplished": true
+                                },
+                                {
+                                    "teacher_text": "SHALOM SHALOM! I'm Jenny. I'm your english teacher. What is your name?",
+                                    "is_mission_accomplished": true
+                                }
+                            ],
+                            "student_responses": [],
+                            "teacher_name": "Jenny",
+                            "teacher_name_native": "ג׳ני",
+                            "teacher_image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg",
+                            "text": "Hello. I'm Jenny.\n\n                        Today's lesson:  Colors and Animals for beginners."
+                        }
+                    ]
+                }
+            ],
+            "presentation_done": false,
+            "current_section_index": 0,
+            "current_slide_index": 0,
+            "current_objective_index": 0,
+            "current_objective_api_tries": 0,
+            "estimated_duration": 345,
+            "teacher": {
+                "age": 25,
+                "name": "Jenny",
+                "style": "very friendly, patient, and kids' oriented",
+                "gender": "female",
+                "image_path": "https://t3.ftcdn.net/jpg/00/63/41/20/360_F_63412065_tVAWzIWl9wE7l73MWUVieyGg1QlzhQCR.jpg"
+            },
+            "presentation_title": "Colors and Animals",
+            "presentation_topic": "Colors and Animals for beginners"
+        }
+
+        this.presentation = new Presentation(presentation);
+        console.log('this.presentation ', this.presentation )
+        this.currentSectionIndex = this.presentation.current_section_index;
+        this.currentSlideIndex = this.presentation.current_slide_index;
+        this.currentObjectiveIndex = this.presentation.current_objective_index;
+        this.estimatedDuration = this.presentation.estimated_duration;
+        this.setCurrentSection();
     }
 }

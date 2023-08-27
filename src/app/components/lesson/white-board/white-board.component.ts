@@ -32,6 +32,8 @@ export class WhiteBoardComponent {
         this.imageSrc = this.config.staticImagePath
     }
     async resetPresentation(reason: string = '') {
+        this.currentSlide.full_screen = !this.currentSlide.full_screen;
+        return;
         if (this.presentationResetIsInProgress) {
             return;
         }

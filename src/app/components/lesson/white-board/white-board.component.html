@@ -6,148 +6,30 @@
         <img src="{{imageSrc}}assets/images/icons/exit_icon.png"> <span>Exit</span>
     </div>
 </div>
-<div class="white-board" [ngClass]="currentSlide.slide_type">
-    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.greeting">
-        <div class="general-box lesson-board">
-            <div class="outer-scroller">
-                <div class="inner-scroller">
-                    <div class="text text-pre-line">
-                        <p>{{currentSlide.text}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="image" *ngIf="currentSlide.teacher_image_path">
-                <img [src]="currentSlide.teacher_image_path">
-            </div>
-        </div>
-        <div class="general-box text-board">
-            <div class="text">
-                <div class="outer-scroller">
-                    <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="image">
-                <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.reading">
-        <div class="general-box lesson-board">
-            <div class="outer-scroller">
-                <div class="inner-scroller">
-                    <div class="text text-pre-line">
-                        <p>{{currentSlide.text}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="image" *ngIf="currentSlide.teacher_image_path">
-                <img [src]="currentSlide.teacher_image_path">
-            </div>
-        </div>
-        <div class="general-box text-board">
-            <div class="text">
-                <div class="outer-scroller">
-                    <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="image">
-                <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.word_repeater">
-        <div class="general-box lesson-board">
-            <div class="outer-scroller">
-                <div class="inner-scroller">
-                    <div class="text text-pre-line">
-                        <p>{{currentSlide.text}}</p>
-                    </div>
-                    <div class="text text-dubb" style="position:absolute; bottom:15%">
-                        <p>{{recognitionText}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="image image-right" *ngIf="currentSlide.word_image_path">
-                <img [src]="currentSlide.word_image_path">
-            </div>
-        </div>
-        <div class="general-box text-board">
-            <div class="text">
-                <div class="outer-scroller">
-                    <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="image">
-                <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.agenda">
-        <div class="general-box lesson-board">
-            <div class="outer-scroller">
-                <div class="inner-scroller">
-                    <div class="text text-pre-line">
-                        <p>{{currentSlide.text}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="image image-right" *ngIf="currentSlide.word_image_path">
-                <img [src]="currentSlide.word_image_path">
-            </div>
-        </div>
-        <div class="general-box text-board">
-            <div class="text">
-                <div class="outer-scroller">
-                    <div class="inner-scroller dir-rtl">
-                                <span class="text">
-                                    {{currentSlide.native_language_text.he}}
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="image">
-                <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="currentSlide.slide_type === sectionTitles.ending">
-        <div class="general-box lesson-board">
-            <div class="outer-scroller">
-                <div class="inner-scroller">
-                    <div class="text text-pre-line">
-                        <p>{{currentSlide.text}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="image image-right" *ngIf="currentSlide.word_image_path">
-                <img [src]="currentSlide.word_image_path">
-            </div>
-        </div>
-        <div class="general-box text-board">
-            <div class="text">
-                <div class="outer-scroller">
-                    <div class="inner-scroller dir-rtl">
-                        <span class="text">
-                            {{currentSlide.native_language_text.he}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="image">
-                <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
-            </div>
-        </div>
-    </ng-container>
+<div class="white-board" [ngClass]="currentSlide.slide_type && {'white-board-full-screen': currentSlide.full_screen}">
+    <app-greeting
+        *ngIf="currentSlide.slide_type === sectionTitles.greeting"
+        [currentSlide]="currentSlide"
+    ></app-greeting>
+    <app-reading
+        *ngIf="currentSlide.slide_type === sectionTitles.reading"
+        [currentSlide]="currentSlide"
+    ></app-reading>
+    <app-word-repeater
+        *ngIf="currentSlide.slide_type === sectionTitles.word_repeater"
+        [currentSlide]="currentSlide"
+        [recognitionText]="recognitionText"
+    ></app-word-repeater>
+    <app-image-generator
+        *ngIf="currentSlide.slide_type === sectionTitles.image_generator"
+        [currentSlide]="currentSlide"
+    ></app-image-generator>
+    <app-agenda
+        *ngIf="currentSlide.slide_type === sectionTitles.agenda"
+        [currentSlide]="currentSlide"
+    ></app-agenda>
+    <app-ending
+        *ngIf="currentSlide.slide_type === sectionTitles.ending"
+        [currentSlide]="currentSlide"
+    ></app-ending>
 </div>

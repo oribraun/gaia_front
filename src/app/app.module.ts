@@ -38,6 +38,12 @@ import { LessonComponent } from './components/lesson/lesson.component';
 import { WhiteBoardComponent } from './components/lesson/white-board/white-board.component';
 import { PanelBoardComponent } from './components/lesson/panel-board/panel-board.component';
 import { SwipeDirective } from './directives/swipe.directive';
+import { GreetingComponent } from './components/lesson/slides/greeting/greeting.component';
+import { ReadingComponent } from './components/lesson/slides/reading/reading.component';
+import { WordRepeaterComponent } from './components/lesson/slides/word-repeater/word-repeater.component';
+import { AgendaComponent } from './components/lesson/slides/agenda/agenda.component';
+import { EndingComponent } from './components/lesson/slides/ending/ending.component';
+import { ImageGeneratorComponent } from './components/lesson/slides/image-generator/image-generator.component';
 
 @NgModule({
     declarations: [
@@ -72,6 +78,12 @@ import { SwipeDirective } from './directives/swipe.directive';
         WhiteBoardComponent,
         PanelBoardComponent,
         SwipeDirective,
+        GreetingComponent,
+        ReadingComponent,
+        WordRepeaterComponent,
+        AgendaComponent,
+        EndingComponent,
+        ImageGeneratorComponent,
     ],
     imports: [
         BrowserModule,
