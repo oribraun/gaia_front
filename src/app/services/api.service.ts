@@ -255,6 +255,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    generateImage(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'generate-image', obj,
+            this.httpOptions
+        )
+    }
     audioToText(obj: any) {
         const httpOptions = {...this.httpOptions}
         httpOptions['Content-Type'] = 'application/octet-stream';

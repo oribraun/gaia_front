@@ -6,7 +6,7 @@
         <img src="{{imageSrc}}assets/images/icons/exit_icon.png"> <span>Exit</span>
     </div>
 </div>
-<div class="white-board" [ngClass]="currentSlide.slide_type">
+<div class="white-board" [ngClass]="currentSlide.slide_type && {'white-board-full-screen': currentSlide.full_screen}">
     <app-greeting
         *ngIf="currentSlide.slide_type === sectionTitles.greeting"
         [currentSlide]="currentSlide"

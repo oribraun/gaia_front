@@ -9,7 +9,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import {Presentation} from "../../../entities/presentation";
+import {Presentation, PresentationSlide} from "../../../entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
 import {Config} from "../../../config";
 import {HelperService} from "../../../services/helper.service";
@@ -25,6 +25,7 @@ import {
 export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input('presentation') presentation: Presentation = new Presentation();
+    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('currentSectionIndex') currentSectionIndex: number = -1;
     @Input('isMobile') isMobile: boolean = false;
 

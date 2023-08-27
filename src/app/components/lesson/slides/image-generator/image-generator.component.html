@@ -1,1 +1,43 @@
-<p>image-generator works!</p>
+<div class="general-box lesson-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="choose-options">
+                <div class="form-check" *ngFor="let item of currentSlide.words">
+                    <input class="form-check-input" type="checkbox" name="{{item}}" id="{{item}}"
+                    (change)="onCheckboxChange(item, $event)">
+                    <label class="form-check-label" for="{{item}}">
+                        {{item}}
+                    </label>
+                </div>
+                {{wordsSelected}}
+            </div>
+            <button class="btn btn-light" (click)="generateImage()">
+                Generate Image
+            </button>
+        </div>
+    </div>
+    <div class="image" *ngIf="imagePathGenerated">
+        <img [src]="imagePathGenerated">
+        <div class="generic-loader-wrapper" *ngIf="generatingImage">
+            <div class="loader">
+                <div class="spinner-border">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="general-box text-board">
+    <div class="text">
+        <div class="outer-scroller">
+            <div class="inner-scroller dir-rtl">
+                <span class="text">
+                    {{currentSlide.native_language_text.he}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="image">
+        <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
+    </div>
+</div>
