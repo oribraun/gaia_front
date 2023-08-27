@@ -46,6 +46,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         greeting: 'greeting',
         reading: 'reading',
         word_repeater: 'word_repeater',
+        image_generator: 'image-generator',
         agenda: 'agenda',
         ending: 'ending'
     }
