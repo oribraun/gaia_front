@@ -49,7 +49,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         word_repeater: 'word_repeater',
         image_generator: 'image_generator',
         agenda: 'agenda',
-        ending: 'ending'
+        ending: 'ending',
+        video: 'video',
     }
 
     recognitionCountWords = 0;
@@ -57,7 +58,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     recognitionOnResultsSubscribe: any = null;
     speakInProgress = false;
     currentAudio: any = null;
-
+    isPause: boolean = false;
     noReplayInterval: any = null
     noReplayCounter = 0;
     noReplayTriggerOn = 10; // no replay will be called every 5 seconds
@@ -106,6 +107,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.getPresentation();
         this.startHeartBeat()
         this.listenForSlideEventRequests()
+        this.listenForPauseEvnet()
 
         // this.setupPresentationMock();
     }
@@ -117,6 +119,23 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenToSpeechRecognitionResults() {
         this.recognitionOnResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+    }
+
+    listenForPauseEvnet(){
+        this.lessonService.ListenFor("togglePauseLesson").subscribe((obj: any) => {
+            this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        })
+    }
+
+    togglePauseLesson(){
+        this.isPause = !this.isPause
+        if (this.isPause) {
+            this.stopAudio()
+            this.stopSpeechRecognition()
+
+        } else {
+            this.startSpeechRecognition()
+        }
     }
 
     listenForSlideEventRequests(){
@@ -273,6 +292,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             this.currentSlide = new PresentationSlide(this.currentSection.slides[this.currentSlideIndex]);
         }
+        console.log(this.currentSlide)
     }
     setCurrentObjective(index: number = -1) {
         if (index > -1) {

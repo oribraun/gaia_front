@@ -72,6 +72,7 @@ export class PresentationSlide {
     word!: string
     word_list!: string[]
     words!: string[]
+    video_url!: string
 
     constructor(obj?: any) {
         if (obj) {

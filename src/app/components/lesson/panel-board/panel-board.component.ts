@@ -1,3 +1,4 @@
+import {LessonService} from "../../../services/lesson/lesson.service";
 import {
     Component,
     ElementRef,
@@ -39,13 +40,14 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     subscribe: any;
 
     imageSrc = ''
-
+    pauseButtonText = "take a break"
     recorder: any;
     currentChunks: any[] = []
 
     constructor(
         private config: Config,
         private animationsService: AnimationsService,
+        private lessonService: LessonService,
     ) {
         this.listenToCircleAnimations();
 
@@ -252,6 +254,15 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         if (this.subscribe) {
             this.subscribe.unsubscribe();
         }
+    }
+    togglePauseLesson(): void {
+        this.lessonService.Broadcast("togglePauseLesson", {})
+        if (this.pauseButtonText == "take a break") {
+            this.pauseButtonText = "resume lesson"
+        } else {
+            this.pauseButtonText = "take a break"
+        }
+
     }
 
 

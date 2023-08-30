@@ -32,4 +32,8 @@
         *ngIf="currentSlide.slide_type === sectionTitles.ending"
         [currentSlide]="currentSlide"
     ></app-ending>
+    <app-video
+        *ngIf="currentSlide.slide_type === sectionTitles.video"
+        [currentSlide]="currentSlide"
+    ></app-video>
 </div>

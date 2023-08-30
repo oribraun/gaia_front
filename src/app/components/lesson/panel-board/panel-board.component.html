@@ -27,8 +27,8 @@
                 </div>
             </div>
             <div class="buttons">
-                <button class="button">
-                    <img src="{{imageSrc}}assets/images/icons/take_a_break_icon.png"> Take a break
+                <button class="button" (click)="togglePauseLesson()">
+                    <img src="{{imageSrc}}assets/images/icons/take_a_break_icon.png"> {{pauseButtonText}}
                 </button>
             </div>
         </div>
