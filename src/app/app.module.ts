@@ -44,6 +44,7 @@ import { WordRepeaterComponent } from './components/lesson/slides/word-repeater/
 import { AgendaComponent } from './components/lesson/slides/agenda/agenda.component';
 import { EndingComponent } from './components/lesson/slides/ending/ending.component';
 import { ImageGeneratorComponent } from './components/lesson/slides/image-generator/image-generator.component';
+import { BlanksComponent } from './components/lesson/slides/blanks/blanks.component';
 import { VideoComponent } from './components/lesson/slides/video/video.component';
 
 @NgModule({
@@ -85,6 +86,7 @@ import { VideoComponent } from './components/lesson/slides/video/video.component
         AgendaComponent,
         EndingComponent,
         ImageGeneratorComponent,
+        BlanksComponent,
         VideoComponent,
     ],
     imports: [

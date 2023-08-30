@@ -44,6 +44,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     currentObjective: any = null;
     currentData: any = null;
     sectionTitles = {
+        bundle:'bundle',
         greeting: 'greeting',
         reading: 'reading',
         word_repeater: 'word_repeater',
@@ -51,6 +52,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         agenda: 'agenda',
         ending: 'ending',
         video: 'video',
+        blanks:'blanks'
     }
 
     recognitionCountWords = 0;

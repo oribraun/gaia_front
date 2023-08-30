@@ -52,5 +52,13 @@ export class WhiteBoardComponent {
             },
         })
     }
+    getSlideToRender(){
+        return this.currentSlide.slide_type
+    }
+
+    isSlideToRender(slideType:string){
+        const slideToRender = this.getSlideToRender()
+        return slideToRender === slideType
+    }
 
 }
