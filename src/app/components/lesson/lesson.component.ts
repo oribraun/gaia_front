@@ -132,9 +132,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.isPause) {
             this.stopAudio()
             this.stopSpeechRecognition()
+            this.speakInProgress = true;
 
         } else {
             this.startSpeechRecognition()
+            this.speakInProgress = false;
         }
     }
 
