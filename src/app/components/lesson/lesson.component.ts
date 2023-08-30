@@ -763,7 +763,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             "slide_visual_description": "a slide with a teacher image and a text box with the teacher name and the topic of the lesson",
                             "remarks": "",
                             "n_failures_allowed": 3,
-                            "slide_type": "image-generator",
+                            "slide_type": "image_generator",
                             "slide_objectives": [
                                 "say hi and introduce yourself as the english teacher",
                                 "say the topic of the lesson"
