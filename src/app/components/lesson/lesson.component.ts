@@ -105,7 +105,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.listenToSpeechRecognitionResults();
         this.getPresentation();
         this.startHeartBeat()
-        this.listenForGenerateImageRequests()
+        this.listenForSlideEventRequests()
 
         // this.setupPresentationMock();
     }
@@ -119,9 +119,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.recognitionOnResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
     }
 
-    listenForGenerateImageRequests(){
-        this.lessonService.ListenFor("generateImage").subscribe((obj: any) => {
-            this.getPresentationEventReplay({"source": "image_generator_button_click", "selected_words": obj.selected_words})
+    listenForSlideEventRequests(){
+        this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
+            this.getPresentationEventReplay(obj)//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
     }
 
@@ -596,7 +596,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         if (additional_instructions) {
             const data = {'type': 'additional_instructions', 'data': additional_instructions}
-            this.lessonService.Broadcast("generateImagePath", data)
+            this.lessonService.Broadcast("slideEventReply", data)
         }
 
 

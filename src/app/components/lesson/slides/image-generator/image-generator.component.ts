@@ -34,8 +34,10 @@ export class ImageGeneratorComponent implements OnDestroy {
     ) {
         this.imageSrc = this.config.staticImagePath
         this.imagePathGenerated = this.imageSrc + 'assets/images/lesson_placeholder.jpg'
-        this.lessonService.ListenFor("generateImagePath").subscribe((resp:any) => {
-            this.handleGenerateImageOutput(resp.data)
+        this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
+            if (resp.data.source == "image_generator_button_click") {
+                this.handleGenerateImageOutput(resp.data)
+            }
         })
     }
 
@@ -65,13 +67,13 @@ export class ImageGeneratorComponent implements OnDestroy {
         if (!this.wordsSelected.length || this.generatingImageInProgress){
             return;
         }
-        const data = {'selected_words': this.wordsSelected}
+        const data = {"source": "image_generator_button_click", 'selected_words': this.wordsSelected}
         this.generatingImageInProgress = true;
-        this.lessonService.Broadcast("generateImage", data)
+        this.lessonService.Broadcast("slideEventRequest", data)
     }
 
     ngOnDestroy(): void {
-        this.lessonService.ClearEvent("generateImagePath")
+        // this.lessonService.ClearEvent("slideEventReply")
     }
 
 
