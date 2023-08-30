@@ -100,14 +100,14 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.triggerResize()
-        // this.speechRecognitionService.setupSpeechRecognition();
+        this.speechRecognitionService.setupSpeechRecognition();
         // this.setupSocketSpeechRecognition();
-        // this.listenToSpeechRecognitionResults();
-        // this.getPresentation();
-        // this.startHeartBeat()
+        this.listenToSpeechRecognitionResults();
+        this.getPresentation();
+        this.startHeartBeat()
         this.listenForGenerateImageRequests()
 
-        this.setupPresentationMock();
+        // this.setupPresentationMock();
     }
 
     triggerResize() {
