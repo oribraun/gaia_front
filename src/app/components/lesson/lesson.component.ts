@@ -16,6 +16,7 @@ import {
     SocketSpeechRecognitionService
 } from "../../services/socket-speech-recognition/socket-speech-recognition.service";
 import {LessonService} from "../../services/lesson/lesson.service";
+import {environment} from "../../../environments/environment";
 
 declare var $:any;
 
@@ -32,7 +33,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     mediaStream: any;
 
-    mock = false;
+    mock = environment.is_mock;
 
     presentation: Presentation = new Presentation();
     gettingPresentation = false;

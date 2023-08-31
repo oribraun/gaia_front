@@ -93,6 +93,21 @@
               "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none"
+            },
+            "mock": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mock.ts"
+                }
+              ],
+              "outputHashing": "none"
             }
           },
           "defaultConfiguration": "production"
@@ -105,6 +120,9 @@
             },
             "development": {
               "browserTarget": "frontend:build:development"
+            },
+            "mock": {
+              "browserTarget": "frontend:build:mock"
             }
           },
           "defaultConfiguration": "development"

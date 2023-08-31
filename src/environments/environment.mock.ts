@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     staticUrl: '',
     serverUrl: 'http://localhost:8000/',
-    is_mock: false
+    is_mock: true
 };
 
 /*
