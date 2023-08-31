@@ -32,7 +32,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     mediaStream: any;
 
-    mock = true;
+    mock = false;
 
     presentation: Presentation = new Presentation();
     gettingPresentation = false;
