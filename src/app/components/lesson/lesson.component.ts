@@ -17,6 +17,7 @@ import {
 } from "../../services/socket-speech-recognition/socket-speech-recognition.service";
 import {LessonService} from "../../services/lesson/lesson.service";
 import {environment} from "../../../environments/environment";
+import {ChatMessage} from "../../entities/chat_message";
 
 declare var $:any;
 
@@ -59,6 +60,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     recognitionCountWords = 0;
     recognitionText = '';
+    isFinishedCurrentChatMessage = false;
     recognitionOnResultsSubscribe: any = null;
     speakInProgress = false;
     doNotDisturb = false;
@@ -199,6 +201,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             // }
         }
         // console.log('results', results)
+        this.broadCastMessage('user', results.text, results.isFinal)
+    }
+
+    broadCastMessage(type: string, text: string, isFinal: boolean) {
+        this.lessonService.Broadcast('newChatMessage', new ChatMessage({
+            type: type,
+            message: text,
+            isFinal: isFinal,
+        }))
     }
 
     resetRecognitionData() {
@@ -641,6 +652,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const presentation_content_updated = data.presentation_content_updated;
         const presentation_done = data.presentation_done;
         const text = data.text;
+        this.broadCastMessage('computer', text, true);
         const help_sound_url = data.help_sound_url;
         const help_sound_buffer = data.help_sound_buffer;
         console.log('presentation_slide_updated',presentation_slide_updated)

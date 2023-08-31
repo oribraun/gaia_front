@@ -1,3 +1,25 @@
 <div class="chat-board general-box">
-    <p>chat-board works!</p>
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="messages">
+                <div *ngFor="let item of messages">
+                    <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
+                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>
+                        <i>{{item.message}}</i>
+                    </div>
+<!--                    <ng-container *ngIf="item.message">-->
+<!--                        <div class="message">-->
+<!--                            <figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
+<!--                            <i>{{item.message}}</i>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+<!--                    <ng-container *ngIf="item.message">-->
+<!--                        <div class="message message-personal new">-->
+<!--                            {{item.message}}-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

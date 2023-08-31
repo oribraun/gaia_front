@@ -7,15 +7,6 @@
     </div>
 </div>
 <div class="screen-board" [ngClass]="currentSlide.slide_type && {'screen-board-full-screen': currentSlide.full_screen || isMobile}">
-<!--   <div class="white-board general-box">-->
-<!--        <app-white-board-->
-<!--            [currentSection]="currentSection"-->
-<!--            [currentSlide]="currentSlide"-->
-<!--            [sectionTitles]="sectionTitles"-->
-<!--            [recognitionText]="recognitionText"-->
-<!--            [isPause]="isPause"-->
-<!--        ></app-white-board>-->
-<!--   </div>-->
     <app-white-board
         [currentSection]="currentSection"
         [currentSlide]="currentSlide"
