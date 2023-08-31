@@ -25,7 +25,7 @@ export class BlanksComponent implements OnInit{
 
   ngOnInit(): void {
     let j = 0
-    this.currentSlide.blanked_sentence.split(' ').forEach((word, index) => {
+    this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
       if(word ==='________'){
         this.optionIdx[index]=j
         this.answers[j] = this.currentSlide.blanks_options[j][0]
@@ -34,7 +34,7 @@ export class BlanksComponent implements OnInit{
     })
     console.log(this.optionIdx)
   }
- 
+
   onSelectChange(event: any, idx:number) {
     if (event.target){
       this.answers[idx] = event.target.value
@@ -45,7 +45,7 @@ export class BlanksComponent implements OnInit{
   submitAnswer(){
     let answer_arr:any = []
     let j = 0
-    this.currentSlide.blanked_sentence.split(' ').forEach((word, index) => {
+    this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
       if(word ==='________'){
         answer_arr.push(this.answers[j])
         j+=1
@@ -58,4 +58,4 @@ export class BlanksComponent implements OnInit{
   }
 
 }
- 
+

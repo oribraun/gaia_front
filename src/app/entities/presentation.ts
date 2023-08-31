@@ -45,30 +45,37 @@ export class PresentationSection {
                         // @ts-ignore
                         this[key] = obj[key];
                     } else {
-                        this[key] = []
-                        let bundle_id_to_slides = Object()
-                        for (let item of obj[key]) {
-                            this[key].push(new PresentationSlide(item))
-                            let slide = this[key][this[key].length-1]
-                            if(slide.bundle_id!=-1){
-                                if(bundle_id_to_slides.hasOwnProperty(slide.bundle_id)) {
-                                    bundle_id_to_slides[slide.bundle_id].push(slide)
-                                } else {
-                                    bundle_id_to_slides[slide.bundle_id] = [slide]
-                                }
-                            }
-                        }
-                        for (let bundle_id in bundle_id_to_slides) {
-                            let bundle_list = bundle_id_to_slides[bundle_id]
-                            for (let slide of bundle_list){
-                                slide.bundle = bundle_list
-                                slide.bundle_len = bundle_list.length
-                                const isThisMe = (element: any) => element === slide;
-                                slide.index_in_bundle = bundle_list.findIndex(isThisMe)
-                            }
-                        }
+                        this.searchBundles(obj, key)
                     }
                 }
+            }
+        }
+    }
+
+    searchBundles(obj: any, key: any) {
+        // @ts-ignore
+        this[key] = []
+        let bundle_id_to_slides = Object()
+        for (let item of obj[key]) {
+            // @ts-ignore
+            this[key].push(new PresentationSlide(item))
+            // @ts-ignore
+            let slide = this[key][this[key].length-1]
+            if(slide.bundle_id!=-1){
+                if(bundle_id_to_slides.hasOwnProperty(slide.bundle_id)) {
+                    bundle_id_to_slides[slide.bundle_id].push(slide)
+                } else {
+                    bundle_id_to_slides[slide.bundle_id] = [slide]
+                }
+            }
+        }
+        for (let bundle_id in bundle_id_to_slides) {
+            let bundle_list = bundle_id_to_slides[bundle_id]
+            for (let slide of bundle_list){
+                slide.bundle = bundle_list
+                slide.bundle_len = bundle_list.length
+                const isThisMe = (element: any) => element === slide;
+                slide.index_in_bundle = bundle_list.findIndex(isThisMe)
             }
         }
     }
@@ -90,19 +97,18 @@ export class PresentationSlide {
     word!: string
     word_list!: string[]
     words!: string[]
-    bundle_id!:number
+    bundle_id:number = -1
     bundle:any[] = []
     bundle_len:number=0
     index_in_bundle:number=-1
 
     blanks !:string[]
-    blanks_options !:string[][] 
-    target_sentence !:string[] 
-    blanked_sentence !:string[] 
+    blanks_options !:string[][]
+    target_sentence !:string[]
+    blanked_sentence !:string
     video_details!: VideoDetails
 
     constructor(obj?: any) {
-        this.bundle_id  = -1
         if (obj) {
             for (const key in obj) {
                 if (obj[key] !== undefined && obj[key] !== null) {
