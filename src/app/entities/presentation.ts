@@ -99,7 +99,7 @@ export class PresentationSlide {
     blanks_options !:string[] 
     target_sentence !:string[] 
     blanked_sentence !:string[] 
-       video_url!: string
+    video_url!: string
 
     constructor(obj?: any) {
         this.bundle_id  = -1
