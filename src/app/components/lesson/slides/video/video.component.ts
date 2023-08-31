@@ -65,11 +65,13 @@ export class VideoComponent implements OnInit, AfterViewInit{
             console.log('ended')
             const data = {"source": "video_player", 'video_event': "ended"}
             this.lessonService.Broadcast("endDoNotDisturb", data)
+            this.lessonService.Broadcast("slideEventRequest", data)
         }
         if (e.data == PlayerState.PAUSED) {
             console.log('paused')
             const data = {"source": "video_player", 'video_event': "paused"}
             this.lessonService.Broadcast("endDoNotDisturb", data)
+            this.lessonService.Broadcast("slideEventRequest", data)
         }
         if (e.data == PlayerState.PLAYING) {
             console.log('playing')
