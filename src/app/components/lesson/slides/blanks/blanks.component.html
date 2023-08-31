@@ -1,20 +1,21 @@
-<!-- <p>{{currentSlide.blanked_sentence}}</p> -->
-<!-- <p>{{currentSlide.text}}</p>
-<p>{{currentSlide.text}}</p>
-<p>{{currentSlide.text}}</p>
-<p>{{currentSlide.text}}</p> -->
-
 
 <div class="general-box lesson-board">
     <div class="outer-scroller">
         <div class="inner-scroller">
-            <div class="text text-pre-line">
-                <p>{{currentSlide.blanked_sentence}}</p>
+            <div>
+                <ng-container *ngFor="let word of currentSlide.blanked_sentence.split(' '); let index=index">
+                    <span *ngIf="word !=='________'">{{word}}&nbsp;</span>
+                    <ng-container *ngIf="word ==='________'">
+                            <select (change)="onSelectChange($event, optionIdx[index])">
+                                <option *ngFor="let option of currentSlide.blanks_options[optionIdx[index]]">{{ option }}</option>
+                            </select>&nbsp;
+                    </ng-container>
+                </ng-container>
+                <button (click)="submitAnswer()">Submit</button>
             </div>
         </div>
     </div>
-    options {{currentSlide.blanks_options}}
-    <div class="image" *ngIf="currentSlide.teacher_image_path">
+     <div class="image" *ngIf="currentSlide.teacher_image_path">
         <img [src]="currentSlide.teacher_image_path">
     </div>
 </div>

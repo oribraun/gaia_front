@@ -114,6 +114,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.startHeartBeat()
             this.listenForSlideEventRequests()
             this.listenForPauseEvnet()
+        this.listenForBlanksSubmitEvent()
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -133,6 +134,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("togglePauseLesson").subscribe((obj: any) => {
             console.log('asdfasdf')
             this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        })
+    }
+
+    listenForBlanksSubmitEvent(){
+        this.lessonService.ListenFor("blanksSubmitEvent").subscribe((text: any) => {
+            this.getPresentationReplay(text)
         })
     }
 

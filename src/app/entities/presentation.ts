@@ -96,9 +96,9 @@ export class PresentationSlide {
     index_in_bundle:number=-1
 
     blanks !:string[]
-    blanks_options !:string[]
-    target_sentence !:string[]
-    blanked_sentence !:string[]
+    blanks_options !:string[][] 
+    target_sentence !:string[] 
+    blanked_sentence !:string[] 
     video_details!: VideoDetails
 
     constructor(obj?: any) {
