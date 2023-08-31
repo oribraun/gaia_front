@@ -96,18 +96,22 @@ export class PresentationSlide {
     index_in_bundle:number=-1
 
     blanks !:string[]
-    blanks_options !:string[] 
-    target_sentence !:string[] 
-    blanked_sentence !:string[] 
-       video_url!: string
+    blanks_options !:string[]
+    target_sentence !:string[]
+    blanked_sentence !:string[]
+    video_details!: VideoDetails
 
     constructor(obj?: any) {
         this.bundle_id  = -1
         if (obj) {
             for (const key in obj) {
                 if (obj[key] !== undefined && obj[key] !== null) {
-                    // @ts-ignore
-                    this[key] = obj[key];
+                    if (key === 'video_details') {
+                        this[key] = new VideoDetails(obj[key]);
+                    } else {
+                        // @ts-ignore
+                        this[key] = obj[key];
+                    }
                 }
             }
         }
@@ -121,6 +125,24 @@ export class PresentationTeacher {
     gender!: string
     style!: string
     age!: number
+
+    constructor(obj?: any) {
+        if (obj) {
+            for (const key in obj) {
+                if (obj[key] !== undefined && obj[key] !== null) {
+                    // @ts-ignore
+                    this[key] = obj[key];
+                }
+            }
+        }
+    }
+}
+
+export class VideoDetails {
+
+    id!: string
+    start_time!: number
+    end_time!: number
 
     constructor(obj?: any) {
         if (obj) {

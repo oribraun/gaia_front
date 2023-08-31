@@ -55,6 +55,7 @@ section {
         }
 
         .white-board {
+            position: relative;
             height: calc(100% - @header-height);
             width: calc(100% - (@panel-width + @padding));
             display: inline-block;
@@ -76,6 +77,15 @@ section {
                         float: right;
                     }
                     img {
+                        max-height: 100%;
+                        max-width: 100%;
+                        object-fit: contain;
+                        position: relative;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+                    iframe {
                         max-height: 100%;
                         max-width: 100%;
                         object-fit: contain;
@@ -144,6 +154,13 @@ section {
                                 transform: rotate(@arrow-rotate);
                                 z-index: -1;
                             }
+                        }
+                    }
+                    p.no-style {
+                        background: none;
+                        &:before {
+                            content: '';
+                            border-bottom: none;
                         }
                     }
                 }
@@ -377,6 +394,11 @@ section {
                                     top:0;
                                     left:0;
                                 }
+                                iframe {
+                                    max-height: 100%;
+                                    max-width: 100%;
+                                    object-fit: contain;
+                                }
                             }
                         }
                     }
@@ -401,6 +423,13 @@ section {
                     border-bottom: 3px solid transparent;
                 }
             }
+        }
+        .disabled-board {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
     }
 }

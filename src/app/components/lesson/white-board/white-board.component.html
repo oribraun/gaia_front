@@ -64,7 +64,7 @@
         <div class="image">
             <img src="{{imageSrc}}assets/images/icons/speak_icon.png">
         </div>
-    </div>    
+    </div>
 </ng-template>
 
 <div class="header">
@@ -87,4 +87,6 @@
     </ng-container>
     <!-- Add also native language instructions -->
     <ng-container *ngTemplateOutlet="native_instructions;context: {'model': {} }"></ng-container>
+    <div class="disabled-board" *ngIf="isPause"></div>
 </div>
+

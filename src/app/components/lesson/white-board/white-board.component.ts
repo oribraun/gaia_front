@@ -15,9 +15,10 @@ export class WhiteBoardComponent {
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('sectionTitles') sectionTitles: any = {};
     @Input('recognitionText') recognitionText: string = '';
+    @Input('isPause') isPause: boolean = false;
     @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
 
-    
+
     presentationResetIsInProgress = false;
 
     apiSubscriptions: any = {

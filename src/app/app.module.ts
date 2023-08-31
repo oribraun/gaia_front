@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+import {YouTubePlayerModule} from '@angular/youtube-player';
 import { AppComponent } from './app.component';
 import {Config} from "./config";
 import { TestComponent } from './components/test/test.component';
@@ -94,6 +95,7 @@ import { VideoComponent } from './components/lesson/slides/video/video.component
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
+        YouTubePlayerModule,
         NgxEchartsModule.forRoot({
             /**
              * This will import all modules from echarts.

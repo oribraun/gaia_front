@@ -2,16 +2,28 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
             <div>
-                <p>{{currentSlide.slide_title}}</p>
+                <h2>{{currentSlide.slide_title}}</h2>
             </div>
             <div class="text text-pre-line">
-                <p>{{currentSlide.text}}</p>
+                <p class="no-style">{{currentSlide.text}}</p>
             </div>
         </div>
     </div>
-    
-    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">
-        
+
+    <!--    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">-->
+
+    <!--    </div>-->
+    <div class="image image-right" #youtube_player>
+<!--        <youtube-player videoId="-sPwShzNyGQ"></youtube-player>-->
+        <youtube-player
+            *ngIf="currentSlide.video_details"
+            [videoId]="currentSlide.video_details.id"
+            [startSeconds]="currentSlide.video_details.start_time"
+            [endSeconds]="currentSlide.video_details.start_time"
+            (ready)="onPlayerReady($event)"
+            (stateChange)="onPlayerStateChange($event)"
+        >
+        </youtube-player>
     </div>
 </div>
 <div class="general-box text-board">
