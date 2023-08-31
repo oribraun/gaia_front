@@ -1,19 +1,21 @@
 <section>
     <div class="board" *ngIf="isMobile">
         <div id="lessonCarousel" class="carousel slide" data-bs-ride="false"
-        appSwipe (swipeLeft)="onSwipeLeft()" (swipeRight)="onSwipeRight()">
+             appSwipe (swipeLeft)="onSwipeLeft()" (swipeRight)="onSwipeRight()">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#lessonCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#lessonCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <app-white-board
+                    <app-screen-board
                         [currentSection]="currentSection"
                         [currentSlide]="currentSlide"
                         [sectionTitles]="sectionTitles"
+                        [isPause]="isPause"
+                        [isMobile]="isMobile"
                         (onResetPresentation)="onResetPresentation($event)"
-                    ></app-white-board>
+                    ></app-screen-board>
                 </div>
                 <div class="carousel-item center">
                     <app-panel-board
@@ -27,14 +29,13 @@
         </div>
     </div>
     <div class="board" *ngIf="!isMobile">
-        <app-white-board
+        <app-screen-board
             [currentSection]="currentSection"
             [currentSlide]="currentSlide"
             [sectionTitles]="sectionTitles"
-            [recognitionText]="recognitionText"
             [isPause]="isPause"
             (onResetPresentation)="onResetPresentation($event)"
-        ></app-white-board>
+        ></app-screen-board>
         <app-panel-board
             [presentation]="presentation"
             [currentSlide]="currentSlide"

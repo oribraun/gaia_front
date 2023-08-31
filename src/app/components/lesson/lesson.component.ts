@@ -957,7 +957,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "dog",
                             "word_image_path": "https://www.thesprucepets.com/thmb/wdb0SmPvT4IjVLM7TdztfD_KAUs=/2144x0/filters:no_upscale():strip_icc()/AmericanEskimo-4293b26f3e044165959f6dbfd70214b2.jpg",
                             "text": "dog"
@@ -1003,7 +1003,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "cat",
                             "word_image_path": "https://images.ctfassets.net/cnu0m8re1exe/qDQgxOUG5DNKlKH5TXsbo/813fa629fe33794c7ff439070fc31b89/shutterstock_603117302.jpg?fm=jpg&fl=progressive&w=660&h=433&fit=fill",
                             "text": "cat"
@@ -1049,7 +1049,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "bird",
                             "word_image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
                             "text": "bird"
@@ -1276,7 +1276,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             ],
             "presentation_done": false,
-            "current_section_index": 0,
+            "current_section_index": 1,
             "current_slide_index": 0,
             "current_objective_index": 0,
             "current_objective_api_tries": 0,

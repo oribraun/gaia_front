@@ -47,6 +47,8 @@ import { EndingComponent } from './components/lesson/slides/ending/ending.compon
 import { ImageGeneratorComponent } from './components/lesson/slides/image-generator/image-generator.component';
 import { BlanksComponent } from './components/lesson/slides/blanks/blanks.component';
 import { VideoComponent } from './components/lesson/slides/video/video.component';
+import { ScreenBoardComponent } from './components/lesson/screen-board/screen-board.component';
+import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.component';
 
 @NgModule({
     declarations: [
@@ -89,6 +91,8 @@ import { VideoComponent } from './components/lesson/slides/video/video.component
         ImageGeneratorComponent,
         BlanksComponent,
         VideoComponent,
+        ScreenBoardComponent,
+        ChatBoardComponent,
     ],
     imports: [
         BrowserModule,
