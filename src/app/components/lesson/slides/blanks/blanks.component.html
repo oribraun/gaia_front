@@ -1,11 +1,19 @@
+<!-- <p>{{currentSlide.blanked_sentence}}</p> -->
+<!-- <p>{{currentSlide.text}}</p>
+<p>{{currentSlide.text}}</p>
+<p>{{currentSlide.text}}</p>
+<p>{{currentSlide.text}}</p> -->
+
+
 <div class="general-box lesson-board">
     <div class="outer-scroller">
         <div class="inner-scroller">
             <div class="text text-pre-line">
-                <p>{{currentSlide.text}}</p>
+                <p>{{currentSlide.blanked_sentence}}</p>
             </div>
         </div>
     </div>
+    options {{currentSlide.blanks_options}}
     <div class="image" *ngIf="currentSlide.teacher_image_path">
         <img [src]="currentSlide.teacher_image_path">
     </div>
