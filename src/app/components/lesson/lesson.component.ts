@@ -134,7 +134,6 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenForPauseEvnet(){
         this.lessonService.ListenFor("togglePauseLesson").subscribe((obj: any) => {
-            console.log('asdfasdf')
             this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
     }
@@ -162,7 +161,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopHeartBeat()
 
         } else {
-            this.startSpeechRecognition()
+            this.startSpeechRecognition();
             this.startHeartBeat()
             // this.speakInProgress = false;
         }
@@ -183,30 +182,30 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onRecognitionResults = (results: any) => {
-        this.recognitionText = results.text;
-        // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
-        this.recognitionCountWords++;
-        if (this.recognitionText) {
-            console.log('partial', this.recognitionText)
-        }
-        if (results.isFinal) {
-            console.log('final', this.recognitionText)
-            this.updateSrList(this.recognitionText)
-            this.recognitionCountWords = 0;
-            this.recognitionText = ''
-            // console.log("End speech recognition", this.recognitionText)
-            // if (this.recognitionText) {
-            // this.stopSpeechRecognition();
-            // this.getPresentationReplay();
-            // } else {
-            //         // this.stopSpeechRecognition();
-            //         // this.startSpeechRecognition();
-            // }
-        }
-        console.log('results', results)
-        if (!this.speakInProgress) {
+        if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
+            this.recognitionText = results.text;
+            // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
+            this.recognitionCountWords++;
+            if (this.recognitionText) {
+                console.log('partial', this.recognitionText)
+            }
+            if (results.isFinal) {
+                console.log('final', this.recognitionText)
+                this.updateSrList(this.recognitionText)
+                this.broadCastMessage('user', results.text, results.isFinal)
+                this.recognitionCountWords = 0;
+                this.recognitionText = ''
+                // console.log("End speech recognition", this.recognitionText)
+                // if (this.recognitionText) {
+                // this.stopSpeechRecognition();
+                // this.getPresentationReplay();
+                // } else {
+                //         // this.stopSpeechRecognition();
+                //         // this.startSpeechRecognition();
+                // }
+            }
+            console.log('results', results)
             this.resetHeartBeatCounter();
-            this.broadCastMessage('user', results.text, results.isFinal)
         }
     }
 
@@ -241,7 +240,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         // app data : slide index, cam snapshot, sr_len, last_sr, timestamp
         // response : instruction for the client how to proceed (i.e change slide, play audio ...)
         console.log('heartBeatTrigger', this.sr_list)
-        
+
         if(reply){
             this.getPresentationReplay();
         } else {
@@ -573,7 +572,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     let lastLoggedTime = 0;
                     this.animationsService.triggerAddingCircle(count);
                     count++;
-                    this.currentAudio.addEventListener('timeupdate', () => {
+                    this.currentAudio.ontimeupdate = () => {
                         const currentTime = this.currentAudio.currentTime;
                         const timeIntervalMilliseconds = 250; // 250 milliseconds
                         if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
@@ -584,13 +583,14 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                             lastLoggedTime = currentTime;
                         }
-                    });
-                    this.currentAudio.addEventListener('pause', (e: any) => {
+                    }
+                    this.currentAudio.onpause = (e: any) => {
                         this.speakInProgress = false;
-                    })
-                    this.currentAudio.addEventListener('ended', (e: any) => {
+                    }
+                    this.currentAudio.onended = (e: any) => {
                         // const handled_module_type = this.handleWhiteBoardModuleType();
                         // if (!handled_module_type) {
+                        this.currentAudio.currentTime = 0;
                         const src_url: any = this.audioQue.shift();
                         console.log('playUsingAudio ended src_url', src_url)
                         if (src_url) {
@@ -604,7 +604,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             resolve(true)
                         }
                         // }
-                    })
+                    }
                 }
                 loop(src_url);
             } else {
@@ -630,7 +630,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     let lastLoggedTime = 0;
                     this.animationsService.triggerAddingCircle(count);
                     count++;
-                    this.currentAudio.addEventListener('timeupdate', () => {
+                    this.currentAudio.ontimeupdate = () => {
                         const currentTime = this.currentAudio.currentTime;
                         const timeIntervalMilliseconds = 250; // 250 milliseconds
                         if (currentTime - lastLoggedTime >= timeIntervalMilliseconds / 1000) {
@@ -641,11 +641,13 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                             lastLoggedTime = currentTime;
                         }
-                    });
-                    this.currentAudio.addEventListener('pause', (e: any) => {
+                    }
+                    this.currentAudio.onpause = () => {
                         this.speakInProgress = false;
-                    })
-                    this.currentAudio.addEventListener('ended', (e: any) => {
+                    }
+                    this.currentAudio.onended = () => {
+                        console.log('audio ended')
+                        this.currentAudio.currentTime = 0;
                         const arrayBuffer: any = this.audioBlobQue.shift();
                         console.log('playUsingBlob ended arrayBuffer')
                         if (arrayBuffer) {
@@ -659,7 +661,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
-                    })
+                    };
                 }
                 loop(arrayBuffer);
             }
