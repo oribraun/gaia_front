@@ -191,6 +191,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             console.log('final', this.recognitionText)
             this.updateSrList(this.recognitionText)
             this.recognitionCountWords = 0;
+            this.recognitionText = ''
             // console.log("End speech recognition", this.recognitionText)
             // if (this.recognitionText) {
             // this.stopSpeechRecognition();
@@ -200,7 +201,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             //         // this.startSpeechRecognition();
             // }
         }
-        // console.log('results', results)
+        console.log('results', results)
         if (!this.speakInProgress) {
             this.resetHeartBeatCounter();
             this.broadCastMessage('user', results.text, results.isFinal)
@@ -478,16 +479,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             console.log('response', response)
             this.unsubscribeAllHttpEvents();
-            if (this.recognitionOnResultsSubscribe) {
-                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
-            }
             this.stopAudio();
-            this.listenToSpeechRecognitionResults();
             this.currentSectionIndex = 0;
             this.currentSlideIndex = 0;
             this.currentObjectiveIndex = 0;
             this.setCurrentSection();
-            this.getPresentationNoReplay('new_slide');
+            setTimeout(() => {
+                this.getPresentationNoReplay('new_slide');
+            }, 5000)
         }
     }
 
@@ -557,8 +556,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (this.audioQue.length) {
                 const src_url: any = this.audioQue.shift();
                 console.log('playUsingAudio src_url', src_url)
-                this.speakInProgress = true;
                 const loop = (src_url: string) => {
+                    this.speakInProgress = true;
                     this.currentAudio = new Audio();
                     this.currentAudio.src = src_url;
                     this.currentAudio.load();
@@ -579,6 +578,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                             lastLoggedTime = currentTime;
                         }
                     });
+                    this.currentAudio.addEventListener('pause', (e: any) => {
+                        this.speakInProgress = false;
+                    })
                     this.currentAudio.addEventListener('ended', (e: any) => {
                         // const handled_module_type = this.handleWhiteBoardModuleType();
                         // if (!handled_module_type) {
@@ -610,8 +612,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (this.audioBlobQue.length) {
                 const arrayBuffer: any = this.audioBlobQue.shift();
                 console.log('playUsingBlob arrayBuffer')
-                this.speakInProgress = true;
                 const loop = (blob: any) => {
+                    this.speakInProgress = true;
                     const audioBlob = new Blob([arrayBuffer], {type: 'audio/mpeg'});
                     this.currentAudio = new Audio();
                     this.currentAudio.src = URL.createObjectURL(audioBlob);
@@ -633,6 +635,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                             lastLoggedTime = currentTime;
                         }
                     });
+                    this.currentAudio.addEventListener('pause', (e: any) => {
+                        this.speakInProgress = false;
+                    })
                     this.currentAudio.addEventListener('ended', (e: any) => {
                         const arrayBuffer: any = this.audioBlobQue.shift();
                         console.log('playUsingBlob ended arrayBuffer')
@@ -733,8 +738,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     stopAudio() {
         if (this.currentAudio) {
             this.currentAudio.pause();
-            this.currentAudio.src = '';
-            this.speakInProgress = false;
+            // setTimeout(() => {
+            // this.currentAudio.src = '';
+            // })
+            // this.speakInProgress = false;
         }
     }
 
