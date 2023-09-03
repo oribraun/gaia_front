@@ -158,11 +158,13 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (value) {
             this.stopAudio();
             this.stopSpeechRecognition();
-            this.speakInProgress = true;
+            // this.speakInProgress = true;
+            this.stopHeartBeat()
 
         } else {
             this.startSpeechRecognition()
-            this.speakInProgress = false;
+            this.startHeartBeat()
+            // this.speakInProgress = false;
         }
     }
 
@@ -287,7 +289,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     stopHeartBeat(){
-        clearInterval(this.heartBeatInterval)
+        if (this.heartBeatInterval) {
+            clearInterval(this.heartBeatInterval)
+        }
     }
 
 
