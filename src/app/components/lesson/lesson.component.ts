@@ -34,7 +34,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     mediaStream: any;
 
-    mock = environment.is_mock;
+    mock = false;
 
     presentation: Presentation = new Presentation();
     gettingPresentation = false;
@@ -116,7 +116,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.startHeartBeat()
             this.listenForSlideEventRequests()
             this.listenForPauseEvnet()
-        this.listenForBlanksSubmitEvent()
+            this.listenForBlanksSubmitEvent()
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -200,8 +200,10 @@ export class LessonComponent implements OnInit, OnDestroy {
             //         // this.startSpeechRecognition();
             // }
         }
-        // console.log('results', results)
-        this.broadCastMessage('user', results.text, results.isFinal)
+        console.log('results', results)
+        if (!this.speakInProgress) {
+            this.broadCastMessage('user', results.text, results.isFinal)
+        }
     }
 
     broadCastMessage(type: string, text: string, isFinal: boolean) {
@@ -337,7 +339,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             this.currentSlide = new PresentationSlide(this.currentSection.slides[this.currentSlideIndex]);
         }
-        console.log(this.currentSlide)
+        console.log('this.currentSlide', this.currentSlide)
     }
     setCurrentObjective(index: number = -1) {
         if (index > -1) {
@@ -723,7 +725,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.currentAudio) {
             this.currentAudio.pause();
             this.currentAudio.src = '';
-            this.speakInProgress = false;
+            setTimeout(() => {
+                this.speakInProgress = false;
+            })
         }
     }
 

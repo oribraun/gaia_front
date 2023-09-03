@@ -43,8 +43,8 @@ export class ScreenBoardComponent {
             }
         }).subscribe({
             next: (response: any) => {
-                this.presentationResetIsInProgress = false;
                 this.onResetPresentation.emit(response)
+                this.presentationResetIsInProgress = false;
             },
             error: (error) => {
                 this.presentationResetIsInProgress = false;

@@ -1,6 +1,6 @@
 <div class="chat-board general-box">
     <div class="outer-scroller">
-        <div class="inner-scroller">
+        <div class="inner-scroller" #scroller>
             <div class="messages">
                 <div *ngFor="let item of messages">
                     <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
