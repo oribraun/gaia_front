@@ -34,7 +34,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     mediaStream: any;
 
-    mock = false;
+    mock = environment.is_mock;
 
     presentation: Presentation = new Presentation();
     gettingPresentation = false;
