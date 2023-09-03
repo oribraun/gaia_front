@@ -200,7 +200,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             //         // this.startSpeechRecognition();
             // }
         }
-        console.log('results', results)
+        // console.log('results', results)
         if (!this.speakInProgress) {
             this.broadCastMessage('user', results.text, results.isFinal)
         }
