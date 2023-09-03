@@ -202,6 +202,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         // console.log('results', results)
         if (!this.speakInProgress) {
+            this.resetHeartBeatCounter();
             this.broadCastMessage('user', results.text, results.isFinal)
         }
     }
@@ -278,6 +279,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.heartBeatInterval =  setInterval(() => {
             this.heartBeatSequence()
         }, 5*1000)
+    }
+
+    resetHeartBeatCounter() {
+        this.hearBeatCounter = 0;
     }
 
     stopHeartBeat(){
