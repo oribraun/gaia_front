@@ -11,7 +11,7 @@
                             </select>&nbsp;
                     </ng-container>
                 </ng-container>
-                <button (click)="submitAnswer()">Submit</button>
+                <button [disabled]="submitAnswerPending" (click)="submitAnswer()">Submit</button>
             </div>
         </div>
     </div>

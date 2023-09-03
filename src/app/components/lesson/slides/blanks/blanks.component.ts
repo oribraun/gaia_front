@@ -14,6 +14,7 @@ export class BlanksComponent implements OnInit{
    imageSrc = ''
    optionIdx = Object()
    answers= Object()
+   submitAnswerPending:boolean =false
 
   constructor(
       private config: Config,
@@ -33,6 +34,11 @@ export class BlanksComponent implements OnInit{
       }
     })
     console.log(this.optionIdx)
+    this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
+      if (resp.data.source == "blanks_button_reply") {
+        this.submitAnswerPending = false
+      }
+  })
   }
 
   onSelectChange(event: any, idx:number) {
@@ -54,7 +60,10 @@ export class BlanksComponent implements OnInit{
       }
     })
     let answer = answer_arr.join(' ');
-    this.lessonService.Broadcast("blanksSubmitEvent", answer)
+    this.submitAnswerPending = true
+    const data = {"source": "blanks_button_click", 'answer': answer}
+    this.lessonService.Broadcast("slideEventRequest", data)
+    // this.lessonService.Broadcast("blanksSubmitEvent", answer)
   }
 
 }

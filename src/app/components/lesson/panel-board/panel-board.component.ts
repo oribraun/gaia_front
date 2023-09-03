@@ -255,12 +255,17 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             this.subscribe.unsubscribe();
         }
     }
+  
+
     togglePauseLesson(): void {
-        this.lessonService.Broadcast("togglePauseLesson", {})
+        console.log('Daniel')
+        
         if (this.pauseButtonText == "take a break") {
             this.pauseButtonText = "resume lesson"
+            this.lessonService.Broadcast("pauseLesson", {})
         } else {
             this.pauseButtonText = "take a break"
+            this.lessonService.Broadcast("resumeLesson", {})
         }
 
     }

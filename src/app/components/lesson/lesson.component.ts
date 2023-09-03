@@ -155,7 +155,18 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     listenForPauseEvnet(){
-        this.lessonService.ListenFor("togglePauseLesson").subscribe((obj: any) => {
+        this.lessonService.ListenFor("pauseLesson").subscribe((obj: any) => {
+            if (this.doNotDisturb) {
+                return;
+            }
+            this.isPause = true
+            this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        })
+        this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
+            if (this.doNotDisturb) {
+                return;
+            }
+            this.isPause = false
             this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
     }
@@ -167,26 +178,21 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     togglePauseLesson(){
-        if (this.doNotDisturb) {
-            return;
-        }
-        this.isPause = !this.isPause;
         console.log('this.isPause', this.isPause)
         this.toggleStopAll(this.isPause);
     }
 
-    
     toggleStopAll(value: boolean) {
         if (value) {
             this.stopAudio();
             this.stopSpeechRecognition();
             this.stopHeartBeat()
             this.unsubscribeAllHttpEvents();
-
+ 
         } else {
             this.startSpeechRecognition();
             this.startHeartBeat()
-        }
+         }
     }
 
     listenForSlideEventRequests(){
@@ -204,7 +210,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onRecognitionResults = (results: any) => {
+        console.log("out",this.isPause)
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
+            console.log("in",this.isPause)
+ 
             this.recognitionText = results.text;
             // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
             this.recognitionCountWords++;
@@ -214,17 +223,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (results.isFinal) {
                 console.log('final', this.recognitionText)
                 this.updateSrList(this.recognitionText)
-                this.broadCastMessage('user', results.text, results.isFinal)
                 this.recognitionCountWords = 0;
                 this.recognitionText = ''
-                // console.log("End speech recognition", this.recognitionText)
-                // if (this.recognitionText) {
-                // this.stopSpeechRecognition();
-                // this.getPresentationReplay();
-                // } else {
-                //         // this.stopSpeechRecognition();
-                //         // this.startSpeechRecognition();
-                // }
             }
             console.log('results', results)
             this.resetHeartBeatCounter();
@@ -264,7 +264,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('heartBeatTrigger', this.sr_list)
 
         if(reply){
-            this.getPresentationReplay();
+            // add user to chat
+            this.broadCastMessage('user', this.sr_list[this.sr_list.length-1], true)
+            this.getPresentationReplay(this.sr_list[this.sr_list.length-1]);
         } else {
             if (!this.speakInProgress){
                 this.getPresentationNoReplay('heartbeat')
@@ -288,7 +290,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('speakInProgress', this.speakInProgress)
         console.log('ASR_recognizing', this.speechRecognitionService.ASR_recognizing)
 
-        if ((!this.speakInProgress) && (!this.speechRecognitionService.ASR_recognizing)){
+        if ((!this.speakInProgress) && (!this.isPause) && (!this.speechRecognitionService.ASR_recognizing)){
             // make sure the service is off before starting it again
             try{
                 this.startSpeechRecognition();
@@ -564,7 +566,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             && !this.presentationNoReplayIsInProgress
             && !this.presentationResetIsInProgress) {
             this.speakInProgress = false;
-            this.resetSpeechRecognition();
+            // this.resetSpeechRecognition();
             // this.resetIntervalNoReplay();
             // this.stopIntervalNoReplay();
             // this.startIntervalNoReplay()
@@ -588,6 +590,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     stopSpeechRecognition() {
         console.log('stopSpeechRecognition');
         this.speechRecognitionService.abortListening();
+        this.speechRecognitionService.stopListening();
     }
 
     playUsingAudio() {
@@ -650,8 +653,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     playUsingBlob() {
         return new Promise((resolve, reject) => {
             if (this.audioBlobQue.length) {
+                console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
+
                 const arrayBuffer: any = this.audioBlobQue.shift();
-                console.log('playUsingBlob arrayBuffer')
+                console.log('playUsingBlob arrayBuffer', arrayBuffer.toString().substring(0,100))
                 const loop = (blob: any) => {
                     this.speakInProgress = true;
                     const audioBlob = new Blob([arrayBuffer], {type: 'audio/mpeg'});
@@ -734,11 +739,13 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (help_sound_buffer) {
             console.log('help_sound_buffer added to que')
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
-            this.audioBlobQue.push(arrayBuffer);
-            if (!this.speakInProgress) {
-                console.log('this.audioBlobQue', this.audioBlobQue.length)
-                console.log('this.speakInProgress', this.speakInProgress)
-                const value = await this.playUsingBlob();
+            if(!this.audioBlobQue.includes(arrayBuffer)){
+                this.audioBlobQue.push(arrayBuffer);
+                if (!this.speakInProgress) {
+                    console.log('this.audioBlobQue', this.audioBlobQue.length)
+                    console.log('this.speakInProgress', this.speakInProgress)
+                    const value = await this.playUsingBlob();
+                }
             }
         }
 
