@@ -473,7 +473,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             console.log('response', response)
             this.unsubscribeAllHttpEvents();
+            if (this.recognitionOnResultsSubscribe) {
+                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+            }
             this.stopAudio();
+            this.listenToSpeechRecognitionResults();
             this.currentSectionIndex = 0;
             this.currentSlideIndex = 0;
             this.currentObjectiveIndex = 0;
@@ -725,9 +729,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.currentAudio) {
             this.currentAudio.pause();
             this.currentAudio.src = '';
-            setTimeout(() => {
-                this.speakInProgress = false;
-            })
+            this.speakInProgress = false;
         }
     }
 
