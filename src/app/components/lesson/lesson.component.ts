@@ -157,13 +157,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (value) {
             this.stopAudio();
             this.stopSpeechRecognition();
-            // this.speakInProgress = true;
             this.stopHeartBeat()
+            this.unsubscribeAllHttpEvents();
 
         } else {
             this.startSpeechRecognition();
             this.startHeartBeat()
-            // this.speakInProgress = false;
         }
     }
 
@@ -475,25 +474,40 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
+    async resetPresentation(reason: string = '') {
+        if (this.presentationResetIsInProgress) {
+            return;
+        }
+        this.unsubscribeAllHttpEvents();
+        this.presentationResetIsInProgress = true;
+        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+            app_data: {
+                type: reason
+            }
+        }).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('response err', response)
+                    this.handleOnReplayError();
+                } else {
+                    console.log('response', response)
+                    this.stopAudio();
+                    this.currentSectionIndex = 0;
+                    this.currentSlideIndex = 0;
+                    this.currentObjectiveIndex = 0;
+                    this.setCurrentSection();
+                }
+                this.presentationResetIsInProgress = false;
+            },
+            error: (error) => {
+                this.presentationResetIsInProgress = false;
+                console.log('resetPresentation error', error)
+            },
+        })
+    }
 
     onResetPresentation(response: any) {
-        this.presentationResetIsInProgress = false;
-
-        if (response.err) {
-            console.log('response err', response)
-            this.handleOnReplayError();
-        } else {
-            console.log('response', response)
-            this.unsubscribeAllHttpEvents();
-            this.stopAudio();
-            this.currentSectionIndex = 0;
-            this.currentSlideIndex = 0;
-            this.currentObjectiveIndex = 0;
-            this.setCurrentSection();
-            setTimeout(() => {
-                this.getPresentationNoReplay('new_slide');
-            }, 5000)
-        }
+        this.resetPresentation()
     }
 
     onResultsContinuesRecording(obj: any) {

@@ -33,28 +33,10 @@ export class ScreenBoardComponent {
         this.imageSrc = this.config.staticImagePath
     }
     async resetPresentation(reason: string = '') {
-        if (this.presentationResetIsInProgress) {
-            return;
-        }
-        this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
-            app_data: {
-                type: reason
-            }
-        }).subscribe({
-            next: (response: any) => {
-                this.onResetPresentation.emit(response)
-                this.presentationResetIsInProgress = false;
-            },
-            error: (error) => {
-                this.presentationResetIsInProgress = false;
-                console.log('resetPresentation error', error)
-            },
-        })
+        this.onResetPresentation.emit()
     }
 
     toggleFullScreen() {
         this.currentSlide.full_screen = !this.currentSlide.full_screen;
     }
-
 }

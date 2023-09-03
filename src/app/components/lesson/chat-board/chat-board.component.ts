@@ -34,6 +34,7 @@ export class ChatBoardComponent implements OnInit {
     ngOnInit(): void {
         this.lessonService.ListenFor('newChatMessage').subscribe((obj: ChatMessage) =>{
             if (obj.message) {
+                obj.message = this.cleanMessage(obj.message)
                 if (obj.isFinal) {
                     if (!this.started) {
                         this.messages.push(obj);
@@ -52,6 +53,10 @@ export class ChatBoardComponent implements OnInit {
                 this.scrollToBottom2()
             }
         })
+    }
+    cleanMessage(message: string): string {
+        let msg = message.replace('PAUSE1SEC','').replace('PAUSE3SEC','')
+        return msg
     }
 
     scrollToBottom2(animate=false, timeout=0){
