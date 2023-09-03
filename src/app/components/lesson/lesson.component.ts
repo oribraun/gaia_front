@@ -228,9 +228,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             console.log('updateSrList - SPEAK IN PROGRESS ABORTING Trigger')
             return
         }
-        this.sr_list.push(recognitionText)
-        this.last_sr_ts = Date.now()
-        this.heartBeatTrigger(true)
+        if(!this.doNotDisturb){
+            this.sr_list.push(recognitionText)
+            this.last_sr_ts = Date.now()
+            this.heartBeatTrigger(true)
+        }
     }
 
     heartBeatTrigger(reply:boolean=false){
@@ -239,6 +241,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         // app data : slide index, cam snapshot, sr_len, last_sr, timestamp
         // response : instruction for the client how to proceed (i.e change slide, play audio ...)
         console.log('heartBeatTrigger', this.sr_list)
+        
         if(reply){
             this.getPresentationReplay();
         } else {
