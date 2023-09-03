@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
 import {environment} from "../../../../environments/environment";
@@ -9,10 +9,10 @@ import {Config} from "../../../config";
     templateUrl: './white-board.component.html',
     styleUrls: ['./white-board.component.less'],
 })
-export class WhiteBoardComponent implements OnInit {
+export class WhiteBoardComponent implements OnInit, OnChanges {
 
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('currentSlide') currentSlide!: PresentationSlide;
     @Input('sectionTitles') sectionTitles: any = {};
     @Input('recognitionText') recognitionText: string = '';
     @Input('isPause') isPause: boolean = false;
@@ -37,7 +37,6 @@ export class WhiteBoardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.setData()
     }
 
 
@@ -78,5 +77,13 @@ export class WhiteBoardComponent implements OnInit {
         const slideToRender = this.getSlideToRender()
         return slideToRender === slideType
     }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['currentSlide']) {
+             this.setData()
+        }
+    }
+
+
 
 }
