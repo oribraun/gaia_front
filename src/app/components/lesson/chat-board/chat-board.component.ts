@@ -55,7 +55,7 @@ export class ChatBoardComponent implements OnInit {
         })
     }
     cleanMessage(message: string): string {
-        let msg = message.replace('PAUSE1SEC','').replace('PAUSE3SEC','')
+        let msg = message.replace(/PAUSE.*SEC/g, '')
         return msg
     }
 
