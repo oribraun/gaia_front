@@ -107,6 +107,28 @@ export class LessonComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
+        this.initApplication()
+    }
+   
+    resetApplication(){
+        
+        if (!this.mock) {
+            if (this.recognitionOnResultsSubscribe) {
+                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+            }
+            this.stopAudio();
+            this.stopSpeechRecognition();
+            this.unsubscribeAllHttpEvents();
+            this.stopHeartBeat()
+            this.lessonService.Broadcast('resetChatMessages', {});
+            // this.lessonService.ClearAllEvents();
+        } else {
+            this.listenForPauseEvnet()
+            this.setupPresentationMock();
+        }
+    }
+
+    initApplication(){
         this.triggerResize()
         if (!this.mock) {
             this.speechRecognitionService.setupSpeechRecognition();
@@ -153,6 +175,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.toggleStopAll(this.isPause);
     }
 
+    
     toggleStopAll(value: boolean) {
         if (value) {
             this.stopAudio();
@@ -478,7 +501,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.presentationResetIsInProgress) {
             return;
         }
-        this.unsubscribeAllHttpEvents();
+        this.resetApplication()
         this.presentationResetIsInProgress = true;
         this.apiSubscriptions.reset = this.apiService.resetPresentation({
             app_data: {
@@ -491,11 +514,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError();
                 } else {
                     console.log('response', response)
-                    this.stopAudio();
-                    this.currentSectionIndex = 0;
-                    this.currentSlideIndex = 0;
-                    this.currentObjectiveIndex = 0;
-                    this.setCurrentSection();
+                    this.initApplication()                    
                 }
                 this.presentationResetIsInProgress = false;
             },

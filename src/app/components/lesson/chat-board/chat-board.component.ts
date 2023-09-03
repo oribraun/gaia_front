@@ -53,6 +53,9 @@ export class ChatBoardComponent implements OnInit {
                 this.scrollToBottom2()
             }
         })
+        this.lessonService.ListenFor('resetChatMessages').subscribe(() =>{
+            this.messages = []
+        })
     }
     cleanMessage(message: string): string {
         let msg = message.replace('PAUSE1SEC','').replace('PAUSE3SEC','')
