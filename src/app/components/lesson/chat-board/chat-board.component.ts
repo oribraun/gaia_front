@@ -19,10 +19,10 @@ export class ChatBoardComponent implements OnInit {
     private scrollSubscription!: Subscription;
 
     messages: ChatMessage[] = [
-        new ChatMessage({type: 'computer', message: 'hi how are you?'}),
-        new ChatMessage({type: 'user', message: 'im good how are you?'}),
-        new ChatMessage({type: 'computer', message: 'fine'}),
-        new ChatMessage({type: 'user', message: 'hi'}),
+        // new ChatMessage({type: 'computer', message: 'hi how are you?'}),
+        // new ChatMessage({type: 'user', message: 'im good how are you?'}),
+        // new ChatMessage({type: 'computer', message: 'fine'}),
+        // new ChatMessage({type: 'user', message: 'hi'}),
     ];
     started = false;
 
