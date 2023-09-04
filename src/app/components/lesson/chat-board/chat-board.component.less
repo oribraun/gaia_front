@@ -22,18 +22,31 @@
     .message {
         clear: both;
         //float: left;
-        padding: 6px 10px 7px;
-        border-radius: 10px 10px 10px 0;
-        background: #b2b2b2;
-        margin: 8px 0;
-        margin-bottom: 20px;
+        padding: 6px 10px;
+        padding-right: 20px;
+        border-radius: 10px 10px 10px 10px;
+        background: var(--grey-background-color);
+        //margin: 8px 0;
+        margin-bottom: 5px;
         font-size: 11px;
-        line-height: 1.4;
-        margin-left: 35px;
+        line-height: 11px;
+        //margin-left: 35px;
         position: relative;
         text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
         vertical-align: top;
         z-index: 0;
+        .text   {
+            vertical-align: middle;
+        }
+        .translate-icon{
+            position: absolute;
+            vertical-align: middle;
+            right: 5px;
+            top: 25%;
+            font-size: 1.2em;
+            color: #000;
+            cursor: pointer;
+        }
 
         .timestamp {
             position: absolute;
@@ -42,15 +55,15 @@
             color: rgba(255, 255, 255, .3);
         }
 
-        &::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            border-top: 6px solid #b2b2b2;
-            left: 0;
-            border-right: 7px solid transparent;
-            z-index: -1;
-        }
+        //&::before {
+        //    content: '';
+        //    position: absolute;
+        //    bottom: -5px;
+        //    border-top: 6px solid #b2b2b2;
+        //    left: 0;
+        //    border-right: 7px solid transparent;
+        //    z-index: -1;
+        //}
 
         .avatar {
             position: absolute;
@@ -73,19 +86,19 @@
 
         &.message-personal {
             //float: right;
-            color: #fff;
-            text-align: right;
-            background: linear-gradient(120deg, #248A52, #257287);
-            border-radius: 10px 10px 0 10px;
+            //color: #fff;
+            //text-align: right;
+            background: var(--pink-background-color);
+            //border-radius: 10px 10px 10px 10px;
 
-            &::before {
-                left: auto;
-                right: 0;
-                border-right: none;
-                border-left: 7px solid transparent;
-                border-top: 6px solid #257287;
-                bottom: -4px;
-            }
+            //&::before {
+            //    left: auto;
+            //    right: 0;
+            //    border-right: none;
+            //    border-left: 7px solid transparent;
+            //    border-top: 6px solid #257287;
+            //    bottom: -4px;
+            //}
         }
 
         &:last-child {

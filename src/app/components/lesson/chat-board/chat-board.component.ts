@@ -5,6 +5,8 @@ import {ChatMessage} from "../../../entities/chat_message";
 import {fromEvent, interval, Subscription} from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 
+declare var $: any;
+
 @Component({
     selector: 'app-chat-board',
     templateUrl: './chat-board.component.html',
@@ -17,10 +19,10 @@ export class ChatBoardComponent implements OnInit {
     private scrollSubscription!: Subscription;
 
     messages: ChatMessage[] = [
-        // new ChatMessage({type: 'computer', message: 'hi how are you?'}),
-        // new ChatMessage({type: 'user', message: 'im good how are you?'}),
-        // new ChatMessage({type: 'computer', message: 'fine'}),
-        // new ChatMessage({type: 'user', message: 'hi'}),
+        new ChatMessage({type: 'computer', message: 'hi how are you?'}),
+        new ChatMessage({type: 'user', message: 'im good how are you?'}),
+        new ChatMessage({type: 'computer', message: 'fine'}),
+        new ChatMessage({type: 'user', message: 'hi'}),
     ];
     started = false;
 
@@ -111,6 +113,39 @@ export class ChatBoardComponent implements OnInit {
         });
 
         const startTime = Date.now();
+
+    }
+
+    translate(index: number) {
+        if (!this.messages[index].translatedMessage) {
+            this.translateGoogle(this.messages[index]).then((translated_text: string) => {
+                this.messages[index].translatedMessage = translated_text;
+                this.messages[index].showTranslated = true;
+            }).catch((e) => {
+                console.log('translateGoogle e', e)
+            })
+        } else {
+            this.messages[index].showTranslated = !this.messages[index].showTranslated;
+        }
+    }
+
+    translateGoogle(currentMessage: ChatMessage): Promise<string> {
+        return new Promise((resolve, reject) => {
+            var sourceLang = 'en';
+            var targetLang = 'he';
+
+            var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
+
+            $.getJSON(url, (data: any) => {
+                let translated_text = '';
+                try {
+                    translated_text = data[0][0][0];
+                    resolve(translated_text);
+                } catch (e) {
+                    reject(e)
+                }
+            });
+        })
 
     }
 }
