@@ -44,6 +44,8 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     recorder: any;
     currentChunks: any[] = []
 
+    showTeacherIcon = true;
+
     constructor(
         private config: Config,
         private animationsService: AnimationsService,
@@ -255,11 +257,11 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             this.subscribe.unsubscribe();
         }
     }
-  
+
 
     togglePauseLesson(): void {
         console.log('Daniel')
-        
+
         if (this.pauseButtonText == "take a break") {
             this.pauseButtonText = "resume lesson"
             this.lessonService.Broadcast("pauseLesson", {})
@@ -268,6 +270,14 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             this.lessonService.Broadcast("resumeLesson", {})
         }
 
+    }
+
+    changeToUserIcon() {
+        this.showTeacherIcon = false;
+    }
+
+    changeToTeacherIcon() {
+        this.showTeacherIcon = true;
     }
 
 

@@ -3,8 +3,11 @@
         <div class="teacher">
             <div class="user-box">
                 <div class="user" #user>
-                    <div class="icon">
+                    <div class="icon" *ngIf="showTeacherIcon">
                         <i class="bi bi-person"></i>
+                    </div>
+                    <div class="icon" *ngIf="!showTeacherIcon">
+                        <i class="bi bi-ear"></i>
                     </div>
                 </div>
             </div>
