@@ -255,6 +255,16 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getNextSlide(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-next-slide', obj,
+            this.httpOptions
+        )
+    }
+    getPrevSlide(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-prev-slide', obj,
+            this.httpOptions
+        )
+    }
     resetPresentation(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'reset-presentation', obj,
             this.httpOptions

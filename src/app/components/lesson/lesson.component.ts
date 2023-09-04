@@ -81,6 +81,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
     presentationNoReplayIsInProgress = false;
+    nextSlideIsInProgress = false;
+    prevSlideIsInProgress = false;
     eventHandlingInProgress = false;
 
     mobileWidth = 768; // pixels
@@ -91,6 +93,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         replay: null,
         no_replay: null,
         reset: null,
+        next_slide: null,
+        prev_slide: null,
     }
     heartBeatInterval: any = null
     heartBeatCounter: number = 0;
@@ -111,9 +115,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.initApplication()
     }
-   
+
     resetApplication(){
-        
+
         if (!this.mock) {
             if (this.recognitionOnResultsSubscribe) {
                 this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
@@ -173,9 +177,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-     
 
-   
+
+
     togglePauseLesson(){
         console.log('this.isPause', this.isPause)
         this.toggleStopAll(this.isPause);
@@ -187,11 +191,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopSpeechRecognition();
             this.stopHeartBeat()
             this.unsubscribeAllHttpEvents();
- 
+
         } else {
             this.startSpeechRecognition();
             this.startHeartBeat()
-         }
+        }
     }
 
     listenForSlideEventRequests(){
@@ -212,7 +216,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log("out",this.isPause)
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
             console.log("in",this.isPause)
- 
+
             this.recognitionText = results.text;
             // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
             this.recognitionCountWords++;
@@ -270,7 +274,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if( (!this.speakInProgress) && (n_seconds_from_last_sr>10)  && (n_seconds_from_last_speak>10) && (n_seconds_from_user_action>10)){
             this.getHeartBeatReply()
         }
-     }
+    }
 
     heartBeatSequence(x:number=3){
         // increase the counter
@@ -540,7 +544,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError();
                 } else {
                     console.log('response', response)
-                    this.initApplication()                    
+                    this.initApplication()
                 }
                 this.presentationResetIsInProgress = false;
             },
@@ -551,8 +555,50 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-    onResetPresentation(response: any) {
+    onResetPresentation(obj: any) {
         this.resetPresentation()
+    }
+
+    onNextSlide(obj: any) {
+        if (this.nextSlideIsInProgress) {
+            return;
+        }
+        this.nextSlideIsInProgress = true;
+        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+            app_data: {
+                // type: reason
+            }
+        }).subscribe({
+            next: (response: any) => {
+
+                this.nextSlideIsInProgress = false;
+            },
+            error: (error) => {
+                this.nextSlideIsInProgress = false;
+                console.log('onNextSlide error', error)
+            },
+        })
+    }
+
+    onPrevSlide(response: any) {
+        if (this.prevSlideIsInProgress) {
+            return;
+        }
+        this.prevSlideIsInProgress = true;
+        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+            app_data: {
+                // type: reason
+            }
+        }).subscribe({
+            next: (response: any) => {
+
+                this.prevSlideIsInProgress = false;
+            },
+            error: (error) => {
+                this.prevSlideIsInProgress = false;
+                console.log('onPrevSlide error', error)
+            },
+        })
     }
 
     onResultsContinuesRecording(obj: any) {
