@@ -32,10 +32,10 @@ export class SpeechRecognitionService {
             this.englishRecognition.continuous = true;
             this.englishRecognition.interimResults = true
 
-            this.hebrewRecognition = new recognitionClass();
-            this.hebrewRecognition.lang = 'en-US';//he-IL
-            this.hebrewRecognition.continuous = true;
-            this.hebrewRecognition.interimResults = true
+            // this.hebrewRecognition = new recognitionClass();
+            // this.hebrewRecognition.lang = 'en-US';//he-IL
+            // this.hebrewRecognition.continuous = true;
+            // this.hebrewRecognition.interimResults = true
 
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
             // this.englishRecognition.addEventListener('end', this.onEndRecognitionEn);
@@ -49,15 +49,15 @@ export class SpeechRecognitionService {
                 console.log('EN ASR ON END', self.ASR_recognizing)
 
             };
-            this.hebrewRecognition.onstart = function () {
-                self.ASR_recognizing = true;
-                console.log('HE ASR ON START', self.ASR_recognizing)
-            };
-            this.hebrewRecognition.onend = function () {
-                self.ASR_recognizing = false;
-                console.log('HE ASR ON END', self.ASR_recognizing)
-            };
-            this.hebrewRecognition.addEventListener('result', this.onResultRecognitionHe);
+            // this.hebrewRecognition.onstart = function () {
+            //     self.ASR_recognizing = true;
+            //     console.log('HE ASR ON START', self.ASR_recognizing)
+            // };
+            // this.hebrewRecognition.onend = function () {
+            //     self.ASR_recognizing = false;
+            //     console.log('HE ASR ON END', self.ASR_recognizing)
+            // };
+            // this.hebrewRecognition.addEventListener('result', this.onResultRecognitionHe);
             // this.hebrewRecognition.addEventListener('end', this.onEndRecognitionHe);
         } else {
             console.error('Speech recognition not supported in this browser.');
@@ -77,14 +77,14 @@ export class SpeechRecognitionService {
         console.log('onEndRecognitionEn event', event)
     }
 
-    onResultRecognitionHe = (event: any) => {
-        const result = event.results[event.results.length - 1];
-        const word = result[0].transcript;
-        this.hebrewText = word;
-        this.onResults.emit(
-            new OnResults(word, this.hebrewRecognition.lang, result.isFinal)
-        )
-    }
+    // onResultRecognitionHe = (event: any) => {
+    //     const result = event.results[event.results.length - 1];
+    //     const word = result[0].transcript;
+    //     this.hebrewText = word;
+    //     this.onResults.emit(
+    //         new OnResults(word, this.hebrewRecognition.lang, result.isFinal)
+    //     )
+    // }
 
     onEndRecognitionHe = (event: any) => {
         console.log('onEndRecognitionHe event', event)
@@ -103,8 +103,8 @@ export class SpeechRecognitionService {
         try {
             if (this.englishRecognition)
                 this.englishRecognition.start();
-            if (this.hebrewRecognition)
-                this.hebrewRecognition.start();
+            // if (this.hebrewRecognition)
+            //     this.hebrewRecognition.start();
             this.isListening = true;
         } catch (e) {
             console.log('startListening Error', e)
@@ -115,8 +115,8 @@ export class SpeechRecognitionService {
         try {
             if (this.englishRecognition)
                 this.englishRecognition.stop();
-            if (this.hebrewRecognition)
-                this.hebrewRecognition.stop();
+            // if (this.hebrewRecognition)
+            //     this.hebrewRecognition.stop();
             this.isListening = false;
         } catch (e) {
             console.log('stopListening Error', e)
@@ -126,8 +126,8 @@ export class SpeechRecognitionService {
         try {
             if (this.englishRecognition)
                 this.englishRecognition.abort();
-            if (this.hebrewRecognition)
-                this.hebrewRecognition.abort();
+            // if (this.hebrewRecognition)
+            //     this.hebrewRecognition.abort();
             this.isListening = false;
         } catch (e) {
             console.log('stopListening Error', e)
