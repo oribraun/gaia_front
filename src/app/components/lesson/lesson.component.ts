@@ -395,7 +395,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentationEventReplay(data:any={}) {
         this.last_user_action_ts = Date.now()
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.eventHandlingInProgress) {
@@ -429,7 +429,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationReplay(text: string = '') {
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.presentationNoReplayIsInProgress) {
@@ -466,7 +466,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getHeartBeatReply() {
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.presentationReplayIsInProgress) {
@@ -538,7 +538,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async resetPresentation(reason: string = '') {
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.presentationResetIsInProgress) {
@@ -573,7 +573,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onNextSlide(obj: any) {
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.nextSlideIsInProgress) {
@@ -599,7 +599,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onPrevSlide(response: any) {
-        if (!this.allowApiCalles()) {
+        if (!this.allowApiCalls()) {
             return;
         }
         if (this.prevSlideIsInProgress) {
@@ -962,7 +962,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    allowApiCalles() {
+    allowApiCalls() {
         return !this.presentationResetIsInProgress &&
             !this.presentationReplayIsInProgress &&
             !this.presentationNewSlideInProgress &&
