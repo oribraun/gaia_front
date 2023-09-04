@@ -68,7 +68,9 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-
+        this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
+            this.pauseButtonText = "take a break"
+        })
     }
 
     listenToCircleAnimations() {

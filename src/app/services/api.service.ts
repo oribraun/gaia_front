@@ -245,8 +245,13 @@ export class ApiService {
             this.httpOptions
         )
     }
-    getPresentationNoReplay(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation-no-reply', obj,
+    getHeartBeatReply(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-heartbeat-reply', obj,
+            this.httpOptions
+        )
+    }
+    getNewSlideReply(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-new-slide-reply', obj,
             this.httpOptions
         )
     }

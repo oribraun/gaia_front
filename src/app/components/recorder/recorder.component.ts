@@ -518,23 +518,23 @@ export class RecorderComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationNoReplay(reason: string = '') {
-        const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
-            app_data: {
-                type: reason,
-            }
-        }))
+        // const response: any = await lastValueFrom(this.apiService.getPresentationNoReplay({
+        //     app_data: {
+        //         type: reason,
+        //     }
+        // }))
 
-        if (response.err) {
-            console.log('response err', response)
-            // setTimeout(() => {
-            //     this.startSpeechRecognition();
-            // },2000)
-            this.handleOnReplayError()
-        } else {
-            console.log('response', response)
-            // this.currentData = response.data;
-            this.handleOnPresentationReplay();
-        }
+        // if (response.err) {
+        //     console.log('response err', response)
+        //     // setTimeout(() => {
+        //     //     this.startSpeechRecognition();
+        //     // },2000)
+        //     this.handleOnReplayError()
+        // } else {
+        //     console.log('response', response)
+        //     // this.currentData = response.data;
+        //     this.handleOnPresentationReplay();
+        // }
     }
 
     handleOnReplayError() {
