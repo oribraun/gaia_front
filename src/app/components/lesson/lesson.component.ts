@@ -80,6 +80,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
+    presentationNewSlideInProgress = false;
     presentationNoReplayIsInProgress = false;
     nextSlideIsInProgress = false;
     prevSlideIsInProgress = false;
@@ -394,6 +395,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentationEventReplay(data:any={}) {
         this.last_user_action_ts = Date.now()
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.eventHandlingInProgress) {
             return;
         }
@@ -425,6 +429,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getPresentationReplay(text: string = '') {
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.presentationNoReplayIsInProgress) {
             return;
         }
@@ -459,6 +466,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getHeartBeatReply() {
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.presentationReplayIsInProgress) {
             return;
         }
@@ -494,10 +504,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async getNewSlideReply() {
-        if (this.presentationReplayIsInProgress) {
+        if (this.presentationNewSlideInProgress) {
             return;
         }
-        this.presentationNoReplayIsInProgress = true;
+        this.presentationNewSlideInProgress = true;
         this.apiSubscriptions.no_replay = this.apiService.getNewSlideReply({
             app_data: {
                 type: 'new_slide',
@@ -510,7 +520,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }).subscribe({
             next: (response: any) => {
-                this.presentationNoReplayIsInProgress = false;
+                this.presentationNewSlideInProgress = false;
 
                 if (response.err) {
                     console.log('new slide response err', response)
@@ -521,13 +531,16 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             },
             error: (error) => {
-                this.presentationNoReplayIsInProgress = false;
+                this.presentationNewSlideInProgress = false;
                 console.log('new slide error', error)
             },
         })
     }
 
     async resetPresentation(reason: string = '') {
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.presentationResetIsInProgress) {
             return;
         }
@@ -560,18 +573,21 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onNextSlide(obj: any) {
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.nextSlideIsInProgress) {
             return;
         }
         this.nextSlideIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.getNextSlide({
+        this.apiSubscriptions.next_slide = this.apiService.getNextSlide({
             app_data: {
                 // type: reason
             }
         }).subscribe({
             next: (response: any) => {
                 if (!response.err) {
-                    this.handleOnPresentationReplay();
+
                 }
                 this.nextSlideIsInProgress = false;
             },
@@ -583,6 +599,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     onPrevSlide(response: any) {
+        if (!this.allowApiCalles()) {
+            return;
+        }
         if (this.prevSlideIsInProgress) {
             return;
         }
@@ -941,6 +960,16 @@ export class LessonComponent implements OnInit, OnDestroy {
         } else {
             console.error('Webcam access not supported');
         }
+    }
+
+    allowApiCalles() {
+        return !this.presentationResetIsInProgress &&
+            !this.presentationReplayIsInProgress &&
+            !this.presentationNewSlideInProgress &&
+            !this.presentationNoReplayIsInProgress &&
+            !this.nextSlideIsInProgress &&
+            !this.prevSlideIsInProgress &&
+            !this.eventHandlingInProgress
     }
 
     ngOnDestroy() {
