@@ -19,7 +19,7 @@ export class ChatBoardComponent implements OnInit {
     private scrollSubscription!: Subscription;
 
     messages: ChatMessage[] = [
-        // new ChatMessage({type: 'computer', message: 'hi how are you?'}),
+        new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
         // new ChatMessage({type: 'user', message: 'im good how are you?'}),
         // new ChatMessage({type: 'computer', message: 'fine'}),
         // new ChatMessage({type: 'user', message: 'hi'}),
@@ -139,7 +139,7 @@ export class ChatBoardComponent implements OnInit {
             $.getJSON(url, (data: any) => {
                 let translated_text = '';
                 try {
-                    translated_text = data[0][0][0];
+                    translated_text = data[0].map((o: any) => o[0]).join('')
                     resolve(translated_text);
                 } catch (e) {
                     reject(e)
