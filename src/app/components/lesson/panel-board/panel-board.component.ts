@@ -34,6 +34,8 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('user', { static: false }) userElement!: ElementRef;
 
     @Output('onResults') onResults: EventEmitter<any> = new EventEmitter<any>();
+    @Output('onNextSlide') onNextSlide: EventEmitter<any> = new EventEmitter<any>();
+    @Output('onPrevSlide') onPrevSlide: EventEmitter<any> = new EventEmitter<any>();
 
     mediaStream: any;
 
@@ -280,6 +282,14 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     changeToTeacherIcon() {
         this.showTeacherIcon = true;
+    }
+
+    nextSlide(){
+        this.onNextSlide.emit({});
+    }
+
+    prevSlide(){
+        this.onPrevSlide.emit({});
     }
 
 

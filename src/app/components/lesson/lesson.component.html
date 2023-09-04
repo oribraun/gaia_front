@@ -23,6 +23,8 @@
                         [currentSlide]="currentSlide"
                         [currentSectionIndex]="currentSectionIndex"
                         [isMobile]="isMobile"
+                        (onNextSlide)="onNextSlide($event)"
+                        (onPrevSlide)="onPrevSlide($event)"
                     ></app-panel-board>
                 </div>
             </div>
@@ -41,6 +43,8 @@
             [currentSlide]="currentSlide"
             [currentSectionIndex]="currentSectionIndex"
             [isMobile]="isMobile"
+            (onNextSlide)="onNextSlide($event)"
+            (onPrevSlide)="onPrevSlide($event)"
         ></app-panel-board>
         <div class="generic-loader-wrapper" *ngIf="gettingPresentation">
             <div class="loader">

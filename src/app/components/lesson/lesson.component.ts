@@ -564,13 +564,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.nextSlideIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.getNextSlide({
             app_data: {
                 // type: reason
             }
         }).subscribe({
             next: (response: any) => {
-
+                if (!response.err) {
+                    this.handleOnPresentationReplay();
+                }
                 this.nextSlideIsInProgress = false;
             },
             error: (error) => {
@@ -585,13 +587,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.prevSlideIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.getPrevSlide({
             app_data: {
                 // type: reason
             }
         }).subscribe({
             next: (response: any) => {
+                if (!response.err) {
 
+                }
                 this.prevSlideIsInProgress = false;
             },
             error: (error) => {
