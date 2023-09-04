@@ -587,9 +587,17 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: (response: any) => {
                 if (!response.err) {
-
+                    this.stopAudio();
+                    this.currentSectionIndex = response.data.current_section_index;
+                    this.currentSlideIndex = response.data.current_slide_index;
+                    this.currentObjectiveIndex = response.data.current_objective_index;
+                    this.setCurrentSection();
+                    this.nextSlideIsInProgress = false;
+                    this.getNewSlideReply();
                 }
-                this.nextSlideIsInProgress = false;
+                else {
+                    this.nextSlideIsInProgress = false;
+                }
             },
             error: (error) => {
                 this.nextSlideIsInProgress = false;
@@ -598,7 +606,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-    onPrevSlide(response: any) {
+    onPrevSlide(obj: any) {
         if (!this.allowApiCalls()) {
             return;
         }
@@ -606,16 +614,24 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.prevSlideIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.getPrevSlide({
+        this.apiSubscriptions.prev_slide = this.apiService.getPrevSlide({
             app_data: {
                 // type: reason
             }
         }).subscribe({
             next: (response: any) => {
                 if (!response.err) {
-
+                    this.stopAudio();
+                    this.currentSectionIndex = response.data.current_section_index;
+                    this.currentSlideIndex = response.data.current_slide_index;
+                    this.currentObjectiveIndex = response.data.current_objective_index;
+                    this.setCurrentSection();
+                    this.prevSlideIsInProgress = false;
+                    this.getNewSlideReply();
                 }
-                this.prevSlideIsInProgress = false;
+                else {
+                    this.prevSlideIsInProgress = false;
+                }
             },
             error: (error) => {
                 this.prevSlideIsInProgress = false;
