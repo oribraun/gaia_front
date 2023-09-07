@@ -31,6 +31,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     @Input('isMobile') isMobile: boolean = false;
 
     @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
+    @ViewChild('canvasElement') canvasElement!: ElementRef;
     @ViewChild('user', { static: false }) userElement!: ElementRef;
 
     @Output('onResults') onResults: EventEmitter<any> = new EventEmitter<any>();
@@ -40,13 +41,14 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     mediaStream: any;
 
     subscribe: any;
-
+    snapShotInterval: any = null
     imageSrc = ''
     pauseButtonText = "take a break"
     recorder: any;
     currentChunks: any[] = []
 
     showTeacherIcon = true;
+    takeSnapshotEnabled = false;
 
     constructor(
         private config: Config,
@@ -56,7 +58,11 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         this.listenToCircleAnimations();
 
         this.imageSrc = this.config.staticImagePath;
-
+        if (this.takeSnapshotEnabled) {
+            this.snapShotInterval = setInterval(() => {
+                this.takeSnapshot()
+            }, 15*1000)
+        }
         this.startVideo().then((res) => {
             if (res) {
                 this.setMediaStream();
@@ -73,11 +79,25 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
             this.pauseButtonText = "take a break"
         })
+        this.lessonService.ListenFor("teacherListening").subscribe((obj: any) => {
+            console.log('teacherListening')
+            this.changeToUserIcon()
+        })
+        this.lessonService.ListenFor("teacherSpeaking").subscribe((obj: any) => {
+            console.log('teacherSpeaking')
+            this.changeToTeacherIcon()
+        })
     }
 
     listenToCircleAnimations() {
         this.subscribe = this.animationsService.onAddCircle.subscribe((obj) => {
             this.animationsService.addCircle(this.userElement.nativeElement, obj.unique_num)
+        })
+    }
+    
+    listenToSnapshotRequest() {
+        this.lessonService.ListenFor("takeSnapshot").subscribe((obj: any) => {
+            this.takeSnapshot()
         })
     }
 
@@ -95,6 +115,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                     navigator.mediaDevices.getUserMedia(constraints).then((mediaStream) => {
                         // Display the stream in the video element
                         this.mediaStream = mediaStream;
+                        this.videoElement.nativeElement.srcObject = mediaStream;
                         resolve(true);
                     })
                 } else {
@@ -106,6 +127,27 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                 resolve(false);
             }
         })
+    }
+
+    takeSnapshot() {
+        if (this.takeSnapshotEnabled) {
+            const video = this.videoElement.nativeElement;
+            const canvas = this.canvasElement.nativeElement;
+            const context = canvas.getContext('2d');
+            
+            // Adjust the canvas dimensions to match the video frame
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw the current video frame onto the canvas
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+            
+            // Get the image data URL from the canvas
+            const imageUrl = canvas.toDataURL('image/jpeg',0.5);
+            
+            // Now, you can use this imageUrl for display, storage, etc.
+            this.lessonService.Broadcast("snapshotTaken", {image_url: imageUrl});
+        }
     }
 
     setUpRecorder() {
@@ -259,6 +301,9 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     ngOnDestroy(): void {
         if (this.subscribe) {
             this.subscribe.unsubscribe();
+        }
+        if (this.snapShotInterval) {
+            clearInterval(this.snapShotInterval);
         }
     }
 

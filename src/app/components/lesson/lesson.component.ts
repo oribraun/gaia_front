@@ -75,7 +75,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     audioBlobQue: any[] = []
     enableArrayBuffer = true;
     enableNoReplayInterval = true;
-
+    webcam_last_snapshot_url: string = ''
+    webcam_last_snapshot_url_updated: boolean = false;
     resetSpeechRecognitionTimeout: any = null;
 
     presentationReplayIsInProgress = false;
@@ -146,6 +147,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.startHeartBeat()
             this.listenForSlideEventRequests()
             this.listenForPauseEvnet()
+            this.listenForSnapshots()
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -178,8 +180,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-
-
+    listenForSnapshots(){
+        this.lessonService.ListenFor("snapshotTaken").subscribe((obj: any) => {
+            this.webcam_last_snapshot_url = obj["image_url"]
+            this.webcam_last_snapshot_url_updated = true
+        })
+    }
 
     togglePauseLesson(){
         console.log('this.isPause', this.isPause)
@@ -356,7 +362,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentObjectiveIndex = this.presentation.current_objective_index;
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
-                    this.getPresentationReplay('hi');
+                    this.getNewSlideReply();
                 }
                 this.gettingPresentation = false;
             },
@@ -407,7 +413,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             app_data: {
                 type:'event',
                 data: data,
-                array_buffer: this.enableArrayBuffer
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
         }).subscribe({
             next: (response: any) => {
@@ -444,7 +451,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             app_data: {
                 type:'student_reply',
                 student_text: message,
-                array_buffer: this.enableArrayBuffer
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
         }).subscribe({
             next: (response: any) => {
@@ -481,7 +489,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                 last_speak_ts:this.last_speak_ts,
                 n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
                 n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
-                array_buffer: this.enableArrayBuffer
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
         }).subscribe({
             next: (response: any) => {
@@ -516,7 +525,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                 last_speak_ts:this.last_speak_ts,
                 n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
                 n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
-                array_buffer: this.enableArrayBuffer
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
         }).subscribe({
             next: (response: any) => {
@@ -850,9 +860,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             if(!this.audioBlobQue.includes(arrayBuffer)){
                 this.audioBlobQue.push(arrayBuffer);
                 if (!this.speakInProgress) {
+                    this.lessonService.Broadcast('teacherSpeaking', {});
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
                     const value = await this.playUsingBlob();
+                    this.lessonService.Broadcast('teacherListening', {});
                 }
             }
         }
@@ -893,6 +905,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     stopAudio() {
+        this.lessonService.Broadcast('teacherListening', {});
         if (this.currentAudio) {
             this.currentAudio.pause();
             // setTimeout(() => {
