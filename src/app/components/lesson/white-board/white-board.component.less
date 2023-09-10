@@ -1,63 +1,75 @@
 .active-slide {
     //box-shadow: inset 0px 0px 4px red;
-    border: 2px solid red;
+    //border: 2px solid red;
+    box-shadow: 0 0 10px 2px #ff0000;
     border-radius: 5px;
     //margin-right: 2px;
     overflow: hidden;
 }
 
-section .board .screen-board .white-board .slides .row {
-    .slide-board-bundle {
-        position: relative;
-        height: 100%;
-        //height: 192.7px;
-        margin-top: 0.75rem;
-        .slide-board {
-            padding: 0;
+section .board .screen-board .white-board .slides {
+    padding: 0;
+    .inner-scroller {
+        padding-right: calc(var(--bs-gutter-x) * .5);
+        padding-left: calc(var(--bs-gutter-x) * .5);
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .row {
+        .slide-board-bundle {
             position: relative;
-            .outer-scroller {
-                display: block;
-                width: 100%;
-                z-index: 1;
-                text-align: center;
-                height: auto;
-                position: absolute;
-                bottom: 0;
+            height: 100%;
+            //height: 192.7px;
+            margin-top: 0.75rem;
 
-                .inner-scroller {
-                    .text {
-                        h2 {
-                            display: inline-block;
-                            background: rgba(255, 255, 255, .7);
-                            padding: 0 40px;
-                            border-radius: 100%;
-                            margin: 0;
+            .slide-board {
+                padding: 0;
+                position: relative;
+
+                .outer-scroller {
+                    display: block;
+                    width: 100%;
+                    z-index: 1;
+                    text-align: center;
+                    height: auto;
+                    position: absolute;
+                    bottom: 0;
+
+                    .inner-scroller {
+                        .text {
+                            h2 {
+                                display: inline-block;
+                                background: rgba(255, 255, 255, .7);
+                                padding: 0 40px;
+                                border-radius: 100%;
+                                margin: 0;
+                            }
                         }
                     }
                 }
-            }
 
-            .image {
-                //position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                float: none;
-                display: block;
-                width: 100%;
-                padding: 0;
-
-                img {
-                    transform: none;
+                .image {
+                    //position: absolute;
                     top: 0;
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    //position: absolute;
+                    float: none;
+                    display: block;
                     width: 100%;
-                    height: 100%;
-                    object-fit: cover;
+                    padding: 0;
+
+                    img {
+                        transform: none;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        //position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
                 }
             }
         }
