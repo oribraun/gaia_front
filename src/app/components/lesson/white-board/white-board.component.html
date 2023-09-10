@@ -49,7 +49,8 @@
                             <div class="slide"
                                  [ngClass]="{
                                   'active-slide':id==currentSlide.index_in_bundle && data.length > 1,
-                                  'slide-board-full-height':  data.length > 1
+                                  'slide-board-full-height':  data.length > 1,
+                                  'slide-board-bundle':  data.length > 1
                                  }"
                             >
                                 <ng-container *ngTemplateOutlet="selected_slide_container;context: {'model': {'currentSlide':slide} }"></ng-container>

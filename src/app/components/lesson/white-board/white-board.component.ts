@@ -1,13 +1,22 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewEncapsulation
+} from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
-import {environment} from "../../../../environments/environment";
 import {Config} from "../../../config";
 
 @Component({
     selector: 'app-white-board',
     templateUrl: './white-board.component.html',
     styleUrls: ['./white-board.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 export class WhiteBoardComponent implements OnInit, OnChanges {
 
