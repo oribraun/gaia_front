@@ -1305,7 +1305,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "white dog",
                             "word_image_path": "https://www.rd.com/wp-content/uploads/2021/03/GettyImages-185867236-scaled-e1617044973291.jpg",
                             "text": "white dog"
@@ -1351,7 +1351,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "black cat",
                             "word_image_path": "https://www.rover.com/blog/wp-content/uploads/black-long-hair-cat-min-1024x683.jpg",
                             "text": "black cat"
