@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "animations.less";
 @import "vars.less";
+
 html {
     height: 100%;
     width: 100%;
@@ -93,6 +94,13 @@ html {
         }
         .text-pre-line {
             white-space: pre-line;
+        }
+        .general-box {
+            box-shadow: 0 0 5px var(--grey-background-color);
+            padding: @padding;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space:nowrap;
         }
     }
 

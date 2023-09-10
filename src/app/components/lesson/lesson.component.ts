@@ -5,7 +5,6 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
-    ViewEncapsulation
 } from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
@@ -24,8 +23,7 @@ declare var $:any;
 @Component({
     selector: 'app-lesson',
     templateUrl: './lesson.component.html',
-    styleUrls: ['./lesson.component.less'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./lesson.component.less']
 })
 export class LessonComponent implements OnInit, OnDestroy {
 
@@ -467,6 +465,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             message = text;
         }
         this.presentationReplayIsInProgress = true;
+
+        this.lessonService.Broadcast('student_reply_request', message)
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
@@ -477,6 +477,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: (response: any) => {
                 this.presentationReplayIsInProgress = false;
+                this.lessonService.Broadcast('student_reply_response', response);
 
                 if (response.err) {
                     console.log('response err', response)
@@ -1022,10 +1023,12 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     allowApiCalls() {
+        // return true
         return !this.presentationResetIsInProgress &&
             !this.presentationReplayIsInProgress &&
             !this.presentationNewSlideInProgress &&
             !this.presentationNoReplayIsInProgress &&
+
             !this.nextSlideIsInProgress &&
             !this.prevSlideIsInProgress &&
             !this.eventHandlingInProgress
@@ -1105,7 +1108,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                     "is_mission_accomplished": true
                                 },
                                 {
-                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today. Are you excited?",
+                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today",
                                     "is_mission_accomplished": true
                                 },
                                 {
@@ -1289,7 +1292,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": 1,
+                            "bundle_id": -1,
                             "word": "bird",
                             "word_image_path": "https://cdn.britannica.com/23/188023-050-C1E4796B/cardinal-branch-songbird.jpg",
                             "text": "bird"
@@ -1335,7 +1338,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "white dog",
                             "word_image_path": "https://www.rd.com/wp-content/uploads/2021/03/GettyImages-185867236-scaled-e1617044973291.jpg",
                             "text": "white dog"
@@ -1381,7 +1384,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 }
                             ],
                             "student_responses": [],
-                            "bundle_id": -1,
+                            "bundle_id": 1,
                             "word": "black cat",
                             "word_image_path": "https://www.rover.com/blog/wp-content/uploads/black-long-hair-cat-min-1024x683.jpg",
                             "text": "black cat"
@@ -1516,7 +1519,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             ],
             "presentation_done": false,
-            "current_section_index": 1,
+            "current_section_index": 0,
             "current_slide_index": 0,
             "current_objective_index": 0,
             "current_objective_api_tries": 0,

@@ -1,4 +1,7 @@
-<div class="right-panel" [ngClass]="{'right-panel-closed1': currentSlide.full_screen && !isMobile}">
+<div class="right-panel" [ngClass]="{
+    'right-panel-closed1': currentSlide.full_screen && !isMobile,
+    'right-panel-full': isMobile
+}">
     <div class="cam-board">
         <div class="teacher">
             <div class="user-box">

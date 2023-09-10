@@ -1,7 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    HostListener,
+    Input,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {LessonService} from "../../../../services/lesson/lesson.service";
 
 export enum PlayerState
@@ -25,7 +34,8 @@ export interface OnStateChangeEvent
 @Component({
     selector: 'app-video',
     templateUrl: './video.component.html',
-    styleUrls: ['./video.component.less']
+    styleUrls: ['./video.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 export class VideoComponent implements OnInit, AfterViewInit{
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
@@ -35,6 +45,9 @@ export class VideoComponent implements OnInit, AfterViewInit{
     embeddedVideo: SafeHtml;
 
     loading_player = false;
+
+    videoHeight: any;
+    videoWidth: any;
 
     constructor(
         private config: Config,
@@ -53,6 +66,10 @@ export class VideoComponent implements OnInit, AfterViewInit{
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         this.youtube_player.nativeElement.appendChild(tag);
+        setTimeout(() => {
+            this.videoHeight = this.youtube_player.nativeElement.offsetHeight;
+            this.videoWidth = this.youtube_player.nativeElement.clientWidth;
+        })
     }
 
     onPlayerReady(e: any) {
@@ -79,6 +96,12 @@ export class VideoComponent implements OnInit, AfterViewInit{
             this.lessonService.Broadcast("DoNotDisturb", data)
         }
         // console.log('onPlayerStateChange e', e.data)
+    }
+
+    @HostListener('window:resize')
+    onWindowResize() {
+        this.videoHeight = this.youtube_player.nativeElement.offsetHeight;
+        this.videoWidth = this.youtube_player.nativeElement.clientWidth;
     }
 }
 

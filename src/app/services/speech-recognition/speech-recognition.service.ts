@@ -29,6 +29,7 @@ export class SpeechRecognitionService {
         if (recognitionClass) {
             this.englishRecognition = new recognitionClass();
             this.englishRecognition.lang = 'en-US';
+            // this.englishRecognition.lang = 'he-IL';
             this.englishRecognition.continuous = true;
             this.englishRecognition.interimResults = true
 

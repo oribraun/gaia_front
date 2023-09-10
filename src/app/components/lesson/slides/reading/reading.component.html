@@ -2,7 +2,13 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
             <div class="text text-pre-line">
-                <h3>{{currentSlide.text}}</h3>
+                <ng-container *ngFor="let sentence of sentences; let index=index">
+                    <p class="no-style no-indent" [ngClass]="{'target_sentnece': index==currentSentenceIndex}">
+                        <ng-container *ngFor="let word of sentence.split(' '); let j=index">
+                            <span [ngClass]="{'correct_word': correct_words.includes(remove_punct(word).toLowerCase()) && index<=currentSentenceIndex}">{{word}}&nbsp;</span>
+                        </ng-container>                        
+                    </p>
+                </ng-container>                
             </div>
         </div>
     </div>
@@ -10,3 +16,5 @@
         <img [src]="currentSlide.teacher_image_path">
     </div>
 </div>
+
+ 

@@ -1,7 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
-import {environment} from "../../../../environments/environment";
 import {Config} from "../../../config";
 import {LessonService} from "../../../services/lesson/lesson.service";
 
