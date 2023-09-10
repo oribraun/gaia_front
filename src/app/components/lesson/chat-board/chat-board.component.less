@@ -1,4 +1,12 @@
-.messages {
+@import "../../../../vars";
+
+.chat-board {
+    margin-top: @padding;
+    width: 100%;
+    height: @chat-height;
+    background: var(--white-background-color);
+    border-radius: @border-radius;
+    .messages {
     flex: 1 1 auto;
     //color: rgba(255, 255, 255, .5);
     color: rgba(0, 0, 0, 0.5);
@@ -187,4 +195,5 @@
         }
 
     }
+}
 }
