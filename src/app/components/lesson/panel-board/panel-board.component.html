@@ -3,17 +3,24 @@
         <div class="teacher">
             <div class="user-box">
                 <div class="user" #user>
-                    <div class="icon" *ngIf="showTeacherIcon">
+                    <!-- <div class="icon" *ngIf="showTeacherIcon">
                         <i class="bi bi-person"></i>
                     </div>
                     <div class="icon" *ngIf="!showTeacherIcon">
                         <i class="bi bi-ear"></i>
+                    </div> -->
+                    <div class="icon" *ngIf="showTeacherIcon">
+                        <img src="{{imageSrc}}assets/images/speaking.gif">
+                    </div>
+                    <div class="icon" *ngIf="!showTeacherIcon">
+                        <img src="{{imageSrc}}assets/images/listening.gif">
                     </div>
                 </div>
             </div>
         </div>
         <div class="student">
             <video #videoElement autoplay playsinline [muted]="'muted'"></video>
+            <canvas #canvasElement style="display: none;"></canvas>
         </div>
         <div class="today-plan">
             <h4 class="text-center">Today's plan</h4>
