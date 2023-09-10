@@ -6,7 +6,6 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewEncapsulation
 } from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
@@ -16,7 +15,6 @@ import {Config} from "../../../config";
     selector: 'app-white-board',
     templateUrl: './white-board.component.html',
     styleUrls: ['./white-board.component.less'],
-    encapsulation: ViewEncapsulation.None
 })
 export class WhiteBoardComponent implements OnInit, OnChanges {
 
