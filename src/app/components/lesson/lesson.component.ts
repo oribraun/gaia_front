@@ -447,6 +447,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             message = text;
         }
         this.presentationReplayIsInProgress = true;
+    
+        this.lessonService.Broadcast('student_reply_request', message)
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
@@ -457,6 +459,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: (response: any) => {
                 this.presentationReplayIsInProgress = false;
+                this.lessonService.Broadcast('student_reply_response', response);
 
                 if (response.err) {
                     console.log('response err', response)
@@ -992,10 +995,12 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     allowApiCalls() {
+        // return true
         return !this.presentationResetIsInProgress &&
             !this.presentationReplayIsInProgress &&
             !this.presentationNewSlideInProgress &&
             !this.presentationNoReplayIsInProgress &&
+
             !this.nextSlideIsInProgress &&
             !this.prevSlideIsInProgress &&
             !this.eventHandlingInProgress
@@ -1075,7 +1080,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                     "is_mission_accomplished": true
                                 },
                                 {
-                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today. Are you excited?",
+                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today",
                                     "is_mission_accomplished": true
                                 },
                                 {
