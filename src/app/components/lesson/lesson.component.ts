@@ -62,6 +62,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     recognitionText = '';
     isFinishedCurrentChatMessage = false;
     recognitionOnResultsSubscribe: any = null;
+    speakingNativeInProgress = false;
     speakInProgress = false;
     doNotDisturb = false;
     currentAudio: any = null;
@@ -137,6 +138,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
+    
+    
     initApplication(){
         this.triggerResize()
         if (!this.mock) {
@@ -148,6 +151,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.listenForSlideEventRequests()
             this.listenForPauseEvnet()
             this.listenForSnapshots()
+            this.listenForSpeakNative()
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -185,6 +189,22 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.webcam_last_snapshot_url = obj["image_url"]
             this.webcam_last_snapshot_url_updated = true
         })
+    }
+
+    listenForSpeakNative(){
+        this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
+            if (!this.speakingNativeInProgress) {
+                this.speakingNativeInProgress = true;
+                this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {   
+                    const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
+                    if(!this.audioBlobQue.includes(arrayBuffer)){
+                        this.audioBlobQue.push(arrayBuffer);
+                        const value = await this.playUsingBlob();
+                        this.speakingNativeInProgress = false
+                    }
+                })  
+            }
+        })  
     }
 
     togglePauseLesson(){
@@ -537,7 +557,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
-                    this.handleOnPresentationReplay();
+                    this.handleOnPresentationReplay('new_slide');
                 }
             },
             error: (error) => {
@@ -868,6 +888,16 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        // if (reason == 'new_slide') {
+        //     await this.apiService.textToSpeech({
+        //         app_data: {text: this.currentSlide.native_language_text,
+        //                    lang: 'iw'}
+        //         }).subscribe((response: any) => {
+        //             res = response.data
+
+
+        //     })
+        // }
 
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();

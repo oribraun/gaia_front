@@ -3,6 +3,8 @@ import {PresentationSection, PresentationSlide} from "../../../entities/presenta
 import {ApiService} from "../../../services/api.service";
 import {environment} from "../../../../environments/environment";
 import {Config} from "../../../config";
+import {LessonService} from "../../../services/lesson/lesson.service";
+
 
 @Component({
     selector: 'app-white-board',
@@ -32,6 +34,7 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
     constructor(
         private config: Config,
         private apiService: ApiService,
+        private lessonService: LessonService,
     ) {
         this.imageSrc = this.config.staticImagePath
     }
@@ -69,6 +72,10 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
             },
         })
     }
+    speakNative(text:string){
+        this.lessonService.Broadcast('speakNative', {'text':text})       
+    }
+    
     getSlideToRender(){
         return this.currentSlide.slide_type
     }
