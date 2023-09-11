@@ -95,6 +95,7 @@ export class PresentationSlide {
     image_path!: string
     text!: string
     word!: string
+    should_read_native:boolean = false
     word_list!: string[]
     words!: string[]
     bundle_id:number = -1

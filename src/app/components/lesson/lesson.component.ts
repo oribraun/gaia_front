@@ -17,6 +17,7 @@ import {
 import {LessonService} from "../../services/lesson/lesson.service";
 import {environment} from "../../../environments/environment";
 import {ChatMessage} from "../../entities/chat_message";
+import { BlobItem } from 'src/app/entities/blob_item';
 
 declare var $:any;
 
@@ -70,7 +71,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     noReplayTriggerOn = 10; // no replay will be called every 5 seconds
 
     audioQue: string[] = []
-    audioBlobQue: any[] = []
+    audioBlobQue: BlobItem[] = []
     enableArrayBuffer = true;
     enableNoReplayInterval = true;
     webcam_last_snapshot_url: string = ''
@@ -198,9 +199,14 @@ export class LessonComponent implements OnInit, OnDestroy {
                     } else {
                         const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
                         console.log('textToSpeech - ', arrayBuffer)
-                        if(!this.audioBlobQue.includes(arrayBuffer)){
-                            this.audioBlobQue.push(arrayBuffer);
-                            const value = await this.playUsingBlob();
+                        if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                            const new_blob = new BlobItem({arrayBuffer:arrayBuffer, 
+                                action:'speakNative', 
+                                type:'audio'})
+                            this.audioBlobQue.push(new_blob);
+                            if (!this.speakInProgress) {
+                                const value = await this.playUsingBlob();
+                            }
                         }
                     }
                     this.lessonService.speakNativeOnProgress=false
@@ -586,6 +592,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.presentationNewSlideInProgress) {
             return;
         }
+        this.lessonService.speakNativeOnProgress = false;
         this.presentationNewSlideInProgress = true;
         this.apiSubscriptions.no_replay = this.apiService.getNewSlideReply({
             app_data: {
@@ -608,6 +615,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay('new_slide');
+                    if (this.currentSlide.index_in_bundle <=0 && this.currentSlide.should_read_native) {
+                        this.lessonService.Broadcast('speakNative', {'text':this.currentSlide.native_language_text.he})
+                    }
                 }
             },
             error: (error) => {
@@ -844,10 +854,16 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (this.audioBlobQue.length) {
                 console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
 
-                const currentArrayBuffer: any = this.audioBlobQue.shift();
-                const loop = (arrayBuffer: any) => {
+                const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
+                const loop = (blobItem: BlobItem) => {
+                    if (blobItem.action=='speakNative') {
+                        this.lessonService.speakNativeOnProgress = true;
+                    }
+                    else {
+                        this.lessonService.speakNativeOnProgress = false;
+                    }
                     this.speakInProgress = true;
-                    const audioBlob = new Blob([arrayBuffer], {type: 'audio/mpeg'});
+                    const audioBlob = new Blob([blobItem.arrayBuffer], {type: 'audio/mpeg'});
                     this.currentAudio = new Audio();
                     this.currentAudio.src = URL.createObjectURL(audioBlob);
                     this.currentAudio.load();
@@ -872,12 +888,15 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.speakInProgress = false;
                     }
                     this.currentAudio.onended = () => {
+                        if (blobItem && blobItem.action=='speakNative') {
+                            this.lessonService.speakNativeOnProgress = false;
+                        }
                         console.log('audio ended')
                         this.currentAudio.currentTime = 0;
-                        const currentArrayBuffer: any = this.audioBlobQue.shift();
+                        const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
                         console.log('playUsingBlob ended arrayBuffer')
-                        if (currentArrayBuffer) {
-                            loop(currentArrayBuffer)
+                        if (currentBlobItem) {
+                            loop(currentBlobItem)
                         } else {
                             setTimeout(() => {
                                 console.log('Reseting ASR')
@@ -889,7 +908,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                         }
                     };
                 }
-                loop(currentArrayBuffer);
+                if (currentBlobItem) {
+                    loop(currentBlobItem);
+                }
             }
         });
     }
@@ -929,8 +950,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (help_sound_buffer) {
             console.log('help_sound_buffer added to que')
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
-            if(!this.audioBlobQue.includes(arrayBuffer)){
-                this.audioBlobQue.push(arrayBuffer);
+            if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:'', type:'audio'}));
                 if (!this.speakInProgress) {
                     this.lessonService.Broadcast('teacherSpeaking', {});
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
@@ -941,6 +962,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }
         // if (reason == 'new_slide') {
+        //     console.log('speak_native')
         //     this.lessonService.Broadcast('speakNative', {'text':this.currentSlide.native_language_text})
         //     }
 
@@ -1116,7 +1138,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             "full_screen": false,
                             "estimated_duration": 120,
                             "native_language_text": {
-                                "he": "צפה בוידאו"
+                                "he": "צְפֵה בַּוִּידֵאוֹ"
                             },
                             "starting_responses": [
                                 {
