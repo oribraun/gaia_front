@@ -77,6 +77,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     webcam_last_snapshot_url: string = ''
     webcam_last_snapshot_url_updated: boolean = false;
     resetSpeechRecognitionTimeout: any = null;
+    forceChangeSlideInfo: boolean = false;
+    forcedChangeSlideInfo:any = {};
+
 
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
@@ -96,6 +99,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         reset: null,
         next_slide: null,
         prev_slide: null,
+        change_slide:null,
     }
     heartBeatInterval: any = null
     heartBeatCounter: number = 0;
@@ -549,27 +553,22 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.no_replay = this.apiService.changeSlideReply({
+        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply({
             app_data: {
                 type: 'change_slide',
-                current_slide_info: {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex},
-                last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
-                last_sr_ts:this.last_sr_ts,
-                last_speak_ts:this.last_speak_ts,
-                n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
-                n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
-                array_buffer: this.enableArrayBuffer,
-                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+                current_slide_info: this.forceChangeSlideInfo ? this.forcedChangeSlideInfo : {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex}
             }
         }).subscribe({
             next: (response: any) => {
                 this.presentationNewSlideInProgress = false;
+                this.clearForcedSlide()
 
                 if (response.err) {
                     console.log('change slide response err', response)
                     this.handleOnReplayError()
                 } else {
                     const data = response.data;
+                    // this.stopAudio();
                     if (data.success) {
                         this.currentSectionIndex = data.current_section_index;
                         this.currentSlideIndex = data.current_slide_index;
@@ -583,9 +582,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 this.presentationNewSlideInProgress = false;
+                this.clearForcedSlide()
                 console.log('change slide error', error)
             },
         })
+    }
+    clearForcedSlide() {
+        this.forceChangeSlideInfo = false
+        this.forcedChangeSlideInfo = {}
     }
 
     async getNewSlideReply() {
@@ -662,72 +666,44 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.resetPresentation()
     }
 
+
+    setForcedSlide(modifier:number=0){
+        let flat_index = this.presentation.sections[this.currentSectionIndex].slides[this.currentSlideIndex].flat_index
+        let new_flat_index = flat_index+modifier
+        console.log('flat index ',flat_index)
+        console.log('flat index info',this.presentation.slides_flat[flat_index])
+        console.log('new_flat_index ',new_flat_index)
+        console.log('new_flat_index info ',this.presentation.slides_flat[new_flat_index])
+        if(new_flat_index>=0 && new_flat_index<this.presentation.slides_flat.length){
+            let target_slide_info = this.presentation.slides_flat[new_flat_index]
+            this.forceChangeSlideInfo = true
+            this.forcedChangeSlideInfo = target_slide_info
+        } else if (new_flat_index<0){
+            this.resetPresentation()
+
+        }
+    }
+
     onNextSlide(obj: any) {
         if (!this.allowApiCalls()) {
             return;
         }
-        if (this.nextSlideIsInProgress) {
-            return;
+        this.setForcedSlide(0)
+        if(this.forceChangeSlideInfo){
+            this.stopAudio()
+            this.changeSlideReply() 
         }
-        this.nextSlideIsInProgress = true;
-        this.apiSubscriptions.next_slide = this.apiService.getNextSlide({
-            app_data: {
-                // type: reason
-            }
-        }).subscribe({
-            next: (response: any) => {
-                if (!response.err) {
-                    this.stopAudio();
-                    this.currentSectionIndex = response.data.current_section_index;
-                    this.currentSlideIndex = response.data.current_slide_index;
-                    this.currentObjectiveIndex = response.data.current_objective_index;
-                    this.setCurrentSection();
-                    this.nextSlideIsInProgress = false;
-                    this.getNewSlideReply();
-                }
-                else {
-                    this.nextSlideIsInProgress = false;
-                }
-            },
-            error: (error) => {
-                this.nextSlideIsInProgress = false;
-                console.log('onNextSlide error', error)
-            },
-        })
     }
 
     onPrevSlide(obj: any) {
         if (!this.allowApiCalls()) {
             return;
         }
-        if (this.prevSlideIsInProgress) {
-            return;
+        this.setForcedSlide(-2)
+        if(this.forceChangeSlideInfo){
+            this.stopAudio()
+            this.changeSlideReply() 
         }
-        this.prevSlideIsInProgress = true;
-        this.apiSubscriptions.prev_slide = this.apiService.getPrevSlide({
-            app_data: {
-                // type: reason
-            }
-        }).subscribe({
-            next: (response: any) => {
-                if (!response.err) {
-                    this.stopAudio();
-                    this.currentSectionIndex = response.data.current_section_index;
-                    this.currentSlideIndex = response.data.current_slide_index;
-                    this.currentObjectiveIndex = response.data.current_objective_index;
-                    this.setCurrentSection();
-                    this.prevSlideIsInProgress = false;
-                    this.getNewSlideReply();
-                }
-                else {
-                    this.prevSlideIsInProgress = false;
-                }
-            },
-            error: (error) => {
-                this.prevSlideIsInProgress = false;
-                console.log('onPrevSlide error', error)
-            },
-        })
     }
 
     onResultsContinuesRecording(obj: any) {
@@ -983,7 +959,6 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if (all_objectives_accomplished) {
-            console.log('DANIEL YOU NEED TO CHANGE SLIDES NOW')
             this.changeSlideReply()
         }
         if (presentation_slide_updated) {
@@ -1614,3 +1589,4 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.setCurrentSection();
     }
 }
+
