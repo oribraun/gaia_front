@@ -8,14 +8,7 @@ export class User {
     company_admin!: boolean
     gmail_auth!: boolean
 
-    constructor(obj?: any) {
-        if (obj) {
-            for (const key in obj) {
-                if (obj[key] !== undefined && obj[key] !== null) {
-                    // @ts-ignore
-                    this[key] = obj[key];
-                }
-            }
-        }
+    constructor(v: Partial<User>) {
+        Object.assign(this, v);
     }
 }
