@@ -65,7 +65,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     doNotDisturb = false;
     currentAudio: any = null;
     isPause: boolean = false;
-    allow_ASR_activation: boolean = false;
+    allow_ASR_activation: boolean = true;
     noReplayInterval: any = null
     noReplayCounter = 0;
     noReplayTriggerOn = 10; // no replay will be called every 5 seconds
@@ -754,7 +754,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         clearTimeout(this.resetSpeechRecognitionTimeout);
         this.resetSpeechRecognitionTimeout = setTimeout(() => {
             this.startSpeechRecognition()
-        }, 500)
+        }, 150)
     }
 
     startSpeechRecognition() {
@@ -896,7 +896,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 console.log('Reseting ASR')
                                 this.speakInProgress = false;
                                 this.resetSpeechRecognition();
-                            }, 0)
+                            }, 200)
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
@@ -977,11 +977,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             this.changeSlideReply()
         }
-        if (presentation_slide_updated) {
-            this.getNewSlideReply();
-        } else {
-            // this.resetSpeechRecognition();
-        }
+        // if (presentation_slide_updated) {
+        //     this.getNewSlideReply();
+        // } else {
+        //     // this.resetSpeechRecognition();
+        // }
     }
 
     base64ToArrayBuffer(base64: string): ArrayBuffer {

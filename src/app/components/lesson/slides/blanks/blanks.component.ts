@@ -11,7 +11,8 @@ import {LessonService} from "../../../../services/lesson/lesson.service";
 export class BlanksComponent implements OnInit{
 
   @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-   imageSrc = ''
+  @Input('slideDone')  slideDone:boolean = false
+  imageSrc = ''
    optionIdx = Object()
    answers= Object()
    submitAnswerPending:boolean =false

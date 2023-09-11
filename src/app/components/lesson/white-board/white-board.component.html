@@ -28,6 +28,7 @@
     <app-blanks
         *ngIf="model.currentSlide.slide_type === sectionTitles.blanks"
         [currentSlide]="model.currentSlide"
+        [slideDone]="model.slide_done"
     ></app-blanks>
     <app-video
         *ngIf="model.currentSlide.slide_type === sectionTitles.video"
@@ -53,7 +54,7 @@
                                   'slide-board-bundle':  data.length > 1
                                  }"
                             >
-                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {'model': {'currentSlide':slide} }"></ng-container>
+                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {'model': {'currentSlide':slide, 'slide_done': id<currentSlide.index_in_bundle && data.length > 1} }"></ng-container>
                             </div>
                         </div>
                     </ng-container>
