@@ -195,8 +195,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenForSpeakNative(){
         this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
-            if (!this.lessonService.speakNativeOnProgress) {
-                // this.lessonService.speakNativeOnProgress=true
+            if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
+                this.lessonService.speakNativeOnWaiting=true
                 this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {   
                     if (response.err) {
                         console.log('textToSpeech err', response)
@@ -213,7 +213,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                         }
                     }
-                    this.lessonService.speakNativeOnProgress=false
                 })  
                 
             }
@@ -597,6 +596,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.lessonService.speakNativeOnProgress = false;
+        this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
         this.apiSubscriptions.no_replay = this.apiService.getNewSlideReply({
             app_data: {
@@ -836,7 +836,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.lessonService.speakNativeOnProgress = true;
                     }
                     else {
-                        this.lessonService.speakNativeOnProgress = false;
+                        this.lessonService.Broadcast('teacherSpeaking', {});
                     }
                     this.speakInProgress = true;
                     const audioBlob = new Blob([blobItem.arrayBuffer], {type: 'audio/mpeg'});
@@ -859,14 +859,28 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                             lastLoggedTime = currentTime;
                         }
+                        // HERE WE CAN DO THINGS BEFORE THE AUDIO ENDS
+                        // if (this.currentAudio.duration-currentTime<0.1) {
+                        //     if (!this.audioBlobQue.length) {
+
+                        //     }
+                        //     console.log('audio ended')
+                        // }
                     }
                     this.currentAudio.onpause = () => {
+                        console.log('audio paused')
                         this.speakInProgress = false;
+                        if (blobItem && blobItem.action=='speakNative') {
+                            this.lessonService.speakNativeOnProgress = false;
+                            this.lessonService.speakNativeOnWaiting = false;
+                        }
                     }
                     this.currentAudio.onended = () => {
                         if (blobItem && blobItem.action=='speakNative') {
                             this.lessonService.speakNativeOnProgress = false;
+                            this.lessonService.speakNativeOnWaiting = false;
                         }
+                        
                         console.log('audio ended')
                         this.currentAudio.currentTime = 0;
                         const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
@@ -874,11 +888,15 @@ export class LessonComponent implements OnInit, OnDestroy {
                         if (currentBlobItem) {
                             loop(currentBlobItem)
                         } else {
+                            console.log('end_blobItem', blobItem)
+                            if (!blobItem || blobItem.action!='doNotListenAfter') {
+                                this.lessonService.Broadcast('teacherListening', {});
+                            }
                             setTimeout(() => {
                                 console.log('Reseting ASR')
                                 this.speakInProgress = false;
                                 this.resetSpeechRecognition();
-                            }, 200)
+                            }, 0)
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
@@ -927,13 +945,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             console.log('help_sound_buffer added to que')
             const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
             if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:'', type:'audio'}));
+                this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished?'doNotListenAfter':'', type:'audio'}));
                 if (!this.speakInProgress) {
-                    this.lessonService.Broadcast('teacherSpeaking', {});
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
                     const value = await this.playUsingBlob();
-                    this.lessonService.Broadcast('teacherListening', {});
                 }
             }
         }
@@ -986,7 +1002,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     stopAudio() {
-        this.lessonService.Broadcast('teacherListening', {});
         this.clearAudioQue();
         if (this.currentAudio) {
             this.currentAudio.pause();

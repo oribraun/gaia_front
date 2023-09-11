@@ -9,6 +9,7 @@ export class LessonService {
 
     private events: EventsHashTable<Subject<any>> = {};
     speakNativeOnProgress: boolean = false;
+    speakNativeOnWaiting: boolean = false;
 
     constructor() { }
 
