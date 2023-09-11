@@ -7,7 +7,7 @@ export class ChatMessage {
     isFinal!: boolean;
     showTranslated: boolean = false;
 
-    constructor(v: Partial<ChatMessage>) {
+    constructor(v: Partial<ChatMessage> = {}) {
         Object.assign(this, v);
     }
 }
