@@ -513,6 +513,50 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
+    async changeSlideReply() {
+        if (this.presentationNewSlideInProgress) {
+            return;
+        }
+        this.presentationNewSlideInProgress = true;
+        this.apiSubscriptions.no_replay = this.apiService.changeSlideReply({
+            app_data: {
+                type: 'change_slide',
+                current_slide_info: {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex},
+                last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
+                last_sr_ts:this.last_sr_ts,
+                last_speak_ts:this.last_speak_ts,
+                n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
+                n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+            }
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationNewSlideInProgress = false;
+
+                if (response.err) {
+                    console.log('change slide response err', response)
+                    this.handleOnReplayError()
+                } else {
+                    const data = response.data;
+                    if (data.success) {
+                        this.currentSectionIndex = data.current_section_index;
+                        this.currentSlideIndex = data.current_slide_index;
+                        this.currentObjectiveIndex = data.current_objective_index;
+                        this.setCurrentSection();
+                        this.getNewSlideReply();
+                    } else {
+                        console.log('change slide response err', response)
+                    }
+                }
+            },
+            error: (error) => {
+                this.presentationNewSlideInProgress = false;
+                console.log('change slide error', error)
+            },
+        })
+    }
+
     async getNewSlideReply() {
         if (this.presentationNewSlideInProgress) {
             return;
@@ -832,6 +876,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
+        const all_objectives_accomplished = data.all_objectives_accomplished;
+        const n_slide_objectives = data.n_slide_objectives;
         const presentation_done = data.presentation_done;
         const text = data.text;
         this.broadCastMessage('computer', text, true);
@@ -869,23 +915,27 @@ export class LessonComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
+ 
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();
             this.stopAudio();
             return;
         }
-        if (presentation_index_updated) {
-            this.currentSectionIndex = data.current_section_index;
-            this.currentSlideIndex = data.current_slide_index;
-            this.currentObjectiveIndex = data.current_objective_index;
-            this.setCurrentSection();
-        }
+        // if (presentation_index_updated) {
+        //     this.currentSectionIndex = data.current_section_index;
+        //     this.currentSlideIndex = data.current_slide_index;
+        //     this.currentObjectiveIndex = data.current_objective_index;
+        //     this.setCurrentSection();
+        // }
 
         if (presentation_content_updated) {
             // TODO request presentation from server
         }
 
+        if (all_objectives_accomplished) {
+            console.log('DANIEL YOU NEED TO CHANGE SLIDES NOW')
+            this.changeSlideReply()
+        }
         if (presentation_slide_updated) {
             this.getNewSlideReply();
         } else {
@@ -993,7 +1043,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     allowApiCalls() {
-        // return true
+        return true
         return !this.presentationResetIsInProgress &&
             !this.presentationReplayIsInProgress &&
             !this.presentationNewSlideInProgress &&

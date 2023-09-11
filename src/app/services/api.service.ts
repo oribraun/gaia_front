@@ -255,6 +255,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    changeSlideReply(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'change-slide-reply', obj,
+            this.httpOptions
+        )
+    }
     getNextSlide(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-next-slide', obj,
             this.httpOptions
