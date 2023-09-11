@@ -36,12 +36,14 @@ export class Presentation {
     buildSlidesFlat(){
         let section_index =0
         let slide_idx =0
+        let flat_index = 0
         for (let section of this.sections) {
             for (let slide of section.slides){
                 slide.prev = this.slides_flat.length>0 ? this.slides_flat[this.slides_flat.length-1]: null
-                slide.flat_index = section_index+slide_idx
+                slide.flat_index = flat_index
                 this.slides_flat.push({'section_idx':section_index, 'slide_idx': slide_idx})
                 slide_idx+=1
+                flat_index+=1
             }
             slide_idx=0
             section_index+=1
