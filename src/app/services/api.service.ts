@@ -255,6 +255,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    changeSlideReply(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'change-slide-reply', obj,
+            this.httpOptions
+        )
+    }
     getNextSlide(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-next-slide', obj,
             this.httpOptions
@@ -275,6 +280,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    textToSpeech(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'text-to-speech', obj,
+            this.httpOptions
+        )
+    }    
     audioToText(obj: any) {
         const httpOptions = {...this.httpOptions}
         httpOptions['Content-Type'] = 'application/octet-stream';
