@@ -8,7 +8,7 @@ export class User {
     company_admin!: boolean
     gmail_auth!: boolean
 
-    constructor(v: Partial<User>) {
+    constructor(v: Partial<User> = {}) {
         Object.assign(this, v);
     }
 }
