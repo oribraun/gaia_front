@@ -4,6 +4,7 @@ import {LessonService} from "../../../services/lesson/lesson.service";
 import {ChatMessage} from "../../../entities/chat_message";
 import {fromEvent, interval, Subscription} from "rxjs";
 import { takeUntil } from 'rxjs/operators';
+import {environment} from "../../../../environments/environment";
 
 declare var $: any;
 
@@ -18,12 +19,7 @@ export class ChatBoardComponent implements OnInit {
 
     private scrollSubscription!: Subscription;
 
-    messages: ChatMessage[] = [
-        new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
-        new ChatMessage({type: 'user', message: 'im good how are you?'}),
-        new ChatMessage({type: 'computer', message: 'fine'}),
-        new ChatMessage({type: 'user', message: 'hi'}),
-    ];
+    messages: ChatMessage[] = [];
     started = false;
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
@@ -31,6 +27,14 @@ export class ChatBoardComponent implements OnInit {
     constructor(
         private lessonService: LessonService
     ) {
+        if (environment.is_mock) {
+            this.messages = [
+                new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
+                new ChatMessage({type: 'user', message: 'im good how are you?'}),
+                new ChatMessage({type: 'computer', message: 'fine'}),
+                new ChatMessage({type: 'user', message: 'hi'}),
+            ]
+        }
     }
 
     ngOnInit(): void {
