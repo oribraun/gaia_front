@@ -9,6 +9,7 @@ export class Presentation {
     presentation_title!: string
     presentation_topic!: string
     sections!: PresentationSection[]
+    slides_flat: object[] = []
     teacher!: any
 
     constructor(obj?: any) {
@@ -28,6 +29,22 @@ export class Presentation {
                     }
                 }
             }
+            this.buildSlidesFlat()
+        }
+    }
+
+    buildSlidesFlat(){
+        let section_index =0
+        let slide_idx =0
+        for (let section of this.sections) {
+            for (let slide of section.slides){
+                slide.prev = this.slides_flat.length>0 ? this.slides_flat[this.slides_flat.length-1]: null
+                slide.flat_index = section_index+slide_idx
+                this.slides_flat.push({'section_idx':section_index, 'slide_idx': slide_idx})
+                slide_idx+=1
+            }
+            slide_idx=0
+            section_index+=1
         }
     }
 }
@@ -107,6 +124,8 @@ export class PresentationSlide {
     target_sentence !:string[]
     blanked_sentence !:string
     video_details!: VideoDetails
+    prev:any=null
+    flat_index:number=0
 
     constructor(obj?: any) {
         if (obj) {
