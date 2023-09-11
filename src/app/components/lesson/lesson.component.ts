@@ -196,7 +196,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     listenForSpeakNative(){
         this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
             if (!this.lessonService.speakNativeOnProgress) {
-                this.lessonService.speakNativeOnProgress=true
+                // this.lessonService.speakNativeOnProgress=true
                 this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {   
                     if (response.err) {
                         console.log('textToSpeech err', response)
@@ -980,8 +980,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         return bytes.buffer;
     }
 
+    clearAudioQue() {
+        this.audioBlobQue = [];
+        this.audioQue = [];
+    }
+
     stopAudio() {
         this.lessonService.Broadcast('teacherListening', {});
+        this.clearAudioQue();
         if (this.currentAudio) {
             this.currentAudio.pause();
             // setTimeout(() => {
