@@ -41,7 +41,7 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
     constructor(
         private config: Config,
         private apiService: ApiService,
-        private lessonService: LessonService,
+        public lessonService: LessonService,
     ) {
         this.imageSrc = this.config.staticImagePath
     }
@@ -80,9 +80,10 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
         })
     }
     speakNative(text:string){
+        console.log('speakNative-emit', text)
         this.lessonService.Broadcast('speakNative', {'text':text})       
     }
-    
+
     getSlideToRender(){
         return this.currentSlide.slide_type
     }

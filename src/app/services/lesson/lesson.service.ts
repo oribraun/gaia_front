@@ -8,6 +8,7 @@ import {EventsHashTable} from "../../interfaces/eventHashTable";
 export class LessonService {
 
     private events: EventsHashTable<Subject<any>> = {};
+    speakNativeOnProgress: boolean = false;
 
     constructor() { }
 

@@ -60,7 +60,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     recognitionText = '';
     isFinishedCurrentChatMessage = false;
     recognitionOnResultsSubscribe: any = null;
-    speakingNativeInProgress = false;
     speakInProgress = false;
     doNotDisturb = false;
     currentAudio: any = null;
@@ -191,16 +190,22 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenForSpeakNative(){
         this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
-            if (!this.speakingNativeInProgress) {
-                this.speakingNativeInProgress = true;
+            if (!this.lessonService.speakNativeOnProgress) {
+                this.lessonService.speakNativeOnProgress=true
                 this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {   
-                    const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
-                    if(!this.audioBlobQue.includes(arrayBuffer)){
-                        this.audioBlobQue.push(arrayBuffer);
-                        const value = await this.playUsingBlob();
-                        this.speakingNativeInProgress = false
+                    if (response.err) {
+                        console.log('textToSpeech err', response)
+                    } else {
+                        const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
+                        console.log('textToSpeech - ', arrayBuffer)
+                        if(!this.audioBlobQue.includes(arrayBuffer)){
+                            this.audioBlobQue.push(arrayBuffer);
+                            const value = await this.playUsingBlob();
+                        }
                     }
+                    this.lessonService.speakNativeOnProgress=false
                 })  
+                
             }
         })  
     }
@@ -890,15 +895,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }
         // if (reason == 'new_slide') {
-        //     await this.apiService.textToSpeech({
-        //         app_data: {text: this.currentSlide.native_language_text,
-        //                    lang: 'iw'}
-        //         }).subscribe((response: any) => {
-        //             res = response.data
-
-
-        //     })
-        // }
+        //     this.lessonService.Broadcast('speakNative', {'text':this.currentSlide.native_language_text})
+        //     }
 
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();
