@@ -763,7 +763,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             && !this.presentationNoReplayIsInProgress
             && !this.presentationResetIsInProgress) {
             this.speakInProgress = false;
-            // this.resetSpeechRecognition();
+            this.resetSpeechRecognition();
             // this.resetIntervalNoReplay();
             // this.stopIntervalNoReplay();
             // this.startIntervalNoReplay()
