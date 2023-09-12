@@ -41,6 +41,11 @@
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
     ></app-video>
+    <app-title
+        *ngIf="model.currentSlide.slide_type === sectionTitles.title"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-title>
 </ng-template>
 
 <div class="white-board">
