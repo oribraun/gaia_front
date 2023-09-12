@@ -131,8 +131,6 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopAudio();
             this.unsubscribeAllHttpEvents();
             this.stopHeartBeat();
-            this.lessonService.Broadcast('resetChatMessages', {});
-            this.lessonService.Broadcast('resumeLesson', {});
             if (!this.speakInProgress) {
                 await this.stopSpeechRecognition();
             }
@@ -158,6 +156,8 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopAudio();
             this.listenToSpeechRecognitionResults();
             this.resetAllEventProgress();
+            this.lessonService.Broadcast('resetChatMessages', {});
+            this.lessonService.Broadcast('resumeLesson', {});
             this.getPresentation();
             this.startHeartBeat()
             if (!this.initApplicationDone) {
