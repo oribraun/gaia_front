@@ -48,6 +48,9 @@ export class BlanksComponent extends BaseSlideComponent implements OnInit {
     }
 
     submitAnswer(){
+        if (this.slideData.is_active !== undefined && !this.slideData?.is_active) {
+            return;
+        }
         let answer_arr:any = []
         let j = 0
         this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
