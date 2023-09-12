@@ -54,7 +54,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         agenda: 'agenda',
         ending: 'ending',
         video: 'video',
-        blanks:'blanks'
+        blanks:'blanks',
+        title:'title'
     }
 
     recognitionCountWords = 0;

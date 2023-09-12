@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {BaseSlideComponent} from "../base-slide.component";
@@ -8,12 +8,16 @@ import {BaseSlideComponent} from "../base-slide.component";
     templateUrl: './title.component.html',
     styleUrls: ['./title.component.less']
 })
-export class TitleComponent extends BaseSlideComponent {
+export class TitleComponent extends BaseSlideComponent implements OnInit{
 
+    imgSrc = ''
     constructor(
         protected override config: Config,
     ) {
         super(config)
     }
 
+    ngOnInit(): void {
+        
+    }
 }
