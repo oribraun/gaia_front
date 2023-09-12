@@ -459,7 +459,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (this.eventHandlingInProgress) {
             return;
         }
-
+        this.stopSpeechRecognition();
         this.eventHandlingInProgress = true;
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
@@ -498,8 +498,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (text) {
             message = text;
         }
-        this.presentationReplayIsInProgress = true;
 
+        this.stopSpeechRecognition();
+        this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message)
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
@@ -986,6 +987,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.startHeartBeat();
                 }
             }
+        }
+        if(!help_sound_buffer && !help_sound_url) {
+            await this.startSpeechRecognition();
         }
         // if (reason == 'new_slide') {
         //     console.log('speak_native')
