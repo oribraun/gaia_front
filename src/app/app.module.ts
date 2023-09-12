@@ -39,6 +39,7 @@ import { LessonComponent } from './components/lesson/lesson.component';
 import { WhiteBoardComponent } from './components/lesson/white-board/white-board.component';
 import { PanelBoardComponent } from './components/lesson/panel-board/panel-board.component';
 import { SwipeDirective } from './directives/swipe.directive';
+import { BaseSlideComponent } from './components/lesson/slides/base-slide.component';
 import { GreetingComponent } from './components/lesson/slides/greeting/greeting.component';
 import { ReadingComponent } from './components/lesson/slides/reading/reading.component';
 import { WordRepeaterComponent } from './components/lesson/slides/word-repeater/word-repeater.component';
@@ -83,6 +84,7 @@ import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.co
         WhiteBoardComponent,
         PanelBoardComponent,
         SwipeDirective,
+        BaseSlideComponent,
         GreetingComponent,
         ReadingComponent,
         WordRepeaterComponent,

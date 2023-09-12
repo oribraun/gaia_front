@@ -3,23 +3,19 @@ import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {ApiService} from "../../../../services/api.service";
 import {LessonService} from "../../../../services/lesson/lesson.service";
+import {BaseSlideComponent} from "../base-slide.component";
 
 @Component({
     selector: 'app-image-generator',
     templateUrl: './image-generator.component.html',
     styleUrls: ['./image-generator.component.less']
 })
-export class ImageGeneratorComponent implements OnDestroy {
-
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('slideData') slideData: any = {};
+export class ImageGeneratorComponent extends BaseSlideComponent implements OnDestroy {
 
     // @Input('generatingImageInProgress') generatingImageInProgress: boolean = false;
 
     // @Output('onGenerateImage') onGenerateImage: EventEmitter<any> = new EventEmitter<any>();
 
-
-    imageSrc = ''
 
     wordsSelected: string[] = [];
 
@@ -29,11 +25,11 @@ export class ImageGeneratorComponent implements OnDestroy {
     generatingImage = false;
 
     constructor(
-        private config: Config,
+        protected override config: Config,
         private apiService: ApiService,
         private lessonService: LessonService,
     ) {
-        this.imageSrc = this.config.staticImagePath
+        super(config)
         this.imagePathGenerated = this.imageSrc + 'assets/images/lesson_placeholder.jpg'
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "image_generator_button_click") {

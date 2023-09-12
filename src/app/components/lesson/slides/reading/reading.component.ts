@@ -2,18 +2,15 @@ import {Component, Input, OnInit} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {LessonService} from "../../../../services/lesson/lesson.service";
+import {BaseSlideComponent} from "../base-slide.component";
 
 @Component({
     selector: 'app-reading',
     templateUrl: './reading.component.html',
     styleUrls: ['./reading.component.less']
 })
-export class ReadingComponent implements OnInit{
+export class ReadingComponent extends BaseSlideComponent implements OnInit{
 
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('slideData') slideData: any = {};
-
-    imageSrc = ''
     text_to_present = ''
     correct_words:string[] = []
     target_words:string[] = []
@@ -21,10 +18,10 @@ export class ReadingComponent implements OnInit{
     currentSentenceIndex = 0
 
     constructor(
-        private config: Config,
+        protected override config: Config,
         private lessonService: LessonService,
     ) {
-        this.imageSrc = this.config.staticImagePath
+        super(config)
     }
 
     ngOnInit(): void {
