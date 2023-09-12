@@ -50,6 +50,7 @@ import { BlanksComponent } from './components/lesson/slides/blanks/blanks.compon
 import { VideoComponent } from './components/lesson/slides/video/video.component';
 import { ScreenBoardComponent } from './components/lesson/screen-board/screen-board.component';
 import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.component';
+import { TitleComponent } from './components/lesson/slides/title/title.component';
 
 @NgModule({
     declarations: [
@@ -95,6 +96,7 @@ import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.co
         VideoComponent,
         ScreenBoardComponent,
         ChatBoardComponent,
+        TitleComponent,
     ],
     imports: [
         BrowserModule,
