@@ -750,6 +750,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     resetSpeechRecognition() {
+        console.log('resetting ASR')
         if (this.speechRecognitionService.ASR_recognizing) {
             this.speechRecognitionService.stopListening().then(() => {
                 this.startSpeechRecognition()
@@ -762,7 +763,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async startSpeechRecognition() {
         console.log('startSpeechRecognition');
-        if (!this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
+        if (this.speechRecognitionService.englishRecognition &&
+            !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
             await this.speechRecognitionService.startListening();
         }
     }
@@ -820,11 +822,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                         if (current_src_url) {
                             loop(current_src_url)
                         } else {
-                            setTimeout(() => {
-                                console.log('Reseting ASR')
-                                this.speakInProgress = false;
-                                this.resetSpeechRecognition();
-                            }, 200)
+                            this.speakInProgress = false;
+                            this.resetSpeechRecognition();
                             resolve(true)
                         }
                         // }
@@ -905,11 +904,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
                                 this.lessonService.Broadcast('teacherListening', {});
                             }
-                            setTimeout(() => {
-                                console.log('Reseting ASR')
-                                this.speakInProgress = false;
-                                this.resetSpeechRecognition();
-                            }, 200)
+                            this.speakInProgress = false;
+                            this.resetSpeechRecognition();
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
