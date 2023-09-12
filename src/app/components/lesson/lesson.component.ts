@@ -111,6 +111,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     last_speak_ts: number = 0;
     last_user_action_ts: number = 0;
 
+    initApplicationDone = false;
+
     constructor(
         private apiService: ApiService,
         private animationsService: AnimationsService,
@@ -128,7 +130,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (!this.mock) {
             this.stopAudio();
             this.unsubscribeAllHttpEvents();
-            this.stopHeartBeat()
+            this.stopHeartBeat();
             this.lessonService.Broadcast('resetChatMessages', {});
             this.lessonService.Broadcast('resumeLesson', {});
             if (!this.speakInProgress) {
@@ -155,12 +157,17 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
             this.stopAudio();
             this.listenToSpeechRecognitionResults();
+            this.resetAllEventProgress();
             this.getPresentation();
             this.startHeartBeat()
-            this.listenForSlideEventRequests()
-            this.listenForPauseEvnet()
-            this.listenForSnapshots()
-            this.listenForSpeakNative()
+            if (!this.initApplicationDone) {
+                // adding listeners only once
+                this.listenForSlideEventRequests()
+                this.listenForPauseEvnet()
+                this.listenForSnapshots()
+                this.listenForSpeakNative()
+            }
+            this.initApplicationDone = true;
 
         } else {
             this.listenForPauseEvnet()
@@ -609,7 +616,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.no_replay = this.apiService.getNewSlideReply({
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
             app_data: {
                 type: 'new_slide',
                 last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
@@ -1046,7 +1053,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.apiSubscriptions[key] = null;
             }
         }
-        this.resetAllEventProgress();
     }
 
 
