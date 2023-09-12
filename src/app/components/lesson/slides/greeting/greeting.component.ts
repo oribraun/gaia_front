@@ -10,7 +10,6 @@ import {BaseSlideComponent} from "../base-slide.component";
 })
 export class GreetingComponent extends BaseSlideComponent {
 
-
     constructor(
         protected override config: Config,
     ) {
