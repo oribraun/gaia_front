@@ -3,35 +3,43 @@
     <app-greeting
         *ngIf="model.currentSlide.slide_type === sectionTitles.greeting"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-greeting>
     <app-reading
         *ngIf="model.currentSlide.slide_type === sectionTitles.reading"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-reading>
     <app-word-repeater
         *ngIf="model.currentSlide.slide_type === sectionTitles.word_repeater"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
         [recognitionText]="recognitionText"
     ></app-word-repeater>
     <app-image-generator
         *ngIf="model.currentSlide.slide_type === sectionTitles.image_generator"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-image-generator>
     <app-agenda
         *ngIf="model.currentSlide.slide_type === sectionTitles.agenda"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-agenda>
     <app-ending
         *ngIf="model.currentSlide.slide_type === sectionTitles.ending"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-ending>
     <app-blanks
         *ngIf="model.currentSlide.slide_type === sectionTitles.blanks"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-blanks>
     <app-video
         *ngIf="model.currentSlide.slide_type === sectionTitles.video"
         [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
     ></app-video>
 </ng-template>
 
@@ -53,7 +61,15 @@
                                   'slide-board-bundle':  data.length > 1
                                  }"
                             >
-                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {'model': {'currentSlide':slide} }"></ng-container>
+                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {
+                                    model: {
+                                        currentSlide: slide,
+                                        slideData: {
+                                            slide_done: id<currentSlide.index_in_bundle && data.length > 1,
+                                            is_active: id==currentSlide.index_in_bundle && data.length > 1
+                                        },
+                                    }
+                                }"></ng-container>
                             </div>
                         </div>
                     </ng-container>

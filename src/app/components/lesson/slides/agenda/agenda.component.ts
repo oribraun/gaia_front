@@ -1,22 +1,19 @@
 import {Component, Input} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
+import {BaseSlideComponent} from "../base-slide.component";
 
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
     styleUrls: ['./agenda.component.less']
 })
-export class AgendaComponent {
-
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-
-    imageSrc = ''
+export class AgendaComponent extends BaseSlideComponent {
 
     constructor(
-        private config: Config,
+        protected override config: Config,
     ) {
-        this.imageSrc = this.config.staticImagePath
+        super(config)
     }
 
 }

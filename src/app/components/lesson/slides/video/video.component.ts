@@ -12,6 +12,7 @@ import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {LessonService} from "../../../../services/lesson/lesson.service";
+import {BaseSlideComponent} from "../base-slide.component";
 
 export enum PlayerState
 {
@@ -37,11 +38,9 @@ export interface OnStateChangeEvent
     styleUrls: ['./video.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class VideoComponent implements OnInit, AfterViewInit{
+export class VideoComponent extends BaseSlideComponent implements OnInit, AfterViewInit{
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
 
-    imageSrc = ''
     embeddedVideo: SafeHtml;
 
     loading_player = false;
@@ -50,11 +49,11 @@ export class VideoComponent implements OnInit, AfterViewInit{
     videoWidth: any;
 
     constructor(
-        private config: Config,
+        protected override config: Config,
         private sanitizer: DomSanitizer,
         private lessonService: LessonService
     ) {
-        this.imageSrc = this.config.staticImagePath
+        super(config)
         this.embeddedVideo =""
     }
     ngOnInit() {

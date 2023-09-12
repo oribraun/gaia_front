@@ -9,17 +9,18 @@ declare var SpeechRecognition:any;
 export class SpeechRecognitionService {
     englishRecognition: any;
     hebrewRecognition: any;
-    isListening: boolean = false;
+    ASR_recognizing: boolean = false;
     englishText: string = '';
     hebrewText: string = '';
-    ASR_recognizing:boolean=false;
+    startingRecognition = false;
+    stoppingRecognition = false;
+    abortingRecognition = false;
 
     public onResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
 
     constructor() {}
 
     setupSpeechRecognition() {
-        let self = this
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
             recognitionClass = webkitSpeechRecognition;
@@ -41,15 +42,6 @@ export class SpeechRecognitionService {
             this.englishRecognition.addEventListener('result', this.onResultRecognitionEn);
             // this.englishRecognition.addEventListener('end', this.onEndRecognitionEn);
 
-            this.englishRecognition.onstart = function () {
-                self.ASR_recognizing = true;
-                console.log('EN ASR ON START', self.ASR_recognizing)
-            };
-            this.englishRecognition.onend = function () {
-                self.ASR_recognizing = false;
-                console.log('EN ASR ON END', self.ASR_recognizing)
-
-            };
             // this.hebrewRecognition.onstart = function () {
             //     self.ASR_recognizing = true;
             //     console.log('HE ASR ON START', self.ASR_recognizing)
@@ -93,46 +85,92 @@ export class SpeechRecognitionService {
 
 
     toggleListening(): void {
-        if (this.isListening) {
+        if (this.ASR_recognizing) {
             this.stopListening();
         } else {
             this.startListening();
         }
     }
 
-    startListening(): void {
-        try {
-            if (this.englishRecognition)
-                this.englishRecognition.start();
-            // if (this.hebrewRecognition)
-            //     this.hebrewRecognition.start();
-            this.isListening = true;
-        } catch (e) {
-            console.log('startListening Error', e)
-        }
+    startListening(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.englishRecognition) {
+                    this.startingRecognition = true;
+                    this.englishRecognition.start();
+                    this.englishRecognition.onstart = () => {
+                        this.ASR_recognizing = true;
+                        console.log('EN ASR ON START', this.ASR_recognizing)
+                        this.startingRecognition = false;
+                        resolve(true)
+                    };
+                    // if (this.hebrewRecognition)
+                    //     this.hebrewRecognition.start();
+                } else {
+                    console.log('englishRecognition not setup')
+                    resolve(false)
+                }
+            } catch (e) {
+                console.log('startListening Error', e)
+                resolve(false)
+            }
+        });
     }
 
-    stopListening(): void {
-        try {
-            if (this.englishRecognition)
-                this.englishRecognition.stop();
-            // if (this.hebrewRecognition)
-            //     this.hebrewRecognition.stop();
-            this.isListening = false;
-        } catch (e) {
-            console.log('stopListening Error', e)
-        }
+    stopListening(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.englishRecognition) {
+                    this.stoppingRecognition = true;
+                    this.englishRecognition.stop();
+                    this.englishRecognition.onend = () => {
+                        this.ASR_recognizing = false;
+                        console.log('stopListening EN ASR ON END', this.ASR_recognizing)
+                        this.stoppingRecognition = false;
+                        if(this.startingRecognition) {
+                            this.startingRecognition = false;
+                        }
+                        resolve(true)
+                    };
+                    // if (this.hebrewRecognition)
+                    //     this.hebrewRecognition.stop();
+                    this.ASR_recognizing = false;
+                } else {
+                    console.log('englishRecognition not setup')
+                    resolve(false)
+                }
+            } catch (e) {
+                console.log('stopListening Error', e)
+                resolve(false)
+            }
+        });
     }
-    abortListening(): void {
-        try {
-            if (this.englishRecognition)
-                this.englishRecognition.abort();
-            // if (this.hebrewRecognition)
-            //     this.hebrewRecognition.abort();
-            this.isListening = false;
-        } catch (e) {
-            console.log('stopListening Error', e)
-        }
+    abortListening(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.englishRecognition) {
+                    this.abortingRecognition = true;
+                    this.englishRecognition.abort();
+                    this.englishRecognition.onend = () => {
+                        this.ASR_recognizing = false;
+                        console.log('abortListening EN ASR ON END', this.ASR_recognizing)
+                        this.abortingRecognition = false;
+                        if(this.startingRecognition) {
+                            this.startingRecognition = false;
+                        }
+                        resolve(true)
+                    };
+                    // if (this.hebrewRecognition)
+                    //     this.hebrewRecognition.abort();
+                } else {
+                    console.log('englishRecognition not setup')
+                    resolve(false)
+                }
+            } catch (e) {
+                console.log('stopListening Error', e)
+                resolve(false)
+            }
+        })
     }
 }
 

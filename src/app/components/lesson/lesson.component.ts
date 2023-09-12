@@ -65,7 +65,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     doNotDisturb = false;
     currentAudio: any = null;
     isPause: boolean = false;
-    allow_ASR_activation: boolean = false;
+    allow_ASR_activation: boolean = true;
     noReplayInterval: any = null
     noReplayCounter = 0;
     noReplayTriggerOn = 10; // no replay will be called every 5 seconds
@@ -100,14 +100,18 @@ export class LessonComponent implements OnInit, OnDestroy {
         next_slide: null,
         prev_slide: null,
         change_slide:null,
+        text_to_speech:null,
     }
     heartBeatInterval: any = null
     heartBeatCounter: number = 0;
+    disableHearBeat = false;
 
     sr_list:string[] = []
     last_sr_ts: number = 0;
     last_speak_ts: number = 0;
     last_user_action_ts: number = 0;
+
+    initApplicationDone = false;
 
     constructor(
         private apiService: ApiService,
@@ -121,18 +125,15 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.initApplication()
     }
 
-    resetApplication(){
+    async resetApplication(){
 
         if (!this.mock) {
-            if (this.recognitionOnResultsSubscribe) {
-                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
-            }
             this.stopAudio();
-            this.stopSpeechRecognition();
             this.unsubscribeAllHttpEvents();
-            this.stopHeartBeat()
-            this.lessonService.Broadcast('resetChatMessages', {});
-            this.lessonService.Broadcast('resumeLesson', {});
+            this.stopHeartBeat();
+            if (!this.speakInProgress) {
+                await this.stopSpeechRecognition();
+            }
             // this.lessonService.ClearAllEvents();
         } else {
             this.listenForPauseEvnet()
@@ -140,20 +141,34 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    
-    
+
+
     initApplication(){
         this.triggerResize()
         if (!this.mock) {
-            this.speechRecognitionService.setupSpeechRecognition();
+            if(!this.speechRecognitionService.englishRecognition) {
+                this.speechRecognitionService.setupSpeechRecognition();
+            }
             // this.setupSocketSpeechRecognition();
+            if (this.recognitionOnResultsSubscribe) {
+                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+            }
+            this.stopAudio();
             this.listenToSpeechRecognitionResults();
+            this.resetAllEventProgress();
+            this.lessonService.Broadcast('resetChatMessages', {});
+            this.lessonService.Broadcast('resumeLesson', {});
             this.getPresentation();
             this.startHeartBeat()
-            this.listenForSlideEventRequests()
-            this.listenForPauseEvnet()
-            this.listenForSnapshots()
-            this.listenForSpeakNative()
+            if (!this.initApplicationDone) {
+                // adding listeners only once
+                this.listenForSlideEventRequests()
+                this.listenForPauseEvnet()
+                this.listenForSnapshots()
+                this.listenForSpeakNative()
+            }
+            this.initApplicationDone = true;
+
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -197,15 +212,15 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
                 this.lessonService.speakNativeOnWaiting=true
-                this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {   
+                this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {
                     if (response.err) {
                         console.log('textToSpeech err', response)
                     } else {
                         const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
                         console.log('textToSpeech - ', arrayBuffer)
                         if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                            const new_blob = new BlobItem({arrayBuffer:arrayBuffer, 
-                                action:'speakNative', 
+                            const new_blob = new BlobItem({arrayBuffer:arrayBuffer,
+                                action:'speakNative',
                                 type:'audio'})
                             this.audioBlobQue.push(new_blob);
                             if (!this.speakInProgress) {
@@ -213,10 +228,10 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                         }
                     }
-                })  
-                
+                })
+
             }
-        })  
+        })
     }
 
     togglePauseLesson(){
@@ -224,16 +239,18 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.toggleStopAll(this.isPause);
     }
 
-    toggleStopAll(value: boolean) {
+    async toggleStopAll(value: boolean) {
         if (value) {
             this.stopAudio();
-            this.stopSpeechRecognition();
             this.stopHeartBeat()
             this.unsubscribeAllHttpEvents();
+            await this.stopSpeechRecognition();
 
         } else {
-            this.startSpeechRecognition();
             this.startHeartBeat()
+            if (!this.speakInProgress) {
+                await this.startSpeechRecognition();
+            }
         }
     }
 
@@ -319,7 +336,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         // increase the counter
         this.heartBeatCounter++;
         // make sure SR is active (if not actively playing sound)
-        this.activateSR()
+        // this.activateSR()
         // trigger a request to the server every x seconds
         if (this.heartBeatCounter%x == 0){
             console.log('calling heartBeatTrigger',new Date().toTimeString())
@@ -327,31 +344,33 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    activateSR(){
-        // Only enable when speak is not in progress
-        console.log('speakInProgress', this.speakInProgress)
-        console.log('ASR_recognizing', this.speechRecognitionService.ASR_recognizing)
-
-        if ((!this.speakInProgress) && (!this.isPause) && (!this.speechRecognitionService.ASR_recognizing) && this.allow_ASR_activation){
-            // make sure the service is off before starting it again
-            try{
-                this.startSpeechRecognition();
-                console.log('Starting SR')
-
-            }
-            catch (error) {
-                //line of code to stop the speech recognition
-                console.log('SR is already on')
-            }
-        }
-    }
+    // activateSR(){
+    //     // Only enable when speak is not in progress
+    //     console.log('speakInProgress', this.speakInProgress)
+    //     console.log('ASR_recognizing', this.speechRecognitionService.ASR_recognizing)
+    //
+    //     if ((!this.speakInProgress) && (!this.isPause) && (!this.speechRecognitionService.ASR_recognizing) && this.allow_ASR_activation){
+    //         // make sure the service is off before starting it again
+    //         try{
+    //             this.startSpeechRecognition();
+    //             console.log('Starting SR')
+    //
+    //         }
+    //         catch (error) {
+    //             //line of code to stop the speech recognition
+    //             console.log('SR is already on')
+    //         }
+    //     }
+    // }
 
     startHeartBeat(){
-        console.log('startHeartBeat Called')
-        this.stopHeartBeat()
-        this.heartBeatInterval =  setInterval(() => {
-            this.heartBeatSequence()
-        }, 5*1000)
+        if (!this.disableHearBeat) {
+            console.log('startHeartBeat Called')
+            this.stopHeartBeat()
+            this.heartBeatInterval = setInterval(() => {
+                this.heartBeatSequence()
+            }, 5 * 1000)
+        }
     }
 
     resetHeartBeatCounter() {
@@ -400,6 +419,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log('getPresentation error', error)
+                this.gettingPresentation = false;
             },
         })
     }
@@ -598,7 +618,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.no_replay = this.apiService.getNewSlideReply({
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
             app_data: {
                 type: 'new_slide',
                 last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
@@ -635,10 +655,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (!this.allowApiCalls()) {
             return;
         }
-        if (this.presentationResetIsInProgress) {
+        console.log('this.gettingPresentation',this.gettingPresentation)
+        console.log('this.presentationResetIsInProgress',this.presentationResetIsInProgress)
+        if (this.presentationResetIsInProgress || this.gettingPresentation) {
             return;
         }
-        this.resetApplication()
+        await this.resetApplication()
         this.presentationResetIsInProgress = true;
         this.apiSubscriptions.reset = this.apiService.resetPresentation({
             app_data: {
@@ -691,7 +713,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.setForcedSlide(0)
         if(this.forceChangeSlideInfo){
             this.stopAudio()
-            this.changeSlideReply() 
+            this.changeSlideReply()
         }
     }
 
@@ -702,7 +724,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.setForcedSlide(-2)
         if(this.forceChangeSlideInfo){
             this.stopAudio()
-            this.changeSlideReply() 
+            this.changeSlideReply()
         }
     }
 
@@ -741,7 +763,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             && !this.presentationNoReplayIsInProgress
             && !this.presentationResetIsInProgress) {
             this.speakInProgress = false;
-            // this.resetSpeechRecognition();
+            this.resetSpeechRecognition();
             // this.resetIntervalNoReplay();
             // this.stopIntervalNoReplay();
             // this.startIntervalNoReplay()
@@ -749,27 +771,43 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     resetSpeechRecognition() {
-        this.stopSpeechRecognition()
+        console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing)
+        if (this.speechRecognitionService.ASR_recognizing) {
+            this.speechRecognitionService.stopListening().then(() => {
+                this.startSpeechRecognition()
+            })
+        } else {
+            this.startSpeechRecognition();
+        }
         this.last_speak_ts = Date.now()
-        clearTimeout(this.resetSpeechRecognitionTimeout);
-        this.resetSpeechRecognitionTimeout = setTimeout(() => {
-            this.startSpeechRecognition()
-        }, 500)
     }
 
-    startSpeechRecognition() {
+    async startSpeechRecognition() {
         console.log('startSpeechRecognition');
-        this.speechRecognitionService.startListening();
+        console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
+        console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
+        if (this.speechRecognitionService.englishRecognition &&
+            !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
+            await this.speechRecognitionService.startListening();
+        }
     }
 
-    stopSpeechRecognition() {
+    async stopSpeechRecognition() {
         console.log('stopSpeechRecognition');
-        this.speechRecognitionService.abortListening();
-        this.speechRecognitionService.stopListening();
+        if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.stoppingRecognition) {
+            await this.speechRecognitionService.stopListening();
+        }
+    }
+
+    async abortSpeechRecognition() {
+        console.log('abortSpeechRecognition');
+        if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.abortingRecognition) {
+            await this.speechRecognitionService.abortListening();
+        }
     }
 
     playUsingAudio() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (this.audioQue.length) {
                 const current_src_url: any = this.audioQue.shift();
                 console.log('playUsingAudio src_url', current_src_url)
@@ -807,11 +845,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         if (current_src_url) {
                             loop(current_src_url)
                         } else {
-                            setTimeout(() => {
-                                console.log('Reseting ASR')
-                                this.speakInProgress = false;
-                                this.resetSpeechRecognition();
-                            }, 200)
+                            this.speakInProgress = false;
                             resolve(true)
                         }
                         // }
@@ -826,7 +860,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
 
     playUsingBlob() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (this.audioBlobQue.length) {
                 console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
 
@@ -880,7 +914,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             this.lessonService.speakNativeOnProgress = false;
                             this.lessonService.speakNativeOnWaiting = false;
                         }
-                        
+
                         console.log('audio ended')
                         this.currentAudio.currentTime = 0;
                         const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
@@ -892,11 +926,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
                                 this.lessonService.Broadcast('teacherListening', {});
                             }
-                            setTimeout(() => {
-                                console.log('Reseting ASR')
-                                this.speakInProgress = false;
-                                this.resetSpeechRecognition();
-                            }, 0)
+                            this.speakInProgress = false;
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
@@ -949,7 +979,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (!this.speakInProgress) {
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
+                    this.stopSpeechRecognition();
+                    this.stopHeartBeat();
                     const value = await this.playUsingBlob();
+                    this.resetSpeechRecognition();
+                    this.startHeartBeat();
                 }
             }
         }
@@ -977,11 +1011,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             this.changeSlideReply()
         }
-        if (presentation_slide_updated) {
-            this.getNewSlideReply();
-        } else {
-            // this.resetSpeechRecognition();
-        }
+        // if (presentation_slide_updated) {
+        //     this.getNewSlideReply();
+        // } else {
+        //     // this.resetSpeechRecognition();
+        // }
     }
 
     base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -1100,16 +1134,27 @@ export class LessonComponent implements OnInit, OnDestroy {
             !this.eventHandlingInProgress
     }
 
+    resetAllEventProgress() {
+        this.presentationResetIsInProgress = false;
+        this.presentationReplayIsInProgress = false;
+        this.presentationNewSlideInProgress = false;
+        this.presentationNoReplayIsInProgress = false;
+
+        this.nextSlideIsInProgress = false;
+        this.prevSlideIsInProgress = false;
+        this.eventHandlingInProgress = false;
+    }
+
     ngOnDestroy() {
         if (this.recognitionOnResultsSubscribe) {
             this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
         }
         console.log('this.currentAudi', this.currentAudio);
         this.stopAudio();
-        this.stopSpeechRecognition();
         this.unsubscribeAllHttpEvents();
         this.stopHeartBeat()
         this.lessonService.ClearAllEvents();
+        this.stopSpeechRecognition();
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
     }

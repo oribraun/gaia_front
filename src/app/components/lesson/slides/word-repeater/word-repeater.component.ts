@@ -1,23 +1,27 @@
 import {Component, Input} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
+import {BaseSlideComponent} from "../base-slide.component";
 
 @Component({
     selector: 'app-word-repeater',
     templateUrl: './word-repeater.component.html',
     styleUrls: ['./word-repeater.component.less']
 })
-export class WordRepeaterComponent {
+export class WordRepeaterComponent  extends BaseSlideComponent {
 
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('recognitionText') recognitionText: string = '';
 
-    imageSrc = ''
-
     constructor(
-        private config: Config,
+        protected override config: Config,
     ) {
-        this.imageSrc = this.config.staticImagePath
+        super(config)
+    }
+
+    example_how_to_use_is_active() {
+        if (this.slideData?.is_active) {
+            console.log('asdf')
+        }
     }
 
 }
