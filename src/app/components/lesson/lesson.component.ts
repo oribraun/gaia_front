@@ -248,7 +248,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         } else {
             this.startHeartBeat()
-            await this.startSpeechRecognition();
+            if (!this.speakInProgress) {
+                await this.startSpeechRecognition();
+            }
         }
     }
 
