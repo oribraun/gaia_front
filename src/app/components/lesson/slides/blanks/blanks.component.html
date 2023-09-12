@@ -3,8 +3,8 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
             <div>
-                <span *ngIf="slideDone"> {{currentSlide.target_sentence}}</span>
-                <ng-container *ngIf="!slideDone"> 
+                <span *ngIf="slideData?.slideDone"> {{currentSlide.target_sentence}}</span>
+                <ng-container *ngIf="!slideData?.slideDone">
                     <ng-container *ngFor="let word of currentSlide.blanked_sentence.split(' '); let index=index">
                         <span *ngIf="word !=='________'">{{word}}&nbsp;</span>
                         <ng-container *ngIf="word ==='________'">

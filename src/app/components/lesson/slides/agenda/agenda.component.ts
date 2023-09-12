@@ -10,6 +10,7 @@ import {Config} from "../../../../config";
 export class AgendaComponent {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('slideData') slideData: any = {};
 
     imageSrc = ''
 

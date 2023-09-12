@@ -40,6 +40,7 @@ export interface OnStateChangeEvent
 export class VideoComponent implements OnInit, AfterViewInit{
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('slideData') slideData: any = {};
 
     imageSrc = ''
     embeddedVideo: SafeHtml;

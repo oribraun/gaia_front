@@ -11,6 +11,7 @@ import {LessonService} from "../../../../services/lesson/lesson.service";
 export class ReadingComponent implements OnInit{
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('slideData') slideData: any = {};
 
     imageSrc = ''
     text_to_present = ''
@@ -46,7 +47,7 @@ export class ReadingComponent implements OnInit{
             } catch (error) {
                 console.error(error);
             }
-            
+
             console.log('in reading student_reply_response' ,response.data.text)
         })
     }

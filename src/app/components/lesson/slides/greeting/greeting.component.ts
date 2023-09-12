@@ -10,6 +10,7 @@ import {Config} from "../../../../config";
 export class GreetingComponent {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('slideData') slideData: any = {};
 
     imageSrc = ''
 

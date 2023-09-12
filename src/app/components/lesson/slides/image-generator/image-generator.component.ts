@@ -12,6 +12,7 @@ import {LessonService} from "../../../../services/lesson/lesson.service";
 export class ImageGeneratorComponent implements OnDestroy {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input('slideData') slideData: any = {};
 
     // @Input('generatingImageInProgress') generatingImageInProgress: boolean = false;
 

@@ -11,6 +11,7 @@ export class WordRepeaterComponent {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('recognitionText') recognitionText: string = '';
+    @Input('slideData') slideData: any = {};
 
     imageSrc = ''
 
