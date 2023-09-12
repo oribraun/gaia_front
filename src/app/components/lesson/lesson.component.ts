@@ -100,6 +100,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         next_slide: null,
         prev_slide: null,
         change_slide:null,
+        text_to_speech:null,
     }
     heartBeatInterval: any = null
     heartBeatCounter: number = 0;
@@ -197,7 +198,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
                 this.lessonService.speakNativeOnWaiting=true
-                this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {
+                this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {
                     if (response.err) {
                         console.log('textToSpeech err', response)
                     } else {
