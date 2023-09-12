@@ -104,6 +104,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
     heartBeatInterval: any = null
     heartBeatCounter: number = 0;
+    disableHearBeat = false;
 
     sr_list:string[] = []
     last_sr_ts: number = 0;
@@ -128,12 +129,16 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (this.recognitionOnResultsSubscribe) {
                 this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
             }
-            this.stopAudio();
+            if (this.speakInProgress) {
+                this.stopAudio();
+            }
             this.unsubscribeAllHttpEvents();
             this.stopHeartBeat()
             this.lessonService.Broadcast('resetChatMessages', {});
             this.lessonService.Broadcast('resumeLesson', {});
-            await this.stopSpeechRecognition();
+            if (!this.speakInProgress) {
+                await this.stopSpeechRecognition();
+            }
             // this.lessonService.ClearAllEvents();
         } else {
             this.listenForPauseEvnet()
@@ -348,11 +353,13 @@ export class LessonComponent implements OnInit, OnDestroy {
     // }
 
     startHeartBeat(){
-        console.log('startHeartBeat Called')
-        this.stopHeartBeat()
-        this.heartBeatInterval =  setInterval(() => {
-            this.heartBeatSequence()
-        }, 5*1000)
+        if (!this.disableHearBeat) {
+            console.log('startHeartBeat Called')
+            this.stopHeartBeat()
+            this.heartBeatInterval = setInterval(() => {
+                this.heartBeatSequence()
+            }, 5 * 1000)
+        }
     }
 
     resetHeartBeatCounter() {
@@ -1030,6 +1037,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.apiSubscriptions[key] = null;
             }
         }
+        this.resetAllEventProgress();
     }
 
 
@@ -1107,6 +1115,17 @@ export class LessonComponent implements OnInit, OnDestroy {
             !this.nextSlideIsInProgress &&
             !this.prevSlideIsInProgress &&
             !this.eventHandlingInProgress
+    }
+
+    resetAllEventProgress() {
+        this.presentationResetIsInProgress = false;
+        this.presentationReplayIsInProgress = false;
+        this.presentationNewSlideInProgress = false;
+        this.presentationNoReplayIsInProgress = false;
+
+        this.nextSlideIsInProgress = false;
+        this.prevSlideIsInProgress = false;
+        this.eventHandlingInProgress = false;
     }
 
     ngOnDestroy() {
