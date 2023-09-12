@@ -126,9 +126,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     async resetApplication(){
 
         if (!this.mock) {
-            if (this.speakInProgress) {
-                this.stopAudio();
-            }
+            this.stopAudio();
             this.unsubscribeAllHttpEvents();
             this.stopHeartBeat()
             this.lessonService.Broadcast('resetChatMessages', {});
@@ -155,6 +153,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (this.recognitionOnResultsSubscribe) {
                 this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
             }
+            this.stopAudio();
             this.listenToSpeechRecognitionResults();
             this.getPresentation();
             this.startHeartBeat()
@@ -162,6 +161,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.listenForPauseEvnet()
             this.listenForSnapshots()
             this.listenForSpeakNative()
+
         } else {
             this.listenForPauseEvnet()
             this.setupPresentationMock();
@@ -775,7 +775,6 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async startSpeechRecognition() {
         console.log('startSpeechRecognition');
-        console.log('this.speechRecognitionService.englishRecognition', this.speechRecognitionService.englishRecognition);
         console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
         console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
         if (this.speechRecognitionService.englishRecognition &&

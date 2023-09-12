@@ -108,11 +108,11 @@ export class SpeechRecognitionService {
                     //     this.hebrewRecognition.start();
                 } else {
                     console.log('englishRecognition not setup')
-                    reject(false)
+                    resolve(false)
                 }
             } catch (e) {
                 console.log('startListening Error', e)
-                reject(false)
+                resolve(false)
             }
         });
     }
@@ -137,11 +137,11 @@ export class SpeechRecognitionService {
                     this.ASR_recognizing = false;
                 } else {
                     console.log('englishRecognition not setup')
-                    reject(false)
+                    resolve(false)
                 }
             } catch (e) {
                 console.log('stopListening Error', e)
-                reject(false)
+                resolve(false)
             }
         });
     }
@@ -164,11 +164,11 @@ export class SpeechRecognitionService {
                     //     this.hebrewRecognition.abort();
                 } else {
                     console.log('englishRecognition not setup')
-                    reject(false)
+                    resolve(false)
                 }
             } catch (e) {
                 console.log('stopListening Error', e)
-                reject(false)
+                resolve(false)
             }
         })
     }
