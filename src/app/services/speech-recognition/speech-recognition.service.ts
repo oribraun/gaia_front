@@ -127,6 +127,9 @@ export class SpeechRecognitionService {
                         this.ASR_recognizing = false;
                         console.log('stopListening EN ASR ON END', this.ASR_recognizing)
                         this.stoppingRecognition = false;
+                        if(this.startingRecognition) {
+                            this.startingRecognition = false;
+                        }
                         resolve(true)
                     };
                     // if (this.hebrewRecognition)
@@ -152,6 +155,9 @@ export class SpeechRecognitionService {
                         this.ASR_recognizing = false;
                         console.log('abortListening EN ASR ON END', this.ASR_recognizing)
                         this.abortingRecognition = false;
+                        if(this.startingRecognition) {
+                            this.startingRecognition = false;
+                        }
                         resolve(true)
                     };
                     // if (this.hebrewRecognition)

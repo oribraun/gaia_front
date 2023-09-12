@@ -126,9 +126,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     async resetApplication(){
 
         if (!this.mock) {
-            if (this.recognitionOnResultsSubscribe) {
-                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
-            }
             if (this.speakInProgress) {
                 this.stopAudio();
             }
@@ -151,8 +148,13 @@ export class LessonComponent implements OnInit, OnDestroy {
     initApplication(){
         this.triggerResize()
         if (!this.mock) {
-            this.speechRecognitionService.setupSpeechRecognition();
+            if(!this.speechRecognitionService.englishRecognition) {
+                this.speechRecognitionService.setupSpeechRecognition();
+            }
             // this.setupSocketSpeechRecognition();
+            if (this.recognitionOnResultsSubscribe) {
+                this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
+            }
             this.listenToSpeechRecognitionResults();
             this.getPresentation();
             this.startHeartBeat()
@@ -408,6 +410,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log('getPresentation error', error)
+                this.gettingPresentation = false;
             },
         })
     }
@@ -643,7 +646,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (!this.allowApiCalls()) {
             return;
         }
-        if (this.presentationResetIsInProgress) {
+        console.log('this.gettingPresentation',this.gettingPresentation)
+        console.log('this.presentationResetIsInProgress',this.presentationResetIsInProgress)
+        if (this.presentationResetIsInProgress || this.gettingPresentation) {
             return;
         }
         await this.resetApplication()
@@ -757,7 +762,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     resetSpeechRecognition() {
-        console.log('resetting ASR')
+        console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing)
         if (this.speechRecognitionService.ASR_recognizing) {
             this.speechRecognitionService.stopListening().then(() => {
                 this.startSpeechRecognition()
@@ -770,6 +775,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async startSpeechRecognition() {
         console.log('startSpeechRecognition');
+        console.log('this.speechRecognitionService.englishRecognition', this.speechRecognitionService.englishRecognition);
+        console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
+        console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
         if (this.speechRecognitionService.englishRecognition &&
             !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
             await this.speechRecognitionService.startListening();
@@ -792,8 +800,6 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     playUsingAudio() {
         return new Promise(async (resolve, reject) => {
-            this.stopSpeechRecognition();
-            this.stopHeartBeat();
             if (this.audioQue.length) {
                 const current_src_url: any = this.audioQue.shift();
                 console.log('playUsingAudio src_url', current_src_url)
@@ -832,8 +838,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                             loop(current_src_url)
                         } else {
                             this.speakInProgress = false;
-                            this.resetSpeechRecognition();
-                            this.startHeartBeat();
                             resolve(true)
                         }
                         // }
@@ -849,8 +853,6 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     playUsingBlob() {
         return new Promise(async (resolve, reject) => {
-            this.stopSpeechRecognition();
-            this.stopHeartBeat();
             if (this.audioBlobQue.length) {
                 console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
 
@@ -917,8 +919,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 this.lessonService.Broadcast('teacherListening', {});
                             }
                             this.speakInProgress = false;
-                            this.resetSpeechRecognition();
-                            this.startHeartBeat();
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
@@ -971,7 +971,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (!this.speakInProgress) {
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
+                    this.stopSpeechRecognition();
+                    this.stopHeartBeat();
                     const value = await this.playUsingBlob();
+                    this.resetSpeechRecognition();
+                    this.startHeartBeat();
                 }
             }
         }
