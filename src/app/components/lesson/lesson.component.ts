@@ -65,6 +65,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     doNotDisturb = false;
     currentAudio: any = null;
     isPause: boolean = false;
+    needToCallNextSlideReplay: boolean = false;
     allow_ASR_activation: boolean = true;
     noReplayInterval: any = null
     noReplayCounter = 0;
@@ -250,6 +251,10 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.startHeartBeat()
             if (!this.speakInProgress) {
                 await this.startSpeechRecognition();
+            }
+            if (this.needToCallNextSlideReplay) {
+                this.needToCallNextSlideReplay = false;
+                this.getNewSlideReply();
             }
         }
     }
@@ -594,7 +599,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.currentSlideIndex = data.current_slide_index;
                         this.currentObjectiveIndex = data.current_objective_index;
                         this.setCurrentSection();
-                        this.getNewSlideReply();
+                        if (this.isPause) {
+                            this.needToCallNextSlideReplay = true;
+                        } else {
+                            this.getNewSlideReply();
+                        }
                     } else {
                         console.log('change slide response err', response)
                     }
@@ -942,6 +951,10 @@ export class LessonComponent implements OnInit, OnDestroy {
 
 
     async handleOnPresentationReplay(reason: string = '') {
+        if (this.isPause) {
+
+            return;
+        }
         const data = this.currentData
         const additional_instructions =data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
