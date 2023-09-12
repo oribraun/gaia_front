@@ -792,7 +792,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     playUsingAudio() {
         return new Promise(async (resolve, reject) => {
-            await this.stopSpeechRecognition();
+            this.stopSpeechRecognition();
+            this.stopHeartBeat();
             if (this.audioQue.length) {
                 const current_src_url: any = this.audioQue.shift();
                 console.log('playUsingAudio src_url', current_src_url)
@@ -832,6 +833,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         } else {
                             this.speakInProgress = false;
                             this.resetSpeechRecognition();
+                            this.startHeartBeat();
                             resolve(true)
                         }
                         // }
@@ -847,7 +849,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     playUsingBlob() {
         return new Promise(async (resolve, reject) => {
-            await this.stopSpeechRecognition();
+            this.stopSpeechRecognition();
+            this.stopHeartBeat();
             if (this.audioBlobQue.length) {
                 console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
 
@@ -915,6 +918,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             }
                             this.speakInProgress = false;
                             this.resetSpeechRecognition();
+                            this.startHeartBeat();
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
