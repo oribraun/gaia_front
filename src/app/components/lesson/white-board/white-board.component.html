@@ -64,7 +64,10 @@
                                 <ng-container *ngTemplateOutlet="selected_slide_container;context: {
                                     model: {
                                         currentSlide: slide,
-                                        slideData: {slide_done: id<currentSlide.index_in_bundle && data.length > 1},
+                                        slideData: {
+                                            slide_done: id<currentSlide.index_in_bundle && data.length > 1,
+                                            is_active: id==currentSlide.index_in_bundle && data.length > 1
+                                        },
                                     }
                                 }"></ng-container>
                             </div>

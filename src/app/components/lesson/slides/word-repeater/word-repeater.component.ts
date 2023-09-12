@@ -18,4 +18,10 @@ export class WordRepeaterComponent  extends BaseSlideComponent {
         super(config)
     }
 
+    example_how_to_use_is_active() {
+        if (this.slideData?.is_active) {
+            console.log('asdf')
+        }
+    }
+
 }
