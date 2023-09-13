@@ -12,7 +12,6 @@ export class ScreenBoardComponent {
 
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('sectionTitles') sectionTitles: any = {};
     @Input('recognitionText') recognitionText: string = '';
     @Input('isPause') isPause: boolean = false;
     @Input('isMobile') isMobile: boolean = false;

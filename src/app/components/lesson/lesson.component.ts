@@ -45,18 +45,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     currentSlide: PresentationSlide = new PresentationSlide();
     currentObjective: any = null;
     currentData: any = null;
-    sectionTitles = {
-        bundle:'bundle',
-        greeting: 'greeting',
-        reading: 'reading',
-        word_repeater: 'word_repeater',
-        image_generator: 'image_generator',
-        agenda: 'agenda',
-        ending: 'ending',
-        video: 'video',
-        blanks:'blanks',
-        title:'title'
-    }
 
     recognitionCountWords = 0;
     recognitionText = '';
