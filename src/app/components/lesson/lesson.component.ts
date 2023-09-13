@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
-import {lastValueFrom} from "rxjs";
+import {firstValueFrom, lastValueFrom} from "rxjs";
 import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
 import {
@@ -198,29 +198,31 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-    listenForSpeakNative(){
-        this.lessonService.ListenFor("speakNative").subscribe((obj: any) => {
-            if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
-                this.lessonService.speakNativeOnWaiting=true
-                this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}).subscribe(async (response: any) => {
-                    if (response.err) {
-                        console.log('textToSpeech err', response)
-                    } else {
-                        const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
-                        console.log('textToSpeech - ', arrayBuffer)
-                        if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                            const new_blob = new BlobItem({arrayBuffer:arrayBuffer,
-                                action:'speakNative',
-                                type:'audio'})
-                            this.audioBlobQue.push(new_blob);
-                            if (!this.speakInProgress) {
-                                const value = await this.playUsingBlob();
-                            }
-                        }
+    async speakNative(obj:any={}){
+        if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
+            this.lessonService.speakNativeOnWaiting=true
+            const response:any = await firstValueFrom(this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}))
+            if (response.err) {
+                console.log('textToSpeech err', response)
+            } else {
+                const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
+                console.log('textToSpeech - ', arrayBuffer)
+                if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                    const new_blob = new BlobItem({arrayBuffer:arrayBuffer,
+                        action:'speakNative',
+                        type:'audio'})
+                    this.audioBlobQue.push(new_blob);
+                    if (!this.speakInProgress) {
+                        const value = await this.playUsingBlob();
                     }
-                })
-
+                }
             }
+        }
+    }
+
+    async listenForSpeakNative(){
+        this.lessonService.ListenFor("speakNative").subscribe(async (obj: any) => {
+            await this.speakNative(obj)
         })
     }
 
@@ -631,7 +633,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
         }).subscribe({
-            next: (response: any) => {
+            next: async (response: any) => {
                 this.presentationNewSlideInProgress = false;
 
                 if (response.err) {
@@ -639,10 +641,10 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
-                    this.handleOnPresentationReplay('new_slide');
                     if (this.currentSlide.index_in_bundle <=0 && this.currentSlide.should_read_native) {
-                        this.lessonService.Broadcast('speakNative', {'text':this.currentSlide.native_language_text.he})
-                    }
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he})        
+                    }  
+                    this.handleOnPresentationReplay('new_slide');
                 }
             },
             error: (error) => {
@@ -963,6 +965,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('reason',reason)
         console.log('data',data)
 
+        console.log('after+speak_native')
         if (additional_instructions) {
             const data = {'type': 'additional_instructions', 'data': additional_instructions}
             this.lessonService.Broadcast("slideEventReply", data)
@@ -995,22 +998,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         if(!help_sound_buffer && !help_sound_url) {
             await this.startSpeechRecognition();
         }
-        // if (reason == 'new_slide') {
-        //     console.log('speak_native')
-        //     this.lessonService.Broadcast('speakNative', {'text':this.currentSlide.native_language_text})
-        //     }
+        
 
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();
             this.stopAudio();
             return;
         }
-        // if (presentation_index_updated) {
-        //     this.currentSectionIndex = data.current_section_index;
-        //     this.currentSlideIndex = data.current_slide_index;
-        //     this.currentObjectiveIndex = data.current_objective_index;
-        //     this.setCurrentSection();
-        // }
+        
 
         if (presentation_content_updated) {
             // TODO request presentation from server
@@ -1019,11 +1014,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             this.changeSlideReply()
         }
-        // if (presentation_slide_updated) {
-        //     this.getNewSlideReply();
-        // } else {
-        //     // this.resetSpeechRecognition();
-        // }
+        
     }
 
     base64ToArrayBuffer(base64: string): ArrayBuffer {
