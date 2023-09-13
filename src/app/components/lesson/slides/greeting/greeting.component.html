@@ -6,7 +6,13 @@
             </div>
         </div>
     </div>
-    <div class="image" *ngIf="currentSlide.teacher_image_path">
-        <img [src]="currentSlide.teacher_image_path">
+<!--    <div class="image" *ngIf="currentSlide.teacher_image_path">-->
+<!--        <img [src]="currentSlide.teacher_image_path">-->
+<!--    </div>-->
+    <div class="background-image">
+        <img src="{{imageSrc}}assets/images/lesson/class_background.png">
+    </div>
+    <div class="gif">
+        <img src="{{imageSrc}}assets/gifs/teacher_speaking_new.gif">
     </div>
 </div>

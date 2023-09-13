@@ -58,7 +58,7 @@
                              [ngClass]="{
                               'col-lg-6 mb-4':data.length > 1,
                              }">
-                            <div class="slide"
+                            <div class="slide {{currentSlide.slide_type}}"
                                  [ngClass]="{
                                   'active-slide':id==currentSlide.index_in_bundle && data.length > 1,
                                   'slide-board-full-height':  data.length > 1,
