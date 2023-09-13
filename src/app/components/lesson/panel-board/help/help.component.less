@@ -1,0 +1,211 @@
+
+.container {
+    position: relative;
+    margin: 0 auto;
+    left: 25%;
+    width: 50%;
+    margin: 0;
+    top: 4px;
+    padding: 0;
+  }
+  
+  label {cursor: pointer;}
+  .radio-wrapper {
+    width: 145px;
+    height: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 30px;
+    position: relative;
+    margin-left: 1%;
+  }
+  .radio-wrapper p {
+    position: absolute;
+    z-index: 10;
+    color: white;
+    font-size: 1.7em;
+    margin: 0;
+  }
+  .radio-wrapper .correct {
+    left: 17px;
+  }
+  .radio-wrapper .wrong {
+    right: 17px;
+    top: -5px;
+  }
+  .radio-wrapper .neutral-icon {
+    left: 69px;
+    top: -8px;
+    opacity: 0.5;
+  }
+  .radio-wrapper label {
+    z-index: 9;
+  }
+  
+  input[type=radio] {
+    display: none;
+  }
+  
+  i {
+    z-index: 99;
+    font-size: 18px;
+  }
+  
+  .neutral-icon i {
+    font-size: 10px;
+  }
+  
+  .neutral + label {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    left: 33%;
+    transition: transform 1s;
+    font-size: 12px;
+  }
+  
+  .neutral:checked + label {
+    border: 2px solid black;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #eeeeee;
+    background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
+  }
+  
+  .yes + label {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    text-align: center;
+  }
+  
+  .yes:checked + label {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #20d532;
+    background: linear-gradient(to bottom, #20d532 0%, #1cc301 100%);
+    -moz-animation-duration: 0.4s;
+    -moz-animation-name: slidein;
+    -webkit-animation-duration: 0.4s;
+    -webkit-animation-name: slidein;
+    animation-duration: 0.4s;
+    animation-name: slidein;
+    -webkit-transform: translateZ(0);
+  }
+  
+  .no + label {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
+  
+  .no:checked + label {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: red;
+    -moz-animation-duration: 0.4s;
+    -moz-animation-name: slideno;
+    -webkit-animation-duration: 0.4s;
+    -webkit-animation-name: slideno;
+    animation-duration: 0.4s;
+    animation-name: slideno;
+    -webkit-transform: translateZ(0);
+    background: #e66c67;
+    background: linear-gradient(to bottom, #e66c67 0%, #dd4f4b 100%);
+  }
+  
+  h6 {
+    position: absolute;
+    top: -20px;
+    font-size: 15px;
+    left: 37%;
+  }
+
+  label {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  @-webkit-keyframes slidein {
+    from {
+      transform: translate(50px, 0);
+    }
+    to {
+      transform: translate(0px, 0px);
+    }
+  }
+  
+  @keyframes slidein {
+    from {
+      transform: translate(50px, 0);
+    }
+    to {
+      transform: translate(0px, 0px);
+    }
+  }
+  @-webkit-keyframes slideno {
+    from {
+      transform: translate(-50px, 0);
+    }
+    to {
+      transform: translate(0px, 0px);
+    }
+  }
+  @keyframes slideno {
+    from {
+      transform: translate(-50px, 0);
+    }
+    to {
+      transform: translate(0px, 0px);
+    }
+  }
+  @-webkit-keyframes returnLeft {
+    from {
+      transform: translate(-50px, 0);
+    }
+    to {
+      transform: translate(0px, 0);
+    }
+  }
+  @keyframes returnLeft {
+    from {
+      transform: translate(-50px, 0);
+    }
+    to {
+      transform: translate(0px, 0);
+    }
+  }
+  @-webkit-keyframes returnRight {
+    from {
+      transform: translate(50px, 0);
+    }
+    to {
+      transform: translate(0px, 0);
+    }
+  }
+  @keyframes returnRight {
+    from {
+      transform: translate(50px, 0);
+    }
+    to {
+      transform: translate(0px, 0);
+    }
+  }

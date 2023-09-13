@@ -11,6 +11,8 @@ export class LessonService {
     speakNativeOnProgress: boolean = false;
     speakNativeOnWaiting: boolean = false;
 
+    helpMode = 'disabled'
+
     constructor() { }
 
     /**
@@ -58,5 +60,10 @@ export class LessonService {
             this.events[name].unsubscribe();
             delete this.events[name];
         }
+    }
+
+    setHelpMode(helpType:string='disabled'){        
+        this.helpMode = helpType
+        this.Broadcast('setHelpMode', helpType)
     }
 }

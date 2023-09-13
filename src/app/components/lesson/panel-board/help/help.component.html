@@ -1,0 +1,20 @@
+<h6>Need Help ?</h6>
+<div class="container">
+  <div class="radio-wrapper">
+    <p class="correct">
+    </p>
+    <p class="neutral-icon">
+    </p>
+    <p class="wrong"></p>
+    <input type="radio" name="event" class="yes" id="radio-yes" (click)="setHelpMode('en')" />
+
+    <label for="radio-yes">En</label>
+
+    <input type="radio" name="event" class="neutral" checked id="radio-neutral" (click)="setHelpMode('disabled')"/>
+    <label for="radio-neutral" >Return</label>
+
+
+    <input type="radio" name="event" class="no" id="radio-no" (click)="setHelpMode('native')"/>
+    <label for="radio-no">He</label>
+  </div>
+</div>
