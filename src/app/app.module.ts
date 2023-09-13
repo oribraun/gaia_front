@@ -51,6 +51,7 @@ import { VideoComponent } from './components/lesson/slides/video/video.component
 import { ScreenBoardComponent } from './components/lesson/screen-board/screen-board.component';
 import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.component';
 import { TitleComponent } from './components/lesson/slides/title/title.component';
+import { WordTranslatorComponent } from './components/lesson/slides/word-translator/word-translator.component';
 
 @NgModule({
     declarations: [
@@ -97,6 +98,7 @@ import { TitleComponent } from './components/lesson/slides/title/title.component
         ScreenBoardComponent,
         ChatBoardComponent,
         TitleComponent,
+        WordTranslatorComponent,
     ],
     imports: [
         BrowserModule,

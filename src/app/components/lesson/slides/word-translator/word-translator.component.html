@@ -1,0 +1,21 @@
+<div class="slide-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="text text-pre-line">
+                <h2>{{currentSlide.text}}</h2>
+            </div>
+        </div>
+    </div>
+    <!-- mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio" -->
+
+    <!-- answer_options [urls\native text] -->
+    <div class="image image-right" *ngIf="currentSlide.mode.toLowerCase() === 'word_to_picture' ">
+        <!-- answer_options are urls of pic -->
+    </div>
+    <div class="image image-right" *ngIf="currentSlide.mode.toLowerCase() === 'word_to_native_text'">
+        <!-- answer_options are native text -->
+    </div>
+    <div class="image image-right" *ngIf="currentSlide.mode.toLowerCase() === 'word_to_native_audio'">
+        <!-- press to talk button -->
+    </div>        
+</div>

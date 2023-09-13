@@ -46,6 +46,12 @@
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
     ></app-title>
+    <app-word-translator
+        *ngIf="model.currentSlide.slide_type === sectionTitles.word_translator"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-word-translator>    
+    
 </ng-template>
 <div class="white-board">
     <!-- If it is a bundle -->

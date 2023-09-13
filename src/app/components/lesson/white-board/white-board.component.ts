@@ -42,7 +42,9 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
         ending: 'ending',
         video: 'video',
         blanks:'blanks',
-        title:'title'
+        title:'title',
+        word_translator:'word_translator'
+
     }
 
 
