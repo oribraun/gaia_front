@@ -1063,6 +1063,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.apiSubscriptions[key] = null;
             }
         }
+        this.clearForcedSlide()
     }
 
 
