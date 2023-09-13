@@ -1,4 +1,19 @@
 @import "../../../../../slide-board";
 
-.slide-board {height:50%;}
 .slide-board-bundle {border: 1px solid whitesmoke !important;}
+.slide-board {
+    .outer-scroller {
+        width: 100%;
+        display: block;
+        .sentence {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            .form-select {
+                display: inline-block;
+                width: auto;
+            }
+        }
+    }
+}

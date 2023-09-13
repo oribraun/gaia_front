@@ -22,10 +22,22 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
 
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
     @Input('currentSlide') currentSlide!: PresentationSlide;
-    @Input('sectionTitles') sectionTitles: any = {};
     @Input('recognitionText') recognitionText: string = '';
     @Input('isPause') isPause: boolean = false;
     @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
+
+    public sectionTitles = {
+        bundle:'bundle',
+        greeting: 'greeting',
+        reading: 'reading',
+        word_repeater: 'word_repeater',
+        image_generator: 'image_generator',
+        agenda: 'agenda',
+        ending: 'ending',
+        video: 'video',
+        blanks:'blanks',
+        title:'title'
+    }
 
 
     presentationResetIsInProgress = false;
@@ -81,7 +93,7 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
     }
     speakNative(text:string){
         console.log('speakNative-emit', text)
-        this.lessonService.Broadcast('speakNative', {'text':text})       
+        this.lessonService.Broadcast('speakNative', {'text':text})
     }
 
     getSlideToRender(){

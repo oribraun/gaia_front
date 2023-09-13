@@ -45,19 +45,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     currentSlide: PresentationSlide = new PresentationSlide();
     currentObjective: any = null;
     currentData: any = null;
-    sectionTitles = {
-        bundle:'bundle',
-        greeting: 'greeting',
-        reading: 'reading',
-        word_repeater: 'word_repeater',
-        image_generator: 'image_generator',
-        agenda: 'agenda',
-        ending: 'ending',
-        video: 'video',
-        blanks:'blanks',
-        title:'title',
-        translator:'word_translator'
-    }
 
     recognitionCountWords = 0;
     recognitionText = '';
@@ -139,8 +126,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
             // this.lessonService.ClearAllEvents();
         } else {
-            this.listenForPauseEvnet()
-            this.setupPresentationMock();
+
         }
     }
 
@@ -174,7 +160,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         } else {
             this.listenForPauseEvnet()
-            this.setupPresentationMock();
+            // this.setupPresentationMock();
+            this.getPresentation();
         }
     }
 
@@ -420,7 +407,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentObjectiveIndex = this.presentation.current_objective_index;
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
-                    this.getNewSlideReply();
+                    if (!this.mock) {
+                        this.getNewSlideReply();
+                    }
                 }
                 this.gettingPresentation = false;
             },
@@ -882,7 +871,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.lessonService.speakNativeOnProgress = true;
                     }
                     else {
-                        this.lessonService.Broadcast('teacherSpeaking', {});
+                        this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_speaking'});
                     }
                     this.speakInProgress = true;
                     const audioBlob = new Blob([blobItem.arrayBuffer], {type: 'audio/mpeg'});
@@ -936,7 +925,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         } else {
                             console.log('end_blobItem', blobItem)
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
-                                this.lessonService.Broadcast('teacherListening', {});
+                                this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_listening'});
                             }
                             this.speakInProgress = false;
                             // this.resetSpeechRecognition();
@@ -1074,6 +1063,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.apiSubscriptions[key] = null;
             }
         }
+        this.clearForcedSlide()
     }
 
 

@@ -3,20 +3,11 @@
     'right-panel-full': isMobile
 }">
     <div class="cam-board">
-        <div class="teacher" *ngIf="showTeacherIcon">
+        <div class="teacher">
             <div class="user-box">
                 <div class="user" #user>
                     <div class="icon">
-                        <img src="{{imageSrc}}assets/images/speaking.gif">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="teacher" style="background-color: var(--blue-background-color)" *ngIf="!showTeacherIcon">
-            <div class="user-box">
-                <div class="user" #user>
-                    <div class="icon">
-                        <img src="{{imageSrc}}assets/images/listening.gif">
+                        <img src="{{imageSrc}}{{currentIcon}}">
                     </div>
                 </div>
             </div>

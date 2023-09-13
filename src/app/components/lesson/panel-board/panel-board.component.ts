@@ -47,6 +47,13 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     recorder: any;
     currentChunks: any[] = []
 
+    currentIcon = true;
+    icons: any = {
+        'teacher_speaking': 'assets/gifs/teacher_speaking.gif',
+        'teacher_listening': 'assets/gifs/user_listening.gif',
+        'slide_success': 'assets/gifs/slide_success.gif',
+        'slide_failed': 'assets/gifs/slide_failed.gif',
+    }
     showTeacherIcon = true;
     takeSnapshotEnabled = false;
 
@@ -73,11 +80,19 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                 // }, 5000)
             }
         })
+
+        this.setIcon('teacher_speaking');
     }
 
     ngOnInit(): void {
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
             this.pauseButtonText = "take a break"
+        })
+        this.lessonService.ListenFor("panelIconChange").subscribe((obj: any) => {
+            if (obj && obj.iconName) {
+                this.setIcon(obj.iconName);
+            }
+
         })
         this.lessonService.ListenFor("teacherListening").subscribe((obj: any) => {
             console.log('teacherListening')
@@ -94,7 +109,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             this.animationsService.addCircle(this.userElement.nativeElement, obj.unique_num)
         })
     }
-    
+
     listenToSnapshotRequest() {
         this.lessonService.ListenFor("takeSnapshot").subscribe((obj: any) => {
             this.takeSnapshot()
@@ -134,17 +149,17 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             const video = this.videoElement.nativeElement;
             const canvas = this.canvasElement.nativeElement;
             const context = canvas.getContext('2d');
-            
+
             // Adjust the canvas dimensions to match the video frame
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            
+
             // Draw the current video frame onto the canvas
             context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-            
+
             // Get the image data URL from the canvas
             const imageUrl = canvas.toDataURL('image/jpeg',0.5);
-            
+
             // Now, you can use this imageUrl for display, storage, etc.
             this.lessonService.Broadcast("snapshotTaken", {image_url: imageUrl});
         }
@@ -327,6 +342,12 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     changeToTeacherIcon() {
         this.showTeacherIcon = true;
+    }
+
+    setIcon(iconName: string) {
+        if (this.icons[iconName]) {
+            this.currentIcon = this.icons[iconName];
+        }
     }
 
     nextSlide(){
