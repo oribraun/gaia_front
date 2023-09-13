@@ -20,7 +20,8 @@ export class SpeechRecognitionService {
 
     constructor() {}
 
-    setupSpeechRecognition() {
+    setupSpeechRecognition(lang:string='en-US') {
+        console.log('here1')
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
             recognitionClass = webkitSpeechRecognition;
@@ -28,8 +29,9 @@ export class SpeechRecognitionService {
             recognitionClass = SpeechRecognition;
         }
         if (recognitionClass) {
+            console.log('here2')
             this.englishRecognition = new recognitionClass();
-            this.englishRecognition.lang = 'en-US';
+            this.englishRecognition.lang = lang; //'en-US';
             // this.englishRecognition.lang = 'he-IL';
             this.englishRecognition.continuous = true;
             this.englishRecognition.interimResults = true

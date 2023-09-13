@@ -65,5 +65,12 @@ export class LessonService {
     setHelpMode(helpType:string='disabled'){        
         this.helpMode = helpType
         this.Broadcast('setHelpMode', helpType)
+        return this.helpMode
+    }
+
+    resetHelpMode(helpType:string='disabled'){        
+        this.helpMode = helpType
+        this.Broadcast('resetHelpMode', helpType)
+        return this.helpMode
     }
 }

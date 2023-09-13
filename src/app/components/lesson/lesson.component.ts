@@ -143,6 +143,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.recognitionOnResultsSubscribe.unsubscribe(this.onRecognitionResults);
             }
             this.stopAudio();
+            this.lessonService.resetHelpMode()
             this.listenToSpeechRecognitionResults();
             this.resetAllEventProgress();
             this.lessonService.Broadcast('resetChatMessages', {});
@@ -262,6 +263,30 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.doNotDisturb = false;
             this.toggleStopAll(this.doNotDisturb);
         })
+        this.lessonService.ListenFor("setHelpMode").subscribe((helpMode: string) => {
+            this.stopAudio()
+            this.stopSpeechRecognition()
+            let native_lang:string = 'he-IL'
+            let en:string = 'en-US'
+            if(helpMode == 'en'){
+                this.speechRecognitionService.englishRecognition.lang = en
+                this.startSpeechRecognition()
+            } else if (helpMode == 'native'){
+                this.speechRecognitionService.englishRecognition.lang = native_lang
+                this.speechRecognitionService.setupSpeechRecognition(native_lang);
+                this.startSpeechRecognition()
+            } else {
+                this.speechRecognitionService.englishRecognition.lang = en
+                this.startSpeechRecognition()
+                this.restartCurrentSlide()
+            }
+            this.getHeartBeatReply()
+        })
+    }
+
+    restartCurrentSlide(){
+        this.setForcedSlide(-1)
+        this.changeSlideReply()
     }
 
     onRecognitionResults = (results: any) => {
@@ -543,6 +568,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 last_speak_ts:this.last_speak_ts,
                 n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
                 n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
+                help_mode: this.lessonService.helpMode,
                 array_buffer: this.enableArrayBuffer,
                 webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
@@ -635,7 +661,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: async (response: any) => {
                 this.presentationNewSlideInProgress = false;
-
+                // this.stopAudio()    
                 if (response.err) {
                     console.log('new slide response err', response)
                     this.handleOnReplayError()
@@ -643,7 +669,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentData = response.data;
                     if (this.currentSlide.index_in_bundle <=0 && this.currentSlide.should_read_native) {
                         await this.speakNative({'text':this.currentSlide.native_language_text.he})        
-                    }  
+                    }
                     this.handleOnPresentationReplay('new_slide');
                 }
             },
@@ -801,7 +827,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             await this.speechRecognitionService.stopListening();
         }
     }
-
+    
     async abortSpeechRecognition() {
         console.log('abortSpeechRecognition');
         if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.abortingRecognition) {
