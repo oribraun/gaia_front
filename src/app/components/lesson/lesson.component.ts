@@ -869,7 +869,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.lessonService.speakNativeOnProgress = true;
                     }
                     else {
-                        this.lessonService.Broadcast('teacherSpeaking', {});
+                        this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_speaking'});
                     }
                     this.speakInProgress = true;
                     const audioBlob = new Blob([blobItem.arrayBuffer], {type: 'audio/mpeg'});
@@ -923,7 +923,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         } else {
                             console.log('end_blobItem', blobItem)
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
-                                this.lessonService.Broadcast('teacherListening', {});
+                                this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_listening'});
                             }
                             this.speakInProgress = false;
                             // this.resetSpeechRecognition();
