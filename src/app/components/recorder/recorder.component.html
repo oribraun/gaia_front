@@ -23,7 +23,7 @@
                     <h4 class="title">{{section.section_title}}</h4>
                     <p class="desc">{{section.section_topic}}</p>
                     <p class="duration" *ngIf="section.duration"><small>{{section.duration}} min</small></p>
-                    <img src="{{section.placeholder_image ? section.placeholder_image : 'assets/images/lesson_placeholder.jpg'}}" alt="" class="image">
+                    <img src="{{section.placeholder_image ? section.placeholder_image : 'assets/images/lesson/lesson_placeholder.jpg'}}" alt="" class="image">
                 </div>
             </ng-container>
             <ng-container *ngIf="!presentation">
@@ -82,7 +82,7 @@
                             </div>
                             <div class="text" *ngIf="currentSlide && currentSlide.native_language_text">
                                 {{currentSlide.native_language_text.he}}
-                            </div>                            
+                            </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="currentSlide.slide_type.toLowerCase() === sectionTitles.ending">
@@ -108,7 +108,7 @@
                             </div>
                             <div class="text" *ngIf="currentSlide && currentSlide.native_language_text">
                                 {{currentSlide.native_language_text.he}}
-                            </div>                            
+                            </div>
                         </div>
                     </ng-container>
 <!--                    <ng-container *ngIf="whiteBoardPage.module_type === 'displayer'">-->

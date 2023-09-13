@@ -126,8 +126,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
             // this.lessonService.ClearAllEvents();
         } else {
-            this.listenForPauseEvnet()
-            this.setupPresentationMock();
+
         }
     }
 
@@ -161,7 +160,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
         } else {
             this.listenForPauseEvnet()
-            this.setupPresentationMock();
+            // this.setupPresentationMock();
+            this.getPresentation();
         }
     }
 
@@ -407,7 +407,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentObjectiveIndex = this.presentation.current_objective_index;
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
-                    this.getNewSlideReply();
+                    if (!this.mock) {
+                        this.getNewSlideReply();
+                    }
                 }
                 this.gettingPresentation = false;
             },

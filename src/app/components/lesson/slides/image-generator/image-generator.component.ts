@@ -30,7 +30,7 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnDes
         private lessonService: LessonService,
     ) {
         super(config)
-        this.imagePathGenerated = this.imageSrc + 'assets/images/lesson_placeholder.jpg'
+        this.imagePathGenerated = this.imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "image_generator_button_click") {
                 this.handleGenerateImageOutput(resp.data)
