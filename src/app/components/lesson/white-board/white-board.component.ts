@@ -1,11 +1,12 @@
 import {
-    Component,
-    EventEmitter,
+    AfterViewInit,
+    Component, ElementRef,
+    EventEmitter, HostListener,
     Input,
     OnChanges,
     OnInit,
     Output,
-    SimpleChanges,
+    SimpleChanges, ViewChild,
 } from '@angular/core';
 import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
 import {ApiService} from "../../../services/api.service";
@@ -18,13 +19,18 @@ import {LessonService} from "../../../services/lesson/lesson.service";
     templateUrl: './white-board.component.html',
     styleUrls: ['./white-board.component.less'],
 })
-export class WhiteBoardComponent implements OnInit, OnChanges {
+export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
 
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
     @Input('currentSlide') currentSlide!: PresentationSlide;
     @Input('recognitionText') recognitionText: string = '';
     @Input('isPause') isPause: boolean = false;
     @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
+
+    @ViewChild('slides', { static: false }) slides!: ElementRef;
+
+    slideWidth: number = -1;
+    slideHeight: number = -1;
 
     public sectionTitles = {
         bundle:'bundle',
@@ -59,9 +65,38 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
+
+    }
+
+    ngAfterViewInit(): void {
+        this.setSlidesRelativeWidth();
     }
 
 
+    setSlidesRelativeWidth() {
+        const map = this.data.map(o => o.slide_type).filter((str) => str !== undefined);
+        const all_blanks = map.every( v => v === 'blanks' );
+
+        if(this.slides && this.data.length > 1 && !all_blanks) {
+            const e = this.slides.nativeElement;
+            const slidesWidth = e.clientWidth;
+            const slidesHeight = e.clientHeight;
+            if (slidesWidth > slidesHeight) {
+                this.slideHeight = -1;
+                this.slideWidth = slidesWidth * (slidesHeight/slidesWidth)
+            } else if (slidesWidth < slidesHeight) {
+                this.slideHeight = slidesHeight * (slidesWidth/slidesHeight)
+                this.slideWidth = -1;
+            }
+        } else {
+            this.resetSlideStyle();
+        }
+    }
+
+    resetSlideStyle() {
+        this.slideWidth = -1;
+        this.slideHeight = -1;
+    }
 
     setData() {
         if (this.currentSlide.bundle_id>-1) {
@@ -107,8 +142,15 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['currentSlide']) {
-             this.setData()
+            this.setData();
+
+            this.setSlidesRelativeWidth();
         }
+    }
+
+    @HostListener('window:resize')
+    onWindowResize() {
+        this.setSlidesRelativeWidth();
     }
 
 
