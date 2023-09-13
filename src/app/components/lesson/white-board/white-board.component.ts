@@ -78,8 +78,9 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
     setSlidesRelativeWidth() {
         const map = this.data.map(o => o.slide_type).filter((str) => str !== undefined);
         const all_blanks = map.every( v => v === 'blanks' );
+        const all_word_repeater = map.every( v => v === 'word_repeater' );
 
-        if(this.slides && this.data.length > 1 && !all_blanks) {
+        if(this.slides && this.data.length > 1 && all_word_repeater) {
             const e = this.slides.nativeElement;
             const slidesWidth = e.clientWidth;
             const slidesHeight = e.clientHeight;
