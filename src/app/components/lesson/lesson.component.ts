@@ -55,7 +55,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         ending: 'ending',
         video: 'video',
         blanks:'blanks',
-        title:'title'
+        title:'title',
+        translator:'word_translator'
     }
 
     recognitionCountWords = 0;

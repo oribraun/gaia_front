@@ -112,6 +112,9 @@ export class PresentationSlide {
     teacher_image_path!: string
     word_image_path!: string
     image_path!: string
+    mode!: string
+    answer_options!: string[]
+    correct_answer!: string
     text!: string
     word!: string
     should_read_native:boolean = false
@@ -121,6 +124,7 @@ export class PresentationSlide {
     bundle:any[] = []
     bundle_len:number=0
     index_in_bundle:number=-1
+    
 
     blanks !:string[]
     blanks_options !:string[][]
