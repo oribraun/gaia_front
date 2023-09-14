@@ -53,6 +53,7 @@ import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.co
 import { TitleComponent } from './components/lesson/slides/title/title.component';
 import { WordTranslatorComponent } from './components/lesson/slides/word-translator/word-translator.component';
 import { HelpComponent } from './components/lesson/panel-board/help/help.component';
+import { EmbedGameComponent } from './components/lesson/slides/embed-game/embed-game.component';
 
 @NgModule({
     declarations: [
@@ -101,6 +102,7 @@ import { HelpComponent } from './components/lesson/panel-board/help/help.compone
         TitleComponent,
         WordTranslatorComponent,
         HelpComponent,
+        EmbedGameComponent,
     ],
     imports: [
         BrowserModule,
