@@ -269,22 +269,25 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
         this.lessonService.ListenFor("setHelpMode").subscribe((helpMode: string) => {
             this.stopAudio()
-            this.stopSpeechRecognition()
             let native_lang:string = 'he-IL'
             let en:string = 'en-US'
             if(helpMode == 'en'){
-                this.speechRecognitionService.englishRecognition.lang = en
-                this.startSpeechRecognition()
+                this.changeAsrLang(en)
+                this.getHeartBeatReply()
             } else if (helpMode == 'native'){
-                this.speechRecognitionService.englishRecognition.lang = native_lang
-                this.speechRecognitionService.setupSpeechRecognition(native_lang);
-                this.startSpeechRecognition()
+                this.changeAsrLang(native_lang)
+                this.getHeartBeatReply()
             } else {
-                this.speechRecognitionService.englishRecognition.lang = en
-                this.startSpeechRecognition()
+                this.changeAsrLang(en)
                 this.restartCurrentSlide()
             }
-            this.getHeartBeatReply()
+        })
+    }
+
+    changeAsrLang(lang:string='en-US'){
+        this.speechRecognitionService.stopListening().then(() => {
+            this.speechRecognitionService.changeLang(lang);
+            this.speechRecognitionService.startListening();
         })
     }
 
