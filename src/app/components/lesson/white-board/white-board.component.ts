@@ -19,7 +19,7 @@ import {LessonService} from "../../../services/lesson/lesson.service";
     templateUrl: './white-board.component.html',
     styleUrls: ['./white-board.component.less'],
 })
-export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
+export class WhiteBoardComponent implements OnInit, OnChanges {
 
     @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
     @Input('currentSlide') currentSlide!: PresentationSlide;
@@ -67,11 +67,9 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngOnInit(): void {
-
-    }
-
-    ngAfterViewInit(): void {
-        this.setSlidesRelativeWidth();
+        setTimeout(() => {
+            this.setSlidesRelativeWidth();
+        })
     }
 
 
@@ -79,17 +77,32 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
         const map = this.data.map(o => o.slide_type).filter((str) => str !== undefined);
         const all_blanks = map.every( v => v === 'blanks' );
         const all_word_repeater = map.every( v => v === 'word_repeater' );
-        const ratio = 3/4;
+        const desiredRatio = 3/4;
         if(this.slides && this.data.length > 1 && all_word_repeater) {
             const e = this.slides.nativeElement;
             const slidesWidth = e.clientWidth;
             const slidesHeight = e.clientHeight;
-            if (slidesWidth > slidesHeight) {
-                this.slideHeight = -1;
-                this.slideWidth = slidesWidth * (slidesHeight/slidesWidth) / ratio;
-            } else if (slidesWidth < slidesHeight) {
-                this.slideHeight = slidesHeight * (slidesWidth/slidesHeight) / ratio;
-                this.slideWidth = -1;
+            const currentRatio = slidesHeight/slidesWidth;
+            if (currentRatio < 1) {
+                // width is bigger
+                let newWidth = slidesHeight / desiredRatio;
+                if (newWidth < slidesWidth) {
+                    this.slideWidth = newWidth;
+                    this.slideHeight = -1;
+                } else {
+                    this.slideWidth = -1;
+                    this.slideHeight = slidesWidth * desiredRatio;
+                }
+            } else {
+                // height is bigger
+                let newHeight = slidesWidth * desiredRatio;
+                if (newHeight < slidesHeight) {
+                    this.slideWidth = -1;
+                    this.slideHeight = newHeight;
+                } else {
+                    this.slideHeight = -1;
+                    this.slideWidth = slidesHeight / desiredRatio;
+                }
             }
         } else {
             this.resetSlideStyle();
@@ -102,7 +115,7 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     setData() {
-        if (this.currentSlide.bundle_id>-1) {
+        if (this.currentSlide.bundle_id > -1) {
             this.data = this.currentSlide.bundle;
         } else {
             this.data = [this.currentSlide]
@@ -144,9 +157,9 @@ export class WhiteBoardComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        console.log('changes[\'currentSlide\']', changes['currentSlide'])
         if (changes['currentSlide']) {
             this.setData();
-
             this.setSlidesRelativeWidth();
         }
     }
