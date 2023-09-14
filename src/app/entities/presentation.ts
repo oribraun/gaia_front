@@ -126,6 +126,7 @@ export class PresentationSlide {
     index_in_bundle:number=-1
     
     iframe_path!:string
+    game_duration:number=4
     blanks !:string[]
     blanks_options !:string[][]
     target_sentence !:string[]

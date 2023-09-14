@@ -281,6 +281,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("stopAudio").subscribe((obj: any) => {
             this.stopAudio()
         })
+        this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
+            this.getPresentationEventReplay(obj)
+        })
+        
     }
 
     restartCurrentSlide(){

@@ -5,7 +5,8 @@
                 <h2>{{currentSlide.slide_title}}</h2>
             </div>
             <div class="text text-pre-line">
-                <p class="no-style">{{currentSlide.text}}</p>
+                <span>{{minutes}}</span><span>:</span><span>{{seconds}}</span>
+                <!-- <p class="no-style">{{currentSlide.text}}</p> -->
             </div>
         </div>
     </div>
@@ -14,6 +15,6 @@
 
     <!--    </div>-->
     <div class="game_container" >
-        <iframe class="responsive-iframe" id="frame" [src]="iframe_url"  (focus)="iframeFocus()" (blur)="iframeBlur()" #iframe></iframe>
+        <iframe [ngClass]="{'iframe-blur':blurIframe}" class="responsive-iframe" id="frame" [src]="iframe_url" #iframe></iframe>
     </div>
 </div>
