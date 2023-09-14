@@ -33,6 +33,7 @@ export class HelpComponent implements OnInit{
         console.log('setHelpMode triggered', helpType)
         this.helpMode = helpType;
         this.lessonService.setHelpMode(this.helpMode);
+        this.lessonService.Broadcast('stopAudio',{})
         if(helpType == 'en'){
             this.speechRecognitionService.resetToOrigLang();
             if (broadcast) {
@@ -46,7 +47,7 @@ export class HelpComponent implements OnInit{
         } else {
             this.speechRecognitionService.resetToOrigLang();
             if (broadcast) {
-                this.lessonService.Broadcast('getHeartBeatReply', {})
+                // this.lessonService.Broadcast('getHeartBeatReply', {})
                 this.lessonService.Broadcast('restartCurrentSlide', {})
             }
         }

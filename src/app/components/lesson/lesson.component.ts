@@ -261,18 +261,25 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.getPresentationEventReplay(obj)//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
-            this.doNotDisturb = true;
-            this.toggleStopAll(this.doNotDisturb);
+            if(!this.doNotDisturb){
+                this.doNotDisturb = true;
+                this.toggleStopAll(this.doNotDisturb);
+            }
         })
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
-            this.doNotDisturb = false;
-            this.toggleStopAll(this.doNotDisturb);
+            if(this.doNotDisturb){
+                this.doNotDisturb = false;
+                this.toggleStopAll(this.doNotDisturb);
+            }
         })
         this.lessonService.ListenFor("getHeartBeatReply").subscribe((helpMode: string) => {
             this.getHeartBeatReply()
         })
         this.lessonService.ListenFor("restartCurrentSlide").subscribe((helpMode: string) => {
             this.restartCurrentSlide()
+        })
+        this.lessonService.ListenFor("stopAudio").subscribe((obj: any) => {
+            this.stopAudio()
         })
     }
 
@@ -479,6 +486,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'event',
+                help_mode: this.lessonService.helpMode,
                 data: data,
                 array_buffer: this.enableArrayBuffer,
                 webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
@@ -521,6 +529,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             app_data: {
                 type:'student_reply',
                 student_text: message,
+                help_mode: this.lessonService.helpMode,
                 array_buffer: this.enableArrayBuffer,
                 webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
             }
@@ -645,6 +654,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
                 last_sr_ts:this.last_sr_ts,
                 last_speak_ts:this.last_speak_ts,
+                help_mode: this.lessonService.helpMode,
                 n_seconds_from_last_sr: Math.floor((Date.now() - this.last_sr_ts) / 1000),
                 n_seconds_from_last_speak: Math.floor((Date.now() - this.last_speak_ts) / 1000),
                 array_buffer: this.enableArrayBuffer,
