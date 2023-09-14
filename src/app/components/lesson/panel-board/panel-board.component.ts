@@ -49,7 +49,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     currentIcon = true;
     icons: any = {
-        'teacher_speaking': 'assets/gifs/teacher_speaking.gif',
+        'teacher_speaking': 'assets/gifs/teacher_speaking_new.gif',
         'teacher_listening': 'assets/gifs/user_listening.gif',
         'slide_success': 'assets/gifs/slide_success.gif',
         'slide_failed': 'assets/gifs/slide_failed.gif',
