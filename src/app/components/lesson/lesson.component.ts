@@ -667,10 +667,14 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
-                    if (this.currentSlide.index_in_bundle <=0 && this.currentSlide.should_read_native) {
+                    if (this.currentSlide.index_in_bundle == 0 && this.currentSlide.should_read_native) {
                         await this.speakNative({'text':this.currentSlide.native_language_text.he})        
                     }
                     this.handleOnPresentationReplay('new_slide');
+                    if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he})        
+                    }
+
                 }
             },
             error: (error) => {
