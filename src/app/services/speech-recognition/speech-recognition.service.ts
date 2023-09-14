@@ -1,4 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
+import {environment} from "../../../environments/environment";
 
 declare var webkitSpeechRecognition:any;
 declare var SpeechRecognition:any;
@@ -67,6 +68,9 @@ export class SpeechRecognitionService {
     onResultRecognitionEn = (event: any) => {
         const result = event.results[event.results.length - 1];
         const word = result[0].transcript;
+        if (environment.is_mock) {
+            console.log('result mock', result)
+        }
         this.onResults.emit(
             new OnResults(word, this.englishRecognition.lang, result.isFinal)
         )
@@ -181,13 +185,15 @@ export class SpeechRecognitionService {
 
     changeLang(lang: string) {
         if (lang) {
-            // TODO versify lang supported
+            // TODO verify lang supported
             this.currentLang = lang;
+            this.englishRecognition.lang = this.currentLang;
         }
     }
 
     resetLang() {
         this.currentLang = this.originalLang;
+        this.englishRecognition.lang = this.currentLang;
     }
 }
 
