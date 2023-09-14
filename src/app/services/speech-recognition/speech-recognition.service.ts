@@ -16,11 +16,15 @@ export class SpeechRecognitionService {
     stoppingRecognition = false;
     abortingRecognition = false;
 
+    originalLang: string = '';
+    currentLang: string = '';
+
     public onResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
 
     constructor() {}
 
     setupSpeechRecognition(lang:string='en-US') {
+        this.originalLang = lang;
         console.log('here1')
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
@@ -31,7 +35,7 @@ export class SpeechRecognitionService {
         if (recognitionClass) {
             console.log('here2')
             this.englishRecognition = new recognitionClass();
-            this.englishRecognition.lang = lang; //'en-US';
+            this.englishRecognition.lang = this.originalLang; //'en-US';
             // this.englishRecognition.lang = 'he-IL';
             this.englishRecognition.continuous = true;
             this.englishRecognition.interimResults = true
@@ -173,6 +177,17 @@ export class SpeechRecognitionService {
                 resolve(false)
             }
         })
+    }
+
+    changeLang(lang: string) {
+        if (lang) {
+            // TODO versify lang supported
+            this.currentLang = lang;
+        }
+    }
+
+    resetLang() {
+        this.currentLang = this.originalLang;
     }
 }
 

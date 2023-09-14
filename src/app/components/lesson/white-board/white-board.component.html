@@ -50,8 +50,8 @@
         *ngIf="model.currentSlide.slide_type === sectionTitles.word_translator"
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
-    ></app-word-translator>    
-    
+    ></app-word-translator>
+
 </ng-template>
 <div class="white-board">
     <!-- If it is a bundle -->
@@ -92,7 +92,7 @@
                                         currentSlide: slide,
                                         slideData: {
                                             slide_done: id<currentSlide.index_in_bundle && data.length > 1,
-                                            is_active: id==currentSlide.index_in_bundle && data.length > 1
+                                            is_active: id==currentSlide.index_in_bundle && data.length > 1,
                                         },
                                     }
                                 }"></ng-container>
