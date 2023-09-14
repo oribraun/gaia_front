@@ -43,8 +43,8 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
         video: 'video',
         blanks:'blanks',
         title:'title',
-        word_translator:'word_translator'
-
+        word_translator:'word_translator',
+        embed_game:'embed_game'
     }
 
 

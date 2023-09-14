@@ -125,7 +125,7 @@ export class PresentationSlide {
     bundle_len:number=0
     index_in_bundle:number=-1
     
-
+    iframe_path!:string
     blanks !:string[]
     blanks_options !:string[][]
     target_sentence !:string[]
