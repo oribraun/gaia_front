@@ -1250,11 +1250,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                             },
                             "starting_responses": [
                                 {
-                                    "teacher_text": "Hi! My name is Jenny and I'm your English teacher. How are you today? MAA SHLOMECHAA?",
+                                    "teacher_text": "Hi! My name is Jenny and I'm your English teacher. How are you today?",
                                     "is_mission_accomplished": true
                                 },
                                 {
-                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today",
+                                    "teacher_text": "Hello dear. SHALOM! You are so cute. I'm happy to be here. My name is Jenny and I will be your english teacher today. are you ready to start?",
                                     "is_mission_accomplished": true
                                 },
                                 {

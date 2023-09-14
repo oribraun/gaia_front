@@ -22,14 +22,18 @@
     <div class="background-image">
         <img src="{{imageSrc}}assets/images/lesson/living_room.jpg">
     </div>
-    <div class="image" *ngIf="imagePathGenerated">
-        <img [src]="imagePathGenerated">
-        <div class="generic-loader-wrapper" *ngIf="generatingImageInProgress">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
+    <div class="tv-image">
+        <img src="{{imageSrc}}assets/images/lesson/tv_screen.png">
+        <div class="generated-image" *ngIf="imagePathGenerated">
+            <img [src]="imagePathGenerated">
+            <div class="generic-loader-wrapper" *ngIf="generatingImageInProgress">
+                <div class="loader">
+                    <div class="spinner-border">
+                        <span class="sr-only"></span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div>    
     </div>
+
 </div>
