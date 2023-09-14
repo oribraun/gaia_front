@@ -1087,22 +1087,19 @@ export class LessonComponent implements OnInit, OnDestroy {
 
 
     setRandomCircleAnimation() {
-        const ele = this.user.nativeElement;
         let count = 0;
-        if (ele) {
-            setInterval(() => {
-                const delay = this.animationsService.randomIntFromInterval(0, 1)
-                setTimeout(() => {
-                    this.animationsService.triggerAddingCircle(count)
-                    count++;
-                    if (count > 10) {
-                        count = 0;
-                    }
-                },delay * 1000)
-            },800)
-            this.animationsService.triggerAddingCircle(count)
-            count++;
-        }
+        setInterval(() => {
+            const delay = this.animationsService.randomIntFromInterval(0, 1)
+            setTimeout(() => {
+                this.animationsService.triggerAddingCircle(count)
+                count++;
+                if (count > 10) {
+                    count = 0;
+                }
+            },delay * 1000)
+        },800)
+        this.animationsService.triggerAddingCircle(count)
+        count++;
     }
 
     @HostListener('window:resize', ['$event'])
