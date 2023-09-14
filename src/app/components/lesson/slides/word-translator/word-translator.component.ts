@@ -18,6 +18,8 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
 
     disableButton = false;
 
+    recognitionPPTSubscribe: any
+
     constructor(
         protected override config: Config,
         private lessonService: LessonService,
@@ -55,6 +57,8 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
         }
     }
 
+
+
     selectText(index: number) {
         this.selectedText = this.currentSlide.answer_options[index];
         this.onButtonClick(this.selectedText);
@@ -65,9 +69,20 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
         }
     }
 
+    onRecognitionPTTResults = (results: any) => {
+        console.log("results",results)
+        const recognitionText = results.text;
+        if (results.isFinal) {
+            console.log('final', recognitionText)
+            this.onButtonClick(recognitionText);
+        }
+    }
+
     onPTTPressDown() {
         if (!this.disableButton) {
             if (this.speechRecognitionService.englishRecognition) {
+                this.speechRecognitionService.PTTInProgress = true;
+                this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
                 if (this.speechRecognitionService.ASR_recognizing) {
                     this.speechRecognitionService.stopListening().then(() => {
                         this.speechRecognitionService.changeLang('he-IL');
@@ -85,15 +100,22 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
             if (this.speechRecognitionService.englishRecognition) {
                 if (this.speechRecognitionService.ASR_recognizing) {
                     this.speechRecognitionService.stopListening().then(() => {
-                        this.speechRecognitionService.resetLang();
-                        this.speechRecognitionService.startListening();
+                        this.onEndPTT();
                     })
                 } else {
-                    this.speechRecognitionService.resetLang();
-                    this.speechRecognitionService.startListening();
+                    this.onEndPTT();
                 }
             }
         }
+    }
+
+    onEndPTT() {
+        if (this.recognitionPPTSubscribe) {
+            this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+        }
+        this.speechRecognitionService.PTTInProgress = false;
+        this.speechRecognitionService.resetLang();
+        this.speechRecognitionService.startListening();
     }
 
 }

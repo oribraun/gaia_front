@@ -21,6 +21,9 @@ export class SpeechRecognitionService {
     currentLang: string = '';
 
     public onResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
+    public onPTTResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
+
+    public PTTInProgress = false;
 
     constructor() {}
 
@@ -69,9 +72,15 @@ export class SpeechRecognitionService {
         if (environment.is_mock) {
             console.log('result mock', result)
         }
-        this.onResults.emit(
-            new OnResults(word, this.englishRecognition.lang, result.isFinal)
-        )
+        if (!this.PTTInProgress) {
+            this.onResults.emit(
+                new OnResults(word, this.englishRecognition.lang, result.isFinal)
+            )
+        } else {
+            this.onPTTResults.emit(
+                new OnResults(word, this.englishRecognition.lang, result.isFinal)
+            )
+        }
     }
 
     onEndRecognitionEn = (event: any) => {
