@@ -5,7 +5,11 @@
     <div class="cam-board">
         <div class="teacher">
             <div class="gif-box">
-                <div class="user" #user></div>
+                <div class="user" #user
+                     [ngClass]="{
+                        'user-mobile': isMobile
+                     }"
+                ></div>
                 <img src="{{imageSrc}}{{currentIcon}}">
             </div>
             <div class="user-box">
