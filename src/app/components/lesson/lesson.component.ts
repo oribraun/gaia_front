@@ -164,6 +164,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.speechRecognitionService.setupSpeechRecognition();
                 this.speechRecognitionService.startListening();
             }
+            this.lessonService.resetHelpMode()
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
             this.getPresentation();
@@ -267,27 +268,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.doNotDisturb = false;
             this.toggleStopAll(this.doNotDisturb);
         })
-        this.lessonService.ListenFor("setHelpMode").subscribe((helpMode: string) => {
-            this.stopAudio()
-            let native_lang:string = 'he-IL'
-            let en:string = 'en-US'
-            if(helpMode == 'en'){
-                this.changeAsrLang(en)
-                this.getHeartBeatReply()
-            } else if (helpMode == 'native'){
-                this.changeAsrLang(native_lang)
-                this.getHeartBeatReply()
-            } else {
-                this.changeAsrLang(en)
-                this.restartCurrentSlide()
-            }
+        this.lessonService.ListenFor("getHeartBeatReply").subscribe((helpMode: string) => {
+            this.getHeartBeatReply()
         })
-    }
-
-    changeAsrLang(lang:string='en-US'){
-        this.speechRecognitionService.stopListening().then(() => {
-            this.speechRecognitionService.changeLang(lang);
-            this.speechRecognitionService.startListening();
+        this.lessonService.ListenFor("restartCurrentSlide").subscribe((helpMode: string) => {
+            this.restartCurrentSlide()
         })
     }
 
@@ -675,11 +660,11 @@ export class LessonComponent implements OnInit, OnDestroy {
                 } else {
                     this.currentData = response.data;
                     if (this.currentSlide.index_in_bundle == 0 && this.currentSlide.should_read_native) {
-                        await this.speakNative({'text':this.currentSlide.native_language_text.he})        
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he})
                     }
                     this.handleOnPresentationReplay('new_slide');
                     if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-                        await this.speakNative({'text':this.currentSlide.native_language_text.he})        
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he})
                     }
 
                 }
@@ -1037,7 +1022,9 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
         }
         if(!help_sound_buffer && !help_sound_url) {
-            await this.startSpeechRecognition();
+            if (!this.speechRecognitionService.ASR_recognizing) {
+                await this.startSpeechRecognition();
+            }
         }
 
 

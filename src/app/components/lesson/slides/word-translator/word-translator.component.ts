@@ -82,42 +82,16 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
 
     onPTTPressDown() {
         if (!this.disableButton) {
-            if (this.speechRecognitionService.englishRecognition) {
-                this.speechRecognitionService.PTTInProgress = true;
-                this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
-                if (this.speechRecognitionService.ASR_recognizing) {
-                    this.speechRecognitionService.stopListening().then(() => {
-                        this.speechRecognitionService.changeLang('he-IL');
-                        this.speechRecognitionService.startListening();
-                    })
-                } else {
-                    this.speechRecognitionService.changeLang('he-IL');
-                    this.speechRecognitionService.startListening();
-                }
-            }
+            this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
+            this.speechRecognitionService.activateNativeLang(true);
         }
     }
     onPTTPressUp () {
         if (!this.disableButton) {
-            if (this.speechRecognitionService.englishRecognition) {
-                if (this.speechRecognitionService.ASR_recognizing) {
-                    this.speechRecognitionService.stopListening().then(() => {
-                        this.onEndPTT();
-                    })
-                } else {
-                    this.onEndPTT();
-                }
+            this.speechRecognitionService.resetToOrigLang();
+            if (this.recognitionPPTSubscribe) {
+                this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
             }
         }
     }
-
-    onEndPTT() {
-        if (this.recognitionPPTSubscribe) {
-            this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
-        }
-        this.speechRecognitionService.PTTInProgress = false;
-        this.speechRecognitionService.resetLang();
-        this.speechRecognitionService.startListening();
-    }
-
 }

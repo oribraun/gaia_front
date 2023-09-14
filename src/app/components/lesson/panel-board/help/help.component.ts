@@ -1,32 +1,54 @@
 import { Component , OnInit} from '@angular/core';
 import { Config } from 'src/app/config';
 import { LessonService } from 'src/app/services/lesson/lesson.service';
+import {SpeechRecognitionService} from "../../../../services/speech-recognition/speech-recognition.service";
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.less']
+    selector: 'app-help',
+    templateUrl: './help.component.html',
+    styleUrls: ['./help.component.less']
 })
 export class HelpComponent implements OnInit{
 
-  helpMode:string = 'disabled'
-  constructor(
-    private config: Config,
-    private lessonService: LessonService,
-) {
+    helpMode:string = 'disabled'
 
-  }
+    disableButton = false;
+    constructor(
+        private config: Config,
+        private lessonService: LessonService,
+        private speechRecognitionService: SpeechRecognitionService,
+    ) {
 
-  ngOnInit(): void {
-      this.lessonService.resetHelpMode()
-      this.lessonService.ListenFor("resetHelpMode").subscribe((helpMode: string) => {
-        this.helpMode = helpMode
-    })
-  }
+    }
 
-  setHelpMode(helpType:string='disabled'){
-    console.log('setHelpMode triggered', helpType)
-    this.helpMode = this.lessonService.setHelpMode(helpType)
-  }
+    ngOnInit(): void {
+        this.lessonService.resetHelpMode()
+        this.lessonService.ListenFor("resetHelpMode").subscribe((helpMode: string) => {
+            this.helpMode = helpMode
+            this.setHelpMode(this.helpMode, false);
+        })
+    }
 
+    setHelpMode(helpType:string='disabled', broadcast=true){
+        console.log('setHelpMode triggered', helpType)
+        this.helpMode = helpType;
+        this.lessonService.setHelpMode(this.helpMode);
+        if(helpType == 'en'){
+            this.speechRecognitionService.resetToOrigLang();
+            if (broadcast) {
+                this.lessonService.Broadcast('getHeartBeatReply', {})
+            }
+        } else if (helpType == 'native'){
+            this.speechRecognitionService.activateNativeLang();
+            if (broadcast) {
+                this.lessonService.Broadcast('getHeartBeatReply', {})
+            }
+        } else {
+            this.speechRecognitionService.resetToOrigLang();
+            if (broadcast) {
+                this.lessonService.Broadcast('getHeartBeatReply', {})
+                this.lessonService.Broadcast('restartCurrentSlide', {})
+            }
+        }
+    }
 }
