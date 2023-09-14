@@ -794,8 +794,10 @@ export class LessonComponent implements OnInit, OnDestroy {
     handleOnReplayError() {
         if (!this.presentationReplayIsInProgress
             && !this.presentationNoReplayIsInProgress
-            && !this.presentationResetIsInProgress) {
-            this.speakInProgress = false;
+            && !this.presentationResetIsInProgress
+            && !this.nextSlideIsInProgress
+            && !this.prevSlideIsInProgress
+            && !this.eventHandlingInProgress) {
             this.resetSpeechRecognition();
             // this.resetIntervalNoReplay();
             // this.stopIntervalNoReplay();
@@ -810,7 +812,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.startSpeechRecognition()
             })
         } else {
-            this.startSpeechRecognition();
+            if (!this.speechRecognitionService.stoppingRecognition) {
+                this.startSpeechRecognition();
+            }
         }
         this.last_speak_ts = Date.now()
     }
