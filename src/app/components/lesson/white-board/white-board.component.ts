@@ -77,7 +77,7 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
         const map = this.data.map(o => o.slide_type).filter((str) => str !== undefined);
         const all_blanks = map.every( v => v === 'blanks' );
         const all_word_repeater = map.every( v => v === 'word_repeater' );
-        const desiredRatio = 3/4;
+        const desiredRatio = 9/16;
         if(this.slides && this.data.length > 1 && all_word_repeater) {
             const e = this.slides.nativeElement;
             const slidesWidth = e.clientWidth;
