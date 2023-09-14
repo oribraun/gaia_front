@@ -160,6 +160,10 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.initApplicationDone = true;
 
         } else {
+            if(!this.speechRecognitionService.englishRecognition) {
+                this.speechRecognitionService.setupSpeechRecognition();
+                this.speechRecognitionService.startListening();
+            }
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
             this.getPresentation();
@@ -661,7 +665,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: async (response: any) => {
                 this.presentationNewSlideInProgress = false;
-                // this.stopAudio()    
+                // this.stopAudio()
                 if (response.err) {
                     console.log('new slide response err', response)
                     this.handleOnReplayError()
@@ -831,7 +835,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             await this.speechRecognitionService.stopListening();
         }
     }
-    
+
     async abortSpeechRecognition() {
         console.log('abortSpeechRecognition');
         if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.abortingRecognition) {
@@ -1028,14 +1032,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         if(!help_sound_buffer && !help_sound_url) {
             await this.startSpeechRecognition();
         }
-        
+
 
         if (presentation_done) {
             this.unsubscribeAllHttpEvents();
             this.stopAudio();
             return;
         }
-        
+
 
         if (presentation_content_updated) {
             // TODO request presentation from server
@@ -1044,7 +1048,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             this.changeSlideReply()
         }
-        
+
     }
 
     base64ToArrayBuffer(base64: string): ArrayBuffer {
