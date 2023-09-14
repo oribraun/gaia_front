@@ -19,6 +19,7 @@ export class SpeechRecognitionService {
 
     originalLang: string = '';
     currentLang: string = '';
+    nativeLang: string = '';
 
     public onResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
     public onPTTResults: EventEmitter<OnResults> = new EventEmitter<OnResults>();
@@ -27,8 +28,10 @@ export class SpeechRecognitionService {
 
     constructor() {}
 
-    setupSpeechRecognition(lang:string='en-US') {
+    setupSpeechRecognition(lang:string='en-US', nativeLang='he-IL') {
         this.originalLang = lang;
+        console.log('this.originalLan', this.originalLang)
+        this.nativeLang = nativeLang;
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
             recognitionClass = webkitSpeechRecognition;
@@ -70,7 +73,7 @@ export class SpeechRecognitionService {
         const result = event.results[event.results.length - 1];
         const word = result[0].transcript;
         if (environment.is_mock) {
-            console.log('result mock', result)
+            console.log('result word mock', word)
         }
         if (!this.PTTInProgress) {
             this.onResults.emit(
@@ -198,9 +201,59 @@ export class SpeechRecognitionService {
         }
     }
 
+    changeToNativeLang() {
+        if (this.nativeLang) {
+            // TODO verify lang supported
+            this.currentLang = this.nativeLang;
+            this.englishRecognition.lang = this.currentLang
+        }
+    }
+
     resetLang() {
         this.currentLang = this.originalLang;
         this.englishRecognition.lang = this.currentLang
+    }
+
+    activateNativeLang(isPTT=false) {
+        if (this.englishRecognition.lang === this.nativeLang) {
+            return;
+        }
+        if (this.englishRecognition) {
+            if (isPTT) {
+                this.PTTInProgress = true;
+            }
+            if (this.ASR_recognizing) {
+                this.stopListening().then(() => {
+                    this.changeToNativeLang();
+                    this.startListening();
+                })
+            } else {
+                this.changeToNativeLang();
+                this.startListening();
+            }
+        }
+    }
+    resetToOrigLang () {
+        if (this.englishRecognition.lang === this.originalLang) {
+            return;
+        }
+        if (this.englishRecognition) {
+            if (this.ASR_recognizing) {
+                this.stopListening().then(() => {
+                    this.onEndChangeLang();
+                })
+            } else {
+                this.onEndChangeLang();
+            }
+        }
+    }
+
+    onEndChangeLang() {
+        if (this.PTTInProgress) {
+            this.PTTInProgress = false;
+        }
+        this.resetLang();
+        this.startListening();
     }
 }
 
