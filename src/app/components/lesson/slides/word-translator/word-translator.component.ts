@@ -37,11 +37,9 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
     }
     onButtonClick(ans: string) {
         // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
-        if (this.currentSlide.mode == "word_to_picture" || this.currentSlide.mode == "word_to_native_text") {
-            const data = {"source": "word_translator_ans", "answer": ans}
-            this.submitAnswerPending = true
-            this.lessonService.Broadcast("slideEventRequest", data)
-        }
+        const data = {"source": "word_translator_ans", "answer": ans}
+        this.submitAnswerPending = true
+        this.lessonService.Broadcast("slideEventRequest", data)
     }
     example_how_to_use_is_active() {
         if (this.slideData?.is_active) {
