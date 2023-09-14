@@ -26,7 +26,6 @@ export class SpeechRecognitionService {
 
     setupSpeechRecognition(lang:string='en-US') {
         this.originalLang = lang;
-        console.log('here1')
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
             recognitionClass = webkitSpeechRecognition;
@@ -34,7 +33,6 @@ export class SpeechRecognitionService {
             recognitionClass = SpeechRecognition;
         }
         if (recognitionClass) {
-            console.log('here2')
             this.englishRecognition = new recognitionClass();
             this.englishRecognition.lang = this.originalLang; //'en-US';
             // this.englishRecognition.lang = 'he-IL';
@@ -187,13 +185,13 @@ export class SpeechRecognitionService {
         if (lang) {
             // TODO verify lang supported
             this.currentLang = lang;
-            this.englishRecognition.lang = this.currentLang;
+            this.englishRecognition.lang = this.currentLang
         }
     }
 
     resetLang() {
         this.currentLang = this.originalLang;
-        this.englishRecognition.lang = this.currentLang;
+        this.englishRecognition.lang = this.currentLang
     }
 }
 

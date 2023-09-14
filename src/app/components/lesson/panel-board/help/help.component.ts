@@ -18,14 +18,10 @@ export class HelpComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      this.resetHelpMode()
+      this.lessonService.resetHelpMode()
       this.lessonService.ListenFor("resetHelpMode").subscribe((helpMode: string) => {
         this.helpMode = helpMode
     })
-  }
-
-  resetHelpMode(){
-    this.setHelpMode('disabled')
   }
 
   setHelpMode(helpType:string='disabled'){
