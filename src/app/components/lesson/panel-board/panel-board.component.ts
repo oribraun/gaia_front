@@ -47,14 +47,13 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     recorder: any;
     currentChunks: any[] = []
 
-    currentIcon = true;
+    currentIcon = 'assets/gifs/teacher_speaking_new.gif';
     icons: any = {
         'teacher_speaking': 'assets/gifs/teacher_speaking_new.gif',
-        'teacher_listening': 'assets/gifs/user_listening.gif',
+        'teacher_listening': 'assets/gifs/teacher_listening.gif',
         'slide_success': 'assets/gifs/slide_success.gif',
         'slide_failed': 'assets/gifs/slide_failed.gif',
     }
-    showTeacherIcon = true;
     takeSnapshotEnabled = false;
 
     constructor(
@@ -89,18 +88,11 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             this.pauseButtonText = "take a break"
         })
         this.lessonService.ListenFor("panelIconChange").subscribe((obj: any) => {
+            console.log('change gif - panelIconChange', obj)
             if (obj && obj.iconName) {
                 this.setIcon(obj.iconName);
             }
 
-        })
-        this.lessonService.ListenFor("teacherListening").subscribe((obj: any) => {
-            console.log('teacherListening')
-            this.changeToUserIcon()
-        })
-        this.lessonService.ListenFor("teacherSpeaking").subscribe((obj: any) => {
-            console.log('teacherSpeaking')
-            this.changeToTeacherIcon()
         })
     }
 
@@ -336,16 +328,10 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    changeToUserIcon() {
-        this.showTeacherIcon = false;
-    }
-
-    changeToTeacherIcon() {
-        this.showTeacherIcon = true;
-    }
-
     setIcon(iconName: string) {
+        console.log('change gif - setIcon', iconName)
         if (this.icons[iconName]) {
+            console.log('change gif - setIcon inside if', iconName)
             this.currentIcon = this.icons[iconName];
         }
     }

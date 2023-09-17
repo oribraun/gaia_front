@@ -913,7 +913,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.lessonService.speakNativeOnProgress = true;
                     }
                     else {
-                        this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_speaking'});
+                        console.log('change gif - speaking')
+                        this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_speaking'});
                     }
                     this.speakInProgress = true;
                     const audioBlob = new Blob([blobItem.arrayBuffer], {type: 'audio/mpeg'});
@@ -967,7 +968,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                         } else {
                             console.log('end_blobItem', blobItem)
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
-                                this.lessonService.Broadcast('panelIconChange', {userIcon: 'teacher_listening'});
+                                console.log('change gif - listening')
+                                this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
                             }
                             this.speakInProgress = false;
                             // this.resetSpeechRecognition();
@@ -1054,6 +1056,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if (all_objectives_accomplished) {
+            // NIR - TODO - add wait for audio que to finish
             this.changeSlideReply()
         }
 
