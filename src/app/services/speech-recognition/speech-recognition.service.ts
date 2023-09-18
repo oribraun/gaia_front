@@ -45,6 +45,12 @@ export class SpeechRecognitionService {
 
             this.mainRecognition.addEventListener('result', this.onResultRecognition);
 
+            this.mainRecognition.onnomatch = (event: any) => {
+                console.log('ASR ON NO MATCH', event)
+            };
+            this.mainRecognition.onerror = (event: any) => {
+                console.log('ASR ON ERROR', event)
+            };
             this.mainRecognition.onend = () => {
                 if (this.ASR_recognizing){
                     this.startListening();
