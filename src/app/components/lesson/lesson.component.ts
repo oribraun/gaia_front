@@ -247,6 +247,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopAudio();
             this.stopHeartBeat()
             this.unsubscribeAllHttpEvents();
+            this.resetAllEventProgress();
             await this.stopSpeechRecognition();
 
         } else {
