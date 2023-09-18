@@ -186,12 +186,14 @@ export class LessonComponent implements OnInit, OnDestroy {
                 return;
             }
             this.isPause = true
+            this.lessonService.Broadcast('panelIconChange', {'iconName':'teacher_sleep'})
             this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
             if (this.doNotDisturb) {
                 return;
             }
+            this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
             this.isPause = false
             this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
@@ -264,12 +266,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             if(!this.doNotDisturb){
                 this.doNotDisturb = true;
                 this.toggleStopAll(this.doNotDisturb);
+                this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_sleep'});
             }
         })
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
             if(this.doNotDisturb){
                 this.doNotDisturb = false;
                 this.toggleStopAll(this.doNotDisturb);
+                this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
             }
         })
         this.lessonService.ListenFor("getHeartBeatReply").subscribe((helpMode: string) => {
@@ -911,6 +915,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 const loop = (blobItem: BlobItem) => {
                     if (blobItem.action=='speakNative') {
                         this.lessonService.speakNativeOnProgress = true;
+                        this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_do_nothing'});
                     }
                     else {
                         console.log('change gif - speaking')

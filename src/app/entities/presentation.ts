@@ -111,6 +111,7 @@ export class PresentationSlide {
     teacher_name!: string
     teacher_image_path!: string
     word_image_path!: string
+    background_image!: string
     image_path!: string
     mode!: string
     answer_options!: string[]
