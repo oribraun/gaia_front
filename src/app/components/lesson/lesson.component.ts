@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
+import {SpeechRecognitionEnhancerService} from "../../services/speech-recognition/speech-recognition-enhancer.service";
 import {firstValueFrom, lastValueFrom} from "rxjs";
 import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
@@ -109,6 +110,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         private speechRecognitionService: SpeechRecognitionService,
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
         private lessonService: LessonService,
+        private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
     ) { }
 
     ngOnInit(): void {
@@ -298,6 +300,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     onRecognitionResults = (results: any) => {
         console.log("out",this.isPause)
+        this.speechRecognitionEnhancerService.shouldAggregate(results, this.currentSlide)
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
             console.log("in",this.isPause)
 
@@ -442,7 +445,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
                     if (!this.mock) {
-                        this.getNewSlideReply();
+                        this.restartCurrentSlide()
+                        // this.getNewSlideReply();
                     }
                 }
                 this.gettingPresentation = false;
