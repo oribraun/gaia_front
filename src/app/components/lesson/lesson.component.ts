@@ -446,8 +446,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
                     if (!this.mock) {
-                        this.restartCurrentSlide()
-                        // this.getNewSlideReply();
+                        // this.restartCurrentSlide()
+                        this.getNewSlideReply();
                     }
                 }
                 this.gettingPresentation = false;
