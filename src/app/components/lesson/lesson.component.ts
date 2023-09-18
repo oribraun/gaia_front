@@ -1040,7 +1040,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (!this.speakInProgress) {
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
-                    this.stopSpeechRecognition();
+                    await this.stopSpeechRecognition();
                     this.stopHeartBeat();
                     const value = await this.playUsingBlob();
                     this.resetSpeechRecognition();
