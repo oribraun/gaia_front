@@ -313,7 +313,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     onRecognitionResults = (results: any) => {
         console.log("out",this.isPause)
-        this.speechRecognitionEnhancerService.shouldAggregate(results, this.currentSlide)
+        this.speechRecognitionEnhancerService.validate(results, this.currentSlide)
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
             console.log("in",this.isPause)
 
