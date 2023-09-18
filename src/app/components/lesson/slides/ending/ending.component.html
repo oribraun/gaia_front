@@ -9,9 +9,12 @@
 <!--    <div class="image image-right" *ngIf="currentSlide.word_image_path">-->
 <!--        <img [src]="currentSlide.word_image_path">-->
 <!--    </div>-->
-    <div class="background-image">
-        <img src="{{imageSrc}}assets/images/lesson/class_end3.jpeg">
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{imageSrc}}{{currentSlide.background_image}}">
     </div>
+    <div class="background-image" *ngIf="!currentSlide.background_image">
+        <img src="{{imageSrc}}assets/images/lesson/class_end3.png">
+    </div>        
     <div class="gif">
         <img src="{{imageSrc}}assets/gifs/wave_hi.gif">
     </div>
