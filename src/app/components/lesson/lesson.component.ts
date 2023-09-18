@@ -696,6 +696,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentData = response.data;
                     if (this.currentSlide.index_in_bundle == 0 && this.currentSlide.should_read_native) {
                         await this.speakNative({'text':this.currentSlide.native_language_text.he})
+                        this.resetSpeechRecognition();
                     }
                     this.handleOnPresentationReplay('new_slide');
                     if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
@@ -899,6 +900,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     }
                     this.currentAudio.onpause = (e: any) => {
                         this.speakInProgress = false;
+                        this.last_speak_ts = Date.now()
                     }
                     this.currentAudio.onended = (e: any) => {
                         // const handled_module_type = this.handleWhiteBoardModuleType();
@@ -910,6 +912,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             loop(current_src_url)
                         } else {
                             this.speakInProgress = false;
+                            this.last_speak_ts = Date.now()
                             resolve(true)
                         }
                         // }
@@ -970,6 +973,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.currentAudio.onpause = () => {
                         console.log('audio paused')
                         this.speakInProgress = false;
+                        this.last_speak_ts = Date.now()
                         if (blobItem && blobItem.action=='speakNative') {
                             this.lessonService.speakNativeOnProgress = false;
                             this.lessonService.speakNativeOnWaiting = false;
@@ -994,6 +998,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                                 this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
                             }
                             this.speakInProgress = false;
+                            this.last_speak_ts = Date.now()
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
