@@ -106,6 +106,7 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
         }, 1000)
     }
   }
+
   alertBeforeEndGame(){
     console.log('one minute before end game')
     let text = 'שים לב נותרה דקה לסיום המשחק'
@@ -117,6 +118,8 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
   }
  
   ngOnDestroy(){
-    // this.lessonService.Broadcast('endDoNotDisturb',{})
+    clearTimeout(this.alertBeforeEndGameTimer)
+    clearInterval(this.checkFocusInterval)
+    clearInterval(this.gameTimerInterval)
   }
 }
