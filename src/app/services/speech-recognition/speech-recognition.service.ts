@@ -52,9 +52,9 @@ export class SpeechRecognitionService {
                 console.log('ASR ON ERROR', event)
             };
             this.mainRecognition.onend = () => {
-                // if (this.ASR_recognizing){
-                //     this.startListening();
-                // }
+                if (this.ASR_recognizing && !this.startingRecognition){
+                    this.startListening();
+                }
                 console.log('ASR ON END TIMEOUT', this.ASR_recognizing)
             };
         } else {
