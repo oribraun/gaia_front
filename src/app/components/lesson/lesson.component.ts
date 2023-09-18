@@ -137,7 +137,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     initApplication(){
         this.triggerResize()
         if (!this.mock) {
-            if(!this.speechRecognitionService.englishRecognition) {
+            if(!this.speechRecognitionService.mainRecognition) {
                 this.speechRecognitionService.setupSpeechRecognition();
             }
             // this.setupSocketSpeechRecognition();
@@ -162,7 +162,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.initApplicationDone = true;
 
         } else {
-            if(!this.speechRecognitionService.englishRecognition) {
+            if(!this.speechRecognitionService.mainRecognition) {
                 this.speechRecognitionService.setupSpeechRecognition();
                 this.speechRecognitionService.startListening();
             }
@@ -170,6 +170,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
             this.getPresentation();
+            // this.setRandomCircleAnimation();
         }
     }
 
@@ -290,7 +291,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
             this.getPresentationEventReplay(obj)
         })
-        
+
     }
 
     restartCurrentSlide(){
@@ -837,7 +838,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('startSpeechRecognition');
         console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
         console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
-        if (this.speechRecognitionService.englishRecognition &&
+        if (this.speechRecognitionService.mainRecognition &&
             !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
             await this.speechRecognitionService.startListening();
         }
