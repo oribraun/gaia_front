@@ -137,7 +137,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     initApplication(){
         this.triggerResize()
         if (!this.mock) {
-            if(!this.speechRecognitionService.englishRecognition) {
+            if(!this.speechRecognitionService.mainRecognition) {
                 this.speechRecognitionService.setupSpeechRecognition();
             }
             // this.setupSocketSpeechRecognition();
@@ -162,7 +162,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.initApplicationDone = true;
 
         } else {
-            if(!this.speechRecognitionService.englishRecognition) {
+            if(!this.speechRecognitionService.mainRecognition) {
                 this.speechRecognitionService.setupSpeechRecognition();
                 this.speechRecognitionService.startListening();
             }
@@ -170,6 +170,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
             this.getPresentation();
+            // this.setRandomCircleAnimation();
         }
     }
 
@@ -209,25 +210,36 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
     async speakNative(obj:any={}){
-        if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
-            this.lessonService.speakNativeOnWaiting=true
-            const response:any = await firstValueFrom(this.apiService.textToSpeech({'app_data':{'text':obj.text, 'lang':'iw'}}))
-            if (response.err) {
-                console.log('textToSpeech err', response)
-            } else {
-                const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
-                console.log('textToSpeech - ', arrayBuffer)
-                if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                    const new_blob = new BlobItem({arrayBuffer:arrayBuffer,
-                        action:'speakNative',
-                        type:'audio'})
-                    this.audioBlobQue.push(new_blob);
-                    if (!this.speakInProgress) {
-                        const value = await this.playUsingBlob();
-                    }
-                }
+        return new Promise((resolve, reject) => {
+            if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
+                this.lessonService.speakNativeOnWaiting=true;
+                this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({
+                    'app_data':{'text':obj.text, 'lang':'iw'}
+                }).subscribe({
+                    next: (response: any) => {
+                        if (response.err) {
+                            console.log('textToSpeech err', response)
+                        } else {
+                            const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
+                            console.log('textToSpeech - ', arrayBuffer)
+                            if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                                const new_blob = new BlobItem({arrayBuffer:arrayBuffer,
+                                    action:'speakNative',
+                                    type:'audio'})
+                                this.audioBlobQue.push(new_blob);
+                                if (!this.speakInProgress) {
+                                    const value = this.playUsingBlob();
+                                }
+                                resolve(true);
+                            }
+                        }
+                    },
+                    error: (error) => {
+                        console.log('getPresentation error', error)
+                    },
+                })
             }
-        }
+        })
     }
 
     async listenForSpeakNative(){
@@ -246,6 +258,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopAudio();
             this.stopHeartBeat()
             this.unsubscribeAllHttpEvents();
+            this.resetAllEventProgress();
             await this.stopSpeechRecognition();
 
         } else {
@@ -290,7 +303,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
             this.getPresentationEventReplay(obj)
         })
-        
+
     }
 
     restartCurrentSlide(){
@@ -837,7 +850,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('startSpeechRecognition');
         console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
         console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
-        if (this.speechRecognitionService.englishRecognition &&
+        if (this.speechRecognitionService.mainRecognition &&
             !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
             await this.speechRecognitionService.startListening();
         }
@@ -1038,7 +1051,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (!this.speakInProgress) {
                     console.log('this.audioBlobQue', this.audioBlobQue.length)
                     console.log('this.speakInProgress', this.speakInProgress)
-                    this.stopSpeechRecognition();
+                    await this.stopSpeechRecognition();
                     this.stopHeartBeat();
                     const value = await this.playUsingBlob();
                     this.resetSpeechRecognition();
