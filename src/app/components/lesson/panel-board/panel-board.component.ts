@@ -47,9 +47,9 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     recorder: any;
     currentChunks: any[] = []
 
-    currentIcon = 'assets/gifs/teacher_speaking_new.gif';
+    currentIcon = 'assets/gifs/teacher_speaking.gif';
     icons: any = {
-        'teacher_speaking': 'assets/gifs/teacher_speaking_new.gif',
+        'teacher_speaking': 'assets/gifs/teacher_speaking.gif',
         'teacher_listening': 'assets/gifs/teacher_listening.gif',
         'teacher_do_nothing': 'assets/gifs/teacher_do_nothing.gif',
         'slide_success': 'assets/gifs/slide_success.gif',
