@@ -248,10 +248,10 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async listenForSpeakNative(){
         this.lessonService.ListenFor("speakNative").subscribe(async (obj: any) => {
-            this.stopAudio();
-            this.lessonService.speakNativeOnProgress = false;
-            this.lessonService.speakNativeOnWaiting = false;
-            await this.speakNative(obj, true);
+            // this.stopAudio();
+            // this.lessonService.speakNativeOnProgress = false;
+            // this.lessonService.speakNativeOnWaiting = false;
+            // await this.speakNative(obj, true);
         })
     }
 
