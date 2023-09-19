@@ -1,4 +1,4 @@
-<div class="slide-board slide-board-one-column">
+<div class="slide-board">
     <div class="outer-scroller" #wrapper>
         <div class="inner-scroller">
             <div>
@@ -9,6 +9,9 @@
                 <!-- <p class="no-style">{{currentSlide.text}}</p> -->
             </div>
         </div>
+    </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{currentSlide.background_image}}">
     </div>
 
     <!--    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">-->

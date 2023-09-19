@@ -19,7 +19,10 @@
             </button>
         </div>
     </div>
-    <div class="background-image">
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{currentSlide.background_image}}">
+    </div>
+    <div class="background-image" *ngIf="!currentSlide.background_image">
         <img src="{{imageSrc}}assets/images/lesson/living_room.jpg">
     </div>
     <div class="tv-image">
@@ -33,7 +36,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 
 </div>

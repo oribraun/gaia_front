@@ -6,6 +6,9 @@
             </div>
         </div>
     </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img [src]="currentSlide.background_image">
+    </div>
     <!-- mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio" -->
 
     <!-- answer_options [urls\native text] -->
