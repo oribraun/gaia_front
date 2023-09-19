@@ -318,8 +318,6 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
 
     togglePauseLesson(): void {
-        console.log('Daniel')
-
         if (this.pauseButtonText == "take a break") {
             this.pauseButtonText = "resume lesson"
             this.lessonService.Broadcast("pauseLesson", {})
