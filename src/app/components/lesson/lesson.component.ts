@@ -209,14 +209,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
-    async speakNative(obj:any={}){
+    async speakNative(obj:any={}, playAudio=false): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
                 this.lessonService.speakNativeOnWaiting=true;
                 this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({
                     'app_data':{'text':obj.text, 'lang':'iw'}
                 }).subscribe({
-                    next: (response: any) => {
+                    next: async (response: any) => {
                         if (response.err) {
                             console.log('textToSpeech err', response)
                         } else {
@@ -227,11 +227,15 @@ export class LessonComponent implements OnInit, OnDestroy {
                                     action:'speakNative',
                                     type:'audio'})
                                 this.audioBlobQue.push(new_blob);
-                                if (!this.speakInProgress) {
-                                    const value = this.playUsingBlob();
+                                if (!this.speakInProgress && playAudio) {
+                                    await this.stopSpeechRecognition();
+                                    this.stopHeartBeat();
+                                    const value = await this.playUsingBlob();
+                                    this.resetSpeechRecognition();
+                                    this.startHeartBeat();
                                 }
-                                resolve(true);
                             }
+                            resolve(true);
                         }
                     },
                     error: (error) => {
@@ -244,7 +248,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async listenForSpeakNative(){
         this.lessonService.ListenFor("speakNative").subscribe(async (obj: any) => {
-            await this.speakNative(obj)
+            // await this.speakNative(obj)
         })
     }
 
@@ -694,12 +698,17 @@ export class LessonComponent implements OnInit, OnDestroy {
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
+
+                    let restartASR = true;
                     if (this.currentSlide.index_in_bundle == 0 && this.currentSlide.should_read_native) {
-                        await this.speakNative({'text':this.currentSlide.native_language_text.he})
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he}, false)
                     }
-                    this.handleOnPresentationReplay('new_slide');
                     if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-                        await this.speakNative({'text':this.currentSlide.native_language_text.he})
+                        restartASR = false;
+                    }
+                    this.handleOnPresentationReplay('new_slide', restartASR);
+                    if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
+                        await this.speakNative({'text':this.currentSlide.native_language_text.he}, true)
                     }
 
                 }
@@ -1011,7 +1020,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
 
-    async handleOnPresentationReplay(reason: string = '') {
+    async handleOnPresentationReplay(reason: string = '', restartASR = true) {
         if (this.isPause) {
 
             return;
@@ -1058,13 +1067,15 @@ export class LessonComponent implements OnInit, OnDestroy {
                     await this.stopSpeechRecognition();
                     this.stopHeartBeat();
                     const value = await this.playUsingBlob();
-                    this.resetSpeechRecognition();
-                    this.startHeartBeat();
+                    if (restartASR) {
+                        this.resetSpeechRecognition();
+                        this.startHeartBeat();
+                    }
                 }
             }
         }
         if(!help_sound_buffer && !help_sound_url) {
-            if (!this.speechRecognitionService.ASR_recognizing) {
+            if (!this.speechRecognitionService.ASR_recognizing && restartASR) {
                 await this.startSpeechRecognition();
             }
         }
