@@ -5,10 +5,10 @@
     left: 25%;
     width: 50%;
     margin: 0;
-    top: 4px;
+    top: 0;
     padding: 0;
   }
-  
+
   label {cursor: pointer;}
   .radio-wrapper {
     width: 145px;
@@ -42,20 +42,20 @@
   .radio-wrapper label {
     z-index: 9;
   }
-  
+
   input[type=radio] {
     display: none;
   }
-  
+
   i {
     z-index: 99;
     font-size: 18px;
   }
-  
+
   .neutral-icon i {
     font-size: 10px;
   }
-  
+
   .neutral + label {
     display: inline-block;
     width: 50px;
@@ -66,7 +66,7 @@
     transition: transform 1s;
     font-size: 12px;
   }
-  
+
   .neutral:checked + label {
     border: 2px solid black;
     display: inline-block;
@@ -76,7 +76,7 @@
     background: #eeeeee;
     background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
   }
-  
+
   .yes + label {
     display: inline-block;
     width: 50px;
@@ -86,7 +86,7 @@
     left: 0;
     text-align: center;
   }
-  
+
   .yes:checked + label {
     display: inline-block;
     width: 50px;
@@ -102,7 +102,7 @@
     animation-name: slidein;
     -webkit-transform: translateZ(0);
   }
-  
+
   .no + label {
     display: inline-block;
     width: 50px;
@@ -112,7 +112,7 @@
     right: 0;
     text-align: center;
   }
-  
+
   .no:checked + label {
     display: inline-block;
     width: 50px;
@@ -129,7 +129,7 @@
     background: #e66c67;
     background: linear-gradient(to bottom, #e66c67 0%, #dd4f4b 100%);
   }
-  
+
   h6 {
     position: absolute;
     top: -20px;
@@ -143,7 +143,7 @@
     align-items: center;
     color: white;
   }
-  
+
   @-webkit-keyframes slidein {
     from {
       transform: translate(50px, 0);
@@ -152,7 +152,7 @@
       transform: translate(0px, 0px);
     }
   }
-  
+
   @keyframes slidein {
     from {
       transform: translate(50px, 0);

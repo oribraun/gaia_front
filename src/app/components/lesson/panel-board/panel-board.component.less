@@ -3,6 +3,7 @@
 .right-panel {
     @cam-height: 180px;
     @button-height: 50px;
+    @help-height: 60px;
     height: calc(100% - @header-height);
     width: @panel-width;
     margin-left: @padding;
@@ -138,7 +139,7 @@
                 margin-bottom: 0;
             }
             .plan {
-                height: calc(100% - 29px - @button-height);
+                height: calc(100% - 29px - @button-height - @help-height);
                 .table-line {
                     width: 100%;
                     padding: 3px @inner-padding;
@@ -156,9 +157,11 @@
                 }
             }
             .help-container {
-                position: absolute;
-                bottom: 70px;
-                height: 60px;
+                //position: absolute;
+                //bottom: 70px;
+                position: relative;
+                bottom: 0;
+                height: @help-height;
                 width: 100%;
                 margin: 0 auto;
                 // border: 1px solid;
