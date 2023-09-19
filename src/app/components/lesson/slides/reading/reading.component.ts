@@ -24,7 +24,8 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit{
         super(config)
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
+        super.ngOnInit();
         this.text_to_present = this.currentSlide.text
         this.sentences = []
         for (let sentence of this.text_to_present.split('\n')){

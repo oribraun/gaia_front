@@ -56,7 +56,8 @@ export class VideoComponent extends BaseSlideComponent implements OnInit, AfterV
         super(config)
         this.embeddedVideo =""
     }
-    ngOnInit() {
+    override ngOnInit(): void {
+        super.ngOnInit();
         // this.createVideo();
     }
 

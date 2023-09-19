@@ -39,22 +39,23 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
   ) {
       super(config)
   }
- 
+
   ngAfterViewInit() {
-     
+
     function checkFocus(self:any) {
       if(document.activeElement == document.getElementsByTagName("iframe")[0]) {
         self.startGame()
       }
     }
-    
-    this.checkFocusInterval = window.setInterval(checkFocus, 2000, this); 
+
+    this.checkFocusInterval = window.setInterval(checkFocus, 2000, this);
 
     // this.lessonService.Broadcast('endDoNotDisturb',{})
     // this.lessonService.Broadcast('DoNotDisturb',{})
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
+    super.ngOnInit();
     this.updateSrc(this.currentSlide['iframe_path'])
     this.game_duration = this.currentSlide['game_duration']
   }
@@ -79,14 +80,14 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
       // Trigger do not disturbe
       this.lessonService.Broadcast('DoNotDisturb',{})
       // Counter for one minute before end of time
-      this.endGameTimer = window.setTimeout(endGameTrigger, 60*1000*endGameTimeLimit, this); 
+      this.endGameTimer = window.setTimeout(endGameTrigger, 60*1000*endGameTimeLimit, this);
       // Counter for end of game
-      this.alertBeforeEndGameTimer = window.setTimeout(alertBeforeEndGameTrigger, 60*1000*alertBeforeEndGameTimeLimit+1, this); 
-      // Interval for counting game time 
+      this.alertBeforeEndGameTimer = window.setTimeout(alertBeforeEndGameTrigger, 60*1000*alertBeforeEndGameTimeLimit+1, this);
+      // Interval for counting game time
       this.gameTimer = 0
-      this.gameTimerInterval = window.setInterval(progressTimer, 1000, this); 
+      this.gameTimerInterval = window.setInterval(progressTimer, 1000, this);
     }
-    
+
   }
 
   stopGame(){
@@ -116,7 +117,7 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
   updateSrc(url:string='') {
     this.iframe_url=this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
- 
+
   ngOnDestroy(){
     clearTimeout(this.alertBeforeEndGameTimer)
     clearInterval(this.checkFocusInterval)

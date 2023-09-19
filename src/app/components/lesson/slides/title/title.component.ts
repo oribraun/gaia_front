@@ -17,7 +17,7 @@ export class TitleComponent extends BaseSlideComponent implements OnInit{
         super(config)
     }
 
-    ngOnInit(): void {
-        
+    override ngOnInit(): void {
+        super.ngOnInit();
     }
 }

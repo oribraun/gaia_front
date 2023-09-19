@@ -11,11 +11,11 @@
 <!--    </div>-->
 
     <div class="background-image" *ngIf="currentSlide.background_image">
-        <img src="{{imageSrc}}{{currentSlide.background_image}}">
+        <img src="{{currentSlide.background_image}}">
     </div>
     <div class="background-image" *ngIf="!currentSlide.background_image">
         <img src="{{imageSrc}}assets/images/lesson/class_background.png">
-    </div>    
+    </div>
     <div class="gif">
         <img src="{{imageSrc}}assets/gifs/wave_hi.gif">
     </div>

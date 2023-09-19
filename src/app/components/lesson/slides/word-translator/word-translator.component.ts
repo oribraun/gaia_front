@@ -28,7 +28,8 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
     ) {
         super(config)
     }
-    ngOnInit(): void {
+    override ngOnInit(): void {
+        super.ngOnInit();
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "word_translator_button_reply") {
                 this.submitAnswerPending = false

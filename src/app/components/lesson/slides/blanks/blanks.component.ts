@@ -23,7 +23,8 @@ export class BlanksComponent extends BaseSlideComponent implements OnInit {
         super(config)
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
+        super.ngOnInit();
         let j = 0
         this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
             if(word ==='________'){
