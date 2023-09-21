@@ -19,6 +19,9 @@ import {LessonService} from "../../services/lesson/lesson.service";
 import {environment} from "../../../environments/environment";
 import {ChatMessage} from "../../entities/chat_message";
 import { BlobItem } from 'src/app/entities/blob_item';
+import {SocketRecorderService} from "../../services/socket-recorder/socket-recorder.service";
+import {User} from "../../entities/user";
+import {Config} from "../../config";
 
 declare var $:any;
 
@@ -29,10 +32,10 @@ declare var $:any;
 })
 export class LessonComponent implements OnInit, OnDestroy {
 
-    @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
-    @ViewChild('user', { static: false }) user!: ElementRef;
+    private user!: User;
 
-    mediaStream: any;
+    socketRecorderEvents: any = {};
+    socketRecorderEnabled = false;
 
     mock = environment.is_mock;
 
@@ -106,15 +109,55 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     constructor(
         private apiService: ApiService,
+        private config: Config,
         private animationsService: AnimationsService,
         private speechRecognitionService: SpeechRecognitionService,
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
         private lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
+        private socketRecorderService: SocketRecorderService
     ) { }
 
     ngOnInit(): void {
-        this.initApplication()
+        this.getUser();
+        if (this.socketRecorderEnabled) {
+            this.startRecordingScreen();
+        } else {
+            this.initApplication();
+        }
+    }
+
+    startRecordingScreen() {
+        this.setupSocketRecorder().then(() => {
+            // starting
+            const lesson_id = `lesson_id_${new Date().getTime()}`;
+            this.socketRecorderService.startCapturingVideo();
+            // this.socketRecorderService.startCapturingMediaTest(5, this.user.id, lesson_id);
+            // this.socketRecorderService.capturingMediaStream.getVideoTracks()[0].onended = () => {
+            //     // stoped sharing
+            //     console.log('stopped sharing');
+            //     this.socketRecorderService.stopCapturingMediaTest(this.user.id, lesson_id);
+            //     this.socketRecorderService.capturingMediaStream = null
+            // };
+            this.socketRecorderService.startCapturingInterval(this.user.id, lesson_id);
+            this.socketRecorderService.capturingMediaStream.getVideoTracks()[0].onended = () => {
+                // stoped sharing
+                console.log('socketRecorderService stopped sharing');
+                this.socketRecorderService.stopCapturingInterval(this.user.id, lesson_id);
+                this.socketRecorderService.capturingMediaStream = null
+            };
+            this.initApplication();
+        }).catch((e) => {
+            console.log('setupSocketRecorder e', e);
+            this.initApplication();
+        })
+    }
+
+    getUser() {
+        this.user = this.config.user
+        this.config.user_subject.subscribe(() => {
+            this.user = this.config.user
+        })
     }
 
     async resetApplication(){
@@ -435,18 +478,6 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.resetHeartBeatCounter()
         if (this.heartBeatInterval) {
             clearInterval(this.heartBeatInterval)
-        }
-    }
-
-
-    startVideo() {
-        try {
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((mediaStream) => {
-                // Display the stream in the video element
-                this.mediaStream = mediaStream;
-            })
-        } catch (error) {
-            console.error('Error accessing webcam:', error);
         }
     }
 
@@ -1241,6 +1272,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopSpeechRecognition();
         // this.audioStreamSubscription.unsubscribe();
         // this.socket.complete();
+        this.clearSocketRecorderServices();
     }
 
     setupPresentationMock() {
@@ -1737,6 +1769,94 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.currentObjectiveIndex = this.presentation.current_objective_index;
         this.estimatedDuration = this.presentation.estimated_duration;
         this.setCurrentSection();
+    }
+
+    async setupSocketRecorder() {
+        return new Promise(async (resolve, reject) => {
+            if (navigator.mediaDevices) {
+                const userCameraConstraints = {
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true
+                    },
+                    // video: true
+                };
+                const videoStream = await navigator.mediaDevices.getUserMedia(userCameraConstraints).catch(e => {
+                    throw e
+                })
+                const userShareScreenConstraints = {
+                    video: true,
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        //     restrictOwnAudio: false
+                        //     // sampleRate: 44100,
+                        //     // suppressLocalAudioPlayback: true,
+                    },
+                    preferCurrentTab: true,
+                    // systemAudio : 'include',
+                    // selfBrowserSurface: 'include'
+                    // video: {
+                    //     displaySurface: "monitor",
+                    //     // cursor: 'always',
+                    //     // resizeMode: 'crop-and-scale',
+                    // },
+                }
+
+                this.socketRecorderService.connect()
+                this.socketRecorderEvents.onConnect = this.socketRecorderService.onConnect.subscribe(this.onSocketRecorderConnect)
+                this.socketRecorderService.ListenFor('got-recorder-data').subscribe((data) => {
+                    console.log('SocketRecorderService got-recorder-data', data)
+                })
+                this.socketRecorderService.ListenFor('hello-back').subscribe((data) => {
+                    console.log('SocketRecorderService hello-back', data)
+                })
+
+                let displayStream: any = null;
+                if (!this.socketRecorderService.capturingMediaStream) {
+                    try {
+                        displayStream = await navigator.mediaDevices.getDisplayMedia(userShareScreenConstraints).catch(e => {
+                            throw e
+                        })
+
+                        // combine two audio sources
+                        const audioCtx = new AudioContext();
+                        const source1 = audioCtx.createMediaStreamSource(videoStream);
+                        const source2 = audioCtx.createMediaStreamSource(displayStream);
+                        const destination = audioCtx.createMediaStreamDestination();
+                        source1.connect(destination);
+                        source2.connect(destination);
+
+                        const combineAudio = destination.stream.getAudioTracks();
+                        const displayVideoTracks = displayStream.getVideoTracks();
+                        const mergeTracks = [...displayVideoTracks, ...combineAudio]
+                        this.socketRecorderService.capturingMediaStream = new MediaStream(mergeTracks)
+                        this.socketRecorderService.setupContinuesRecording3(this.socketRecorderService.capturingMediaStream);
+                        resolve('');
+                    } catch (e) {
+                        reject('the use canceled streaming')
+                        return;
+                    }
+                } else {
+                    reject('already running')
+                }
+            } else {
+                reject('Webcam access not supported');
+            }
+        })
+    }
+
+    onSocketRecorderConnect = (msg: string) => {
+        console.log('SocketRecorderService onConnect msg', msg)
+        this.socketRecorderService.sendMessage('hello', {'test': 'hi'})
+    }
+
+    clearSocketRecorderServices() {
+        if (this.socketRecorderEvents.onConnect) {
+            this.socketRecorderEvents.onConnect.unsubscribe(this.onSocketRecorderConnect)
+            this.socketRecorderService.ClearEvent('got-recorder-data');
+            this.socketRecorderService.ClearEvent('hello-back')
+        }
     }
 }
 
