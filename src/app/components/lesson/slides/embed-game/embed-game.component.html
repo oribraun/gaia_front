@@ -1,11 +1,11 @@
 <div class="slide-board">
-    <div class="outer-scroller" #wrapper>
+    <div class="outer-scroller-gameslide" #wrapper>
         <div class="inner-scroller">
             <div>
-                <h2>{{currentSlide.slide_title}}</h2>
+                <h1>{{currentSlide.slide_title}}</h1>
             </div>
             <div class="text text-pre-line">
-                <span>{{minutes}}</span><span>:</span><span>{{seconds}}</span>
+                <span>{{"<"}}{{minutes}}</span><span>:</span><span>{{seconds}}{{">"}}</span>
                 <!-- <p class="no-style">{{currentSlide.text}}</p> -->
             </div>
         </div>
