@@ -684,6 +684,9 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.currentSlideIndex = data.current_slide_index;
                         this.currentObjectiveIndex = data.current_objective_index;
                         this.setCurrentSection();
+                        if (this.doNotDisturb) {
+                            this.lessonService.Broadcast('endDoNotDisturb',{})
+                        }
                         if (this.isPause) {
                             this.needToCallNextSlideReplay = true;
                         } else {
