@@ -301,11 +301,15 @@ export class LessonComponent implements OnInit, OnDestroy {
             if (blob) {
                 this.audioBlobQue.push(blob);
                 if (!this.speakInProgress) {
-                    await this.stopSpeechRecognition();
-                    this.stopHeartBeat();
+                    if (!obj.onlyAudio) {
+                        await this.stopSpeechRecognition();
+                        this.stopHeartBeat();
+                    }
                     const value = await this.playUsingBlob();
-                    this.resetSpeechRecognition();
-                    this.startHeartBeat();
+                    if (!obj.onlyAudio) {
+                        this.resetSpeechRecognition();
+                        this.startHeartBeat();
+                    }
                 }
             }
         })
@@ -338,6 +342,9 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     listenForSlideEventRequests(){
         this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
+            if (obj.stopAudio) {
+                this.stopAudio();
+            }
             this.getPresentationEventReplay(obj)//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         })
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
@@ -350,8 +357,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
             if(this.doNotDisturb){
                 this.doNotDisturb = false;
-                this.toggleStopAll(this.doNotDisturb);
                 this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
+                if (!obj.noToggle) {
+                    this.toggleStopAll(this.doNotDisturb);
+                }
             }
         })
         this.lessonService.ListenFor("getHeartBeatReply").subscribe((helpMode: string) => {
@@ -586,6 +595,10 @@ export class LessonComponent implements OnInit, OnDestroy {
             error: (error) => {
                 console.log('getPresentationEventReplay error', error)
                 this.eventHandlingInProgress = false;
+                if (data.source == "image_generator_button_click") {
+                    const data = {'type': 'additional_instructions', 'data': {source: 'image_generator_button_click_error'}}
+                    this.lessonService.Broadcast("slideEventReply", data)
+                }
             },
         })
     }
@@ -1086,6 +1099,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         console.log('data',data)
 
         console.log('after+speak_native')
+        console.log('slideEventReply additional_instructions', additional_instructions)
         if (additional_instructions) {
             const data = {'type': 'additional_instructions', 'data': additional_instructions}
             this.lessonService.Broadcast("slideEventReply", data)
@@ -1119,12 +1133,12 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if (help_sound_buffer || blob) {
-            console.log('help_sound_buffer added to que')
             if (blob && this.currentSlide.index_in_bundle == 0) {
                 console.log('speakNative before');
                 this.audioBlobQue.push(blob);
             }
             if (help_sound_buffer) {
+                console.log('help_sound_buffer added to que')
                 const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
                 if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
                     this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished?'doNotListenAfter':'', type:'audio'}));

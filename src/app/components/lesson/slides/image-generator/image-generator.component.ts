@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {ApiService} from "../../../../services/api.service";
@@ -10,7 +10,7 @@ import {BaseSlideComponent} from "../base-slide.component";
     templateUrl: './image-generator.component.html',
     styleUrls: ['./image-generator.component.less']
 })
-export class ImageGeneratorComponent extends BaseSlideComponent implements OnDestroy {
+export class ImageGeneratorComponent extends BaseSlideComponent implements OnInit, OnDestroy {
 
     // @Input('generatingImageInProgress') generatingImageInProgress: boolean = false;
 
@@ -30,10 +30,17 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnDes
         private lessonService: LessonService,
     ) {
         super(config)
+    }
+    override ngOnInit(): void {
+        super.ngOnInit();
         this.imagePathGenerated = this.imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "image_generator_button_click") {
                 this.handleGenerateImageOutput(resp.data)
+            }
+            if (resp.data.source == "image_generator_button_click_error") {
+                this.generatingImageInProgress = false;
+                // TODO deal with error's
             }
         })
     }
@@ -64,7 +71,11 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnDes
         if (!this.wordsSelected.length || this.generatingImageInProgress){
             return;
         }
-        const data = {"source": "image_generator_button_click", 'selected_words': this.wordsSelected}
+        const data = {
+            "source": "image_generator_button_click",
+            'selected_words': this.wordsSelected,
+            'stopAudio': true
+        }
         this.generatingImageInProgress = true;
         this.lessonService.Broadcast("slideEventRequest", data)
     }
