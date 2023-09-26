@@ -81,11 +81,12 @@ export class SpeechRecognitionEnhancerService {
                     if(this.slide_index != slide_index){
                         this.slide_index = slide_index
                         this.lines = slideObj.text.replace(/\s\s+/g, ' ').trim().split('\n')
-                        this.line_index = 0
+                        this.resetLineIndex();
                     }
                     target_text = this.lines[this.line_index]
                 } else {
                     target_text = slideObj.text.replace(/\s\s+/g, ' ').trim()
+                    this.resetLineIndex();
                 }
                 target_text_lower = target_text.toLowerCase()
                 target_text_lower_no_punct = this.removePunct(target_text_lower)
@@ -170,6 +171,10 @@ export class SpeechRecognitionEnhancerService {
 
             }
         }
+    }
+
+    resetLineIndex() {
+        this.line_index = 0
     }
 
     checkAndForcePartial(srObject: any, callback: any) {

@@ -111,7 +111,7 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
   alertBeforeEndGame(){
     console.log('one minute before end game')
     let text = 'שים לב נותרה דקה לסיום המשחק'
-    this.lessonService.Broadcast('speakNative',{'text':text})
+    this.lessonService.Broadcast('speakNative',{'text':text, 'onlyAudio': true})
   }
 
   updateSrc(url:string='') {

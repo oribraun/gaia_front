@@ -1,5 +1,6 @@
 import {EventEmitter, Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
+import {timeout} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -7,6 +8,8 @@ import {DOCUMENT} from "@angular/common";
 export class AnimationsService {
 
     onAddCircle: EventEmitter<any> = new EventEmitter<any>();
+
+    timeouts: any = {}
 
     constructor(
         @Inject(DOCUMENT) private document: Document,
@@ -23,6 +26,7 @@ export class AnimationsService {
             // const transformSpeed = this.randomIntFromInterval(1, 1.5)
             const transformSpeed = 1.5;
             child.id = "circle-animation-" + unique_num
+            child.className = "circle-animations"
             child.style.position = "absolute";
             child.style.top = "0";
             child.style.right = "0";
@@ -39,20 +43,41 @@ export class AnimationsService {
         }
     }
 
+    removeAllCircles(elm: any) {
+        this.clearTimeouts();
+        const circles = document.querySelectorAll('.circle-animations');
+        circles.forEach(circle => {
+            circle.remove();
+        });
+    }
+
+    clearTimeouts() {
+        for (let timeout in this.timeouts) {
+            console.log('timeout', timeout)
+            if (timeout) {
+                clearTimeout(timeout)
+            }
+        }
+    }
+
     animateAndRemoveCircle(id: string, transformSpeed: number) {
-        setTimeout(() => {
+        this.timeouts['one_' + id] = setTimeout(() => {
+            delete this.timeouts['one_' + id];
             const e = document.getElementById(id);
             if (e) {
                 const scale = this.getRandomFloat(1.1, 1.8)
                 e.style.transform = `scale(${scale})`;
                 e.style.opacity = "1";
-                setTimeout(() => {
+                this.timeouts['two_' + id] = setTimeout(() => {
+                    delete this.timeouts['two_' + id];
                     e.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed/1.5}s ease-in-out`;
                     e.style.opacity = "0";
                 }, transformSpeed/1.5 * 1000)
-                setTimeout(() => {
-                    setTimeout(() => {
-                        e.remove();
+                this.timeouts['three_' + id] = setTimeout(() => {
+                    delete this.timeouts['three_' + id];
+                    this.timeouts['four_' + id] = setTimeout(() => {
+                        delete this.timeouts['four_' + id];
+                        // e.remove();
                     }, 600);
                 }, transformSpeed * 1000)
             }

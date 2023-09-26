@@ -20,7 +20,6 @@ export class BaseSlideComponent implements OnInit {
     ) {
         this.imageSrc = this.config.staticImagePath;
         this.currentHost = this.config.server_host || environment.serverUrl;
-        console.log('this.config.server_host', this.config.server_host)
     }
 
     ngOnInit(): void {

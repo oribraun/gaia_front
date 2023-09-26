@@ -94,6 +94,16 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             if (obj && obj.iconName) {
                 this.setIcon(obj.iconName);
             }
+            if (obj.iconName === "teacher_sleep") {
+                if (this.subscribe) {
+                    this.subscribe.unsubscribe();
+                    this.subscribe = null;
+                }
+                this.removeAllCircles();
+            }
+            if (!this.subscribe) {
+                this.listenToCircleAnimations();
+            }
 
         })
     }
@@ -108,6 +118,10 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         this.lessonService.ListenFor("takeSnapshot").subscribe((obj: any) => {
             this.takeSnapshot()
         })
+    }
+
+    removeAllCircles() {
+        this.animationsService.removeAllCircles(this.userElement.nativeElement)
     }
 
     startVideo() {
