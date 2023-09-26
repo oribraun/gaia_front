@@ -374,9 +374,11 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.changeSlideReply()
     }
 
-    onRecognitionResults = (results: any) => {
+    onRecognitionResults = (results: any, shouldValidate = true) => {
         console.log("out",this.isPause)
-        this.speechRecognitionEnhancerService.validate(results, this.currentSlide, this.onRecognitionResults, this.currentSlideIndex)
+        if (shouldValidate) {
+            this.speechRecognitionEnhancerService.validate(results, this.currentSlide, this.onRecognitionResults, this.currentSlideIndex)
+        }
         // clear hearbeat
         this.resetHeartBeatCounter();
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
