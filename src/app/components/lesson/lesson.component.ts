@@ -429,9 +429,20 @@ export class LessonComponent implements OnInit, OnDestroy {
             return
         }
         if(!this.doNotDisturb){
-            if(recognitionText.trim()){
-                this.sr_list.push(recognitionText)
-                this.last_sr_ts = Date.now()
+            let recognitionTextTrimmed = recognitionText.trim()
+            let prevRecognitionTextTrimmed = this.sr_list[this.sr_list.length-1]
+            let now = Date.now()
+            if(recognitionTextTrimmed){  
+                // In case two exactrly the same answers and less than 1.5 sec between them dont insert to list
+                if(prevRecognitionTextTrimmed == recognitionTextTrimmed){
+                    if ((now - this.last_sr_ts)<1500){
+                        console.log('updateSrList: Abort inserting ', recognitionTextTrimmed)
+                        return
+                    }
+                }
+                // Insert to list
+                this.sr_list.push(recognitionTextTrimmed)
+                this.last_sr_ts = now
                 // add user to chat
                 this.broadCastMessage('user', this.sr_list[this.sr_list.length-1], true)
                 this.getPresentationReplay(this.sr_list[this.sr_list.length-1]);
