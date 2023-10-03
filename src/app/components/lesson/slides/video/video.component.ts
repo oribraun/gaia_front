@@ -29,6 +29,7 @@ export interface OnStateChangeEvent
      * New player state.
      */
     data: PlayerState;
+    target:any;
 }
 
 
@@ -82,6 +83,8 @@ export class VideoComponent extends BaseSlideComponent implements OnInit, AfterV
     }
 
     onPlayerStateChange(e: OnStateChangeEvent) {
+        console.log('YouTube event: ', e)
+        console.log('YouTube event target - current time : ', e.target.getCurrentTime())
         this.currentState = e.data;
         clearTimeout(this.currentStateTimeout);
         this.currentStateTimeout = setTimeout(() => {

@@ -10,6 +10,16 @@
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
     ></app-reading>
+    <app-template
+        *ngIf="model.currentSlide.slide_type === sectionTitles.template"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-template>
+    <app-writing
+        *ngIf="model.currentSlide.slide_type === sectionTitles.writing"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-writing>
     <app-word-repeater
         *ngIf="model.currentSlide.slide_type === sectionTitles.word_repeater"
         [currentSlide]="model.currentSlide"
@@ -51,6 +61,7 @@
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
     ></app-word-translator>
+    
     <app-embed-game
         *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
         [currentSlide]="model.currentSlide"

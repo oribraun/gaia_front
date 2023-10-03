@@ -29,7 +29,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/static"
+              "src/static",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@kolkov/angular-editor/assets/",
+                "output": "./assets/fonts/"
+              }
             ],
             "styles": [
               "src/styles.less",
