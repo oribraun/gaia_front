@@ -122,6 +122,7 @@ export class PresentationSlide {
     should_read_native:boolean = false
     word_list!: string[]
     words!: string[]
+    options!: string[]
     bundle_id:number = -1
     bundle:any[] = []
     bundle_len:number=0

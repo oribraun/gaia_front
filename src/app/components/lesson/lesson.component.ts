@@ -70,7 +70,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     enableNoReplayInterval = true;
     webcam_last_snapshot_url: string = ''
     webcam_last_snapshot_url_updated: boolean = false;
-    resetSpeechRecognitionTimeout: any = null;
     forceChangeSlideInfo: boolean = false;
     forcedChangeSlideInfo:any = {};
 
@@ -1128,16 +1127,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.startHeartBeat();
             }
         }
-        // let restartASR = true;
-        // console.log('speakNative init', this.currentSlide)
-        // if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-        //     restartASR = false;
-        // }
-        // console.log('speakNative restartASR', restartASR)
-        // if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-        //     console.log('speakNative after')
-        //     await this.speakNative({'text':this.currentSlide.native_language_text.he}, true)
-        // }
         let blob = null;
         if (reason === 'new_slide') {
             blob = await this.getSpeakNative();

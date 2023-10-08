@@ -57,6 +57,7 @@ import { EmbedGameComponent } from './components/lesson/slides/embed-game/embed-
 import { TemplateComponent } from './components/lesson/slides/template/template.component';
 import { WritingComponent } from './components/lesson/slides/writing/writing.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { RandomSelectorComponent } from './components/lesson/slides/random-selector/random-selector.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -107,6 +108,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
         EmbedGameComponent,
         TemplateComponent,
         WritingComponent,
+        RandomSelectorComponent,
     ],
     imports: [
         BrowserModule,

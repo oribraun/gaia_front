@@ -61,7 +61,11 @@
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
     ></app-word-translator>
-    
+    <app-random-selector
+        *ngIf="model.currentSlide.slide_type === sectionTitles.random_selector"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-random-selector>    
     <app-embed-game
         *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
         [currentSlide]="model.currentSlide"
