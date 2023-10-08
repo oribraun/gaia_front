@@ -126,7 +126,8 @@ export class PresentationSlide {
     bundle:any[] = []
     bundle_len:number=0
     index_in_bundle:number=-1
-    
+    topic!:string
+    essay_type!:string
     iframe_path!:string
     game_duration:number=4
     blanks !:string[]
