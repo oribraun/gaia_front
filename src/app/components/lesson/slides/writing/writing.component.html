@@ -20,11 +20,23 @@
 
     </div>
     <div class="buttons_wrapper">
-        <button class="btn btn-light" (click)="generateEssayTopic()">
+        <!-- <button class="btn btn-light" (click)="generateEssayTopic()">
             Generate Topics
-        </button>
+        </button> -->
         <button class="btn btn-light" (click)="checkEssay()">
             Check Essay
         </button>
     </div>
 </div>
+
+<!--modals-->
+  <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
+      <div>
+         <a  title="Close"  (click)="closeModel()"class="close">X</a>
+         <h2>{{essay_title}}</h2>
+         <div [innerHTML]="essayText"></div>
+         <br>
+         <h2>Results</h2>
+         <p>{{grades}}</p>
+       </div>
+   </div>

@@ -118,6 +118,7 @@ export class PresentationSlide {
     correct_answer!: string
     text!: string
     texts!: string[]
+    examples!: string[]
     word!: string
     should_read_native:boolean = false
     word_list!: string[]

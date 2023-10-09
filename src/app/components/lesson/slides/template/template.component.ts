@@ -12,9 +12,10 @@ import {BaseSlideComponent} from "../base-slide.component";
 export class TemplateComponent extends BaseSlideComponent implements OnInit{
 
     texts:string[] = []
+    texts_valid:boolean[]=[]
     correct_words:string[] = []
     target_words:string[] = []
-    sentences:string[] = []
+    examples:string[] = []
     currentSentenceIndex = 0
 
     constructor(
@@ -28,7 +29,14 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       super.ngOnInit();
       console.log(this.currentSlide)
       this.texts = this.currentSlide.texts
-      this.sentences = []
+      this.examples = this.currentSlide.examples
+      for(let i=0; i<this.texts.length; i=i+1){
+          this.texts_valid.push(false)
+      }
+      this.lessonService.ListenFor("currentObjectiveIndexChanged").subscribe((objective_index: any) => {
+          this.handleObjectiveChanged(objective_index)
+      })
+      
        
   }
 
@@ -38,5 +46,19 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       return finalString
   }
 
- 
+  handleObjectiveChanged(objective_index:number){
+    // if(objective_index == 1){
+      const data = {
+          "source": "slide_intro_ended",
+          "objective_index": objective_index,
+          'stopAudio': true
+      }
+      this.lessonService.Broadcast("slideEventRequest", data)
+      if(objective_index-1<this.texts_valid.length){
+        this.texts_valid[objective_index-1] = true
+      }
+      
+    // }
+    // alert(objective_index)
+  }
 }

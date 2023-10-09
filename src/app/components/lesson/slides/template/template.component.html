@@ -4,9 +4,17 @@
         <div class="inner-scroller">
             <div class="text text-pre-line">
                 <ng-container *ngFor="let text of texts; let index=index">
-                    <p class="no-style no-indent" [ngClass]="{'target_sentnece': index==currentSentenceIndex}">
-                         {{text}}
-                    </p>
+                    <div *ngIf="texts_valid[index]" class="no-style no-indent" [ngClass]="{'target_sentnece': index==currentSentenceIndex}">
+                        <h3>{{text}}</h3>
+                        <ul>
+                            <ng-container *ngFor="let example of examples[index]; let jndex=index">
+                                
+                                <li   class="no-style no-indent" [ngClass]="{'target_sentnece': index==currentSentenceIndex}">
+                                    {{example}}
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </div>
                 </ng-container>
             </div>
         </div>

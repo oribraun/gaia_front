@@ -499,7 +499,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopHeartBeat()
             this.heartBeatInterval = setInterval(() => {
                 this.heartBeatSequence()
-            }, 5 * 1000)
+            }, 50 * 1000)
         }
     }
 
@@ -1092,11 +1092,16 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         const data = this.currentData
+        let currentObjectiveIndexChanged = false
         const additional_instructions =data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const all_objectives_accomplished = data.all_objectives_accomplished;
+        if(this.currentObjectiveIndex != data.current_objective_index){
+            this.currentObjectiveIndex = data.current_objective_index
+            currentObjectiveIndexChanged=true
+        }
         const n_slide_objectives = data.n_slide_objectives;
         const presentation_done = data.presentation_done;
         const text = data.text;
@@ -1179,6 +1184,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             // NIR - TODO - add wait for audio que to finish
             this.changeSlideReply()
+        }
+
+        if(currentObjectiveIndexChanged) {
+            this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex)
         }
 
     }

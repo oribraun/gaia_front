@@ -9,14 +9,20 @@ export class SpeechRecognitionEnhancerService {
 
     // enable_on_slide_types:string[] = ["word_repeater"]
     enable_on_slide_types:string[] = ["word_repeater", "reading"]
+    enable_on_min_delay_slide_types:string[] = ["video", "writing","template"]
+    min_delay = 2000
     lines:string[] = []
     last_partial_timestamp:number = -1
     lastPartialTimeout: any = null;
+    lastFinalTimeout: any = null;
     last_final_timestamp:number = -1
     aggregate:string = ''
     last_aggregate_timestamp:number = -1
     slide_index:number = -1
     line_index:number = 0
+    asr_queue:string[] = []
+
+    
 
 
     constructor() {
@@ -54,10 +60,21 @@ export class SpeechRecognitionEnhancerService {
         return finalString
     }
 
+
     async validate(srObject:any, slideObj:any, callback:any, slide_index:number =-1){
+        const is_final = srObject.isFinal
+        this.last_final_timestamp = Date.now()
+        if(this.enable_on_min_delay_slide_types.includes(slideObj.slide_type)){
+            console.log('SR-Enhancer : validate was called')
+            if (is_final) {
+                this.asr_queue.push(srObject.text.replace(/\s\s+/g, ' ').trim())
+                srObject.isFinal = false
+                this.waitForSlienceToTransmit(srObject,callback)
+            }
+        }
+
         if(this.enable_on_slide_types.includes(slideObj.slide_type)){
             console.log('SR-Enhancer : validate was called')
-            const is_final = srObject.isFinal
             const alternativeTexts = srObject.alternativeTexts
             const asr_text_raw = srObject.text.replace(/\s\s+/g, ' ').trim();
             const asr_text_raw_lower = asr_text_raw.toLowerCase()
@@ -95,7 +112,7 @@ export class SpeechRecognitionEnhancerService {
 
                 console.log('SR-Enhancer : Final ASR Got | ASR RAW = ' + asr_text_raw_lower + ' | ASR = ' + asr_text_lower +' | Target = '+ target_text_lower)
 
-                this.last_final_timestamp = Date.now()
+                
                 // 0) Compare target to raw incoming
                 if(asr_text_raw_lower_no_punct.includes(target_text_lower_no_punct)) {
                     srObject.text = target_text
@@ -173,6 +190,23 @@ export class SpeechRecognitionEnhancerService {
         }
     }
 
+    waitForSlienceToTransmit(srObject: any, callback: any, delay:any = 2200) {
+        const final_timestamp = this.last_final_timestamp
+        let new_result = JSON.parse(JSON.stringify(srObject));
+        clearTimeout(this.lastFinalTimeout)
+        this.lastFinalTimeout = setTimeout(() => {
+            // run  test after 1 sec to validate we are not stuck at partial
+            const should_trigger_final = this.checkIfShouldTriggerFinal(final_timestamp)
+            if(should_trigger_final){
+                new_result.text = this.asr_queue.join(' ')
+                this.asr_queue = []
+                console.log('SR-Enhancer : Final should be triggered - ' + new_result )
+                new_result.isFinal = true
+                callback(new_result, false)
+            }
+        }, delay);
+    }
+
     resetLineIndex() {
         this.line_index = 0
     }
@@ -199,6 +233,14 @@ export class SpeechRecognitionEnhancerService {
             return new_text
         }
         return text
+    }
+
+    checkIfShouldTriggerFinal(final_timestamp:number){
+        if(this.last_final_timestamp>final_timestamp || this.last_partial_timestamp>final_timestamp){
+            // the status has changed in past 1 sec so we will not trigger anything
+            return false
+        }
+        return true
     }
 
     checkIfShouldTriggerPartial(partial_timestamp:number){
