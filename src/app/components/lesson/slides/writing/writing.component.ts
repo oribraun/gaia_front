@@ -18,10 +18,11 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
     checkEssayInProgress = false;
     essayType:string = 'opinion';
     essayText = ''
-    essay_title:string = 'The Impact of Social Media on Society'
+    essay_title:string = ''
     essayTopic:string = ''
     modalActive = false
     grades:string = ''
+    practice:string = ''
 
     constructor(
       protected override config: Config,
@@ -33,16 +34,16 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
 
   override ngOnInit(): void {
       super.ngOnInit();
-      this.essayTopic = this.slideData.topic
-      if(this.slideData.essay_type){
-        this.essayType = this.slideData.essay_type
+      console.log('daniel',this.currentSlide)
+      this.essayTopic = this.currentSlide.topic
+      this.essayText = this.currentSlide.writing
+      this.grades = this.currentSlide.grades
+      this.practice = this.currentSlide.practice
+      if(this.currentSlide.essay_type){
+        this.essayType = this.currentSlide.essay_type
       }
-      if(this.slideData.essay_title){
-        this.essay_title = this.slideData.essay_title
-      }
-      // if(this.slideData.essay_text){
-      //   this.essayText = this.slideData.essay_text
-      // }
+       
+       
       this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
         try {
           let resp_data = resp.data

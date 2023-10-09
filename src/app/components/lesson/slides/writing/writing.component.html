@@ -3,26 +3,23 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
                 <h1>{{currentSlide.slide_title}}</h1>
+                <h2>{{essayTopic}}</h2>
         </div>
     </div>
     <div class="background-image" *ngIf="currentSlide.background_image">
         <img [src]="currentSlide.background_image">
     </div>
 
-    <!--    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">-->
 
-    <!--    </div>-->
     <div class="image image-right" #youtube_player>
-<!--        <youtube-player videoId="-sPwShzNyGQ"></youtube-player>-->
-<angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="essayText"></angular-editor>
-
+        <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="essayText"></angular-editor>
     </div>
     <div class="buttons_wrapper">
-        <!-- <button class="btn btn-light" (click)="generateEssayTopic()">
-            Generate Topics
-        </button> -->
         <button class="btn btn-light" (click)="checkEssay()">
             Check Essay
+        </button>
+        <button class="btn btn-light" (click)="openModel()">
+            Show report
         </button>
     </div>
 </div>
@@ -31,7 +28,7 @@
   <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
       <div>
          <a  title="Close"  (click)="closeModel()"class="close">X</a>
-         <h2>{{essay_title}}</h2>
+         <h2>{{essayTopic}}</h2>
          <div [innerHTML]="essayText"></div>
          <br>
          <h2>Results</h2>
