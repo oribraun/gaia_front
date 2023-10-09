@@ -13,9 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class WritingComponent extends BaseSlideComponent implements OnInit{
 
-    generateEssayTopicInProgress = false;
-    selectEssayTopicInProgress = false;
-    checkEssayInProgress = false;
+    checkEssayInProgress:boolean = false;
     essayType:string = 'opinion';
     essayText = ''
     essay_title:string = ''
@@ -23,6 +21,8 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
     modalActive = false
     grades:string = ''
     practice:string = ''
+    writeEssayInProgress:boolean =false;
+    improveEssayInProgress:boolean =false;
 
     constructor(
       protected override config: Config,
@@ -54,12 +54,13 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             this.grades = resp_data.grades
             this.openModel()
           }
-          else if (resp_data.source == "generate_essay_topic_button_click") {
-            this.generateEssayTopicInProgress = false;
-               
+          else if (resp_data.source == "improve_essay_button_click") {
+            this.improveEssayInProgress = false;
+            this.essayText = resp_data.essay
           }
-          else if (resp_data.source == "select_essay_topic_button_click") {
-            this.selectEssayTopicInProgress = false;
+          else if (resp_data.source == "write_essay_button_click") {
+            this.writeEssayInProgress = false;
+            this.essayText = resp_data.essay
           }
 
         } catch (e){
@@ -77,34 +78,37 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
   closeModel(){
     this.modalActive = false
   }
-  generateEssayTopic() {
-      if (this.generateEssayTopicInProgress){
-          return;
-      }
-      const data = {
-          "source": "generate_essay_topic_button_click",
-          "essay_type": this.essayType,
-          "essay_topic": this.essayTopic,
-          'stopAudio': true
-      }
-      this.generateEssayTopicInProgress = true;
-      this.lessonService.Broadcast("slideEventRequest", data)
+   
+  improveEssay() {
+    if (this.improveEssayInProgress){
+      return;
+    }
+    const data = {
+        "source": "improve_essay_button_click",
+        "essay_type": this.essayType,
+        "essay_text": this.essayText,
+        "essay_topic":this.essayTopic,
+        'stopAudio': true
+    }
+    this.improveEssayInProgress = true;
+    this.lessonService.Broadcast("slideEventRequest", data)
   }
 
-  selectEssayTopic() {
-      if (this.selectEssayTopicInProgress){
-          return;
-      }
-      const data = {
-          "source": "select_essay_topic_button_click",
-          "essay_type": this.essayType,
-          "essay_topic": this.essayTopic,
-          'stopAudio': true
-      }
-      this.selectEssayTopicInProgress = true;
-      this.lessonService.Broadcast("slideEventRequest", data)
+  writeEssay() {
+    if (this.writeEssayInProgress){
+      return;
+    }
+    const data = {
+        "source": "write_essay_button_click",
+        "essay_type": this.essayType,
+        "essay_text": this.essayText,
+        "essay_topic":this.essayTopic,
+        'stopAudio': true
+    }
+    this.writeEssayInProgress = true;
+    this.lessonService.Broadcast("slideEventRequest", data)
   }
-  
+
   checkEssay() {
       if (this.checkEssayInProgress){
           return;

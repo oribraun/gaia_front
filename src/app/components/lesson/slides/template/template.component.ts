@@ -47,9 +47,8 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
   }
 
   handleObjectiveChanged(objective_index:number){
-    // if(objective_index == 1){
       const data = {
-          "source": "slide_intro_ended",
+          "source": (objective_index <= this.texts_valid.length) ? "run_next_objective" : "run_final_objective",
           "objective_index": objective_index,
           'stopAudio': true
       }
@@ -57,8 +56,5 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       if(objective_index-1<this.texts_valid.length){
         this.texts_valid[objective_index-1] = true
       }
-      
-    // }
-    // alert(objective_index)
   }
 }

@@ -15,10 +15,16 @@
         <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="essayText"></angular-editor>
     </div>
     <div class="buttons_wrapper">
+        <button class="btn btn-light" (click)="writeEssay()">
+            Write Essay
+        </button>
+        <button class="btn btn-light" (click)="improveEssay()">
+            Improve Essay
+        </button>
         <button class="btn btn-light" (click)="checkEssay()">
             Check Essay
         </button>
-        <button class="btn btn-light" (click)="openModel()">
+        <button *ngIf="grades" class="btn btn-light" (click)="openModel()">
             Show report
         </button>
     </div>
