@@ -70,7 +70,6 @@ export class LessonComponent implements OnInit, OnDestroy {
     enableNoReplayInterval = true;
     webcam_last_snapshot_url: string = ''
     webcam_last_snapshot_url_updated: boolean = false;
-    resetSpeechRecognitionTimeout: any = null;
     forceChangeSlideInfo: boolean = false;
     forcedChangeSlideInfo:any = {};
 
@@ -429,9 +428,20 @@ export class LessonComponent implements OnInit, OnDestroy {
             return
         }
         if(!this.doNotDisturb){
-            if(recognitionText.trim()){
-                this.sr_list.push(recognitionText)
-                this.last_sr_ts = Date.now()
+            let recognitionTextTrimmed = recognitionText.trim()
+            let prevRecognitionTextTrimmed = this.sr_list[this.sr_list.length-1]
+            let now = Date.now()
+            if(recognitionTextTrimmed){  
+                // In case two exactrly the same answers and less than 1.5 sec between them dont insert to list
+                if(prevRecognitionTextTrimmed == recognitionTextTrimmed){
+                    if ((now - this.last_sr_ts)<1500){
+                        console.log('updateSrList: Abort inserting ', recognitionTextTrimmed)
+                        return
+                    }
+                }
+                // Insert to list
+                this.sr_list.push(recognitionTextTrimmed)
+                this.last_sr_ts = now
                 // add user to chat
                 this.broadCastMessage('user', this.sr_list[this.sr_list.length-1], true)
                 this.getPresentationReplay(this.sr_list[this.sr_list.length-1]);
@@ -489,7 +499,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.stopHeartBeat()
             this.heartBeatInterval = setInterval(() => {
                 this.heartBeatSequence()
-            }, 5 * 1000)
+            }, 50 * 1000)
         }
     }
 
@@ -1082,11 +1092,16 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         const data = this.currentData
+        let currentObjectiveIndexChanged = false
         const additional_instructions =data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const all_objectives_accomplished = data.all_objectives_accomplished;
+        if(this.currentObjectiveIndex != data.current_objective_index){
+            this.currentObjectiveIndex = data.current_objective_index
+            currentObjectiveIndexChanged=true
+        }
         const n_slide_objectives = data.n_slide_objectives;
         const presentation_done = data.presentation_done;
         const text = data.text;
@@ -1117,16 +1132,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.startHeartBeat();
             }
         }
-        // let restartASR = true;
-        // console.log('speakNative init', this.currentSlide)
-        // if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-        //     restartASR = false;
-        // }
-        // console.log('speakNative restartASR', restartASR)
-        // if (this.currentSlide.index_in_bundle == -1 && this.currentSlide.should_read_native) {
-        //     console.log('speakNative after')
-        //     await this.speakNative({'text':this.currentSlide.native_language_text.he}, true)
-        // }
         let blob = null;
         if (reason === 'new_slide') {
             blob = await this.getSpeakNative();
@@ -1179,6 +1184,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (all_objectives_accomplished) {
             // NIR - TODO - add wait for audio que to finish
             this.changeSlideReply()
+        }
+
+        if(currentObjectiveIndexChanged) {
+            this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex)
         }
 
     }

@@ -37,7 +37,10 @@ import { TitleComponent } from './components/lesson/slides/title/title.component
 import { WordTranslatorComponent } from './components/lesson/slides/word-translator/word-translator.component';
 import { HelpComponent } from './components/lesson/panel-board/help/help.component';
 import { EmbedGameComponent } from './components/lesson/slides/embed-game/embed-game.component';
-
+import { TemplateComponent } from './components/lesson/slides/template/template.component';
+import { WritingComponent } from './components/lesson/slides/writing/writing.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { RandomSelectorComponent } from './components/lesson/slides/random-selector/random-selector.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -69,6 +72,9 @@ import { EmbedGameComponent } from './components/lesson/slides/embed-game/embed-
         WordTranslatorComponent,
         HelpComponent,
         EmbedGameComponent,
+        TemplateComponent,
+        WritingComponent,
+        RandomSelectorComponent,
     ],
     imports: [
         BrowserModule,
@@ -76,6 +82,7 @@ import { EmbedGameComponent } from './components/lesson/slides/embed-game/embed-
         HttpClientModule,
         AppRoutingModule,
         YouTubePlayerModule,
+        AngularEditorModule,
         NgxEchartsModule.forRoot({
             /**
              * This will import all modules from echarts.

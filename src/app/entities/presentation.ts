@@ -117,15 +117,21 @@ export class PresentationSlide {
     answer_options!: string[]
     correct_answer!: string
     text!: string
+    writing!: string
+    texts!: string[]
+    examples!: string[]
     word!: string
     should_read_native:boolean = false
     word_list!: string[]
     words!: string[]
+    options!: string[]
     bundle_id:number = -1
     bundle:any[] = []
     bundle_len:number=0
     index_in_bundle:number=-1
-    
+    topic!:string
+    essay_type!:string
+    grades!:string
     iframe_path!:string
     game_duration:number=4
     blanks !:string[]
@@ -135,6 +141,8 @@ export class PresentationSlide {
     video_details!: VideoDetails
     prev:any=null
     flat_index:number=0
+    practice!:string
+
 
     constructor(obj?: any) {
         if (obj) {
