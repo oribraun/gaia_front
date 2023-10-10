@@ -19,53 +19,11 @@
                     <i class="bi bi-info"></i> <span>About</span>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="user.id && user.company_name && user.company_admin">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Company Admin" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/company-admin']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
-                    <i class="bi bi-person-fill-gear"></i> <span>Company Admin</span>
-                </a>
-            </li>
-            <li class="nav-item" *ngIf="user.id">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Plugin Dashboard" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/plugin-dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-clipboard2-pulse"></i> <span>Plugin Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item" *ngIf="user.id">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Playground" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/playground']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-dpad"></i> <span>Playground</span>
-                </a>
-            </li>
-            <li class="nav-item" *ngIf="user.id">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Compare Vendors" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/compare-vendors']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-bezier2"></i> <span>Compare Vendors</span>
-                </a>
-            </li>
-            <li class="nav-item" *ngIf="user.id  && user.company_name.toLowerCase() === 'gaialabs'">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Data Room" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/data-room']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-inboxes"></i> <span>Data Room</span>
-                </a>
-            </li>
-            <li class="nav-item" *ngIf="user.id  && user.company_name.toLowerCase() === 'gaialabs'">
+            <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-award-fill"></i> <span>Lesson</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link border-bottom rounded-0"
-                   data-bs-toggle="tooltip" data-bs-placement="right" title="Privacy Policy" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/privacy-policy']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                    <i class="bi bi-shield-lock-fill"></i> <span>Privacy Policy</span>
                 </a>
             </li>
             <!--            <ng-container *ngIf="this.user">-->

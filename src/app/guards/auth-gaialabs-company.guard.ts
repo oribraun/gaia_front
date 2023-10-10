@@ -18,7 +18,7 @@ export class AuthGaialabsCompanyGuard  {
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
         const user = this.config.user;
-        if (user && user.company_name && user.company_name.toLowerCase() === 'gaialabs') {
+        if (user && user.gaia_admin) {
             return true;
         } else {
             const queryParams: any = {}
