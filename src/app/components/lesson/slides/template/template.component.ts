@@ -52,6 +52,7 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
           "objective_index": objective_index,
           'stopAudio': true
       }
+    //   alert('objective_index: ' + String(objective_index) + ' total text len = ' + String(this.texts_valid.length))
       this.lessonService.Broadcast("slideEventRequest", data)
       if(objective_index-1<this.texts_valid.length){
         this.texts_valid[objective_index-1] = true

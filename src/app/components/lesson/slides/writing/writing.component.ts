@@ -14,6 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class WritingComponent extends BaseSlideComponent implements OnInit{
 
     checkEssayInProgress:boolean = false;
+    endEssayInProgress:boolean = false;
     essayType:string = 'opinion';
     essayText = ''
     essay_title:string = ''
@@ -62,6 +63,11 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             this.writeEssayInProgress = false;
             this.essayText = resp_data.essay
           }
+          else if (resp_data.source == "continue_to_next_slide_click") {
+            this.endEssayInProgress = false;
+          }
+
+          
 
         } catch (e){
           console.error(e)
@@ -122,6 +128,18 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
       }
       this.checkEssayInProgress = true;
       this.lessonService.Broadcast("slideEventRequest", data)
+  }
+
+  endSlide() {
+    if (this.endEssayInProgress){
+      return;
+    }
+    const data = {
+        "source": "continue_to_next_slide_click",
+        'stopAudio': true
+    }
+    this.endEssayInProgress = true;
+    this.lessonService.Broadcast("slideEventRequest", data)
   }
 
 }
