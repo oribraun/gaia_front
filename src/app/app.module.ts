@@ -41,6 +41,7 @@ import { TemplateComponent } from './components/lesson/slides/template/template.
 import { WritingComponent } from './components/lesson/slides/writing/writing.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { RandomSelectorComponent } from './components/lesson/slides/random-selector/random-selector.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -75,6 +76,7 @@ import { RandomSelectorComponent } from './components/lesson/slides/random-selec
         TemplateComponent,
         WritingComponent,
         RandomSelectorComponent,
+        DashboardComponent,
     ],
     imports: [
         BrowserModule,

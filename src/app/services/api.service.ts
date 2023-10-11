@@ -12,6 +12,7 @@ export class ApiService {
     version = 'v1/';
     baseApiOld = 'api/';
     baseApi = 'api/' + this.version;
+    baseApiPublic = this.baseApi + 'pb/';
     baseApiAuth = this.baseApi + 'auth/';
     baseApiUser = this.baseApi + 'us/';
     baseApiCompany = this.baseApi + 'co/';
@@ -76,6 +77,12 @@ export class ApiService {
         if (this.config.server_host) {
             this.serverBase = this.config.server_host;
         }
+    }
+
+    getCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiPublic + 'get-courses', obj,
+            this.httpOptions
+        )
     }
 
     login(email: string, password: string) {
@@ -274,7 +281,7 @@ export class ApiService {
         return this.http.post(this.serverBase + this.baseApiUser + 'text-to-speech', obj,
             this.httpOptions
         )
-    }    
+    }
     audioToText(obj: any) {
         const httpOptions = {...this.httpOptions}
         httpOptions['Content-Type'] = 'application/octet-stream';
@@ -291,6 +298,22 @@ export class ApiService {
         httpOptions['reportProgress'] = true;
         return this.http.post(this.serverBase + this.baseApiUser + 'stream_audio', obj,
             httpOptions,
+        )
+    }
+
+    getPurchasedCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-courses', obj,
+            this.httpOptions
+        )
+    }
+    getPurchasedLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-lessons', obj,
+            this.httpOptions
+        )
+    }
+    getUserCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-user-courses', obj,
+            this.httpOptions
         )
     }
 

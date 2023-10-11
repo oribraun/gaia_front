@@ -1,0 +1,45 @@
+<div class="all">
+    <div class="purchased-courses" *ngIf="!gettingUserCourses">
+        <h2 class="text-center">Purchased Courses</h2>
+        <div class="purchased-courses-items" *ngIf="purchasedCourses.length">
+            <div class="course" *ngFor="let purchasedCourse of purchasedCourses;"  (click)="onPurchasedCourseClick(purchasedCourse)">
+                <div class="course-background">
+                    <img [src]="purchasedCourse.background_image ? purchasedCourse.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                </div>
+                <div class="course-title">
+                    {{purchasedCourse.title}}
+                </div>
+            </div>
+        </div>
+        <div class="purchased-courses-items" *ngIf="!purchasedCourses.length">
+            <div class="empty-list">
+                <span>No Courses Purchased</span>
+            </div>
+        </div>
+    </div>
+    <div class="suggested-courses" *ngIf="!gettingUserCourses">
+        <h2 class="text-center">Suggested Courses</h2>
+        <div class="suggested-courses-items" *ngIf="courses.length">
+            <div class="course" *ngFor="let course of courses;" (click)="onCourseClick(course)">
+                <div class="course-background">
+                    <img [src]="course.background_image ? course.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                </div>
+                <div class="course-title">
+                    {{course.title}}
+                </div>
+            </div>
+        </div>
+        <div class="suggested-courses-items" *ngIf="!courses.length">
+            <div class="empty-list">
+                <span>No Courses Suggested</span>
+            </div>
+        </div>
+    </div>
+    <div class="generic-loader-wrapper" *ngIf="gettingUserCourses">
+            <div class="loader">
+                <div class="spinner-border">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        </div>
+</div>

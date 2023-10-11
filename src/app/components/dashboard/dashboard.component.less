@@ -1,0 +1,119 @@
+.all {
+    .purchased-courses {
+        position: relative;
+        margin-bottom: 10px;
+
+        .purchased-courses-items {
+            white-space: nowrap;
+            width: 100%;
+            overflow-y: hidden;
+            box-shadow: 2px 8px 4px -6px #ccc;
+            @width: 200px;
+
+            .course {
+                position: relative;
+                width: @width;
+                height: @width;
+                margin: 10px;
+                border-radius: 5px;
+                overflow: hidden;
+                display: inline-block;
+                cursor: pointer;
+
+                .course-background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .course-title {
+                    position: absolute;
+                    text-align: center;
+                    background: rgba(255, 255, 255, .9);
+                    width: 100%;
+                    bottom: 0;
+                }
+            }
+
+            .empty-list {
+                width: 100%;
+                height: @width;
+                text-align: center;
+
+                span {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
+
+    .suggested-courses {
+        position: relative;
+        margin-bottom: 10px;
+
+        .suggested-courses-items {
+            white-space: nowrap;
+            width: 100%;
+            overflow-y: hidden;
+            box-shadow: 2px 8px 4px -6px #ccc;
+            @width: 200px;
+
+            .course {
+                position: relative;
+                width: @width;
+                height: @width;
+                margin: 10px;
+                border-radius: 5px;
+                overflow: hidden;
+                display: inline-block;
+                cursor: pointer;
+
+                .course-background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .course-title {
+                    position: absolute;
+                    text-align: center;
+                    background: rgba(255, 255, 255, .9);
+                    width: 100%;
+                    bottom: 0;
+                }
+            }
+
+            .empty-list {
+                width: 100%;
+                height: @width;
+                text-align: center;
+
+                span {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
+}

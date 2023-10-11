@@ -21,6 +21,13 @@
             </li>
             <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
                 <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-view-list"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
+                <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
                    [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                     <i class="bi bi-award-fill"></i> <span>Lesson</span>

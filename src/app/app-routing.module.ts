@@ -5,6 +5,8 @@ import {LoginComponent} from "./components/login/login.component";
 import {AboutComponent} from "./components/about/about.component";
 import {AuthGaialabsCompanyGuard} from "./guards/auth-gaialabs-company.guard";
 import {LessonComponent} from "./components/lesson/lesson.component";
+import {AuthGuard} from "./guards/auth.guard";
+import {DashboardComponent} from "./components/dashboard/dashboard.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -12,6 +14,7 @@ const routes: Routes = [
     { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
     { path: 'about', component: AboutComponent, pathMatch : 'full' },
     { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
+    { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
     { path: '**', redirectTo: '' }
