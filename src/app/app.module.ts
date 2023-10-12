@@ -43,6 +43,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { RandomSelectorComponent } from './components/lesson/slides/random-selector/random-selector.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
+import { BuyComponent } from './components/buy/buy.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -79,6 +80,7 @@ import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
         RandomSelectorComponent,
         DashboardComponent,
         CapitalizePipe,
+        BuyComponent,
     ],
     imports: [
         BrowserModule,

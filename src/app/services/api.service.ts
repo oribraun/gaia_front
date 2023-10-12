@@ -84,6 +84,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getCourse(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiPublic + 'get-course', obj,
+            this.httpOptions
+        )
+    }
     getCourseLessons(obj: any) {
         return this.http.post(this.serverBase + this.baseApiPublic + 'get-course-lessons', obj,
             this.httpOptions
