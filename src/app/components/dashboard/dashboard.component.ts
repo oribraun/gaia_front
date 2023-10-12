@@ -17,6 +17,8 @@ export class DashboardComponent implements OnInit {
     courses: any = [];
     purchasedCourses: any = [];
 
+    coursesType: string = '';
+
     constructor(
         private config: Config,
         private apiService: ApiService
@@ -25,7 +27,7 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
         this.getUser();
-        this.getUserCourses();
+        this.getUserCourses('in_progress');
     }
 
     getUser() {
@@ -35,15 +37,18 @@ export class DashboardComponent implements OnInit {
         })
     }
 
-    getUserCourses() {
+    getUserCourses(coursesType: string) {
+        this.coursesType = coursesType;
         this.gettingUserCourses = true;
-        this.apiService.getUserCourses({}).subscribe({
+        const obj: any = {}
+        obj[coursesType] = true;
+        this.apiService.getUserCourses(obj).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('getPresentation err', response)
                 } else {
                     this.courses = response.courses;
-                    this.purchasedCourses = response.purchased_courses;
+                    // this.purchasedCourses = response.purchased_courses;
                 }
                 this.gettingUserCourses = false;
             },

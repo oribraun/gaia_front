@@ -1,24 +1,44 @@
 <div class="all">
-    <div class="purchased-courses" *ngIf="!gettingUserCourses">
-        <h2 class="text-center">Purchased Courses</h2>
-        <div class="purchased-courses-items" *ngIf="purchasedCourses.length">
-            <div class="course" *ngFor="let purchasedCourse of purchasedCourses;"  (click)="onPurchasedCourseClick(purchasedCourse)">
-                <div class="course-background">
-                    <img [src]="purchasedCourse.background_image ? purchasedCourse.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
-                </div>
-                <div class="course-title">
-                    {{purchasedCourse.title}}
-                </div>
-            </div>
-        </div>
-        <div class="purchased-courses-items" *ngIf="!purchasedCourses.length">
-            <div class="empty-list">
-                <span>No Courses Purchased</span>
-            </div>
-        </div>
-    </div>
+    <ul class="nav nav-tabs justify-content-center nav-justified1">
+        <li class="nav-item">
+            <a class="nav-link active pointer" aria-current="in_progress"
+               (click)="getUserCourses('in_progress')"
+               [ngClass]="{'active': coursesType == 'in_progress'}">In Progress</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link pointer" aria-current="my_courses"
+               (click)="getUserCourses('my_courses')"
+            [ngClass]="{'active': coursesType == 'my_courses'}">My Courses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link pointer" aria-current="suggested_courses"
+               (click)="getUserCourses('suggested_courses')"
+            [ngClass]="{'active': coursesType == 'suggested_courses'}">Suggested Courses</a>
+        </li>
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+<!--        </li>-->
+    </ul>
+<!--    <div class="purchased-courses" *ngIf="!gettingUserCourses">-->
+<!--        <h2 class="text-center">Purchased Courses</h2>-->
+<!--        <div class="purchased-courses-items" *ngIf="purchasedCourses.length">-->
+<!--            <div class="course" *ngFor="let purchasedCourse of purchasedCourses;"  (click)="onPurchasedCourseClick(purchasedCourse)">-->
+<!--                <div class="course-background">-->
+<!--                    <img [src]="purchasedCourse.background_image ? purchasedCourse.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">-->
+<!--                </div>-->
+<!--                <div class="course-title">-->
+<!--                    {{purchasedCourse.title}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="purchased-courses-items" *ngIf="!purchasedCourses.length">-->
+<!--            <div class="empty-list">-->
+<!--                <span>No Courses Purchased</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="suggested-courses" *ngIf="!gettingUserCourses">
-        <h2 class="text-center">Suggested Courses</h2>
+        <h2 class="text-center">{{coursesType | capitalize: 'word': true}}</h2>
         <div class="suggested-courses-items" *ngIf="courses.length">
             <div class="course" *ngFor="let course of courses;" (click)="onCourseClick(course)">
                 <div class="course-background">
@@ -31,15 +51,15 @@
         </div>
         <div class="suggested-courses-items" *ngIf="!courses.length">
             <div class="empty-list">
-                <span>No Courses Suggested</span>
+                <span>No Courses</span>
             </div>
         </div>
     </div>
     <div class="generic-loader-wrapper" *ngIf="gettingUserCourses">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
-                </div>
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
             </div>
         </div>
+    </div>
 </div>
