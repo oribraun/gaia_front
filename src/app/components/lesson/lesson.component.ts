@@ -22,6 +22,7 @@ import { BlobItem } from 'src/app/entities/blob_item';
 import {SocketRecorderService} from "../../services/socket-recorder/socket-recorder.service";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
+import {ActivatedRoute, ParamMap} from "@angular/router";
 
 declare var $:any;
 
@@ -40,6 +41,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     mock = environment.is_mock;
 
     presentation: Presentation = new Presentation();
+    current_lessons_id!: number;
     gettingPresentation = false;
     currentSectionIndex: number = -1;
     currentSlideIndex: number = -1;
@@ -114,10 +116,17 @@ export class LessonComponent implements OnInit, OnDestroy {
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
         private lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
-        private socketRecorderService: SocketRecorderService
+        private socketRecorderService: SocketRecorderService,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
+        this.route.paramMap.subscribe((params: ParamMap) => {
+            const lesson_id = params.get('lesson_id')
+            if (lesson_id) {
+                this.current_lessons_id = parseInt(lesson_id);
+            }
+        })
         this.getUser();
         if (this.socketRecorderEnabled) {
             this.startRecordingScreen();
@@ -192,7 +201,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.resetAllEventProgress();
             this.lessonService.Broadcast('resetChatMessages', {});
             this.lessonService.Broadcast('resumeLesson', {});
-            this.getPresentation();
+            if (!this.current_lessons_id) {
+                this.getPresentation();
+            } else {
+                this.getPurchasedLesson();
+            }
             this.startHeartBeat()
             if (!this.initApplicationDone) {
                 // adding listeners only once
@@ -211,7 +224,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.lessonService.resetHelpMode()
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
-            this.getPresentation();
+            if (!this.current_lessons_id) {
+                this.getPresentation();
+            } else {
+                this.getPurchasedLesson();
+            }
             // this.setRandomCircleAnimation();
         }
     }
@@ -431,7 +448,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             let recognitionTextTrimmed = recognitionText.trim()
             let prevRecognitionTextTrimmed = this.sr_list[this.sr_list.length-1]
             let now = Date.now()
-            if(recognitionTextTrimmed){  
+            if(recognitionTextTrimmed){
                 // In case two exactrly the same answers and less than 1.5 sec between them dont insert to list
                 if(prevRecognitionTextTrimmed == recognitionTextTrimmed){
                     if ((now - this.last_sr_ts)<1500){
@@ -545,6 +562,36 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
     }
 
+    async getPurchasedLesson() {
+        this.gettingPresentation = true;
+        this.apiSubscriptions.get_presentation = this.apiService.getPurchasedLesson({
+            purchased_lesson_id: this.current_lessons_id,
+        }).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('getPresentation err', response)
+                } else {
+                    this.presentation = new Presentation(response.lesson.presentation_data.presentation);
+                    console.log('this.presentation ', this.presentation )
+                    this.currentSectionIndex = this.presentation.current_section_index;
+                    this.currentSlideIndex = this.presentation.current_slide_index;
+                    this.currentObjectiveIndex = this.presentation.current_objective_index;
+                    this.estimatedDuration = this.presentation.estimated_duration;
+                    this.setCurrentSection();
+                    if (!this.mock) {
+                        // this.restartCurrentSlide()
+                        this.getNewSlideReply();
+                    }
+                }
+                this.gettingPresentation = false;
+            },
+            error: (error) => {
+                console.log('getPresentation error', error)
+                this.gettingPresentation = false;
+            },
+        })
+    }
+
     setCurrentSection(index: number = -1) {
         if (index > -1) {
             this.currentSection = new PresentationSection(this.presentation.sections[index]);
@@ -585,6 +632,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'event',
+                purchased_lesson_id: this.current_lessons_id,
                 help_mode: this.lessonService.helpMode,
                 data: data,
                 array_buffer: this.enableArrayBuffer,
@@ -631,6 +679,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
             app_data: {
                 type:'student_reply',
+                purchased_lesson_id: this.current_lessons_id,
                 student_text: message,
                 help_mode: this.lessonService.helpMode,
                 array_buffer: this.enableArrayBuffer,
@@ -667,6 +716,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.no_replay = this.apiService.getHeartBeatReply({
             app_data: {
                 type: 'heartbeat',
+                purchased_lesson_id: this.current_lessons_id,
                 last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
                 last_sr_ts:this.last_sr_ts,
                 last_speak_ts:this.last_speak_ts,
@@ -704,6 +754,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.change_slide = this.apiService.changeSlideReply({
             app_data: {
                 type: 'change_slide',
+                purchased_lesson_id: this.current_lessons_id,
                 current_slide_info: this.forceChangeSlideInfo ? this.forcedChangeSlideInfo : {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex}
             }
         }).subscribe({
@@ -757,6 +808,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
             app_data: {
                 type: 'new_slide',
+                purchased_lesson_id: this.current_lessons_id,
                 last_sr: this.sr_list.length ? this.sr_list[this.sr_list.length - 1] : '',
                 last_sr_ts:this.last_sr_ts,
                 last_speak_ts:this.last_speak_ts,
@@ -799,7 +851,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.presentationResetIsInProgress = true;
         this.apiSubscriptions.reset = this.apiService.resetPresentation({
             app_data: {
-                type: reason
+                type: reason,
+                purchased_lesson_id: this.current_lessons_id,
             }
         }).subscribe({
             next: (response: any) => {
@@ -868,6 +921,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.apiSubscriptions.replay = this.apiService.audioToText({
             app_data: {
                 audio_chunks: obj['audio_chunks'],
+                purchased_lesson_id: this.current_lessons_id,
             }
         }).subscribe({
             next: (response: any) => {

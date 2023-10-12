@@ -1,46 +1,30 @@
 <div class="all">
     <ul class="nav nav-tabs justify-content-center nav-justified1">
         <li class="nav-item">
-            <a class="nav-link active pointer" aria-current="in_progress"
+            <a class="nav-link active pointer"
                (click)="getUserCourses('in_progress')"
                [ngClass]="{'active': coursesType == 'in_progress'}">In Progress</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link pointer" aria-current="my_courses"
+            <a class="nav-link pointer"
                (click)="getUserCourses('my_courses')"
-            [ngClass]="{'active': coursesType == 'my_courses'}">My Courses</a>
+               [ngClass]="{'active': coursesType == 'my_courses'}">My Courses</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link pointer" aria-current="suggested_courses"
+            <a class="nav-link pointer"
                (click)="getUserCourses('suggested_courses')"
-            [ngClass]="{'active': coursesType == 'suggested_courses'}">Suggested Courses</a>
+               [ngClass]="{'active': coursesType == 'suggested_courses'}">Suggested Courses</a>
         </li>
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-<!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+        <!--        </li>-->
     </ul>
-<!--    <div class="purchased-courses" *ngIf="!gettingUserCourses">-->
-<!--        <h2 class="text-center">Purchased Courses</h2>-->
-<!--        <div class="purchased-courses-items" *ngIf="purchasedCourses.length">-->
-<!--            <div class="course" *ngFor="let purchasedCourse of purchasedCourses;"  (click)="onPurchasedCourseClick(purchasedCourse)">-->
-<!--                <div class="course-background">-->
-<!--                    <img [src]="purchasedCourse.background_image ? purchasedCourse.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">-->
-<!--                </div>-->
-<!--                <div class="course-title">-->
-<!--                    {{purchasedCourse.title}}-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="purchased-courses-items" *ngIf="!purchasedCourses.length">-->
-<!--            <div class="empty-list">-->
-<!--                <span>No Courses Purchased</span>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="suggested-courses" *ngIf="!gettingUserCourses">
+    <div class="courses" *ngIf="!gettingUserCourses">
         <h2 class="text-center">{{coursesType | capitalize: 'word': true}}</h2>
-        <div class="suggested-courses-items" *ngIf="courses.length">
-            <div class="course" *ngFor="let course of courses;" (click)="onCourseClick(course)">
+        <div class="courses-items" *ngIf="courses.length">
+            <div class="course" *ngFor="let course of courses;"
+                 [ngClass]="{'course-active': course.id == currentCourseClicked.id}"
+                 (click)="onCourseClick(course)">
                 <div class="course-background">
                     <img [src]="course.background_image ? course.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
                 </div>
@@ -54,6 +38,40 @@
                 <span>No Courses</span>
             </div>
         </div>
+    </div>
+    <div class="lessons" *ngIf="!gettingCourseLessons && currentCourseClicked.id">
+        <h2 class="text-center">Lessons</h2>
+        <div class="lessons-items" *ngIf="lessons.length">
+            <div class="lesson" *ngFor="let lesson of lessons;"
+                 [ngClass]="{'lesson-active': lesson.id == currentLessonClicked.id}"
+                 (click)="onLessonsClick(lesson)">
+                <div class="lesson-background">
+                    <img [src]="lesson.background_image ? lesson.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                </div>
+                <div class="lesson-title">
+                    {{lesson.title}}
+                </div>
+            </div>
+        </div>
+        <div class="lessons-items" *ngIf="!lessons.length">
+            <div class="empty-list">
+                <span>No Lessons</span>
+            </div>
+        </div>
+        <div class="generic-loader-wrapper" *ngIf="gettingCourseLessons">
+            <div class="loader">
+                <div class="spinner-border">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttons text-center" *ngIf="currentLessonClicked.id">
+        <button class="btn btn-primary" *ngIf="coursesType == 'my_courses'" (click)="onStart()">Start</button>
+        <button class="btn btn-primary" *ngIf="coursesType == 'in_progress'"  (click)="onContinue()">Continue</button>
+    </div>
+    <div class="buttons text-center" *ngIf="currentCourseClicked.id && coursesType == 'suggested_courses'">
+        <button class="btn btn-primary" *ngIf="coursesType == 'suggested_courses'"  (click)="onBuy()">Buy</button>
     </div>
     <div class="generic-loader-wrapper" *ngIf="gettingUserCourses">
         <div class="loader">

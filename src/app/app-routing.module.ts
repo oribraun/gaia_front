@@ -14,6 +14,7 @@ const routes: Routes = [
     { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
     { path: 'about', component: AboutComponent, pathMatch : 'full' },
     { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
+    { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },

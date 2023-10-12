@@ -84,6 +84,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getCourseLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiPublic + 'get-course-lessons', obj,
+            this.httpOptions
+        )
+    }
 
     login(email: string, password: string) {
         return this.http.post(this.serverBase + this.baseApiAuth + 'login', {
@@ -308,6 +313,11 @@ export class ApiService {
     }
     getPurchasedLessons(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-lessons', obj,
+            this.httpOptions
+        )
+    }
+    getPurchasedLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-lesson', obj,
             this.httpOptions
         )
     }
