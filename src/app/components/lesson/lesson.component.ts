@@ -201,11 +201,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.resetAllEventProgress();
             this.lessonService.Broadcast('resetChatMessages', {});
             this.lessonService.Broadcast('resumeLesson', {});
-            if (!this.current_lessons_id) {
-                this.getPresentation();
-            } else {
-                this.getPurchasedLesson();
-            }
+            this.getPresentation();
             this.startHeartBeat()
             if (!this.initApplicationDone) {
                 // adding listeners only once
@@ -224,11 +220,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.lessonService.resetHelpMode()
             this.listenForPauseEvnet()
             // this.setupPresentationMock();
-            if (!this.current_lessons_id) {
-                this.getPresentation();
-            } else {
-                this.getPurchasedLesson();
-            }
+            this.getPresentation();
             // this.setRandomCircleAnimation();
         }
     }
@@ -536,6 +528,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.gettingPresentation = true;
         this.apiSubscriptions.get_presentation = this.apiService.getPresentation({
             "type": "messi",
+            purchased_lesson_id: this.current_lessons_id,
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
