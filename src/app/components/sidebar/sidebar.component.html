@@ -29,7 +29,7 @@
             <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
                 <a class="nav-link border-bottom rounded-0"
                    data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
-                   [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                   [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
                     <i class="bi bi-award-fill"></i> <span>Lesson</span>
                 </a>
             </li>
