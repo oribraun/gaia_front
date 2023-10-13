@@ -58,13 +58,6 @@
                 <span>No Lessons</span>
             </div>
         </div>
-        <div class="generic-loader-wrapper" *ngIf="gettingCourseLessons">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="buttons text-center" *ngIf="currentLessonClicked.id">
         <button class="btn btn-primary" *ngIf="coursesType == 'my_courses'" (click)="onStart()">Start</button>
@@ -73,7 +66,7 @@
     <div class="buttons text-center" *ngIf="currentCourseClicked.id && coursesType == 'suggested_courses'">
         <button class="btn btn-primary" *ngIf="coursesType == 'suggested_courses'"  (click)="onBuy()">Buy</button>
     </div>
-    <div class="generic-loader-wrapper" *ngIf="gettingUserCourses">
+    <div class="generic-loader-wrapper" *ngIf="gettingUserCourses || gettingCourseLessons">
         <div class="loader">
             <div class="spinner-border">
                 <span class="sr-only"></span>
