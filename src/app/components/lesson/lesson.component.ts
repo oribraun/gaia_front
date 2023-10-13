@@ -22,7 +22,7 @@ import { BlobItem } from 'src/app/entities/blob_item';
 import {SocketRecorderService} from "../../services/socket-recorder/socket-recorder.service";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 
 declare var $:any;
 
@@ -117,7 +117,8 @@ export class LessonComponent implements OnInit, OnDestroy {
         private lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
         private socketRecorderService: SocketRecorderService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -532,19 +533,22 @@ export class LessonComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
+                    if (response.errMessage.indexOf('PurchasedLesson') > -1) {
+                        this.router.navigate(['dashboard'], { queryParams: { type: 'my_courses' }})
+                    }
                     console.log('getPresentation err', response)
                 } else {
-                    this.presentation = new Presentation(response.presentation);
-                    console.log('this.presentation ', this.presentation )
-                    this.currentSectionIndex = this.presentation.current_section_index;
-                    this.currentSlideIndex = this.presentation.current_slide_index;
-                    this.currentObjectiveIndex = this.presentation.current_objective_index;
-                    this.estimatedDuration = this.presentation.estimated_duration;
-                    this.setCurrentSection();
-                    if (!this.mock) {
-                        // this.restartCurrentSlide()
-                        this.getNewSlideReply();
-                    }
+                        this.presentation = new Presentation(response.presentation);
+                        console.log('this.presentation ', this.presentation)
+                        this.currentSectionIndex = this.presentation.current_section_index;
+                        this.currentSlideIndex = this.presentation.current_slide_index;
+                        this.currentObjectiveIndex = this.presentation.current_objective_index;
+                        this.estimatedDuration = this.presentation.estimated_duration;
+                        this.setCurrentSection();
+                        if (!this.mock) {
+                            // this.restartCurrentSlide()
+                            this.getNewSlideReply();
+                        }
                 }
                 this.gettingPresentation = false;
             },
