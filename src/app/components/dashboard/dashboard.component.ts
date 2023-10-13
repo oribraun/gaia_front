@@ -3,7 +3,7 @@ import {ApiService} from "../../services/api.service";
 import {Config} from "../../config";
 import {User} from "../../entities/user";
 import {Presentation} from "../../entities/presentation";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
     // purchasedCourses: any = [];
     lessons: any = [];
 
-    coursesType: string = '';
+    coursesType: string = 'in_progress';
 
     currentCourseClicked: any = {};
     currentLessonClicked: any = {};
@@ -30,14 +30,22 @@ export class DashboardComponent implements OnInit {
     constructor(
         private config: Config,
         private apiService: ApiService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.imageSrc = this.config.staticImagePath;
     }
 
     ngOnInit(): void {
         this.getUser();
-        this.getUserCourses('in_progress');
+        this.route.queryParams.subscribe((params) => {
+            const available = ['in_progress', 'my_courses', 'suggested_courses'];
+            const type = params['type']
+            if (type && available.indexOf(type) > -1) {
+                this.coursesType = type
+            }
+        })
+        this.getUserCourses(this.coursesType);
     }
 
     getUser() {
