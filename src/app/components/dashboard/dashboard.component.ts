@@ -25,11 +25,14 @@ export class DashboardComponent implements OnInit {
     currentCourseClicked: any = {};
     currentLessonClicked: any = {};
 
+    imageSrc: string = ''
+
     constructor(
         private config: Config,
         private apiService: ApiService,
         private router: Router
     ) {
+        this.imageSrc = this.config.staticImagePath;
     }
 
     ngOnInit(): void {

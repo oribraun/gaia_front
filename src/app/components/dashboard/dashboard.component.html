@@ -26,7 +26,7 @@
                  [ngClass]="{'course-active': course.id == currentCourseClicked.id}"
                  (click)="onCourseClick(course)">
                 <div class="course-background">
-                    <img [src]="course.background_image ? course.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                    <img [src]="course.background_image ? course.background_image : imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
                 </div>
                 <div class="course-title">
                     {{course.title}}
@@ -46,7 +46,7 @@
                  [ngClass]="{'lesson-active': lesson.id == currentLessonClicked.id}"
                  (click)="onLessonsClick(lesson)">
                 <div class="lesson-background">
-                    <img [src]="lesson.background_image ? lesson.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                    <img [src]="lesson.background_image ? lesson.background_image : imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
                 </div>
                 <div class="lesson-title">
                     {{lesson.title}}
