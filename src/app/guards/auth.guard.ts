@@ -26,7 +26,7 @@ export class AuthGuard  {
         //     }
         // })
         // return true
-        if (this.config.user) {
+        if (this.config.user && this.config.user.id) {
             return true;
         } else {
             this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }})
