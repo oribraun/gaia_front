@@ -220,6 +220,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             }
             this.lessonService.resetHelpMode()
             this.listenForPauseEvnet()
+            this.listenForSlideEventRequests()
             // this.setupPresentationMock();
             this.getPresentation();
             // this.setRandomCircleAnimation();
@@ -380,6 +381,9 @@ export class LessonComponent implements OnInit, OnDestroy {
         })
         this.lessonService.ListenFor("stopAudio").subscribe((obj: any) => {
             this.stopAudio()
+        })
+        this.lessonService.ListenFor("slideDestroy").subscribe((obj: any) => {
+            console.log('slideDestroy Event')
         })
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
             this.getPresentationEventReplay(obj)

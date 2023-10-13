@@ -27,9 +27,9 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
     constructor(
         protected override config: Config,
         private apiService: ApiService,
-        private lessonService: LessonService,
+        protected override lessonService: LessonService
     ) {
-        super(config)
+        super(config, lessonService)
     }
     override ngOnInit(): void {
         super.ngOnInit();
@@ -80,7 +80,8 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
         this.lessonService.Broadcast("slideEventRequest", data)
     }
 
-    ngOnDestroy(): void {
+    override ngOnDestroy(): void {
+        super.ngOnDestroy();
         // this.lessonService.ClearEvent("slideEventReply")
     }
 

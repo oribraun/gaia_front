@@ -20,9 +20,9 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
 
     constructor(
       protected override config: Config,
-      private lessonService: LessonService,
+      protected override lessonService: LessonService
   ) {
-      super(config)
+      super(config, lessonService)
   }
 
   override ngOnInit(): void {
@@ -36,8 +36,8 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       this.lessonService.ListenFor("currentObjectiveIndexChanged").subscribe((objective_index: any) => {
           this.handleObjectiveChanged(objective_index)
       })
-      
-       
+
+
   }
 
   remove_punct(text:string){

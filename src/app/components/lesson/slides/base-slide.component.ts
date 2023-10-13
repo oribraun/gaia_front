@@ -1,13 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {PresentationSlide} from "../../../entities/presentation";
 import {Config} from "../../../config";
 import {environment} from "../../../../environments/environment";
+import {LessonService} from "../../../services/lesson/lesson.service";
 
 @Component({
     selector: 'app-base-slide',
     template: ''
 })
-export class BaseSlideComponent implements OnInit {
+export class BaseSlideComponent implements OnInit, OnDestroy {
 
     @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
     @Input('slideData') slideData: any = {};
@@ -17,6 +18,7 @@ export class BaseSlideComponent implements OnInit {
 
     constructor(
         protected config: Config,
+        protected lessonService: LessonService,
     ) {
         this.imageSrc = this.config.staticImagePath;
         this.currentHost = this.config.server_host || environment.serverUrl;
@@ -43,5 +45,13 @@ export class BaseSlideComponent implements OnInit {
     checkIsFullUrl(url: string) {
         return url.indexOf('http://') > -1 || url.indexOf('https://') > -1;
     }
+
+    ngOnDestroy(fireSlideDestroyEvent=true): void {
+        if (fireSlideDestroyEvent) {
+            this.lessonService.Broadcast('slideDestroy', {});
+        }
+    }
+
+
 
 }

@@ -22,11 +22,11 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
 
     constructor(
         protected override config: Config,
-        private lessonService: LessonService,
+        protected override lessonService: LessonService,
         private speechRecognitionService: SpeechRecognitionService,
 
     ) {
-        super(config)
+        super(config, lessonService)
     }
     override ngOnInit(): void {
         super.ngOnInit();

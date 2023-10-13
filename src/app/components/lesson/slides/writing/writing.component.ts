@@ -27,10 +27,10 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
 
     constructor(
       protected override config: Config,
-      private lessonService: LessonService,
+      protected override lessonService: LessonService,
       private sanitizer:DomSanitizer,
   ) {
-      super(config)
+      super(config, lessonService)
   }
 
   override ngOnInit(): void {
@@ -43,8 +43,8 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
       if(this.currentSlide.essay_type){
         this.essayType = this.currentSlide.essay_type
       }
-       
-       
+
+
       this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
         try {
           let resp_data = resp.data
@@ -67,13 +67,13 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             this.endEssayInProgress = false;
           }
 
-          
+
 
         } catch (e){
           console.error(e)
         }
 
-        
+
     })
   }
 
@@ -84,7 +84,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
   closeModel(){
     this.modalActive = false
   }
-   
+
   improveEssay() {
     if (this.improveEssayInProgress){
       return;

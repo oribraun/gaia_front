@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {PresentationSlide} from "../../../../entities/presentation";
 import {Config} from "../../../../config";
 import {BaseSlideComponent} from "../base-slide.component";
+import {LessonService} from "../../../../services/lesson/lesson.service";
 
 @Component({
     selector: 'app-word-repeater',
@@ -14,8 +15,9 @@ export class WordRepeaterComponent  extends BaseSlideComponent {
 
     constructor(
         protected override config: Config,
+        protected override lessonService: LessonService
     ) {
-        super(config)
+        super(config, lessonService)
     }
 
     example_how_to_use_is_active() {

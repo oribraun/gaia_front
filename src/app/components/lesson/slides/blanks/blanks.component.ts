@@ -17,10 +17,10 @@ export class BlanksComponent extends BaseSlideComponent implements OnInit {
 
     constructor(
         protected override config: Config,
-        private lessonService: LessonService,
+        protected override lessonService: LessonService,
 
     ) {
-        super(config)
+        super(config, lessonService)
     }
 
     override ngOnInit(): void {
