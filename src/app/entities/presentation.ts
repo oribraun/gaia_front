@@ -133,6 +133,9 @@ export class PresentationSlide {
     essay_type!:string
     grades!:string
     iframe_path!:string
+    html!:string
+    js!:string
+    css!:string
     game_duration:number=4
     blanks !:string[]
     blanks_options !:string[][]

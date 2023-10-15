@@ -44,6 +44,8 @@ import { RandomSelectorComponent } from './components/lesson/slides/random-selec
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { BuyComponent } from './components/buy/buy.component';
+import { UnseenComponent } from './components/lesson/slides/unseen/unseen.component';
+import { GenericComponent } from './components/lesson/slides/generic/generic.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -78,6 +80,8 @@ import { BuyComponent } from './components/buy/buy.component';
         TemplateComponent,
         WritingComponent,
         RandomSelectorComponent,
+        UnseenComponent,
+        GenericComponent,
         DashboardComponent,
         CapitalizePipe,
         BuyComponent,

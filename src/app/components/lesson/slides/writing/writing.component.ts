@@ -14,6 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class WritingComponent extends BaseSlideComponent implements OnInit{
 
     checkEssayInProgress:boolean = false;
+    spinnerEnabled:boolean = false
     endEssayInProgress:boolean = false;
     essayType:string = 'opinion';
     essayText = ''
@@ -36,6 +37,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
   override ngOnInit(): void {
       super.ngOnInit();
       console.log('daniel',this.currentSlide)
+      this.spinnerEnabled  = false;
       this.essayTopic = this.currentSlide.topic
       this.essayText = this.currentSlide.writing
       this.grades = this.currentSlide.grades
@@ -66,6 +68,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
           else if (resp_data.source == "continue_to_next_slide_click") {
             this.endEssayInProgress = false;
           }
+          this.spinnerEnabled  = false;
 
           
 
@@ -97,6 +100,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
         'stopAudio': true
     }
     this.improveEssayInProgress = true;
+    this.spinnerEnabled  = true;
     this.lessonService.Broadcast("slideEventRequest", data)
   }
 
@@ -112,6 +116,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
         'stopAudio': true
     }
     this.writeEssayInProgress = true;
+    this.spinnerEnabled  = true;
     this.lessonService.Broadcast("slideEventRequest", data)
   }
 
@@ -127,6 +132,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
           'stopAudio': true
       }
       this.checkEssayInProgress = true;
+      this.spinnerEnabled  = true;
       this.lessonService.Broadcast("slideEventRequest", data)
   }
 
@@ -139,6 +145,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
         'stopAudio': true
     }
     this.endEssayInProgress = true;
+    this.spinnerEnabled  = true;
     this.lessonService.Broadcast("slideEventRequest", data)
   }
 

@@ -1,5 +1,12 @@
 
 <div class="slide-board slide-board-one-column">
+    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
     <div class="outer-scroller">
         <div class="inner-scroller">
                 <h1>{{currentSlide.slide_title}}</h1>
