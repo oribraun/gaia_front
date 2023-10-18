@@ -114,9 +114,11 @@ export class PresentationSlide {
     background_image!: string
     image_path!: string
     mode!: string
+    multiple_choice_question!:any
     answer_options!: string[]
     correct_answer!: string
     text!: string
+    sentence_start!:string
     writing!: string
     texts!: string[]
     examples!: string[]
@@ -131,6 +133,7 @@ export class PresentationSlide {
     index_in_bundle:number=-1
     topic!:string
     essay_type!:string
+    unseen_text!:string
     grades!:string
     iframe_path!:string
     html!:string
@@ -140,11 +143,13 @@ export class PresentationSlide {
     blanks !:string[]
     blanks_options !:string[][]
     target_sentence !:string[]
+    all_questions !:any[]
     blanked_sentence !:string
     video_details!: VideoDetails
     prev:any=null
     flat_index:number=0
     practice!:string
+    core_instructions:any={}
 
 
     constructor(obj?: any) {
