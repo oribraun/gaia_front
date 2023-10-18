@@ -144,6 +144,7 @@ export class PresentationSlide {
     blanks_options !:string[][]
     target_sentence !:string[]
     all_questions !:any[]
+    all_answers !:any
     blanked_sentence !:string
     video_details!: VideoDetails
     prev:any=null

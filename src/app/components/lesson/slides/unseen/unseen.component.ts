@@ -4,18 +4,29 @@ import {Config} from "../../../../config";
 import {BaseSlideComponent} from "../base-slide.component";
 import {DomSanitizer} from '@angular/platform-browser';
 
+function isEmpty(obj:any) {
+  for (const prop in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 @Component({
   selector: 'app-unseen',
   templateUrl: './unseen.component.html',
   styleUrls: ['./unseen.component.less']
 })
+
 export class UnseenComponent extends BaseSlideComponent implements OnInit{
   unseen_headline:string = 'Dummy Headline'
   unseen_text:string =''
   answer_text:string =''
   question_text:string =''
   all_questions:any[] = []
+  all_answers:any = {}
   multiple_choice_questions:any[] = []
   sentence_completion_questions:any[] = []
   open_questions:any[] = []
@@ -52,15 +63,20 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       this.unseen_headline = this.currentSlide.slide_title
       this.unseen_text = this.currentSlide.unseen_text
       this.all_questions = this.currentSlide.all_questions || []
+      this.all_answers = this.currentSlide.all_answers || {}
       console.log('all_questions', this.all_questions)
+      console.log('all_answers', this.all_answers)
       if(this.all_questions.length==0){
         this.generateAllQuestions()
       } else {
         this.active_question=this.all_questions[this.question_index]
-        console.log('active_question', this.active_question)
+        if(this.active_question.question_type == 'sentence_completion'){
+          this.answer_text = this.active_question.question
+        } 
       }
-      
-      
+      this.handleAnswers()
+      this.getCheckedAnswer()
+
       this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
         try {
           let resp_data = resp.data
@@ -93,6 +109,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       this.all_questions.push(qq)
     }
     this.active_question = this.all_questions.shift()
+    if(this.active_question.question_type == 'sentence_completion'){
+      this.answer_text = this.active_question.question
+    } 
 
     // this.all_questions.sort( () => Math.random() - 0.5 )
     this.all_questions.unshift(this.active_question)
@@ -107,14 +126,44 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     this.lessonService.Broadcast("slideEventRequest", save_questions_data)
   }
 
-  setCheckedAnswer(checkedAnswer:object={'explanation':'','is_correct_answer':false}){
+  setCheckedAnswer(checkedAnswer:any={'explanation':'','is_correct_answer':false, 'answer_text_or_options':{}, 'question_type':''}, question_index=-1){
+    if(question_index == -1){
+      question_index = this.question_index
+    }
     this.checked_answer = checkedAnswer
     this.checked_answer_text = this.checked_answer.explanation
     this.is_correct_answer = this.checked_answer.is_correct_answer
-    this.checked_answers['_'+String(this.question_index)] = checkedAnswer
-    this.answer_text = this.answers_texts.hasOwnProperty('_'+String(this.question_index)) ? this.answers_texts['_'+String(this.question_index)] : ''
-    this.submited= this.submited_answers.hasOwnProperty('_'+String(this.question_index)) ? true : false
-    console.log('submited',this.submited)
+    this.checked_answers['_'+String(question_index)] = checkedAnswer
+    if(this.answers_texts.hasOwnProperty('_'+String(question_index))){
+      this.answer_text = this.answers_texts['_'+String(question_index)]
+    } else {
+      this.answer_text = ''
+      if(this.active_question.question_type == 'sentence_completion'){
+        this.answer_text = this.active_question.question
+      } 
+       
+    }
+    if(checkedAnswer.question_type == "multiple_choice" && !isEmpty(checkedAnswer.answer_text_or_options)){
+      this.multiple_choice_answers['_'+String(question_index)] = {}
+      let options = checkedAnswer['answer_text_or_options']
+      for(let answer_text in options){
+        let is_correct = options[answer_text]
+        this.multiple_choice_answers['_'+String(question_index)][answer_text] = is_correct
+        this.checked[answer_text + String(question_index)] = true
+      }
+    } 
+    this.submited= this.submited_answers.hasOwnProperty('_'+String(question_index)) ? true : false
+  }
+
+  handleAnswers(){
+    for(let key in this.all_answers){
+      let answer = this.all_answers[key]
+      let question_index = answer['question_idx']
+      this.answers_texts[key] = answer['answer_text']
+      this.submited_answers[key] = true
+      let checkedAnswer:any = {'explanation':answer['explanation'],'is_correct_answer':answer['is_correct_answer'],'answer_text_or_options':answer['answer_text'], 'question_type':answer['question_type']}
+      this.setCheckedAnswer(checkedAnswer,question_index)
+    }
   }
 
   getCheckedAnswer(){
@@ -160,9 +209,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
   checkAnswer(){
        const data = {
         "source": 'check_answer',
-        "answer": this.answer_text,
+        "answer": this.active_question.question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.answer_text,
         "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
         "question_type":this.active_question.question_type,
+        "question_idx":this.question_index,
         'stopAudio': true
       }
       this.answers_texts['_'+String(this.question_index)] = this.answer_text
@@ -189,15 +239,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     }
 
     onMultipleChoiceQuestionChange(answer:any){
-      function isEmpty(obj:any) {
-        for (const prop in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-            return false;
-          }
-        }
-
-        return true;
-      }
+      
       if(this.multiple_choice_answers.hasOwnProperty('_'+String(this.question_index))){
         let ans = this.multiple_choice_answers['_'+String(this.question_index)]
         if(ans.hasOwnProperty(answer.answer)){
