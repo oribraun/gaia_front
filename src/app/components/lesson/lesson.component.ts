@@ -618,11 +618,13 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentationEventReplay(data:any={}) {
         this.last_user_action_ts = Date.now()
-        if (!this.allowApiCalls()) {
-            return;
-        }
-        if (this.eventHandlingInProgress) {
-            return;
+        if(!data.hasOwnProperty('background') || !data['background']){
+            if (!this.allowApiCalls()) {
+                return;
+            }
+            if (this.eventHandlingInProgress) {
+                return;
+            }
         }
         this.stopSpeechRecognition();
         this.eventHandlingInProgress = true;
@@ -1159,28 +1161,37 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.broadCastMessage('computer', text, true);
         const help_sound_url = data.help_sound_url;
         const help_sound_buffer = data.help_sound_buffer;
-        console.log('presentation_slide_updated',presentation_slide_updated)
-        console.log('presentation_index_updated',presentation_index_updated)
-        console.log('reason',reason)
-        console.log('data',data)
+        // console.log('presentation_slide_updated',presentation_slide_updated)
+        // console.log('presentation_index_updated',presentation_index_updated)
+        // console.log('reason',reason)
+        // console.log('data',data)
 
-        console.log('after+speak_native')
-        console.log('slideEventReply additional_instructions', additional_instructions)
+        // console.log('after+speak_native')
+        // console.log('slideEventReply additional_instructions', additional_instructions)
+        
+        this.handleCoreFunctionalityOfSlide()
+        
         if (additional_instructions) {
             const data = {'type': 'additional_instructions', 'data': additional_instructions}
             this.lessonService.Broadcast("slideEventReply", data)
         }
 
 
+
         if (help_sound_url) {
-            console.log('help_sound_url added to que', help_sound_url)
-            this.audioQue.push(help_sound_url);
-            if (!this.speakInProgress) {
-                await this.stopSpeechRecognition();
-                this.stopHeartBeat();
-                const value = await this.playUsingAudio();
-                this.resetSpeechRecognition();
-                this.startHeartBeat();
+            if(this.handleCoreFunctionalityOfSlide('speak')){
+                console.log('help_sound_url added to que', help_sound_url)
+                this.audioQue.push(help_sound_url);
+                if (!this.speakInProgress) {
+                    await this.stopSpeechRecognition();
+                    this.stopHeartBeat();
+                    const value = await this.playUsingAudio();
+                    if(this.handleCoreFunctionalityOfSlide('asr')){
+                        this.resetSpeechRecognition();
+                    }
+                    
+                    this.startHeartBeat();
+                }
             }
         }
         let blob = null;
@@ -1189,34 +1200,40 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if (help_sound_buffer || blob) {
-            if (blob && this.currentSlide.index_in_bundle == 0) {
-                console.log('speakNative before');
-                this.audioBlobQue.push(blob);
-            }
-            if (help_sound_buffer) {
-                console.log('help_sound_buffer added to que')
-                const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
-                if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                    this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished?'doNotListenAfter':'', type:'audio'}));
+            if(this.handleCoreFunctionalityOfSlide('speak')){
+                if (blob && this.currentSlide.index_in_bundle == 0) {
+                    console.log('speakNative before');
+                    this.audioBlobQue.push(blob);
                 }
-            }
-            if (blob && this.currentSlide.index_in_bundle == -1) {
-                console.log('speakNative after');
-                this.audioBlobQue.push(blob);
-            }
-            if (!this.speakInProgress && this.audioBlobQue.length) {
-                console.log('this.audioBlobQue', this.audioBlobQue.length)
-                console.log('this.speakInProgress', this.speakInProgress)
-                await this.stopSpeechRecognition();
-                this.stopHeartBeat();
-                const value = await this.playUsingBlob();
-                this.resetSpeechRecognition();
-                this.startHeartBeat();
+                if (help_sound_buffer) {
+                    console.log('help_sound_buffer added to que')
+                    const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
+                    if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                        this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished?'doNotListenAfter':'', type:'audio'}));
+                    }
+                }
+                if (blob && this.currentSlide.index_in_bundle == -1) {
+                    console.log('speakNative after');
+                    this.audioBlobQue.push(blob);
+                }
+                if (!this.speakInProgress && this.audioBlobQue.length) {
+                    console.log('this.audioBlobQue', this.audioBlobQue.length)
+                    console.log('this.speakInProgress', this.speakInProgress)
+                    await this.stopSpeechRecognition();
+                    this.stopHeartBeat();
+                    const value = await this.playUsingBlob();
+                    if(this.handleCoreFunctionalityOfSlide('asr')){
+                        this.resetSpeechRecognition();
+                    }
+                    this.startHeartBeat();
+                }
             }
         }
         if(!help_sound_buffer && !help_sound_url) {
             if (!this.speechRecognitionService.ASR_recognizing) {
-                await this.startSpeechRecognition();
+                if(this.handleCoreFunctionalityOfSlide('asr')){
+                    await this.startSpeechRecognition();
+                }
             }
         }
 
@@ -1241,6 +1258,26 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex)
         }
 
+        // this.handleCoreFunctionalityOfSlide()
+
+    }
+
+    handleCoreFunctionalityOfSlide(is_key_enabled:string='') {
+        const coreFuncs = this.currentSlide.core_instructions
+        if(is_key_enabled){
+            if(coreFuncs.hasOwnProperty(is_key_enabled)){
+                return coreFuncs[is_key_enabled]
+            } else {
+                return true
+            }
+        } else {
+            console.log('coreFuncs', coreFuncs)
+            if(coreFuncs.hasOwnProperty('asr') && !coreFuncs.asr){
+                console.log('coreFuncs', 'Stopping ASR')
+                this.stopSpeechRecognition()
+            }
+        }
+        return false
     }
 
     async getSpeakNative() {
