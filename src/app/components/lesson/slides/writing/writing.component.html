@@ -11,6 +11,7 @@
         <div class="inner-scroller">
                 <h1>{{currentSlide.slide_title}}</h1>
                 <h2>{{essayTopic}}</h2>
+                <p>{{loaded_text}}</p>
         </div>
     </div>
     <div class="background-image" *ngIf="currentSlide.background_image">
@@ -19,19 +20,19 @@
 
 
     <div class="image image-right" #youtube_player>
-        <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="essayText"></angular-editor>
+        <angular-editor [placeholder]="'Enter text here...'" [config]="editorConfig" [(ngModel)]="essayText"></angular-editor>
     </div>
     <div class="buttons_wrapper">
-        <button class="btn btn-light" (click)="writeEssay()">
-            Write Essay
+        <button class="btn btn-light" (click)="boostEssay()">
+            AI boost
         </button>
-        <button class="btn btn-light" (click)="improveEssay()">
+        <!-- <button class="btn btn-light" (click)="improveEssay()">
             Improve Essay
-        </button>
+        </button> -->
         <button class="btn btn-light" (click)="checkEssay()">
             Check Essay
         </button>
-        <button *ngIf="grades" class="btn btn-light" (click)="openModel()">
+        <button *ngIf="grades" class="btn btn-light" (click)="openModal()">
             Show report
         </button>
         <button *ngIf="grades" class="btn btn-light" (click)="endSlide()">
@@ -48,6 +49,6 @@
          <div [innerHTML]="essayText"></div>
          <br>
          <h2>Results</h2>
-         <p>{{grades}}</p>
+         <p [innerHTML]="grades_html"></p>
        </div>
    </div>

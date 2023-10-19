@@ -54,6 +54,7 @@ export class Presentation {
 export class PresentationSection {
     section_title!: string
     section_topic!: string
+    section_variables!: any
     slides!: PresentationSlide[]
 
     constructor(obj?: any) {
@@ -80,6 +81,7 @@ export class PresentationSection {
             this[key].push(new PresentationSlide(item))
             // @ts-ignore
             let slide = this[key][this[key].length-1]
+            slide.section = this
             if(slide.bundle_id!=-1){
                 if(bundle_id_to_slides.hasOwnProperty(slide.bundle_id)) {
                     bundle_id_to_slides[slide.bundle_id].push(slide)
@@ -119,6 +121,10 @@ export class PresentationSlide {
     text!: string
     writing!: string
     texts!: string[]
+    loaded_text!: string
+    load_fields!: string[]      
+    section_variables!: string 
+    add_loaded_text_to_dynamic_text!: boolean
     examples!: string[]
     word!: string
     should_read_native:boolean = false
@@ -145,6 +151,7 @@ export class PresentationSlide {
     prev:any=null
     flat_index:number=0
     practice!:string
+    section!:any
 
 
     constructor(obj?: any) {
