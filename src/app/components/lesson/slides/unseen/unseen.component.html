@@ -79,8 +79,17 @@
         <div class="buttons_wrapper"><button (click)="checkAnswer()">Submit Answer</button>
             <button (click)="nextQuestion()">Next Question</button>
             <button (click)="prevQuestion()">Previous Question</button>
-            <button onclick="nextSlide()">Continue</button>
+            <button (click)="nextSlide()">Continue</button>
+            <button (click)="getHints()">Hint</button>
         </div>
+        <div class="center">
+        <div class="pagination pagination2">
+            <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+            <ng-container *ngFor="let question of all_questions; let index=index;">
+                <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
+            </ng-container>
+            <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>
+          </div></div>
       </section>
        
     </div>

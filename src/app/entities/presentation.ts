@@ -136,6 +136,7 @@ export class PresentationSlide {
     bundle_id:number = -1
     bundle:any[] = []
     bundle_len:number=0
+    question_index:number=0
     index_in_bundle:number=-1
     topic!:string
     essay_type!:string

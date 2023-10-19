@@ -64,8 +64,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       this.unseen_text = this.currentSlide.unseen_text
       this.all_questions = this.currentSlide.all_questions || []
       this.all_answers = this.currentSlide.all_answers || {}
+      this.question_index = this.currentSlide.question_index || 0
+      this.question_index_str = String(this.question_index)
       console.log('all_questions', this.all_questions)
       console.log('all_answers', this.all_answers)
+      console.log('all_question_index', this.question_index)
       if(this.all_questions.length==0){
         this.generateAllQuestions()
       } else {
@@ -91,6 +94,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
             this.addQuestionsToList(this.sentence_completion_questions,'sentence_completion')
           } else  if (resp_data.source == "check_answer") {
             this.setCheckedAnswer(resp_data.answer)
+          } 
+          else  if (resp_data.source == "get_hints") {
+            console.log('get_hints', resp_data)
           } 
           
         } catch (e) {
@@ -238,6 +244,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       }
     }
 
+    goToQuestionNumber(number:number){
+      if(number>-1 && number<this.all_questions.length){
+        this.question_index=number
+        this.question_index_str = String(this.question_index)
+        this.active_question = this.all_questions[this.question_index]
+        this.getCheckedAnswer()
+      }
+    }
     onMultipleChoiceQuestionChange(answer:any){
       
       if(this.multiple_choice_answers.hasOwnProperty('_'+String(this.question_index))){
@@ -258,5 +272,24 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.checked[answer.answer + String(this.question_index)] = true
       }      
     }
+
+    nextSlide(){
+        const data = {
+            "source": "continue_to_next_slide_click",
+            'stopAudio': true
+        }
+        this.lessonService.Broadcast("slideEventRequest", data)
+    }
+
+    getHints(){
+      const data = {
+        "source": "get_hints",
+        "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
+        "question_type":this.active_question.question_type,
+        "question_idx":this.question_index
+      }
+      this.lessonService.Broadcast("slideEventRequest", data)
+    }
+    
     
 }
