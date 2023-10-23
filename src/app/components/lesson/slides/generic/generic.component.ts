@@ -20,13 +20,13 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
 
   constructor(
       protected override config: Config,
-      private lessonService: LessonService,
+      protected override lessonService: LessonService,
       private jsLoaderService: DynamicScriptLoaderService,
       private sanitizer: DomSanitizer,
-      private _renderer2: Renderer2, 
+      private _renderer2: Renderer2,
       @Inject(DOCUMENT) private _document: Document
   ) {
-      super(config)
+      super(config, lessonService)
   }
 
   override ngOnInit(): void {
@@ -40,7 +40,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
           default:
             rx_doorbell(data)
         }
-        
+
 
       } catch (e) {
         console.error(e)
@@ -58,7 +58,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
   }
 
   loadScripts() {
-    
+
     let scriptSrc = this.currentSlide.js
     if (scriptSrc.endsWith('.js') || scriptSrc.startsWith('http')){
       let scriptName = 'customScript'
@@ -66,12 +66,12 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
       // You can load multiple scripts by just providing the key as argument into load method of the service
       this.jsLoaderService.load(scriptName).then(data => {
         // Script Loaded Successfully
-        
+
       }).catch(error => console.log(error));
     } else {
       this.loadExternalJavaScriptFromStr(scriptSrc)
     }
-   
+
   }
 
   loadExternalJavaScriptFromStr(script: string) {
@@ -84,14 +84,14 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
   sanitizeHtmlContent(htmlContnet:string){
     return this.sanitizer.bypassSecurityTrustHtml(htmlContnet)
   }
- 
+
   tx(){
     const txdata = txData
     switch(txdata.event){
       case 'disable_asr':
         break;
       default:
-        
+
         const data = {
             "source": txdata.event,
             "data":txdata.data,
@@ -102,7 +102,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
     console.log('daniel',txData)
   }
 
-  ngOnDestroy(): void {
-    
+  override ngOnDestroy(): void {
+      super.ngOnDestroy();
   }
 }

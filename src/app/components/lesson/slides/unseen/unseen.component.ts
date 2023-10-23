@@ -42,20 +42,20 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
   submited_answers:any = {}
   checked:any = {}
   submited:boolean = false
- 
+
   public questionTypes = {
     sentence_completion:'sentence_completion',
     multiple_choice: 'multiple_choice',
     open_question: 'open_question'
   }
   unseen_questions: any;
- 
+
   constructor(
         protected override config: Config,
-        private lessonService: LessonService,
+        protected override lessonService: LessonService,
         private sanitizer: DomSanitizer
     ) {
-        super(config)
+        super(config, lessonService)
     }
 
   override ngOnInit(): void {
@@ -75,7 +75,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.active_question=this.all_questions[this.question_index]
         if(this.active_question.question_type == 'sentence_completion'){
           this.answer_text = this.active_question.question
-        } 
+        }
       }
       this.handleAnswers()
       this.getCheckedAnswer()
@@ -94,17 +94,17 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
             this.addQuestionsToList(this.sentence_completion_questions,'sentence_completion')
           } else  if (resp_data.source == "check_answer") {
             this.setCheckedAnswer(resp_data.answer)
-          } 
+          }
           else  if (resp_data.source == "get_hints") {
             console.log('get_hints', resp_data)
-          } 
-          
+          }
+
         } catch (e) {
           console.error(e)
         }
 
       })
- 
+
     }
 
   addQuestionsToList(questions:any[], qType:string){
@@ -117,7 +117,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     this.active_question = this.all_questions.shift()
     if(this.active_question.question_type == 'sentence_completion'){
       this.answer_text = this.active_question.question
-    } 
+    }
 
     // this.all_questions.sort( () => Math.random() - 0.5 )
     this.all_questions.unshift(this.active_question)
@@ -146,8 +146,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       this.answer_text = ''
       if(this.active_question.question_type == 'sentence_completion'){
         this.answer_text = this.active_question.question
-      } 
-       
+      }
+
     }
     if(checkedAnswer.question_type == "multiple_choice" && !isEmpty(checkedAnswer.answer_text_or_options)){
       this.multiple_choice_answers['_'+String(question_index)] = {}
@@ -157,7 +157,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.multiple_choice_answers['_'+String(question_index)][answer_text] = is_correct
         this.checked[answer_text + String(question_index)] = true
       }
-    } 
+    }
     this.submited= this.submited_answers.hasOwnProperty('_'+String(question_index)) ? true : false
   }
 
@@ -207,11 +207,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     console.log('generate_sentence_completion_questions called')
 
   }
-  
+
   sanitizeHtmlContent(htmlContnet:string){
       return this.sanitizer.bypassSecurityTrustHtml(htmlContnet)
     }
-    
+
   checkAnswer(){
        const data = {
         "source": 'check_answer',
@@ -253,12 +253,12 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       }
     }
     onMultipleChoiceQuestionChange(answer:any){
-      
+
       if(this.multiple_choice_answers.hasOwnProperty('_'+String(this.question_index))){
         let ans = this.multiple_choice_answers['_'+String(this.question_index)]
         if(ans.hasOwnProperty(answer.answer)){
           delete ans[answer.answer]
-          delete this.checked[answer.answer + String(this.question_index)] 
+          delete this.checked[answer.answer + String(this.question_index)]
           if(isEmpty(ans)){
             delete this.multiple_choice_answers['_'+String(this.question_index)]
           }
@@ -270,7 +270,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.multiple_choice_answers['_'+String(this.question_index)] = {}
         this.multiple_choice_answers['_'+String(this.question_index)][answer.answer] = answer.is_correct
         this.checked[answer.answer + String(this.question_index)] = true
-      }      
+      }
     }
 
     nextSlide(){
@@ -290,6 +290,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
       }
       this.lessonService.Broadcast("slideEventRequest", data)
     }
-    
-    
+
+
 }
