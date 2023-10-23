@@ -1,0 +1,328 @@
+/*
+ CSS for the main interaction
+*/
+#unseen_wrapper {
+    position: sticky;
+    width: 100%;
+    overflow-y: scroll;
+    height: 456px;
+
+}
+.tabset > input[type="radio"] {
+    position: absolute;
+    left: -200vw;
+  }
+  div.tabset {padding:10px}
+  .tabset .tab-panel {
+    display: none;
+  }
+  
+  .tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+  .tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+  .tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+  .tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+  .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+  .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+    display: block;
+  }
+  
+  /*
+   Styling
+  */
+  body {
+    font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
+    color: #333;
+    font-weight: 300;
+  }
+  
+  .tabset > label {
+    position: relative;
+    display: inline-block;
+    padding: 15px 15px 25px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .tabset > label::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    width: 22px;
+    height: 4px;
+    background: #8d8d8d;
+  }
+  
+  input:focus-visible + label {
+    outline: 2px solid rgba(0,102,204,1);
+    border-radius: 3px;
+  }
+  
+  .tabset > label:hover,
+  .tabset > input:focus + label,
+  .tabset > input:checked + label {
+    color: #06c;
+  }
+  
+  .tabset > label:hover::after,
+  .tabset > input:focus + label::after,
+  .tabset > input:checked + label::after {
+    background: #06c;
+  }
+  
+  .tabset > input:checked + label {
+    border-color: #ccc;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+  }
+  
+  .tab-panel {
+    padding: 30px 0;
+    border-top: 1px solid #ccc;
+  }
+  
+  /*
+   Demo purposes only
+  */
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+  
+  body {
+    padding: 30px;
+  }
+  
+  .tabset {
+    // max-width: 65em;
+  }
+ 
+
+  /*-------*/
+  .mcq .mcq-answer {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    background: #F5F5F5;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    padding-right: 120px;
+    margin-bottom: 3px;
+    cursor: pointer;
+
+  }
+  
+  .mcq .mcq-answer p {
+    z-index: 1000;
+  }
+  
+  .mcq .circle {
+    position: relative;
+    height: 1em;
+    width: 1em;
+    margin-left: 1em;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    border: 0.3em solid #666677;
+    background-color: transparent;
+  }
+  
+  .mcq .mcq-answer p {
+    display: block;
+    margin: 1em;
+    z-index: 10;
+  }
+  
+  .mcq .feedback {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #a94442;
+    color: white;
+    min-height: 100%;
+    max-width: 88.6%;
+    min-width: 14%;
+    padding: 1em 1em 1em 2em;
+    z-index: 100;
+    opacity: 1;
+    visibility: hidden;
+  }
+  
+  .mcq .correct .feedback {
+    background-color: #3c763d;
+  }
+  
+  .mcq input {
+    display: none;
+  }
+  
+  .mcq .highlight {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .mcq input:hover ~ .highlight {
+    background-color: #CCC;
+  }
+  
+  .mcq input:checked:hover ~ .highlight {
+    background-color: #b3d2ed;
+  }
+  
+  .mcq .incorrect input:checked ~ .highlight {
+    background-color: #f2dede;
+  }
+  .mcq .correct input:checked ~ .highlight {
+    background-color: #dff0d8;
+  }
+  
+//   .mcq input:checked ~ .circle {
+//     background-color: #ebccd1;;
+//     border-color: #a94442;
+//   }
+   
+  
+  .mcq .correct input:checked ~ .circle {
+    background-color: #d6e9c6;
+    border-color: #3c763d;
+    
+  }
+  
+//   .mcq .checked_item input:checked ~ .circle {
+//     background-color: #d6e9c6;
+//     border-color: #1a0d7b;
+    
+//   }
+
+  .mcq  .checked_item {
+ 
+    background-color: #b3d2ed;
+  }
+  
+//   .mcq .correct .feedback {
+//     background-color: #1a0d7b;
+//   }
+  
+  .mcq input:checked ~ .feedback {
+    visibility: visible;
+    -webkit-animation: feedbackfade 3s ease 3s;
+            animation: feedbackfade 3s ease 3s;
+    -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+  }
+  
+
+  #textarea {
+	font-size: 20px;
+    resize: none;
+    line-height: 40px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 34px;
+    background-image: url(https://static.tumblr.com/maopbtg/E9Bmgtoht/lines.png), url(https://static.tumblr.com/maopbtg/nBUmgtogx/paper.png);
+    // background-repeat: repeat-y, repeat;
+    // border-radius: 12px;
+    // box-shadow: 0px 1px 4px #000;
+    border: 1px solid #f9f5f5b8;
+
+}
+
+div.question_number {
+    position:absolute;
+    right:2rem;
+    color: #0b4746;
+    font-size: 20px;
+    top:40px;
+}
+
+div.buttons_wrapper{
+    position: absolute;
+    bottom: 50px;
+    z-index:100;
+
+}
+div.buttons_wrapper > button {
+    margin:3px
+}
+
+
+// paginagion 
+.pagination {
+    display: inline-block;
+  }
+  .pagination a {
+    text-decoration: none;
+    color: #000;
+    float: left;
+    padding: 8px 16px;
+  }
+  .pagination1 a.active {
+    background-color: #4CAF50;
+    color: #FFF;
+  }
+  .pagination1 a:hover:not(.active) {
+    background-color: #DDD;
+  }
+  .pagination2 a.active {
+    background-color: #4CAF50;
+    color: #FFF;
+    border-radius: 5px;
+  }
+  .pagination2 a:hover:not(.active) {
+    background-color: #DDD;
+    border-radius: 5px;
+  }
+  .pagination3 a {
+    transition: background-color 0.3s;
+  }
+  .pagination4 a:not(.active) {
+    border: 1px solid #DDD;
+  }
+  .pagination4 a.active {
+    border: 1px solid #4CAF50;
+  }
+  .pagination5 a:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  .pagination5 a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .pagination6 a {
+    margin: 0 4px;
+  }
+  .pagination7 a {
+    font-size: 22px;
+  }
+  .center {
+    text-align: center;
+  }
+  ul.breadcrumb {
+    list-style-type: none;
+    background-color: #EEE;
+    padding: 8px 16px;
+  }
+  ul.breadcrumb li {
+    display: inline-block;
+  }
+  ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: #000;
+    content: "/\00A0";
+  }
+  ul.breadcrumb li a {
+    color: green;
+  }

@@ -1,0 +1,99 @@
+<ng-template #selected_question_container let-model="model">
+    <ng-container *ngIf="active_question">
+        <ng-container *ngIf="active_question.question_type===questionTypes.sentence_completion"> 
+            <ng-container *ngTemplateOutlet="sentence_completion;"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.open_question"><ng-container  *ngTemplateOutlet="open_question;"></ng-container></ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.multiple_choice"><ng-container  *ngTemplateOutlet="quiz;"></ng-container></ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #quiz let-model="model">
+    <div class="">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="mcq">
+      
+              <h4>{{active_question.question.question}}</h4>
+              <p>Mark all the correct answers</p>
+      
+              <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
+                <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
+                    <input type="checkbox" [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+                    <div class="highlight"></div>
+                    <div class="circle"></div>
+                    <p>{{option.answer}}</p>
+                    <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
+                    <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
+                </label>
+              </ng-container>
+      
+            </div>
+            <!-- MCQ visible demo ends here -->
+      
+          </div>
+        </div>
+      </div>
+</ng-template>
+
+<ng-template #sentence_completion let-model="model">
+    <div>
+        <h4 id="question">Complete the following sentence according to the text</h4>
+        <textarea id="textarea" style="width:100%; height:200px" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation" style="width:100%; height:130px">{{checked_answer_text}}</div>
+        <div style="width:0;height:0; visibility:hidden;display:none; opacity:0" id="sentence_start">{{active_question.question}}</div>
+    </div>
+</ng-template>
+
+<ng-template #open_question let-model="model">
+    <div>
+        <h4 id="question">{{active_question.question}}</h4>
+        <!-- <div id="question">{{active_question.question}}</div> -->
+        <textarea style="width:100%; height:200px" id="textarea" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation" style="width:100%; height:130px">{{checked_answer_text}}</div>
+    </div>
+</ng-template>
+
+
+
+
+<div class="tabset">
+    <!-- Tab 1 -->
+    <input type="radio" name="tabset" id="tab1" aria-controls="text" checked>
+    <label for="tab1">Text</label>
+    <!-- Tab 2 -->
+    <input type="radio" name="tabset" id="tab2" aria-controls="questions">
+    <label for="tab2">Questions</label>
+     
+    
+    <div class="tab-panels">
+      <section id="text" class="tab-panel">
+        <div id="unseen_wrapper">
+            <h2>{{unseen_headline}}</h2>
+            <p>{{unseen_text}}</p>
+        </div>        
+    </section>
+      <section id="questions" class="tab-panel">
+        <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
+        <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>
+        <div class="buttons_wrapper"><button (click)="checkAnswer()">Submit Answer</button>
+            <button (click)="nextQuestion()">Next Question</button>
+            <button (click)="prevQuestion()">Previous Question</button>
+            <button (click)="nextSlide()">Continue</button>
+            <button (click)="getHints()">Hint</button>
+        </div>
+        <div class="center">
+        <div class="pagination pagination2">
+            <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+            <ng-container *ngFor="let question of all_questions; let index=index;">
+                <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
+            </ng-container>
+            <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>
+          </div></div>
+      </section>
+       
+    </div>
+    
+  </div>
+  
+ 

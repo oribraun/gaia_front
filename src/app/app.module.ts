@@ -44,6 +44,8 @@ import { RandomSelectorComponent } from './components/lesson/slides/random-selec
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { BuyComponent } from './components/buy/buy.component';
+import { UnseenComponent } from './components/lesson/slides/unseen/unseen.component';
+import { GenericComponent } from './components/lesson/slides/generic/generic.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
 @NgModule({
@@ -80,6 +82,8 @@ import { OnBoardingComponent } from './components/on-boarding/on-boarding.compon
         TemplateComponent,
         WritingComponent,
         RandomSelectorComponent,
+        UnseenComponent,
+        GenericComponent,
         DashboardComponent,
         CapitalizePipe,
         BuyComponent,

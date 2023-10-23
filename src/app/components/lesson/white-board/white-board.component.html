@@ -65,7 +65,17 @@
         *ngIf="model.currentSlide.slide_type === sectionTitles.random_selector"
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
-    ></app-random-selector>    
+    ></app-random-selector>
+    <app-generic
+        *ngIf="model.currentSlide.slide_type === sectionTitles.generic_slide"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-generic>
+    <app-unseen
+        *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-unseen>   
     <app-embed-game
         *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
         [currentSlide]="model.currentSlide"

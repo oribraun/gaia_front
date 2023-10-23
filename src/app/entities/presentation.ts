@@ -54,6 +54,7 @@ export class Presentation {
 export class PresentationSection {
     section_title!: string
     section_topic!: string
+    section_variables!: any
     slides!: PresentationSlide[]
 
     constructor(obj?: any) {
@@ -80,6 +81,7 @@ export class PresentationSection {
             this[key].push(new PresentationSlide(item))
             // @ts-ignore
             let slide = this[key][this[key].length-1]
+            slide.section = this
             if(slide.bundle_id!=-1){
                 if(bundle_id_to_slides.hasOwnProperty(slide.bundle_id)) {
                     bundle_id_to_slides[slide.bundle_id].push(slide)
@@ -114,11 +116,17 @@ export class PresentationSlide {
     background_image!: string
     image_path!: string
     mode!: string
+    multiple_choice_question!:any
     answer_options!: string[]
     correct_answer!: string
     text!: string
+    sentence_start!:string
     writing!: string
     texts!: string[]
+    loaded_text!: string
+    load_fields!: string[]      
+    section_variables!: string 
+    add_loaded_text_to_dynamic_text!: boolean
     examples!: string[]
     word!: string
     should_read_native:boolean = false
@@ -128,20 +136,29 @@ export class PresentationSlide {
     bundle_id:number = -1
     bundle:any[] = []
     bundle_len:number=0
+    question_index:number=0
     index_in_bundle:number=-1
     topic!:string
     essay_type!:string
+    unseen_text!:string
     grades!:string
     iframe_path!:string
+    html!:string
+    js!:string
+    css!:string
     game_duration:number=4
     blanks !:string[]
     blanks_options !:string[][]
     target_sentence !:string[]
+    all_questions !:any[]
+    all_answers !:any
     blanked_sentence !:string
     video_details!: VideoDetails
     prev:any=null
     flat_index:number=0
     practice!:string
+    section!:any
+    core_instructions:any={}
 
 
     constructor(obj?: any) {
