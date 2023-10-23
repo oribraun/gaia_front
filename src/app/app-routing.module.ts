@@ -8,15 +8,17 @@ import {LessonComponent} from "./components/lesson/lesson.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {BuyComponent} from "./components/buy/buy.component";
+import {OnBoardingComponent} from "./components/on-boarding/on-boarding.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
-    { path: 'login', component: LoginComponent, pathMatch : 'full' },
-    { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
+    // { path: 'login', component: LoginComponent, pathMatch : 'full' },
+    // { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
     { path: 'about', component: AboutComponent, pathMatch : 'full' },
     { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
     { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [AuthGuard] },
+    { path: 'onBoarding', component: OnBoardingComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthGuard] },
     // { path: 'test', component: TestComponent, pathMatch : 'full' },
     // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },

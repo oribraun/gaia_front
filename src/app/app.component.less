@@ -1,9 +1,15 @@
-.main-window {
+@import "../vars";
+
+.main-window-sidebar {
     padding-left: 48px;
     margin-left: 5px;
     position: relative;
     height: 100%;
     margin-right: 5px;
+}
+.main-window-header {
+    position: relative;
+    height: calc(100% - @nav-header-height);
 }
 .lesson {
     margin: 0;

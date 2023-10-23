@@ -8,6 +8,11 @@ export class User {
     gaia_admin!: boolean;
     company_admin!: boolean
     gmail_auth!: boolean
+    birthday!: string
+    first_name!: string
+    last_name!: string
+    login_provider!: string
+    on_boarding_details!: any;
 
     constructor(v: Partial<User> = {}) {
         Object.assign(this, v);
