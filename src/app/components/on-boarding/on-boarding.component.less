@@ -1,0 +1,129 @@
+.on-boarding {
+    padding: 5px;
+    height: 100%;
+    overflow: hidden;
+    #onBoardingCarousel {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .page {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            .eng {
+                flex: 0 0 50%;
+            }
+            .native {
+                flex: 0 0 50%;
+                direction: rtl;
+            }
+        }
+        .interest {
+            //display: flex;
+            //gap: 10px;
+            @padding: 5px;
+            .box-wrap {
+                padding: 0 @padding;
+                width: 20%;
+                display: inline-block;
+                margin: @padding 0;
+                vertical-align: top;
+                .box {
+                    padding: 35%;
+                    background: #ccc;
+                    position: relative;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    cursor: pointer;
+                    .text {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: #fff;
+                        text-shadow: 2px 2px 5px #000;
+                        width: 100%;
+                        text-align: center;
+                        padding: 0 5px;
+                    }
+                    .text-no-wrap {
+                        white-space: nowrap;
+                    }
+                    &.box-hover {
+                        &:hover {
+                            box-shadow: 0 0 5px #6c6c6c;
+                        }
+                    }
+                    &.active {
+                        box-shadow: 0 0 5px #0f3460;
+                    }
+                }
+                .specific {
+                    .item {
+                        text-align: center;
+                        padding: 5px 0;
+                        background: #ccc;
+                        margin: 10px 0;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        &.active {
+                            background: #84e384;
+                        }
+                    }
+                }
+            }
+        }
+        .buttons {
+            button {
+                margin: 0 5px;
+            }
+        }
+        .video {
+            height: 400px;
+            max-width: 90%;
+            margin: 10px auto;
+            overflow: hidden;
+            text-align: center;
+        }
+        .sentence {
+            height: 400px;
+            max-width: 90%;
+            margin: 10px auto;
+            overflow: hidden;
+            .row {
+                height: 100%;
+            }
+            .textarea {
+                width: 100%;
+                height: 100%;
+                textarea {
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    resize: none;
+                    background: #dbdbdb;
+                    padding: 5px;
+                    &:active, &:focus {
+                        border: none;
+                        outline: none;
+                    }
+                }
+            }
+            .image {
+                width: 100%;
+                height: 100%;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+    }
+}
