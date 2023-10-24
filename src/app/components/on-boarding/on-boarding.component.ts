@@ -37,7 +37,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     maxItems: any = {
         area_of_interest: 5,
-        familiar_words: 5
+        familiar_words: 99
     }
 
     current_page = 'area_of_interest'
@@ -226,13 +226,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         if (index > -1) {
             this.onBoardingObject.familiar_words.splice(index, 1);
         } else {
-            if (this.onBoardingObject.familiar_words.length < this.maxItems.area_of_interest) {
+            if (this.onBoardingObject.familiar_words.length < this.maxItems.familiar_words) {
                 this.onBoardingObject.familiar_words.push(itemText)
             } else {
                 this.onBoardingObject.familiar_words.splice(0, 1);
                 this.onBoardingObject.familiar_words.push(itemText)
             }
-            if (this.onBoardingObject.familiar_words.length == this.maxItems.area_of_interest) {
+            if (this.onBoardingObject.familiar_words.length == this.maxItems.familiar_words) {
             }
         }
     }
