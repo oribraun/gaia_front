@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
     }
 
     setupUser(response: any) {
-        this.user = response;
+        this.user = response.user;
         this.config.user = response.user;
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);

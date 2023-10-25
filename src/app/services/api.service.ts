@@ -103,6 +103,17 @@ export class ApiService {
             this.httpOptions
         )
     }
+
+    loginSocial(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'login-social', obj,
+            this.httpOptions
+        )
+    }
+    registerSocial(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'register-social', obj,
+            this.httpOptions
+        )
+    }
     register(email: string, username: string, password: string) {
         return this.http.post(this.serverBase + this.baseApiAuth + 'register', {
                 email: email,
