@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {Config} from "../../config";
 import {User} from "../../entities/user";
 import {OnStateChangeEvent, PlayerState} from "../lesson/slides/video/video.component";
+import {ApiService} from "../../services/api.service";
 
 declare var $: any;
 @Component({
@@ -32,8 +33,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         ],
         video_answer: '',
         picture_sentence: '',
+        last_page: 'area_of_interest',
         finished: false
     }
+
+    onBoardingObjectChanged = false;
 
     maxItems: any = {
         area_of_interest: 5,
@@ -64,6 +68,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         "Computers": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
         "Movies and TV": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']}
     }
+
+    beMoreSpecificSelected = 0;
 
     familiarWords = [
         'Cat',
@@ -100,7 +106,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     image = "assets/images/lesson/lesson_placeholder.jpg"
 
     constructor(
-        private config: Config
+        private config: Config,
+        private apiService: ApiService
     ) {
         this.imageSrc = this.config.staticImagePath;
     }
@@ -157,11 +164,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                 "finished": false
             }
             this.setUpObject(obj);
-            this.findLastPage();
         } else {
             this.setUpObject(this.user.on_boarding_details);
-            this.findLastPage();
         }
+        this.initExtraDetails();
     }
 
     setUpObject(obj: any) {
@@ -179,19 +185,17 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         console.log('this.onBoardingObject', this.onBoardingObject)
     }
 
-    findLastPage() {
-        let lastPage = ''
-        for (let item in this.onBoardingObject) {
-            if (Object.keys(this.onBoardingObject[item]).length > 0) {
-                lastPage = item
-            }
+    initExtraDetails() {
+        this.current_page = this.onBoardingObject.last_page;
+
+        for (let item in this.onBoardingObject.be_more_specific) {
+           this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[item].length;
         }
-        if (lastPage) {
-            this.current_page = lastPage;
-        }
+        console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected)
     }
 
     selectInterest(itemText: any) {
+        this.onBoardingObjectChanged = true;
         const index = this.onBoardingObject.area_of_interest.indexOf(itemText)
         if (index > -1) {
             this.onBoardingObject.area_of_interest.splice(index, 1);
@@ -209,19 +213,23 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     selectBeMoreSpecific(item: any, specificItem: string) {
+        this.onBoardingObjectChanged = true;
         const specificForItem = this.onBoardingObject.be_more_specific[item.key];
         console.log('specificForItem', specificForItem)
         const index = specificForItem.indexOf(specificItem)
         if (index > -1) {
             this.onBoardingObject.be_more_specific[item.key].splice(index, 1);
+            this.beMoreSpecificSelected--;
         } else {
             this.onBoardingObject.be_more_specific[item.key].push(specificItem)
+            this.beMoreSpecificSelected++;
             // if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
             // }
         }
     }
 
     selectFamiliarWords(itemText: any) {
+        this.onBoardingObjectChanged = true;
         const index = this.onBoardingObject.familiar_words.indexOf(itemText)
         if (index > -1) {
             this.onBoardingObject.familiar_words.splice(index, 1);
@@ -238,7 +246,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     selectVideoAnswer(itemText: any) {
+        this.onBoardingObjectChanged = true;
         this.onBoardingObject.video_answer = itemText;
+    }
+
+    onChangePictureSentence() {
+        this.onBoardingObjectChanged = true;
     }
 
     onSwipeLeft() {
@@ -263,6 +276,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         if (page === 'video_answer') {
             this.setVideoHeight();
         }
+        this.onBoardingObject.last_page = page;
+        this.saveUserDetails();
         this.onSwipeLeft();
         // console.log('this.onBoardingObject', this.onBoardingObject)
     }
@@ -281,6 +296,33 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         ele.stop().animate({ scrollTop: 0 }, 50);
     }
 
+    saveUserDetails() {
+        if (this.onBoardingObjectChanged) {
+            this.onBoardingObjectChanged = false;
+            // this.user.on_boarding_details = {...this.onBoardingObject}
+            this.apiService.saveUserOnBoarding({'on_boarding_object': this.onBoardingObject}).subscribe({
+                next: async (response: any) => {
+                    console.log('response', response)
+                    const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+                    if (!clientRunningOnServerHost) {
+                        // only when running localhost 4200
+                        let user = this.config.getCookie('user', true)
+                        if(user) {
+                            user = JSON.parse(user)
+                            user.on_boarding_details = this.onBoardingObject;
+                            const user_exp = this.config.getCookie('user-exp', true)
+                            const d = new Date(user_exp)
+                            this.config.setCookie('user', JSON.stringify(user), d, true);
+                        }
+                    }
+                },
+                error: (error) => {
+                    console.log('saveUserDetails error', error)
+                },
+            })
+        }
+    }
+
     onFinish() {
         console.log('finish this.onBoardingObject', this.onBoardingObject)
     }
@@ -296,13 +338,14 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     resetBeMoreSpecific() {
         this.onBoardingObject.be_more_specific = {}
+        this.beMoreSpecificSelected = 0;
     }
 
     getString(text: any) {
         return String(text)
     }
 
-     onPlayerReady(e: any) {
+    onPlayerReady(e: any) {
         // this.loading_player = false;
         console.log('onPlayerReady e', e)
     }

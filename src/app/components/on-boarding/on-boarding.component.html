@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="buttons text-center" *ngIf="onBoardingObject.area_of_interest.length > 1">
+                    <div class="buttons text-center" *ngIf="onBoardingObject.area_of_interest.length">
                         <button class="btn btn-primary" (click)="goToNextPage('be_more_specific')">Next</button>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                         <div class="eng">Be more specific please</div>
                         <div class="native">תהיה יותר ספציפי. הסיבה שאנחנו שואלים כי אנחנו רוצים להתאים את תוכן הקורס לתחומי העניין שלך.</div>
                     </div>
-                    <div class="interest">
+                    <div class="interest text-center">
                         <div class="box-wrap" *ngFor="let item of onBoardingObject.be_more_specific | keyvalue">
                             <div class="box"
                                  [ngStyle]="{'background-image': 'url(' + imageSrc + areaOfInterestItems[getString(item.key)].image + ')'}"
@@ -48,7 +48,7 @@
                     <div class="buttons text-center">
                         <button class="btn btn-primary" (click)="goToPrevPage('area_of_interest')">Prev</button>
                         <button
-                            *ngIf="onBoardingObject.area_of_interest.length > 1"
+                            *ngIf="beMoreSpecificSelected"
                             class="btn btn-primary" (click)="goToNextPage('familiar_words')">Next</button>
                     </div>
                 </div>
@@ -122,7 +122,10 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="textarea">
-                                    <textarea [(ngModel)]="onBoardingObject.picture_sentence" name="" id="" cols="30" rows="10"></textarea>
+                                    <textarea
+                                        [(ngModel)]="onBoardingObject.picture_sentence"
+                                        (ngModelChange)="onChangePictureSentence()"
+                                        name="" id="" cols="30" rows="10"></textarea>
                                 </div>
                             </div>
                             <div class="col-6">

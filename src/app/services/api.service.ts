@@ -331,6 +331,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    saveUserOnBoarding(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'save-user-on-boarding', obj,
+            this.httpOptions
+        )
+    }
 
     getCompanyUsers(obj: any) {
         // company_users_offset
