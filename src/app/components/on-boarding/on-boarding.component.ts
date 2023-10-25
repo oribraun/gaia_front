@@ -3,6 +3,7 @@ import {Config} from "../../config";
 import {User} from "../../entities/user";
 import {OnStateChangeEvent, PlayerState} from "../lesson/slides/video/video.component";
 import {ApiService} from "../../services/api.service";
+import {Router} from "@angular/router";
 
 declare var $: any;
 @Component({
@@ -107,7 +108,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     constructor(
         private config: Config,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private router: Router
     ) {
         this.imageSrc = this.config.staticImagePath;
     }
@@ -189,13 +191,14 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.current_page = this.onBoardingObject.last_page;
 
         for (let item in this.onBoardingObject.be_more_specific) {
-           this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[item].length;
+            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[item].length;
         }
         console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected)
     }
 
     selectInterest(itemText: any) {
         this.onBoardingObjectChanged = true;
+        this.onBoardingObject.finished = false;
         const index = this.onBoardingObject.area_of_interest.indexOf(itemText)
         if (index > -1) {
             this.onBoardingObject.area_of_interest.splice(index, 1);
@@ -214,6 +217,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectBeMoreSpecific(item: any, specificItem: string) {
         this.onBoardingObjectChanged = true;
+         this.onBoardingObject.finished = false;
         const specificForItem = this.onBoardingObject.be_more_specific[item.key];
         console.log('specificForItem', specificForItem)
         const index = specificForItem.indexOf(specificItem)
@@ -230,6 +234,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectFamiliarWords(itemText: any) {
         this.onBoardingObjectChanged = true;
+         this.onBoardingObject.finished = false;
         const index = this.onBoardingObject.familiar_words.indexOf(itemText)
         if (index > -1) {
             this.onBoardingObject.familiar_words.splice(index, 1);
@@ -247,11 +252,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectVideoAnswer(itemText: any) {
         this.onBoardingObjectChanged = true;
+         this.onBoardingObject.finished = false;
         this.onBoardingObject.video_answer = itemText;
     }
 
     onChangePictureSentence() {
         this.onBoardingObjectChanged = true;
+         this.onBoardingObject.finished = false;
     }
 
     onSwipeLeft() {
@@ -296,7 +303,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         ele.stop().animate({ scrollTop: 0 }, 50);
     }
 
-    saveUserDetails() {
+    saveUserDetails(redirect=false) {
         if (this.onBoardingObjectChanged) {
             this.onBoardingObjectChanged = false;
             // this.user.on_boarding_details = {...this.onBoardingObject}
@@ -313,18 +320,29 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                             const user_exp = this.config.getCookie('user-exp', true)
                             const d = new Date(user_exp)
                             this.config.setCookie('user', JSON.stringify(user), d, true);
+                            this.config.user = user;
                         }
+                    }
+                    if (redirect) {
+                        console.log('redirect', redirect)
+                        this.router.navigate(['/dashboard'])
                     }
                 },
                 error: (error) => {
                     console.log('saveUserDetails error', error)
                 },
             })
+        } else {
+            if (redirect) {
+                this.router.navigate(['/dashboard'])
+            }
         }
     }
 
     onFinish() {
+        this.onBoardingObject.finished = true;
         console.log('finish this.onBoardingObject', this.onBoardingObject)
+        this.saveUserDetails(true);
     }
 
     setUpBeMoreSpecific() {

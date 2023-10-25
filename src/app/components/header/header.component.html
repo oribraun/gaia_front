@@ -22,23 +22,23 @@
                         <i class="bi bi-info"></i> <span>About</span>
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && (!user.on_boarding_details || !user.on_boarding_details.finished)">
+                <li class="nav-item" *ngIf="user.id">
                     <a class="nav-link rounded-0"
-                       data-bs-toggle="tooltip" data-bs-placement="right" title="On Boarding" data-bs-custom-class="gaia-tooltip"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"
                        [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="user.id && user.on_boarding_details && user.on_boarding_details.finished">
                     <a class="nav-link rounded-0"
-                       data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard" data-bs-custom-class="gaia-tooltip"
                        [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <i class="bi bi-view-list"></i> <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
                     <a class="nav-link rounded-0"
-                       data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"
                        [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
                         <i class="bi bi-award-fill"></i> <span>Lesson</span>
                     </a>

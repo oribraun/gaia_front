@@ -57,8 +57,10 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
+        console.log('this.user', this.user)
         this.config.user_subject.subscribe((user) => {
             this.user = user;
+            console.log('this.user2', this.user)
             this.helperService.applyTooltip()
         });
         this.helperService.applyTooltip()
