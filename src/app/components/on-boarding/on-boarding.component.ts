@@ -337,7 +337,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     resetBeMoreSpecific() {
-        this.onBoardingObject.be_more_specific = {}
+        this.onBoardingObject.be_more_specific = {};
         this.beMoreSpecificSelected = 0;
     }
 
