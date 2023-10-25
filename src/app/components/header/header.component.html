@@ -98,34 +98,6 @@
                                     <div class="text-center">
                                         <button class="btn btn-primary" (click)="login()">Log in</button>
                                     </div>
-                                    <div class="divider">
-                                        <hr>
-                                        <span>or</span>
-                                        <hr>
-                                    </div>
-                                    <div class="providers">
-                                        <button type="button">
-                                            <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <title>Google</title>
-                                                <g fill="none" fill-rule="evenodd">
-                                                    <path d="M23.52 12.273c0-.851-.076-1.67-.218-2.455H12v4.642h6.458a5.52 5.52 0 01-2.394 3.622v3.01h3.878c2.269-2.088 3.578-5.165 3.578-8.82z" fill="#4285F4" fill-rule="nonzero"></path><path d="M12 24c3.24 0 5.956-1.075 7.942-2.907l-3.878-3.011c-1.075.72-2.45 1.145-4.064 1.145-3.125 0-5.77-2.11-6.715-4.947H1.276v3.11A11.995 11.995 0 0012 24z" fill="#34A853" fill-rule="nonzero"></path><path d="M5.285 14.28A7.213 7.213 0 014.91 12c0-.79.136-1.56.376-2.28V6.61H1.276A11.995 11.995 0 000 12c0 1.936.464 3.77 1.276 5.39l4.01-3.11z" fill="#FBBC05" fill-rule="nonzero"></path><path d="M12 4.773c1.762 0 3.344.605 4.587 1.794l3.442-3.442C17.951 1.19 15.235 0 12 0 7.31 0 3.25 2.69 1.276 6.61l4.01 3.11C6.228 6.884 8.874 4.773 12 4.773z" fill="#EA4335" fill-rule="nonzero"></path><path d="M0 0h24v24H0z"></path>
-                                                </g>
-                                            </svg>
-                                            Continue with Google
-                                        </button>
-                                        <button type="button">
-                                            <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <title>Facebook</title>
-                                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">
-                                                </path>
-                                            </svg>
-                                            Continue with Facebook
-                                        </button>
-                                    </div>
-                                    <p class="text-center">
-                                        New to Gaia? <a class="sign-up" (click)="formType='signup'; errMessage = '';">Sign up</a>
-                                    </p>
-                                    <!--                <app-google-signin></app-google-signin>-->
                                 </div>
                                 <div *ngSwitchCase="'signup'">
                                     <h3 class="text-center">Sign up</h3>
@@ -141,33 +113,6 @@
                                     <div class="text-center">
                                         <button class="btn btn-primary" (click)="signup()">Sign up</button>
                                     </div>
-                                    <div class="divider">
-                                        <hr>
-                                        <span>or</span>
-                                        <hr>
-                                    </div>
-                                    <div class="providers">
-                                        <button type="button">
-                                            <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <title>Google</title>
-                                                <g fill="none" fill-rule="evenodd">
-                                                    <path d="M23.52 12.273c0-.851-.076-1.67-.218-2.455H12v4.642h6.458a5.52 5.52 0 01-2.394 3.622v3.01h3.878c2.269-2.088 3.578-5.165 3.578-8.82z" fill="#4285F4" fill-rule="nonzero"></path><path d="M12 24c3.24 0 5.956-1.075 7.942-2.907l-3.878-3.011c-1.075.72-2.45 1.145-4.064 1.145-3.125 0-5.77-2.11-6.715-4.947H1.276v3.11A11.995 11.995 0 0012 24z" fill="#34A853" fill-rule="nonzero"></path><path d="M5.285 14.28A7.213 7.213 0 014.91 12c0-.79.136-1.56.376-2.28V6.61H1.276A11.995 11.995 0 000 12c0 1.936.464 3.77 1.276 5.39l4.01-3.11z" fill="#FBBC05" fill-rule="nonzero"></path><path d="M12 4.773c1.762 0 3.344.605 4.587 1.794l3.442-3.442C17.951 1.19 15.235 0 12 0 7.31 0 3.25 2.69 1.276 6.61l4.01 3.11C6.228 6.884 8.874 4.773 12 4.773z" fill="#EA4335" fill-rule="nonzero"></path><path d="M0 0h24v24H0z"></path>
-                                                </g>
-                                            </svg>
-                                            Continue with Google
-                                        </button>
-                                        <button type="button">
-                                            <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <title>Facebook</title>
-                                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">
-                                                </path>
-                                            </svg>
-                                            Continue with Facebook
-                                        </button>
-                                    </div>
-                                    <p class="text-center">
-                                        Already on Gaia? <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a>
-                                    </p>
                                 </div>
                                 <div *ngSwitchCase="'forgot'">
                                     <h3 class="text-center">Forgot Password</h3>
@@ -179,15 +124,48 @@
                                     <div class="text-center">
                                         <button class="btn btn-primary" (click)="forgot()">Submit</button>
                                     </div>
-                                    <div class="divider">
-                                        <hr>
-                                        <span>or</span>
-                                        <hr>
-                                    </div>
-                                    <p class="text-center">Back to <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a></p>
                                 </div>
                             </form>
                         </div>
+                        <div class="divider">
+                            <hr>
+                            <span>or</span>
+                            <hr>
+                        </div>
+                        <ng-container *ngIf="formType === 'login' || formType === 'signup'">
+                            <div class="providers">
+                                <button type="button" (click)="googleSignIn()">
+                                    <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <title>Google</title>
+                                        <g fill="none" fill-rule="evenodd">
+                                            <path d="M23.52 12.273c0-.851-.076-1.67-.218-2.455H12v4.642h6.458a5.52 5.52 0 01-2.394 3.622v3.01h3.878c2.269-2.088 3.578-5.165 3.578-8.82z" fill="#4285F4" fill-rule="nonzero"></path><path d="M12 24c3.24 0 5.956-1.075 7.942-2.907l-3.878-3.011c-1.075.72-2.45 1.145-4.064 1.145-3.125 0-5.77-2.11-6.715-4.947H1.276v3.11A11.995 11.995 0 0012 24z" fill="#34A853" fill-rule="nonzero"></path><path d="M5.285 14.28A7.213 7.213 0 014.91 12c0-.79.136-1.56.376-2.28V6.61H1.276A11.995 11.995 0 000 12c0 1.936.464 3.77 1.276 5.39l4.01-3.11z" fill="#FBBC05" fill-rule="nonzero"></path><path d="M12 4.773c1.762 0 3.344.605 4.587 1.794l3.442-3.442C17.951 1.19 15.235 0 12 0 7.31 0 3.25 2.69 1.276 6.61l4.01 3.11C6.228 6.884 8.874 4.773 12 4.773z" fill="#EA4335" fill-rule="nonzero"></path><path d="M0 0h24v24H0z"></path>
+                                        </g>
+                                    </svg>
+                                    Continue with Google
+                                </button>
+                                <button type="button" (click)="facebookSignIn()">
+                                    <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <title>Facebook</title>
+                                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">
+                                        </path>
+                                    </svg>
+                                    Continue with Facebook
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="formType === 'login'">
+                            <p class="text-center">
+                                New to Gaia? <a class="sign-up" (click)="formType='signup'; errMessage = '';">Sign up</a>
+                            </p>
+                        </ng-container>
+                        <ng-container *ngIf="formType === 'signup'">
+                            <p class="text-center">
+                                Already on Gaia? <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a>
+                            </p>
+                        </ng-container>
+                        <ng-container *ngIf="formType === 'forgot'">
+                            <p class="text-center">Back to <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a></p>
+                        </ng-container>
                     </div>
                 </div>
             </div>

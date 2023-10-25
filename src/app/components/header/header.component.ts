@@ -176,6 +176,14 @@ export class HeaderComponent implements OnInit {
         }
     }
 
+    googleSignIn() {
+
+    }
+
+    facebookSignIn() {
+
+    }
+
     resetMessages() {
         this.errMessage = '';
         this.successMessage = ''
