@@ -110,7 +110,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.initCurrentPage(true);
+        this.initCurrentPage(false);
     }
 
     ngAfterViewInit(): void {
