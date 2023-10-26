@@ -47,7 +47,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     callInProgress = false;
 
     auth2: any;
-    @ViewChild('googleLogin', { static: false }) googleLogin!: ElementRef;
 
     googleClient: any;
 
