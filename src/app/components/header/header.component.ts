@@ -57,10 +57,8 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
-        console.log('this.user', this.user)
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            console.log('this.user2', this.user)
             this.helperService.applyTooltip()
         });
         this.helperService.applyTooltip()
@@ -338,7 +336,7 @@ export class HeaderComponent implements OnInit {
                         }
 
                     }, (error: any) => {
-                        // user exist window maybe
+                        // user exit window maybe
                         console.log(JSON.stringify(error, undefined, 2));
                     });
             }
