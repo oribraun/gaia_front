@@ -132,7 +132,13 @@
                         </div>
                         <ng-container *ngIf="formType === 'login' || formType === 'signup'">
                             <div class="providers">
-                                <button type="button" #googleLogin>
+                                <div id="googleButton"></div>
+<!--                                <div id="g_id_onload"-->
+<!--                                     data-client_id="10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com"-->
+<!--                                     data-cancel_on_tap_outside="false">-->
+<!--                                </div>-->
+<!--                                <div class="g_id_signin" data-type="standard"></div>-->
+                                <button type="button" #googleLogin (click)="logInGoogle()">
                                     <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <title>Google</title>
                                         <g fill="none" fill-rule="evenodd">
@@ -162,7 +168,7 @@
                             </p>
                         </ng-container>
                         <ng-container *ngIf="formType === 'forgot'">
-                            <p class="text-center">Back to <a class="log-in" (click)="formType='login'; resetMessages(); setupGoogleAuthClickHandler();">Log in</a></p>
+                            <p class="text-center">Back to <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a></p>
                         </ng-container>
                     </div>
                 </div>

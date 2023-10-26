@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, IsActiveMatchOptions, Router} from "@angular/router";
 import {User} from "../../entities/user";
 import {Config} from "../../config";
@@ -6,14 +6,17 @@ import {ApiService} from "../../services/api.service";
 import {HelperService} from "../../services/helper.service";
 import {environment} from "../../../environments/environment";
 import {lastValueFrom} from "rxjs";
+import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
+
 
 declare var $: any;
+declare var google: any;
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.less']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
     routerLinkActiveOptions: IsActiveMatchOptions = {
         fragment: "exact",
         paths: "exact",
@@ -46,13 +49,16 @@ export class HeaderComponent implements OnInit {
     auth2: any;
     @ViewChild('googleLogin', { static: false }) googleLogin!: ElementRef;
 
+    googleClient: any;
+
     constructor(
         private config: Config,
         private apiService: ApiService,
         private router: Router,
         private helperService: HelperService,
         private route: ActivatedRoute,
-        private ref: ChangeDetectorRef
+        private ref: ChangeDetectorRef,
+        private ngZone: NgZone
     ) { }
 
     ngOnInit(): void {
@@ -71,8 +77,174 @@ export class HeaderComponent implements OnInit {
                 this.showLoginModel();
             }
         })
-        this.googleAuthSDK();
+        this.setUpGoogle();
     }
+
+    setUpGoogle() {
+        // @ts-ignore
+        window.onGoogleLibraryLoad = () => {
+            // google.accounts.id.initialize({
+            //     // Ref: https://developers.google.com/identity/gsi/web/reference/js-reference#IdConfiguration
+            //     client_id: '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com',
+            //     callback: this.handleCredentialResponse.bind(this), // Whatever function you want to trigger...
+            //     auto_select: true,
+            //     cancel_on_tap_outside: false
+            // });
+            this.googleClient = google.accounts.oauth2.initTokenClient({
+                client_id: '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com',
+                scope: 'profile email https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read',
+                callback: (tokenResponse: any) => this.getGoogleUser(tokenResponse),
+                error_callback: (err: any) => {
+                    console.log('google error', err)
+                }
+            })
+        };
+    }
+
+    renderGoogleButton() {
+        google.accounts!.id.renderButton(
+            document!.getElementById('googleButton')!,
+            { theme: 'outline', size: 'large', width: 200 }
+        )
+    }
+
+    autoReSignIn() {
+        google.accounts.id.initialize({
+            // Ref: https://developers.google.com/identity/gsi/web/reference/js-reference#IdConfiguration
+            client_id: '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com',
+            callback: this.handleCredentialResponse.bind(this), // Whatever function you want to trigger...
+            auto_select: true,
+            cancel_on_tap_outside: false
+        });
+        // OPTIONAL: In my case I want to redirect the user to an specific path.
+        google.accounts.id.prompt((notification: PromptMomentNotification) => {
+            console.log('Google prompt event triggered...');
+
+            if (notification.getDismissedReason() === 'credential_returned') {
+                this.ngZone.run(() => {
+                    // this.router.navigate(['myapp/somewhere'], { replaceUrl: true });
+                    console.log('Welcome back!');
+                });
+            }
+        });
+    }
+
+    async getGoogleUser(tokenResponse: any) {
+        console.log('tokenResponse', tokenResponse)
+        const user: any = await this.getUserProfileData(tokenResponse.access_token)
+        console.log('user', user)
+        let user_details = {
+            type: 'google',
+            id: user.sub,
+            name: user.name,
+            first_name: user.given_name.trim(),
+            last_name: user.family_name.trim(),
+            image_url: user.picture,
+            email: user.email,
+            // id_token: authResult.id_token,
+            access_token: tokenResponse.access_token,
+            gender: null,
+            birthday: null
+        }
+        const userPeople = await this.getUserPeopleInfo(user_details.id, tokenResponse.access_token)
+        user_details.gender = userPeople.gender;
+        user_details.birthday = userPeople.birthday;
+        if (this.formType === 'login') {
+            this.loginSocial(user_details);
+        } else if (this.formType === 'signup') {
+            this.signupSocial(user_details);
+        }
+    }
+
+    getUserProfileData(accessToken: string) {
+        return new Promise(function (resolve, reject) {
+            let request = new XMLHttpRequest();
+            const url = `https://www.googleapis.com/oauth2/v3/userinfo`;
+            request.addEventListener("loadend", function () {
+                const response = JSON.parse(this.responseText);
+                if (this.status === 200) {
+                    resolve(response);
+                } else {
+                    reject(response);
+                }
+            });
+            request.open("GET", url, true);
+            request.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+            request.send();
+        });
+    }
+
+    async getUserPeopleInfo(user_id: string, accessToken: string) {
+        const response = await fetch(
+            `https://people.googleapis.com/v1/people/${user_id}?personFields=birthdays,genders&access_token=${accessToken}`
+        )
+        let {birthdays, genders} = await response.json();
+        // console.log('birthdays', birthdays)
+        // console.log('genders', genders)
+        let gender = null;
+        let birthday: any = null;
+        try {
+            gender = genders[genders.length - 1].value
+        } catch (e) {
+        }
+        try {
+            for (let b of birthdays) {
+                if (b.date.year && b.date.month && b.date.day) {
+                    birthday = new Date(b.date.year, b.date.month, b.date.day).toLocaleDateString('en-GB');
+                    break;
+                }
+            }
+        } catch (e) {
+        }
+
+        return {gender: gender, birthday: birthday}
+    }
+
+    handleCredentialResponse(response: CredentialResponse) {
+// Decoding  JWT token...
+        let googleUser: any | null = null;
+        try {
+            googleUser = JSON.parse(atob(response?.credential.split('.')[1]));
+        } catch (e) {
+            console.error('Error while trying to decode token', e);
+        }
+        console.log('googleUser', googleUser);
+        // {
+        //     "iss": "https://accounts.google.com",
+        //     "azp": "10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com",
+        //     "aud": "10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com",
+        //     "sub": "107590987755067476953",
+        //     "hd": "gaialabs.ai",
+        //     "email": "ori@gaialabs.ai",
+        //     "email_verified": true,
+        //     "nbf": 1698324722,
+        //     "name": "Ori Braun",
+        //     "given_name": "Ori ",
+        //     "family_name": "Braun",
+        //     "locale": "en",
+        //     "iat": 1698325022,
+        //     "exp": 1698328622,
+        //     "jti": "1ded0241883fe008ab48b21653669a6bfd679379"
+        // }
+    }
+
+    ngAfterViewInit(): void {
+        // google.accounts.id.initialize({
+        //     client_id: "",
+        //     callback: (window as any)['handleCredentialResponse'] =
+        //         (response: any) => this.ngZone.run(() => {
+        //             console.log("this response holds the token for the logged in user information",response)
+        //         })
+        // });
+        //
+        // google.accounts.id.renderButton(
+        //     document.getElementById("googleButton"),
+        //     { type: "standard", text: "signin_with", theme: "outline",
+        //         size: "medium", width: "250"}
+        // )
+    }
+
+
 
     async logout(e: Event) {
         e.preventDefault();
@@ -257,90 +429,8 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    googleAuthSDK() {
-        (<any>window)['googleSDKLoaded'] = () => {
-            (<any>window)['gapi'].load('auth2', () => {
-                this.auth2 = (<any>window)['gapi'].auth2.init({
-                    client_id: '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com',
-                    plugin_name:'login',
-                    cookiepolicy: 'single_host_origin',
-                    scope: 'profile email https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read'
-                });
-                // this.callLogin();
-                this.setupGoogleAuthClickHandler();
-            });
-        }
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement('script');
-            js.id = id;
-            js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
-            fjs?.parentNode?.insertBefore(js, fjs);
-        }(document, 'script', 'google-jssdk'));
-    }
-
-    setupGoogleAuthClickHandler() {
-        setTimeout(() => {
-            const attachClickHandlerExist = this.googleLogin.nativeElement.classList.contains('attachClickHandler');
-            if (!attachClickHandlerExist) {
-                this.googleLogin.nativeElement.classList.add('attachClickHandler')
-                this.auth2.attachClickHandler(this.googleLogin.nativeElement, {},
-                    async (googleAuthUser: any) => {
-
-                        let profile = googleAuthUser.getBasicProfile();
-                        let authResult = googleAuthUser.getAuthResponse();
-                        let user_details = {
-                            type: 'google',
-                            id: profile.getId(),
-                            name: profile.getName().trim(),
-                            first_name: profile.getGivenName().trim(),
-                            last_name: profile.getFamilyName().trim(),
-                            image_url: profile.getImageUrl(),
-                            email: profile.getEmail(),
-                            // id_token: authResult.id_token,
-                            access_token: authResult.access_token,
-                            gender: null,
-                            birthday: null
-                        }
-                        try {
-                            const response = await fetch(
-                                `https://people.googleapis.com/v1/people/${profile.getId()}?personFields=birthdays,genders&access_token=${authResult.access_token}`
-                            )
-                            let {birthdays, genders} = await response.json();
-                            // console.log('birthdays', birthdays)
-                            // console.log('genders', genders)
-                            let gender = null;
-                            let birthday: any = null;
-                            try {
-                                gender = genders[genders.length - 1].value
-                            } catch (e) {
-                            }
-                            try {
-                                for (let b of birthdays) {
-                                    if (b.date.year && b.date.month && b.date.day) {
-                                        birthday = new Date(b.date.year, b.date.month, b.date.day).toLocaleDateString('en-GB');
-                                        break;
-                                    }
-                                }
-                            } catch (e) {
-                            }
-                            user_details.gender = gender;
-                            user_details.birthday = birthday;
-                        } catch (e) {}
-                        if (this.formType === 'login') {
-                            this.loginSocial(user_details);
-                        } else if (this.formType === 'signup') {
-                            this.signupSocial(user_details);
-                        }
-
-                    }, (error: any) => {
-                        // user exit window maybe
-                        console.log(JSON.stringify(error, undefined, 2));
-                    });
-            }
-        })
+    logInGoogle() {
+        this.googleClient.requestAccessToken();
     }
 
     resetMessages() {
