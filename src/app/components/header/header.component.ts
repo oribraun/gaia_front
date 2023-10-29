@@ -62,20 +62,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
-        this.config.user_subject.subscribe((user) => {
-            this.user = user;
-            this.helperService.applyTooltip()
-        });
-        this.helperService.applyTooltip()
-
-        this.route.queryParams.subscribe((params) => {
-            const type = params['authType']
-            if (type && this.formTypeOptions.indexOf(type) > -1) {
-                this.formType = type;
-                console.log('this.formType', this.formType)
-                this.showLoginModel();
-            }
-        })
+        // this.config.user_subject.subscribe((user) => {
+        //     this.user = user;
+        //     this.helperService.applyTooltip()
+        // });
+        // this.helperService.applyTooltip()
+        //
+        // this.route.queryParams.subscribe((params) => {
+        //     const type = params['authType']
+        //     if (type && this.formTypeOptions.indexOf(type) > -1) {
+        //         this.formType = type;
+        //         console.log('this.formType', this.formType)
+        //         this.showLoginModel();
+        //     }
+        // })
         this.setUpGoogle();
     }
 
@@ -266,15 +266,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                let returnUrl = this.route.snapshot.queryParams['returnUrl'];
-                if (!returnUrl) {
-                    if (this.user.on_boarding_details && this.user.on_boarding_details.finished) {
-                        returnUrl = '/dashboard'
-                    } else {
-                        returnUrl = '/onBoarding'
-                    }
-                }
-                this.router.navigateByUrl(returnUrl);
+                this.redirectUser();
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
@@ -301,15 +293,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                let returnUrl = this.route.snapshot.queryParams['returnUrl'];
-                if (!returnUrl) {
-                    if (this.user.on_boarding_details && this.user.on_boarding_details.finished) {
-                        returnUrl = '/dashboard'
-                    } else {
-                        returnUrl = '/onBoarding'
-                    }
-                }
-                this.router.navigateByUrl(returnUrl);
+                this.redirectUser();
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
@@ -365,15 +349,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 console.log('data', data)
                 this.hideLoginModel();
                 this.setupUser(data);
-                let returnUrl = this.route.snapshot.queryParams['returnUrl'];
-                if (!returnUrl) {
-                    if (this.user.on_boarding_details && this.user.on_boarding_details.finished) {
-                        returnUrl = '/dashboard'
-                    } else {
-                        returnUrl = '/onBoarding'
-                    }
-                }
-                this.router.navigateByUrl(returnUrl);
+                this.redirectUser();
             } else {
                 if (Array.isArray(response.errMessage)) {
                     this.errMessage = response.errMessage.join('</br>');
@@ -444,6 +420,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);
         this.config.csrf_token = this.config.getCookie('csrftoken');
+    }
+
+    redirectUser() {
+        let returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        if (!returnUrl) {
+            if (this.user.on_boarding_details && this.user.on_boarding_details.finished) {
+                returnUrl = '/dashboard'
+            } else {
+                returnUrl = '/onBoarding'
+            }
+        }
+        this.router.navigateByUrl(returnUrl);
     }
 
     setCookiesAfterLogin(response: any) {
