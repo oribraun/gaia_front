@@ -93,7 +93,7 @@ export class Config {
     }
 
     resetUserCreds() {
-        this.user = '';
+        this.user = new User();
         this.token = '';
     }
 

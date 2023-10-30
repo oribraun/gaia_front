@@ -50,6 +50,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     googleClient: any;
 
+    imageSrc: string;
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -58,24 +60,26 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         private route: ActivatedRoute,
         private ref: ChangeDetectorRef,
         private ngZone: NgZone
-    ) { }
+    ) {
+        this.imageSrc = this.config.staticImagePath;
+    }
 
     ngOnInit(): void {
         this.user = this.config.user;
-        // this.config.user_subject.subscribe((user) => {
-        //     this.user = user;
-        //     this.helperService.applyTooltip()
-        // });
-        // this.helperService.applyTooltip()
-        //
-        // this.route.queryParams.subscribe((params) => {
-        //     const type = params['authType']
-        //     if (type && this.formTypeOptions.indexOf(type) > -1) {
-        //         this.formType = type;
-        //         console.log('this.formType', this.formType)
-        //         this.showLoginModel();
-        //     }
-        // })
+        this.config.user_subject.subscribe((user) => {
+            this.user = user;
+            this.helperService.applyTooltip()
+        });
+        this.helperService.applyTooltip()
+
+        this.route.queryParams.subscribe((params) => {
+            const type = params['authType']
+            if (type && this.formTypeOptions.indexOf(type) > -1) {
+                this.formType = type;
+                console.log('this.formType', this.formType)
+                this.showLoginModel();
+            }
+        })
         this.setUpGoogle();
     }
 
