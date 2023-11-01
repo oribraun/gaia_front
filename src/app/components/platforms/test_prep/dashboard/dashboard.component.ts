@@ -5,6 +5,8 @@ import {User} from "../../../../entities/user";
 import {Presentation} from "../../../../entities/presentation";
 import {ActivatedRoute, Router} from "@angular/router";
 
+declare var $: any;
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,8 +18,12 @@ export class TestPrepDashboardComponent implements OnInit {
     gettingGroupTypes = false;
 
     groupTypes: any = [];
-    // purchasedCourses: any = [];
-    lessons: any = [];
+    courses: any = [];
+    statusMapping: any = {};
+
+    currentCourseType: any;
+    currentCourseLessons: any;
+    gettingCourseInfo = false;
 
     coursesType: string = 'in_progress';
 
@@ -44,7 +50,7 @@ export class TestPrepDashboardComponent implements OnInit {
                 this.coursesType = type
             }
         })
-        this.getGroupTypes();
+        this.getPlatformDashboard();
     }
 
     getUser() {
@@ -54,15 +60,17 @@ export class TestPrepDashboardComponent implements OnInit {
         })
     }
 
-    getGroupTypes() {
+    getPlatformDashboard() {
         this.reset();
         this.gettingGroupTypes = true;
-        this.apiService.getGroupTypes({}).subscribe({
+        this.apiService.getPlatformDashboard({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('getGroupTypes err', response)
                 } else {
                     this.groupTypes = response.group_types;
+                    this.courses = response.courses;
+                    this.statusMapping = response.status_mapping;
                     // this.purchasedCourses = response.purchased_courses;
                 }
                 this.gettingGroupTypes = false;
@@ -72,6 +80,67 @@ export class TestPrepDashboardComponent implements OnInit {
                 this.gettingGroupTypes = false;
             },
         })
+    }
+
+    resetCurrentCourse() {
+        this.currentCourseLessons = null;
+        this.currentCourseType = null;
+    }
+
+    selectCourse(courseType: any) {
+        if (this.currentCourseType !== courseType) {
+            this.resetCurrentCourse();
+            this.currentCourseType = courseType
+            this.getCourseInfo(this.currentCourseType)
+        } else {
+            this.showUserLessonsModal();
+        }
+    }
+
+    getCourseInfo(courseType: any) {
+        this.gettingCourseInfo = true;
+        this.apiService.getUserLessons(courseType).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('getCourseInfo err', response)
+                } else {
+                    this.currentCourseLessons = response.lessons;
+                    this.showUserLessonsModal();
+                }
+                this.gettingCourseInfo = false;
+            },
+            error: (error) => {
+                console.log('getCourseInfo error', error)
+                this.gettingCourseInfo = false;
+            },
+        })
+    }
+
+    startNewUserLesson(event: Event) {
+        event.preventDefault();
+        console.log('startNewUserLesson')
+    }
+    startUserLesson(event: Event) {
+        event.preventDefault();
+        console.log('startUserLesson')
+    }
+    continueUserLesson(event: Event) {
+        event.preventDefault();
+        console.log('continueUserLesson')
+    }
+    tryAgainUserLesson(event: Event) {
+        event.preventDefault();
+        console.log('tryAgainUserLesson')
+    }
+
+    showUserLessonsModal() {
+        $('#userLessonsModal').modal('show');
+    }
+    hideUserLessonsModal() {
+        const el = $('#userLessonsModal');
+        el.removeClass('show');
+        el.modal('hide');
+        $('.modal-backdrop').hide();
     }
 
     onStart() {

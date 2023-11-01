@@ -475,8 +475,13 @@ export class ApiService {
     // children platform api
 
     // test_prep platform api
-    getGroupTypes(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-group-types', obj,
+    getPlatformDashboard(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-dashboard', obj,
+            this.httpOptions
+        )
+    }
+    getUserLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-user-lessons', obj,
             this.httpOptions
         )
     }

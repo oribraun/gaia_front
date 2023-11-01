@@ -5,9 +5,9 @@
                 <h4 class="header">
                     My Courses
                 </h4>
-                <div class="box" *ngFor="let g of groupTypes">
+                <div class="box" *ngFor="let g of groupTypes" (click)="selectCourse(g)">
                     <div class="headline">Practice {{g.name}}</div>
-                    <div class="desc">Total finished 0 <small>of</small> 1</div>
+                    <div class="desc">Total finished {{courses[g.name].finished}} <small>of</small> {{courses[g.name].finished + courses[g.name].unfinished}}</div>
                 </div>
                 <div class="generic-loader-wrapper" *ngIf="gettingGroupTypes">
                     <div class="loader">
@@ -106,3 +106,52 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="userLessonsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" *ngIf="currentCourseType">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title">{{currentCourseType.name | capitalize: 'word'}}</h5>
+            </div>
+            <div class="modal-body">
+                <div class="start-new">
+                    <a (click)="startNewUserLesson($event)" href="">Start New</a>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Started Count</th>
+                        <th scope="col">last Started</th>
+                        <th scope="col">status</th>
+                        <th scope="col">score</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of currentCourseLessons">
+                        <td>{{item.started_count}}</td>
+                        <td>{{item.last_started ? item.last_started : '-'}}</td>
+                        <td>{{statusMapping[item.status]}}</td>
+                        <td>0</td>
+                        <td>
+                            <a (click)="startUserLesson($event)" href="" *ngIf="item.status === 1">Start</a>
+                            <a (click)="continueUserLesson($event)" href="" *ngIf="item.status === 2">Continue</a>
+                            <a (click)="tryAgainUserLesson($event)" href="" *ngIf="item.status === 3">Try Again</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="generic-loader-wrapper" *ngIf="false">
+                    <div class="loader">
+                        <div class="spinner-border">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
