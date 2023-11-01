@@ -41,13 +41,20 @@ import { TemplateComponent } from './components/lesson/slides/template/template.
 import { WritingComponent } from './components/lesson/slides/writing/writing.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { RandomSelectorComponent } from './components/lesson/slides/random-selector/random-selector.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { BuyComponent } from './components/buy/buy.component';
 import { UnseenComponent } from './components/lesson/slides/unseen/unseen.component';
 import { GenericComponent } from './components/lesson/slides/generic/generic.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
+
+// only for test prep app
+import { TestPrepDashboardComponent } from './components/platforms/test_prep/dashboard/dashboard.component';
+// only for test prep app
+
+// only for childrens app
+import { ChildrensDashboardComponent } from './components/platforms/childrens/dashboard/dashboard.component';
+// only for childrens app
 @NgModule({
     declarations: [
         AppComponent,
@@ -84,11 +91,12 @@ import { OnBoardingComponent } from './components/on-boarding/on-boarding.compon
         RandomSelectorComponent,
         UnseenComponent,
         GenericComponent,
-        DashboardComponent,
+        ChildrensDashboardComponent,
         CapitalizePipe,
         BuyComponent,
         HeaderComponent,
         OnBoardingComponent,
+        TestPrepDashboardComponent,
     ],
     imports: [
         BrowserModule,

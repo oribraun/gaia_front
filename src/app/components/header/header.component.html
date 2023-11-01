@@ -25,14 +25,15 @@
                 <li class="nav-item" *ngIf="user.id">
                     <a class="nav-link rounded-0"
                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"
+                       (click)="initOnBoarding()"
                        [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && user.on_boarding_details && user.on_boarding_details.finished">
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">
                     <a class="nav-link rounded-0"
                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard" data-bs-custom-class="gaia-tooltip"
-                       [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                       [routerLink]="['/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <i class="bi bi-view-list"></i> <span>Dashboard</span>
                     </a>
                 </li>
@@ -45,6 +46,14 @@
                 </li>
             </ul>
             <div class="right-items d-flex" *ngIf="!user.id">
+                <select class="form-select form-select-sm align-self-center"
+                        (change)="changePlatform($event)"
+                        *ngIf="platforms.length">
+                    <option
+                        [selected]="p.value === selectedPlatform"
+                        *ngFor="let p of platforms"
+                        [value]="p.value">{{p.key}}</option>
+                </select>
                 <div class="login align-self-center">
                     <a class="link pointer"
                        (click)="setFormType('login')">Log In</a>
@@ -55,13 +64,21 @@
                 </div>
             </div>
             <div class="right-items d-flex" *ngIf="user.id">
+                <select class="form-select form-select-sm align-self-center"
+                        (change)="changePlatform($event)"
+                        *ngIf="platforms.length">
+                    <option
+                        [selected]="p.value === selectedPlatform"
+                        *ngFor="let p of platforms"
+                        [value]="p.value">{{p.key}}</option>
+                </select>
                 <div class="login align-self-center">
                     Hello {{user.username}}
                 </div>
                 <div class="logout align-self-center">
                     <a class="link" href="#"
                        (click)="logout($event)">
-<!--                        <i class="bi bi-box-arrow-right"></i>-->
+                        <!--                        <i class="bi bi-box-arrow-right"></i>-->
                         <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">
                     </a>
                 </div>
@@ -136,11 +153,11 @@
                         <ng-container *ngIf="formType === 'login' || formType === 'signup'">
                             <div class="providers">
                                 <div id="googleButton"></div>
-<!--                                <div id="g_id_onload"-->
-<!--                                     data-client_id="10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com"-->
-<!--                                     data-cancel_on_tap_outside="false">-->
-<!--                                </div>-->
-<!--                                <div class="g_id_signin" data-type="standard"></div>-->
+                                <!--                                <div id="g_id_onload"-->
+                                <!--                                     data-client_id="10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com"-->
+                                <!--                                     data-cancel_on_tap_outside="false">-->
+                                <!--                                </div>-->
+                                <!--                                <div class="g_id_signin" data-type="standard"></div>-->
                                 <button type="button" (click)="logInGoogle()">
                                     <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <title>Google</title>
@@ -150,14 +167,14 @@
                                     </svg>
                                     Continue with Google
                                 </button>
-<!--                                <button type="button">-->
-<!--                                    <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                        <title>Facebook</title>-->
-<!--                                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">-->
-<!--                                        </path>-->
-<!--                                    </svg>-->
-<!--                                    Continue with Facebook-->
-<!--                                </button>-->
+                                <!--                                <button type="button">-->
+                                <!--                                    <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">-->
+                                <!--                                        <title>Facebook</title>-->
+                                <!--                                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">-->
+                                <!--                                        </path>-->
+                                <!--                                    </svg>-->
+                                <!--                                    Continue with Facebook-->
+                                <!--                                </button>-->
                             </div>
                         </ng-container>
                         <ng-container *ngIf="formType === 'login'">

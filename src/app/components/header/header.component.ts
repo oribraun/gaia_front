@@ -29,7 +29,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         queryParams: 'subset',
         matrixParams: 'subset'
     }
+
+    platforms: any[] = [];
+    selectedPlatform = '';
+
     user!: User;
+    user_on_boarding_finished = false;
     tooltipTimeout: any = null;
 
     logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_Logo.png';
@@ -65,7 +70,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.getPlatforms();
         this.user = this.config.user;
+        this.initOnBoarding();
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             this.helperService.applyTooltip()
@@ -81,6 +88,67 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             }
         })
         this.setUpGoogle();
+    }
+
+    initOnBoarding() {
+        if (this.user.id) {
+            this.selectedPlatform = this.user.last_logged_platform;
+            this.getUserOnBoarding();
+        }
+    }
+
+    getUserOnBoarding() {
+        this.apiService.getUserOnBoarding(this.user.last_logged_platform, {}).subscribe({
+            next: async (response: any) => {
+                if (!response.err) {
+                    const on_boarding_object = response.on_boarding_object;
+                    this.user_on_boarding_finished = on_boarding_object && on_boarding_object.on_boarding_details && on_boarding_object.on_boarding_details.finished;
+                    this.config.user_on_boarding = on_boarding_object?.on_boarding_details
+                } else {
+                    console.log('getUserOnBoarding errMessage', response.errMessage)
+                }
+            },
+            error: (error) => {
+                console.log('getUserOnBoarding error', error)
+            },
+        })
+    }
+
+    getPlatforms() {
+        this.apiService.getPlatforms({}).subscribe({
+            next: async (response: any) => {
+                if (!response.err) {
+                    this.platforms = response.platforms;
+                } else {
+                    console.log('getPlatforms errMessage', response.errMessage)
+                }
+            },
+            error: (error) => {
+                console.log('getPlatforms error', error)
+            },
+        })
+    }
+
+    changePlatform(event: any) {
+        this.selectedPlatform = event.target.value;
+        this.changeUserPlatform();
+    }
+
+    async changeUserPlatform() {
+        if (this.user.id) {
+            try {
+                this.errMessage = '';
+                const response: any = await lastValueFrom(this.apiService.changeUserPlatform(this.selectedPlatform));
+                if (!response.err) {
+                    this.setUpUserLoggedPlatformCookies(this.selectedPlatform);
+                    window.location.reload();
+                } else {
+                    console.log('changeUserPlatform errMessage', response.errMessage)
+                }
+            } catch (error) {
+                console.error('changeUserPlatform', error);
+            }
+        }
     }
 
     setUpGoogle() {
@@ -265,7 +333,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password));
+            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
@@ -292,7 +360,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.loginSocial({user_details: user_details}));
+            const response: any = await lastValueFrom(this.apiService.loginSocial({
+                user_details: user_details,
+                platform: this.selectedPlatform
+            }));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
@@ -424,15 +495,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);
         this.config.csrf_token = this.config.getCookie('csrftoken');
+        this.initOnBoarding();
+    }
+
+    setUpUserOnly(user: any) {
+        this.user = new User(user);
+        this.config.user = user;
+        this.setCookiesAfterLogin(user);
     }
 
     redirectUser() {
         let returnUrl = this.route.snapshot.queryParams['returnUrl'];
         if (!returnUrl) {
-            if (this.user.on_boarding_details && this.user.on_boarding_details.finished) {
-                returnUrl = '/dashboard'
+            if (this.user_on_boarding_finished) {
+                returnUrl = '/' + this.user.last_logged_platform + '/dashboard'
             } else {
-                returnUrl = '/onBoarding'
+                returnUrl = '/' + this.user.last_logged_platform + '/onBoarding'
             }
         }
         this.router.navigateByUrl(returnUrl);
@@ -467,6 +545,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.config.user = JSON.parse(new_user);
         } else {
             this.config.user = JSON.parse(user);
+        }
+    }
+
+    setUpUserLoggedPlatformCookies(logged_platform: any) {
+        const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+        if (!clientRunningOnServerHost) {
+            // only when running localhost 4200
+            let user = this.config.getCookie('user', true)
+            if(user) {
+                user = JSON.parse(user)
+                user.last_logged_platform = logged_platform;
+                const user_exp = this.config.getCookie('user-exp', true)
+                const d = new Date(user_exp)
+                this.config.setCookie('user', JSON.stringify(user), d, true);
+                this.config.user = user;
+            }
         }
     }
 

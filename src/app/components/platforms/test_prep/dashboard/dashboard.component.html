@@ -1,0 +1,108 @@
+<div class="dashboard">
+    <div class="row">
+        <div class="col-4">
+            <div class="panel">
+                <h4 class="header">
+                    My Courses
+                </h4>
+                <div class="box" *ngFor="let g of groupTypes">
+                    <div class="headline">Practice {{g.name}}</div>
+                    <div class="desc">Total finished 0 <small>of</small> 1</div>
+                </div>
+                <div class="generic-loader-wrapper" *ngIf="gettingGroupTypes">
+                    <div class="loader">
+                        <div class="spinner-border">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="panel">
+                <h4 class="header">
+                    My Vocabulary
+                </h4>
+                <div class="text-body">
+                    Here you can see all the important words learned during the course with links to the relevant text.
+                    <a href="">Click</a> here to print in out.
+                </div>
+                <div class="vocab-table">
+                    <table class="table table-bordered">
+                        <!--                        <thead>-->
+                        <!--                        <tr>-->
+                        <!--                            <th scope="col">Date</th>-->
+                        <!--                            <th scope="col">En</th>-->
+                        <!--                            <th scope="col">He</th>-->
+                        <!--                        </tr>-->
+                        <!--                        </thead>-->
+                        <tbody>
+                        <tr>
+                            <td>
+                                22.10.2023
+                            </td>
+                            <td>Lesson</td>
+                            <td>שיעור</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                22.10.2023
+                            </td>
+                            <td>Lesson</td>
+                            <td>שיעור</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                22.10.2023
+                            </td>
+                            <td>Lesson</td>
+                            <td>שיעור</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="panel">
+                <h4 class="header">
+                    My Achievements
+                </h4>
+                <div class="text-body">
+                    Strike: (How many days in a row you are practicing)
+                </div>
+                <div class="starts">
+                    <div class="start">
+                        <i class="bi bi-star-fill"></i>
+                        <div class="start-fill" [ngStyle]="{'bottom': '75%'}"></div>
+                    </div>
+                    <div class="start">
+                        <i class="bi bi-star-fill"></i>
+                        <div class="start-fill" [ngStyle]="{'bottom': '75%'}"></div>
+                    </div>
+                    <div class="start">
+                        <i class="bi bi-star-fill"></i>
+                        <div class="start-fill" [ngStyle]="{'bottom': '53%'}"></div>
+                    </div>
+                </div>
+                <div class="text-body">
+                    Course Progress
+                </div>
+                <div class="achievements-progress-bar">
+                    <div class="progress">
+                        <div class="progress-bar text-dark" [ngStyle]="{'width': '25%'}">25%</div>
+                    </div>
+                </div>
+                <div class="text-body">
+                    Avg Grade: (No one can see it but you)
+                </div>
+                <div class="avg-grade progress">
+                    7.3/10
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-primary">Review my work</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

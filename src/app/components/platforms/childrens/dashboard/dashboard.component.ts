@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from "../../services/api.service";
-import {Config} from "../../config";
-import {User} from "../../entities/user";
-import {Presentation} from "../../entities/presentation";
+import {ApiService} from "../../../../services/api.service";
+import {Config} from "../../../../config";
+import {User} from "../../../../entities/user";
+import {Presentation} from "../../../../entities/presentation";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.less']
 })
-export class DashboardComponent implements OnInit {
+export class ChildrensDashboardComponent implements OnInit {
 
     user!: User;
     gettingUserCourses = false;

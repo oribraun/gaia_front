@@ -1,4 +1,4 @@
-<section class="on-boarding">
+<section class="on-boarding" *ngIf="gotUserOnBoarding">
     <div id="onBoardingCarousel" class="carousel slide" data-bs-ride="false" data-target="#onBoardingCarousel">
         <div class="carousel-inner">
             <div class="carousel-item" [ngClass]="{'active': current_page == 'area_of_interest'}">

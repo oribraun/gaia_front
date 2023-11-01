@@ -79,26 +79,17 @@ export class ApiService {
         }
     }
 
-    getCourses(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiPublic + 'get-courses', obj,
-            this.httpOptions
-        )
-    }
-    getCourse(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiPublic + 'get-course', obj,
-            this.httpOptions
-        )
-    }
-    getCourseLessons(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiPublic + 'get-course-lessons', obj,
+    getPlatforms(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiPublic + 'get-platforms', obj,
             this.httpOptions
         )
     }
 
-    login(email: string, password: string) {
+    login(email: string, password: string, platform: string = '') {
         return this.http.post(this.serverBase + this.baseApiAuth + 'login', {
                 email: email,
-                password: password
+                password: password,
+                platform: platform
             },
             this.httpOptions
         )
@@ -322,28 +313,8 @@ export class ApiService {
         )
     }
 
-    getPurchasedCourses(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-courses', obj,
-            this.httpOptions
-        )
-    }
-    getPurchasedLessons(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-lessons', obj,
-            this.httpOptions
-        )
-    }
-    getPurchasedLesson(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-purchased-lesson', obj,
-            this.httpOptions
-        )
-    }
-    getUserCourses(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-user-courses', obj,
-            this.httpOptions
-        )
-    }
-    saveUserOnBoarding(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'save-user-on-boarding', obj,
+    changeUserPlatform(platform: string) {
+        return this.http.post(this.serverBase + this.baseApiUser + 'change-user-platform', {platform},
             this.httpOptions
         )
     }
@@ -451,4 +422,64 @@ export class ApiService {
             this.httpOptions
         )
     }
+
+    // general platform api
+    getUserOnBoarding(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-user-on-boarding', obj,
+            this.httpOptions
+        )
+    }
+    saveUserOnBoarding(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/save-user-on-boarding', obj,
+            this.httpOptions
+        )
+    }
+    // general platform api
+
+    // children platform api
+    getCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/pb/get-courses', obj,
+            this.httpOptions
+        )
+    }
+    getCourse(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/pb/get-course', obj,
+            this.httpOptions
+        )
+    }
+    getCourseLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/pb/get-course-lessons', obj,
+            this.httpOptions
+        )
+    }
+    getPurchasedCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/us/get-purchased-courses', obj,
+            this.httpOptions
+        )
+    }
+    getPurchasedLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/us/get-purchased-lessons', obj,
+            this.httpOptions
+        )
+    }
+    getPurchasedLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/us/get-purchased-lesson', obj,
+            this.httpOptions
+        )
+    }
+    getUserCourses(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'childrens/us/get-user-courses', obj,
+            this.httpOptions
+        )
+    }
+    // children platform api
+
+    // test_prep platform api
+    getGroupTypes(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-group-types', obj,
+            this.httpOptions
+        )
+    }
+    // test_prep platform api
+
 }

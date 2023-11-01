@@ -6,11 +6,13 @@ const key = "My Secret Passphrase";
 
 export class Config {
     private _user: User = new User();
+    private _user_on_boarding: any = null
     private _server_host: string = '';
     private _token: string = '';
     private _csrf_token: string = '';
     private _server_host_subject: Subject<any> = new Subject<any>();
     private _user_subject: Subject<any> = new Subject<any>();
+    private _user_on_boarding_subject: Subject<any> = new Subject<any>();
     private _token_subject: Subject<string> = new Subject<string>();
     private _csrf_token_subject: Subject<string> = new Subject<string>();
     private _staticImagePath = '';
@@ -22,6 +24,23 @@ export class Config {
     set user(value: any) {
         this._user = new User(value);
         this._user_subject.next(this.user);
+    }
+
+    get user_on_boarding(): any {
+        return this._user_on_boarding;
+    }
+
+    set user_on_boarding(value: any) {
+        this._user_on_boarding = value;
+        this.user_on_boarding_subject.next(this.user_on_boarding);
+    }
+
+    get user_on_boarding_subject(): Subject<any> {
+        return this._user_on_boarding_subject;
+    }
+
+    set user_on_boarding_subject(value: Subject<any>) {
+        this._user_on_boarding_subject = value;
     }
 
     get server_host(): string {

@@ -6,13 +6,13 @@ export class User {
     role_display!: string;
     company_name!: string;
     gaia_admin!: boolean;
-    company_admin!: boolean
-    gmail_auth!: boolean
-    birthday!: string
-    first_name!: string
-    last_name!: string
-    login_provider!: string
-    on_boarding_details!: any;
+    company_admin!: boolean;
+    gmail_auth!: boolean;
+    birthday!: string;
+    first_name!: string;
+    last_name!: string;
+    login_provider!: string;
+    last_logged_platform!: string;
 
     constructor(v: Partial<User> = {}) {
         Object.assign(this, v);

@@ -18,6 +18,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     user!: User;
 
+    gotUserOnBoarding = false;
+    userOnBoarding: any;
+
+    onBoardingDetails: any;
+
     initDone = false;
 
     imageSrc: string;
@@ -119,10 +124,21 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.initCurrentPage(false);
+        this.config.user_on_boarding_subject.subscribe((userOnBoarding) => {
+            this.userOnBoarding = userOnBoarding;
+            this.gotUserOnBoarding = true;
+            this.initCurrentPage(false);
+            setTimeout(() => {
+                this.setUpYoutubeVideo();
+            })
+        });
     }
 
     ngAfterViewInit(): void {
+        // this.setUpYoutubeVideo();
+    }
+
+    setUpYoutubeVideo() {
         this.loading_player = true;
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
@@ -167,7 +183,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             }
             this.setUpObject(obj);
         } else {
-            this.setUpObject(this.user.on_boarding_details);
+            this.setUpObject(this.userOnBoarding);
         }
         this.initExtraDetails();
     }
@@ -307,7 +323,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         if (this.onBoardingObjectChanged) {
             this.onBoardingObjectChanged = false;
             // this.user.on_boarding_details = {...this.onBoardingObject}
-            this.apiService.saveUserOnBoarding({'on_boarding_object': this.onBoardingObject}).subscribe({
+            this.apiService.saveUserOnBoarding(this.user.last_logged_platform, {'on_boarding_object': this.onBoardingObject}).subscribe({
                 next: async (response: any) => {
                     console.log('response', response)
                     const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
@@ -369,8 +385,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     onPlayerStateChange(e: OnStateChangeEvent) {
-        console.log('YouTube event: ', e)
-        console.log('YouTube event target - current time : ', e.target.getCurrentTime())
+        // console.log('YouTube event: ', e)
+        // console.log('YouTube event target - current time : ', e.target.getCurrentTime())
         // this.currentState = e.data;
         // clearTimeout(this.currentStateTimeout);
         // this.currentStateTimeout = setTimeout(() => {
