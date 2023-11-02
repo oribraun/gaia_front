@@ -3,19 +3,20 @@
 .unseen-panel {
     position: relative;
     height: 100%;
+    padding: 1em;
 
     .white-board {
         position: relative;
-        height: calc(100% - (@chat-height + @padding));
+        height: calc(100%);
         width: 100%;
         display: inline-block;
         vertical-align: top;
         transition: width .3s ease-in-out;
-        background: var(--white-background-color);
-        border-radius: @border-radius;
+        //background: var(--white-background-color);
+        //border-radius: @border-radius;
         overflow: hidden;
         .slides {
-            height: calc(100% - (@native-lang-height + @padding));
+            height: calc(100%);
             max-width: 100%;
             padding: 0;
             &-relative {
@@ -31,8 +32,8 @@
                 }
             }
             .inner-scroller {
-                padding-right: calc(var(--bs-gutter-x) * .5);
-                padding-left: calc(var(--bs-gutter-x) * .5);
+                //padding-right: calc(var(--bs-gutter-x) * .5);
+                //padding-left: calc(var(--bs-gutter-x) * .5);
                 margin-right: auto;
                 margin-left: auto;
                 @bundle-column-gap: 0.75rem;
@@ -66,7 +67,7 @@
                     }
                     .slide {
                         height: 100%;
-                        background: var(--white-background-color);
+                        //background: var(--white-background-color);
 
                         .slide-board {
                             height: calc(100% - (@native-lang-height + @padding));
