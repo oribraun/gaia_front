@@ -560,8 +560,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     setUpUserLoggedPlatformCookies(logged_platform: any) {
-        const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
-        if (!clientRunningOnServerHost) {
+        // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+        // if (!clientRunningOnServerHost) {
             // only when running localhost 4200
             let user = this.config.getCookie('user', true)
             if(user) {
@@ -572,7 +572,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 this.config.setCookie('user', JSON.stringify(user), d, true);
                 this.config.user = user;
             }
-        }
+        // }
     }
 
     reloadSystemAndRedirect() {
