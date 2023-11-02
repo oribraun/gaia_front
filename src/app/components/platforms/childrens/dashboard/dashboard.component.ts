@@ -108,16 +108,16 @@ export class ChildrensDashboardComponent implements OnInit {
 
     onStart() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id])
+        this.router.navigate(['/childrens/lesson/' + lesson_id])
 
     }
     onContinue() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id])
+        this.router.navigate(['/childrens/lesson/' + lesson_id])
     }
     onBuy() {
         const course_id = this.currentCourseClicked.id;
-        this.router.navigate(['/buy/' + course_id])
+        this.router.navigate(['/childrens/buy/' + course_id])
     }
 
     reset() {
