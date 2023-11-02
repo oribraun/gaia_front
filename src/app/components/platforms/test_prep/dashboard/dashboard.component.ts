@@ -119,18 +119,34 @@ export class TestPrepDashboardComponent implements OnInit {
     startNewUserLesson(event: Event) {
         event.preventDefault();
         console.log('startNewUserLesson')
+        this.generateNewLesson().then((id) => {
+            this.hideUserLessonsModal();
+             this.router.navigate(['test_prep/practice/' + id])
+        })
     }
-    startUserLesson(event: Event) {
-        event.preventDefault();
-        console.log('startUserLesson')
+
+    generateNewLesson() {
+        return new Promise((resolve, reject) => {
+
+        })
     }
-    continueUserLesson(event: Event) {
+    startUserLesson(event: Event, id: number) {
         event.preventDefault();
-        console.log('continueUserLesson')
+        console.log('startUserLesson', id)
+        this.hideUserLessonsModal();
+        this.router.navigate(['test_prep/practice/' + id])
     }
-    tryAgainUserLesson(event: Event) {
+    continueUserLesson(event: Event, id: number) {
         event.preventDefault();
-        console.log('tryAgainUserLesson')
+        console.log('continueUserLesson', id)
+        this.hideUserLessonsModal();
+        this.router.navigate(['test_prep/practice/' + id])
+    }
+    tryAgainUserLesson(event: Event, id: number) {
+        event.preventDefault();
+        console.log('tryAgainUserLesson', id)
+        this.hideUserLessonsModal();
+        this.router.navigate(['test_prep/practice/' + id])
     }
 
     showUserLessonsModal() {

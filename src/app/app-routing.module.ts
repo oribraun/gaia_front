@@ -12,6 +12,7 @@ import {AuthChildrenPlatformGuard} from "./guards/auth-children-platform.guard";
 import {AuthTestPrepPlatformGuard} from "./guards/auth-test-prep-platform.guard";
 import {ChildrensDashboardComponent} from "./components/platforms/childrens/dashboard/dashboard.component";
 import {TestPrepDashboardComponent} from "./components/platforms/test_prep/dashboard/dashboard.component";
+import {PracticeLessonComponent} from "./components/platforms/test_prep/practice-lesson/practice-lesson.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
     // for test_prep app only
     {path: 'test_prep', children: [
             { path: 'dashboard', component: TestPrepDashboardComponent, pathMatch : 'full' },
+            { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full' },
         ],
         canActivate: [AuthTestPrepPlatformGuard]
     },
