@@ -94,8 +94,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
             this.addQuestionsToList(this.sentence_completion_questions,'sentence_completion')
           } else  if (resp_data.source == "check_answer") {
             this.setCheckedAnswer(resp_data.answer)
-          }
-          else  if (resp_data.source == "get_hints") {
+          } else  if (resp_data.source == "get_hints") {
             console.log('get_hints', resp_data)
           }
 
@@ -282,13 +281,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     }
 
     getHints(){
-      const data = {
-        "source": "get_hints",
-        "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
-        "question_type":this.active_question.question_type,
-        "question_idx":this.question_index
-      }
-      this.lessonService.Broadcast("slideEventRequest", data)
+      alert(this.active_question.hints['guidance'])
+      // const data = {
+      //   "source": "get_hints",
+      //   "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
+      //   "question_type":this.active_question.question_type,
+      //   "question_idx":this.question_index
+      // }
+      // this.lessonService.Broadcast("slideEventRequest", data)
     }
 
 
