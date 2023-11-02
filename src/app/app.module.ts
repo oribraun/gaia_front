@@ -50,6 +50,7 @@ import { OnBoardingComponent } from './components/on-boarding/on-boarding.compon
 
 // only for test prep app
 import { TestPrepDashboardComponent } from './components/platforms/test_prep/dashboard/dashboard.component';
+import { PracticeLessonComponent } from './components/platforms/test_prep/practice-lesson/practice-lesson.component';
 // only for test prep app
 
 // only for childrens app
@@ -97,6 +98,7 @@ import { ChildrensDashboardComponent } from './components/platforms/childrens/da
         HeaderComponent,
         OnBoardingComponent,
         TestPrepDashboardComponent,
+        PracticeLessonComponent,
     ],
     imports: [
         BrowserModule,

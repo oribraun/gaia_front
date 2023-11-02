@@ -124,9 +124,16 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
+        // this.gotUserOnBoarding = true;
+        // console.log('this.gotUserOnBoarding', this.gotUserOnBoarding)
+        // this.initCurrentPage(false);
+        // setTimeout(() => {
+        //     this.setUpYoutubeVideo();
+        // })
         this.config.user_on_boarding_subject.subscribe((userOnBoarding) => {
             this.userOnBoarding = userOnBoarding;
             this.gotUserOnBoarding = true;
+            console.log('this.gotUserOnBoarding', this.gotUserOnBoarding)
             this.initCurrentPage(false);
             setTimeout(() => {
                 this.setUpYoutubeVideo();
@@ -139,11 +146,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     setUpYoutubeVideo() {
-        this.loading_player = true;
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        this.video.nativeElement.appendChild(tag);
-        this.setVideoHeight();
+        if (this.video) {
+            this.loading_player = true;
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            this.video.nativeElement.appendChild(tag);
+            this.setVideoHeight();
+        }
     }
 
     setVideoHeight() {
@@ -197,6 +206,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                     this.onBoardingObject[item] = obj[item]
                 } else if (typeof obj[item] === 'string' && obj[item].length > 0) {
                     this.onBoardingObject[item] = obj[item]
+                } else if (typeof obj[item] === 'boolean') {
+                    this.onBoardingObject[item] = obj[item]
                 }
             }
         }
@@ -233,7 +244,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectBeMoreSpecific(item: any, specificItem: string) {
         this.onBoardingObjectChanged = true;
-         this.onBoardingObject.finished = false;
+        this.onBoardingObject.finished = false;
         const specificForItem = this.onBoardingObject.be_more_specific[item.key];
         console.log('specificForItem', specificForItem)
         const index = specificForItem.indexOf(specificItem)
@@ -250,7 +261,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectFamiliarWords(itemText: any) {
         this.onBoardingObjectChanged = true;
-         this.onBoardingObject.finished = false;
+        this.onBoardingObject.finished = false;
         const index = this.onBoardingObject.familiar_words.indexOf(itemText)
         if (index > -1) {
             this.onBoardingObject.familiar_words.splice(index, 1);
@@ -268,13 +279,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     selectVideoAnswer(itemText: any) {
         this.onBoardingObjectChanged = true;
-         this.onBoardingObject.finished = false;
+        this.onBoardingObject.finished = false;
         this.onBoardingObject.video_answer = itemText;
     }
 
     onChangePictureSentence() {
         this.onBoardingObjectChanged = true;
-         this.onBoardingObject.finished = false;
+        this.onBoardingObject.finished = false;
     }
 
     onSwipeLeft() {
@@ -326,22 +337,22 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             this.apiService.saveUserOnBoarding(this.user.last_logged_platform, {'on_boarding_object': this.onBoardingObject}).subscribe({
                 next: async (response: any) => {
                     console.log('response', response)
-                    const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
-                    if (!clientRunningOnServerHost) {
-                        // only when running localhost 4200
-                        let user = this.config.getCookie('user', true)
-                        if(user) {
-                            user = JSON.parse(user)
-                            user.on_boarding_details = this.onBoardingObject;
-                            const user_exp = this.config.getCookie('user-exp', true)
-                            const d = new Date(user_exp)
-                            this.config.setCookie('user', JSON.stringify(user), d, true);
-                            this.config.user = user;
-                        }
-                    }
+                    // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+                    // if (!clientRunningOnServerHost) {
+                    //     // only when running localhost 4200
+                    //     let user = this.config.getCookie('user', true)
+                    //     if(user) {
+                    //         user = JSON.parse(user)
+                    //         user.on_boarding_details = this.onBoardingObject;
+                    //         const user_exp = this.config.getCookie('user-exp', true)
+                    //         const d = new Date(user_exp)
+                    //         this.config.setCookie('user', JSON.stringify(user), d, true);
+                    //         this.config.user = user;
+                    //     }
+                    // }
                     if (redirect) {
                         console.log('redirect', redirect)
-                        this.router.navigate(['/dashboard'])
+                        this.router.navigate(['/' + this.user.last_logged_platform + '/dashboard'])
                     }
                 },
                 error: (error) => {

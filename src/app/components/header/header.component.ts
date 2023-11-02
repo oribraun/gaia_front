@@ -75,9 +75,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.initOnBoarding();
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            this.helperService.applyTooltip()
+            this.helperService.applyTooltip();
         });
-        this.helperService.applyTooltip()
+        this.helperService.applyTooltip();
 
         this.route.queryParams.subscribe((params) => {
             const type = params['authType']
@@ -97,13 +97,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         }
     }
 
-    getUserOnBoarding() {
+    getUserOnBoarding(redirect=false) {
         this.apiService.getUserOnBoarding(this.user.last_logged_platform, {}).subscribe({
             next: async (response: any) => {
                 if (!response.err) {
                     const on_boarding_object = response.on_boarding_object;
                     this.user_on_boarding_finished = on_boarding_object && on_boarding_object.on_boarding_details && on_boarding_object.on_boarding_details.finished;
-                    this.config.user_on_boarding = on_boarding_object?.on_boarding_details
+                    if (this.user_on_boarding_finished) {
+                        this.helperService.applyTooltip();
+                    }
+                    setTimeout(() => {
+                        this.config.user_on_boarding = on_boarding_object?.on_boarding_details
+                    })
+                    if (redirect) {
+                        this.redirectUser();
+                    }
                 } else {
                     console.log('getUserOnBoarding errMessage', response.errMessage)
                 }
@@ -141,7 +149,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 const response: any = await lastValueFrom(this.apiService.changeUserPlatform(this.selectedPlatform));
                 if (!response.err) {
                     this.setUpUserLoggedPlatformCookies(this.selectedPlatform);
-                    window.location.reload();
+                    this.reloadSystemAndRedirect();
                 } else {
                     console.log('changeUserPlatform errMessage', response.errMessage)
                 }
@@ -338,7 +346,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.redirectUser();
+                this.user.last_logged_platform = this.selectedPlatform
+                this.getUserOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
@@ -495,7 +504,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);
         this.config.csrf_token = this.config.getCookie('csrftoken');
-        this.initOnBoarding();
     }
 
     setUpUserOnly(user: any) {
@@ -507,12 +515,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     redirectUser() {
         let returnUrl = this.route.snapshot.queryParams['returnUrl'];
         if (!returnUrl) {
+            console.log('this.user.last_logged_platform', this.user.last_logged_platform)
+            console.log('this.user_on_boarding_finished', this.user_on_boarding_finished)
             if (this.user_on_boarding_finished) {
                 returnUrl = '/' + this.user.last_logged_platform + '/dashboard'
             } else {
-                returnUrl = '/' + this.user.last_logged_platform + '/onBoarding'
+                returnUrl = '/onBoarding'
             }
         }
+        console.log('returnUrl', returnUrl)
         this.router.navigateByUrl(returnUrl);
     }
 
@@ -549,8 +560,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     setUpUserLoggedPlatformCookies(logged_platform: any) {
-        const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
-        if (!clientRunningOnServerHost) {
+        // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+        // if (!clientRunningOnServerHost) {
             // only when running localhost 4200
             let user = this.config.getCookie('user', true)
             if(user) {
@@ -561,7 +572,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 this.config.setCookie('user', JSON.stringify(user), d, true);
                 this.config.user = user;
             }
-        }
+        // }
+    }
+
+    reloadSystemAndRedirect() {
+        window.location.reload();
     }
 
     setFormType(type: string) {
