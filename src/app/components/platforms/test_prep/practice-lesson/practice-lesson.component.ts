@@ -1,16 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {ApiService} from "../../../../services/api.service";
 import {Config} from "../../../../config";
 import {AnimationsService} from "../../../../services/animations/animations.service";
 import {SpeechRecognitionService} from "../../../../services/speech-recognition/speech-recognition.service";
-import {
-    SocketSpeechRecognitionService
-} from "../../../../services/socket-speech-recognition/socket-speech-recognition.service";
+import {SocketSpeechRecognitionService} from "../../../../services/socket-speech-recognition/socket-speech-recognition.service";
 import {LessonService} from "../../../../services/lesson/lesson.service";
-import {
-    SpeechRecognitionEnhancerService
-} from "../../../../services/speech-recognition/speech-recognition-enhancer.service";
+import {SpeechRecognitionEnhancerService} from "../../../../services/speech-recognition/speech-recognition-enhancer.service";
 import {SocketRecorderService} from "../../../../services/socket-recorder/socket-recorder.service";
 import {User} from "../../../../entities/user";
 import {environment} from "../../../../../environments/environment";
@@ -70,18 +66,48 @@ export class PracticeLessonComponent implements OnInit {
 
     initApplicationDone = false;
 
+
+    public sectionTitles = {
+        bundle:'bundle',
+        greeting: 'greeting',
+        reading: 'reading',
+        word_repeater: 'word_repeater',
+        image_generator: 'image_generator',
+        agenda: 'agenda',
+        ending: 'ending',
+        video: 'video',
+        blanks:'blanks',
+        title:'title',
+        random_selector:'random_selector',
+        writing:'writing',
+        template:'template',
+        word_translator:'word_translator',
+        unseen:'unseen',
+        generic_slide:'generic_slide',
+        embed_game:'embed_game'
+    }
+
+    @ViewChild('slides', { static: false }) slides!: ElementRef;
+    slidesData: any[] = []
+    slideWidth: number = -1;
+    slideHeight: number = -1;
+
+    imageSrc = ''
+
     constructor(
         private apiService: ApiService,
         private config: Config,
         private animationsService: AnimationsService,
         private speechRecognitionService: SpeechRecognitionService,
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
-        private lessonService: LessonService,
+        public lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
         private socketRecorderService: SocketRecorderService,
         private route: ActivatedRoute,
         private router: Router
-    ) {}
+    ) {
+        this.imageSrc = this.config.staticImagePath
+    }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((params: ParamMap) => {
@@ -185,6 +211,7 @@ export class PracticeLessonComponent implements OnInit {
                     this.currentObjectiveIndex = this.presentation.current_objective_index;
                     this.estimatedDuration = this.presentation.estimated_duration;
                     this.setCurrentSection();
+                    this.setData();
                     if (!this.mock) {
                         // this.restartCurrentSlide()
                         this.getNewSlideReply();
@@ -654,6 +681,58 @@ export class PracticeLessonComponent implements OnInit {
         } else {
             this.currentObjective = this.currentSlide.slide_objectives[this.currentObjectiveIndex];
         }
+    }
+
+    setData() {
+        if (this.currentSlide.bundle_id > -1) {
+            this.slidesData = this.currentSlide.bundle;
+        } else {
+            this.slidesData = [this.currentSlide]
+        }
+        setTimeout(() => {
+            this.setSlidesRelativeWidth();
+        })
+    }
+
+    setSlidesRelativeWidth() {
+        const map = this.slidesData.map(o => o.slide_type).filter((str) => str !== undefined);
+        const all_blanks = map.every( v => v === 'blanks' );
+        const all_word_repeater = map.every( v => v === 'word_repeater' );
+        const desiredRatio = 9/16;
+        if(this.slides && this.slidesData.length > 1 && all_word_repeater) {
+            const e = this.slides.nativeElement;
+            const slidesWidth = e.clientWidth;
+            const slidesHeight = e.clientHeight;
+            const currentRatio = slidesHeight/slidesWidth;
+            if (currentRatio < 1) {
+                // width is bigger
+                let newWidth = slidesHeight / desiredRatio;
+                if (newWidth < slidesWidth) {
+                    this.slideWidth = newWidth;
+                    this.slideHeight = -1;
+                } else {
+                    this.slideWidth = -1;
+                    this.slideHeight = slidesWidth * desiredRatio;
+                }
+            } else {
+                // height is bigger
+                let newHeight = slidesWidth * desiredRatio;
+                if (newHeight < slidesHeight) {
+                    this.slideWidth = -1;
+                    this.slideHeight = newHeight;
+                } else {
+                    this.slideHeight = -1;
+                    this.slideWidth = slidesHeight / desiredRatio;
+                }
+            }
+        } else {
+            this.resetSlideStyle();
+        }
+    }
+
+    resetSlideStyle() {
+        this.slideWidth = -1;
+        this.slideHeight = -1;
     }
 
     listenForSlideEventRequests(){
