@@ -8,9 +8,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 declare var $: any;
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.less']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.less']
 })
 export class TestPrepDashboardComponent implements OnInit {
 
@@ -24,6 +24,7 @@ export class TestPrepDashboardComponent implements OnInit {
     currentCourseType: any;
     currentCourseLessons: any;
     gettingCourseInfo = false;
+    gettingNewLesson = false;
 
     coursesType: string = 'in_progress';
 
@@ -121,13 +122,30 @@ export class TestPrepDashboardComponent implements OnInit {
         console.log('startNewUserLesson')
         this.generateNewLesson().then((id) => {
             this.hideUserLessonsModal();
-             this.router.navigate(['test_prep/practice/' + id])
+            this.router.navigate(['test_prep/practice/' + id])
         })
     }
 
     generateNewLesson() {
         return new Promise((resolve, reject) => {
-
+            this.gettingNewLesson = true;
+            this.apiService.getUserNewLesson({current_course_id: this.currentCourseType.id}).subscribe({
+                next: (response: any) => {
+                    this.gettingNewLesson = false;
+                    if (response.err) {
+                        console.log('generateNewLesson err', response)
+                        reject()
+                    } else {
+                        const id = response.id
+                        resolve(id)
+                    }
+                },
+                error: (error) => {
+                    console.log('generateNewLesson error', error)
+                    this.gettingNewLesson = false;
+                    reject()
+                },
+            })
         })
     }
     startUserLesson(event: Event, id: number) {

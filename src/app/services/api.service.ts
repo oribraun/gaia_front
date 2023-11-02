@@ -485,6 +485,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getUserNewLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-user-new-lesson', obj,
+            this.httpOptions
+        )
+    }
     // test_prep platform api
 
 }
