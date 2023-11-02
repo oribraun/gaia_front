@@ -148,7 +148,7 @@ export class Config {
                 final_val = val;
             }
         }
-        var c_value = final_val + "; expires=" + exp.toUTCString();
+        var c_value = final_val + "; expires=" + exp.toUTCString() + '; path=/';
         document.cookie = name + "=" + c_value;
     }
 
@@ -173,5 +173,10 @@ export class Config {
         if (clean_csrftoken) {
             this.setCookie('csrftoken', '', exp);
         }
+    }
+    removeUserCookies() {
+        const exp = new Date()
+        exp.setDate(exp.getDate()-5);
+        this.setCookie('user', '', exp);
     }
 }

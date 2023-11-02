@@ -119,7 +119,7 @@
                 <div class="start-new">
                     <a (click)="startNewUserLesson($event)" href="">Start New</a>
                 </div>
-                <table class="table">
+                <table class="table" *ngIf="currentCourseLessons && currentCourseLessons.length">
                     <thead>
                     <tr>
                         <th scope="col">Started Count</th>

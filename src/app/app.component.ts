@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
         private router: Router
     ) {
         setTimeout(() => {
-            this.setupCredsFromServer();
+            // this.setupCredsFromServer();
         })
         this.setupCredsFromServer();
         this.closeOnGmailCallback();
