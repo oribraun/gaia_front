@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {User} from "../entities/user";
 const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 declare var $: any;
@@ -46,4 +47,14 @@ export class HelperService {
         const u = uuidv5(str, MY_NAMESPACE);
         return u;
     };
+
+    getUserReturnUrl(user: User) {
+        let returnUrl = '';
+        if (user.id && user.last_logged_platform) {
+            returnUrl = '/' + user.last_logged_platform + '/dashboard'
+        } else {
+            returnUrl = '/onBoarding'
+        }
+        return returnUrl;
+    }
 }

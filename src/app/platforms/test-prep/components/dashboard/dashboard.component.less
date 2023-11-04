@@ -82,8 +82,11 @@
 }
 
 #userLessonsModal {
-    .modal-dialog {
-        max-width: 1000px;
-        margin: var(--bs-modal-margin);
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 1000px;
+            margin-right: auto;
+            margin-left: auto;
+        }
     }
 }

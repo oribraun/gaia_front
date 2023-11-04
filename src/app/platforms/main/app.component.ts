@@ -49,6 +49,20 @@ export class AppComponent implements OnInit {
         // setTimeout(() => {
         //     this.setupCredsFromServer()
         // })
+
+        let redirectUser = false;
+        this.route.queryParams.subscribe((params) => {
+            if (params['redirectUser']) {
+                redirectUser = params['redirectUser']
+            }
+            console.log('redirectUser', redirectUser)
+            this.redirectUser()
+        });
+    }
+
+    redirectUser() {
+        let returnUrl = this.helperService.getUserReturnUrl(this.user)
+        this.router.navigateByUrl(returnUrl);
     }
 
     setupCredsFromServer() {

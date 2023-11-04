@@ -38,7 +38,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
 
-    mock = environment.is_mock;
+    mock = false;
 
     presentation: Presentation = new Presentation();
     current_lessons_id!: number;

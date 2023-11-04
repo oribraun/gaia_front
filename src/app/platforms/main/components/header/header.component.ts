@@ -72,7 +72,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.getPlatforms();
         this.user = this.config.user;
-        this.initOnBoarding();
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             this.helperService.applyTooltip();
@@ -86,18 +85,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 console.log('this.formType', this.formType)
                 this.showLoginModel();
             }
+            this.initOnBoarding();
         })
         this.setUpGoogle();
     }
 
     initOnBoarding() {
-        if (this.user.id) {
+        if (this.user.id && this.user.last_logged_platform) {
             this.selectedPlatform = this.user.last_logged_platform;
             this.getUserOnBoarding();
         }
     }
 
-    getUserOnBoarding(redirect=false) {
+    getUserOnBoarding(redirectUser=false) {
         this.apiService.getUserOnBoarding(this.user.last_logged_platform, {}).subscribe({
             next: async (response: any) => {
                 if (!response.err) {
@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                     setTimeout(() => {
                         this.config.user_on_boarding = on_boarding_object?.on_boarding_details
                     })
-                    if (redirect) {
+                    if (redirectUser) {
                         this.redirectUser();
                     }
                 } else {
@@ -127,6 +127,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             next: async (response: any) => {
                 if (!response.err) {
                     this.platforms = response.platforms;
+                    if (this.platforms && this.platforms.length && !this.user.id) {
+                        this.selectedPlatform = this.platforms[0].value;
+                    }
                 } else {
                     console.log('getPlatforms errMessage', response.errMessage)
                 }
@@ -513,17 +516,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     redirectUser() {
-        let returnUrl = this.route.snapshot.queryParams['returnUrl'];
-        if (!returnUrl) {
-            console.log('this.user.last_logged_platform', this.user.last_logged_platform)
-            console.log('this.user_on_boarding_finished', this.user_on_boarding_finished)
-            if (this.user_on_boarding_finished) {
-                returnUrl = '/' + this.user.last_logged_platform + '/dashboard'
-            } else {
-                returnUrl = '/onBoarding'
-            }
-        }
-        console.log('returnUrl', returnUrl)
+        let returnUrl = this.helperService.getUserReturnUrl(this.user)
         this.router.navigateByUrl(returnUrl);
     }
 
@@ -562,21 +555,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     setUpUserLoggedPlatformCookies(logged_platform: any) {
         // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
         // if (!clientRunningOnServerHost) {
-            // only when running localhost 4200
-            let user = this.config.getCookie('user', true)
-            if(user) {
-                user = JSON.parse(user)
-                user.last_logged_platform = logged_platform;
-                const user_exp = this.config.getCookie('user-exp', true)
-                const d = new Date(user_exp)
-                this.config.setCookie('user', JSON.stringify(user), d, true);
-                this.config.user = user;
-            }
+        // only when running localhost 4200
+        let user = this.config.getCookie('user', true)
+        if(user) {
+            user = JSON.parse(user)
+            user.last_logged_platform = logged_platform;
+            const user_exp = this.config.getCookie('user-exp', true)
+            const d = new Date(user_exp)
+            this.config.setCookie('user', JSON.stringify(user), d, true);
+            this.config.user = user;
+        }
         // }
     }
 
     reloadSystemAndRedirect() {
-        window.location.reload();
+        window.location.href = window.location.origin + '?redirectUser=true'
     }
 
     setFormType(type: string) {
