@@ -1,8 +1,10 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DomSanitizer} from "@angular/platform-browser";
+// import { AnimationOptions } from 'ngx-lottie';
+// import {AnimationItem} from "ngx-lottie/lib/symbols";
 
 declare var $: any;
 
@@ -12,7 +14,7 @@ declare var $: any;
     styleUrls: ['./hearing.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class HearingComponent extends BaseSlideComponent implements OnInit {
+export class HearingComponent extends BaseSlideComponent implements OnInit, AfterViewInit {
     unseen_headline:string = 'Dummy Headline'
     unseen_text:string =''
     answer_text:string =''
@@ -48,13 +50,28 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     }
     unseen_questions: any;
 
+    // options: AnimationOptions = {
+    //     path: '/assets/lottie-animations/play-pause.json',
+    //     renderer: 'svg',
+    //     loop: false,
+    //     autoplay: false,
+    //     initialSegment: [14, 27]
+    //     // container: ''
+    // };
+
+
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private ref: ChangeDetectorRef
     ) {
         super(config, lessonService)
     }
+
+    // animationCreated(animationItem: AnimationItem): void {
+    //     console.log(animationItem);
+    // }
 
     override ngOnInit(): void {
         super.ngOnInit();
@@ -102,7 +119,10 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             }
 
         })
+    }
 
+    ngAfterViewInit(): void {
+        // this.setUpPlayer();
     }
 
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {
@@ -401,4 +421,95 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
         return true;
     }
+
+//     setUpPlayer() {
+//         const playIconContainer: any = document.getElementById('play-icon');
+//         const audio: any = document.getElementById('audio');
+//         const durationContainer: any = document.getElementById('duration');
+//         const currentTimeContainer: any = document.getElementById('current-time');
+//         const audioPlayerContainer: any = document.getElementById('audio-player-container');
+//         const seekSlider: any = document.getElementById('seek-slider');
+//         let playState = 'play';
+//
+//         let rAF: any = null;
+//
+//         const whilePlaying = () => {
+//             seekSlider.value = Math.floor(audio.currentTime);
+//             rAF = requestAnimationFrame(whilePlaying);
+//         }
+//
+//         playIconContainer.addEventListener('click', () => {
+//             if(playState === 'play') {
+//                 console.log('asdfasfasdf')
+//                 audio.play();
+//                 const options = {...this.options}
+//                 options.initialSegment = [14, 27];
+//                 this.options = options;
+//                 requestAnimationFrame(whilePlaying);
+//                 playState = 'pause';
+//             } else {
+//                 audio.pause();
+//                 const options = {...this.options}
+//                 options.initialSegment = [0, 14];
+//                 this.options = options;
+//                 cancelAnimationFrame(rAF);
+//                 playState = 'play';
+//             }
+//             this.ref.detectChanges();
+//         });
+//
+//         // const displayDuration = () => {
+//         //     durationContainer.textContent = calculateTime(audio.duration);
+//         // }
+//
+//         // const showRangeProgress = (rangeInput: any) => {
+//         //     if(rangeInput === seekSlider) {
+//         //         audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%');
+//         //     } else {
+//         //         audioPlayerContainer.style.setProperty('--volume-before-width', rangeInput.value / rangeInput.max * 100 + '%');
+//         //     }
+//         // }
+//         //
+//         // const calculateTime = (secs: number) => {
+//         //     const minutes = Math.floor(secs / 60);
+//         //     const seconds = Math.floor(secs % 60);
+//         //     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+//         //     return `${minutes}:${returnedSeconds}`;
+//         // }
+//         // const displayBufferedAmount = () => {
+//         //     const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
+//         //     audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
+//         // }
+//         //
+//         // seekSlider.addEventListener('input', (e: any) => {
+//         //     showRangeProgress(e.target);
+//         // });
+// // variable for the button that will contain both icons
+// //         const playIconContainer = document.getElementById('play-icon');
+// // // variable that will store the button’s current state (play or pause)
+// //         let state = 'play';
+// //
+// // // loads the animation that transitions the play icon into the pause icon into the referenced button, using Lottie’s loadAnimation() method
+// //         const animation = lottieWeb.loadAnimation({
+// //             container: playIconContainer,
+// //             path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json',
+// //             renderer: 'svg',
+// //             loop: false,
+// //             autoplay: false,
+// //             name: "Demo Animation",
+// //         });
+// //
+// //         animation.goToAndStop(14, true);
+// //
+// // // adds an event listener to the button so that when it is clicked, the the player toggles between play and pause
+// //         playIconContainer.addEventListener('click', () => {
+// //             if(state === 'play') {
+// //                 animation.playSegments([14, 27], true);
+// //                 state = 'pause';
+// //             } else {
+// //                 animation.playSegments([0, 14], true);
+// //                 state = 'play';
+// //             }
+// //         });
+//     }
 }

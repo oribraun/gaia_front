@@ -27,7 +27,12 @@ import {SafeHtmlPipe} from "./pipes/safe-html.pipe";
 import {SafePipe} from "./pipes/safe.pipe";
 import { HearingComponent } from './slides/hearing/hearing.component';
 import { SpeakingComponent } from './slides/speaking/speaking.component';
+import { LottieModule } from 'ngx-lottie';
 
+
+export function playerFactory() {
+  return import('lottie-web');
+}
 
 
 @NgModule({
@@ -62,7 +67,8 @@ import { SpeakingComponent } from './slides/speaking/speaking.component';
         CommonModule,
         FormsModule,
         YouTubePlayerModule,
-        AngularEditorModule
+        AngularEditorModule,
+        LottieModule.forRoot({ player: playerFactory })
     ],
     exports: [
         AgendaComponent,
