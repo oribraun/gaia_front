@@ -1,20 +1,18 @@
-import {Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Config} from "../../../main/config";
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {BaseSlideComponent} from "../base-slide.component";
+import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
-import {start} from "repl";
+import {DomSanitizer} from "@angular/platform-browser";
 
 declare var $: any;
 
 @Component({
-    selector: 'app-unseen',
-    templateUrl: './unseen.component.html',
-    styleUrls: ['./unseen.component.less'],
-    encapsulation: ViewEncapsulation.None,
+    selector: 'app-speaking',
+    templateUrl: './speaking.component.html',
+    styleUrls: ['./speaking.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
-
-export class UnseenComponent extends BaseSlideComponent implements OnInit{
+export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     unseen_headline:string = 'Dummy Headline'
     unseen_text:string =''
     answer_text:string =''

@@ -28,6 +28,12 @@
 
         scrollbar-color: #4285F4 #F5F5F5;
         .unseen_text {
+            &::selection, *::selection {
+                background: yellow;
+            }
+            &::-moz-selection, *::-moz-selection {
+                background: yellow;
+            }
             .highlight {
                 background: #d1e7dd;
                 border-radius: 5px;
@@ -44,9 +50,9 @@
                 //}
             }
             .word {
-                padding: 1px;
                 border-radius: 5px;
                 cursor: pointer;
+                //padding: 1px;
                 &:hover {
                     background: #4caf50;
                 }

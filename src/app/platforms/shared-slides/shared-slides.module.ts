@@ -25,6 +25,8 @@ import {DatetimeFormatPipe} from "./pipes/datetime-format/datetime-format.pipe";
 import {RangePipe} from "./pipes/range/range.pipe";
 import {SafeHtmlPipe} from "./pipes/safe-html.pipe";
 import {SafePipe} from "./pipes/safe.pipe";
+import { HearingComponent } from './slides/hearing/hearing.component';
+import { SpeakingComponent } from './slides/speaking/speaking.component';
 
 
 
@@ -47,7 +49,9 @@ import {SafePipe} from "./pipes/safe.pipe";
         WordRepeaterComponent,
         WordTranslatorComponent,
         WritingComponent,
-        
+        HearingComponent,
+        SpeakingComponent,
+
         CapitalizePipe,
         DatetimeFormatPipe,
         RangePipe,
@@ -77,6 +81,8 @@ import {SafePipe} from "./pipes/safe.pipe";
         WordRepeaterComponent,
         WordTranslatorComponent,
         WritingComponent,
+        HearingComponent,
+        SpeakingComponent,
 
         CapitalizePipe,
         DatetimeFormatPipe,
