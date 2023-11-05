@@ -1,5 +1,4 @@
-<div class="unseen-panel">
-
+<div class="practice-lesson">
     <ng-template #selected_slide_container let-model="model">
         <app-greeting
             *ngIf="model.currentSlide.slide_type === sectionTitles.greeting"
@@ -135,22 +134,6 @@
                 </div>
             </div>
         </div>
-        <!-- Add also native language instructions -->
-<!--        <div class="text-board">-->
-<!--            <div class="text">-->
-<!--                <div class="outer-scroller">-->
-<!--                    <div class="inner-scroller dir-rtl">-->
-<!--                    <span [ngClass]="{'native-speak-bold':lessonService.speakNativeOnProgress}" class="text">-->
-<!--                        {{currentSlide.native_language_text?.he}}-->
-<!--                    </span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="image">-->
-<!--                <img src="{{imageSrc}}assets/images/icons/speak_icon.png"  (click)="speakNative(currentSlide.native_language_text?.he)">-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="disabled-board" *ngIf="isPause"></div>
     </div>
-<!--    <button (click)="resetPresentation()">reset</button>-->
 </div>

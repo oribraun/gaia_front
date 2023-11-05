@@ -45,48 +45,38 @@
                     </a>
                 </li>
             </ul>
-            <div class="right-items d-flex" *ngIf="!user.id">
+            <div class="right-items d-flex">
                 <select class="form-select form-select-sm align-self-center"
                         (change)="changePlatform($event)"
-                        *ngIf="platforms.length">
+                        *ngIf="platforms.length > 1">
                     <option
                         [selected]="p.value === selectedPlatform"
                         *ngFor="let p of platforms"
                         [value]="p.value">{{p.key}}</option>
                 </select>
-                <div class="login align-self-center">
-                    <a class="link pointer"
-                       (click)="setFormType('login')">Log In</a>
-                </div>
-                <div class="join align-self-center">
-                    <button class="btn btn-primary"
-                            (click)="setFormType('signup')">Join For Free</button>
-                </div>
-            </div>
-            <div class="right-items d-flex" *ngIf="user.id">
-                <select class="form-select form-select-sm align-self-center"
-                        (change)="changePlatform($event)"
-                        *ngIf="platforms.length">
-                    <option
-                        [selected]="p.value === selectedPlatform"
-                        *ngFor="let p of platforms"
-                        [value]="p.value">{{p.key}}</option>
-                </select>
-                <div class="login align-self-center">
+                <ng-container *ngIf="!user.id">
+                    <div class="login align-self-center">
+                        <a class="link pointer"
+                           (click)="setFormType('login')">Log In</a>
+                    </div>
+                    <div class="join align-self-center">
+                        <button class="btn btn-primary"
+                                (click)="setFormType('signup')">Join For Free</button>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="user.id">
+                     <div class="login align-self-center">
                     Hello {{user.username}}
                 </div>
                 <div class="logout align-self-center">
                     <a class="link" href="#"
                        (click)="logout($event)">
-                        <!--                        <i class="bi bi-box-arrow-right"></i>-->
+<!--                        <i class="bi bi-box-arrow-right"></i>-->
                         <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">
                     </a>
                 </div>
+                </ng-container>
             </div>
-            <!--            <form class="d-flex">-->
-            <!--                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-            <!--                <button class="btn btn-outline-primary" type="submit">Search</button>-->
-            <!--            </form>-->
         </div>
     </div>
 </nav>
