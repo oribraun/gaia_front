@@ -20,6 +20,11 @@ import {WritingComponent} from "./slides/writing/writing.component";
 import {AngularEditorModule} from "@kolkov/angular-editor";
 import {FormsModule} from "@angular/forms";
 import {YouTubePlayerModule} from "@angular/youtube-player";
+import {CapitalizePipe} from "./pipes/capitalize/capitalize.pipe";
+import {DatetimeFormatPipe} from "./pipes/datetime-format/datetime-format.pipe";
+import {RangePipe} from "./pipes/range/range.pipe";
+import {SafeHtmlPipe} from "./pipes/safe-html.pipe";
+import {SafePipe} from "./pipes/safe.pipe";
 
 
 
@@ -41,7 +46,13 @@ import {YouTubePlayerModule} from "@angular/youtube-player";
         VideoComponent,
         WordRepeaterComponent,
         WordTranslatorComponent,
-        WritingComponent
+        WritingComponent,
+        
+        CapitalizePipe,
+        DatetimeFormatPipe,
+        RangePipe,
+        SafeHtmlPipe,
+        SafePipe
     ],
     imports: [
         CommonModule,
@@ -65,7 +76,13 @@ import {YouTubePlayerModule} from "@angular/youtube-player";
         VideoComponent,
         WordRepeaterComponent,
         WordTranslatorComponent,
-        WritingComponent
+        WritingComponent,
+
+        CapitalizePipe,
+        DatetimeFormatPipe,
+        RangePipe,
+        SafeHtmlPipe,
+        SafePipe
     ],
 })
 export class SharedSlidesModule { }

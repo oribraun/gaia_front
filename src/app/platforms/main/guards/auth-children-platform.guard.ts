@@ -27,7 +27,6 @@ export class AuthChildrenPlatformGuard  {
         // })
         // return true
         const user = this.config.user;
-        console.log('user.last_logged_platform childrens', user.last_logged_platform)
         if (user && user.last_logged_platform === 'childrens') {
             return true;
         } else {

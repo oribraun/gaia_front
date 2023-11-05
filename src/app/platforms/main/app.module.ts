@@ -83,6 +83,10 @@ import {ChildrensModule} from "../childrens/childrens.module";
         // {provide: APP_BASE_HREF, useValue: '/static/client/'},
         Config
     ],
+    exports: [
+        SafePipe,
+        SafeHtmlPipe
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

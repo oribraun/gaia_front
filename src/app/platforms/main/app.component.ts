@@ -55,8 +55,9 @@ export class AppComponent implements OnInit {
             if (params['redirectUser']) {
                 redirectUser = params['redirectUser']
             }
-            console.log('redirectUser', redirectUser)
-            this.redirectUser()
+            if (redirectUser) {
+                this.redirectUser()
+            }
         });
     }
 
