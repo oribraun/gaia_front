@@ -5,6 +5,8 @@ import {BaseSlideComponent} from "../base-slide.component";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {start} from "repl";
 
+declare var $: any;
+
 function isEmpty(obj:any) {
     for (const prop in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -23,7 +25,6 @@ function isEmpty(obj:any) {
 })
 
 export class UnseenComponent extends BaseSlideComponent implements OnInit{
-    @ViewChild('textElement') textElement!: ElementRef;
     unseen_headline:string = 'Dummy Headline'
     unseen_text:string =''
     answer_text:string =''
@@ -47,6 +48,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     submited:boolean = false
 
     currentHint = '';
+    currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
+    excludeWords: string[] = []
+    wordLength = 3;
     unseenTextHtml = '';
 
     public questionTypes = {
@@ -85,7 +89,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         }
         this.handleAnswers()
         this.getCheckedAnswer()
-        this.setUpUnseenTextHtml()
+        this.resetUnseenHtml();
 
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
@@ -115,8 +119,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
 
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {
         // const words = this.unseen_text.split(/[ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+/);
+        const word_ids = words.map(o => o.id);
         const tokens = this.unseen_text.split(/([\s.,!?;:]+)/);
-        console.log('tokens', tokens)
+        // console.log('tokens', tokens)
         const spanList = [];
         let wordCount = 0;
         let currentIndex = 0;
@@ -136,22 +141,21 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
                     startedHighlight = null;
                 }
             }
-            if (/\w+/.test(token)) {
+            if (/\w+/.test(token)
+                && token.length >= this.wordLength
+                && this.excludeWords.indexOf(token.toLowerCase()) == -1) {
                 // Create a <span> element for words
                 const span = document.createElement('span');
                 span.textContent = token;
                 span.id = token + '_' + wordCount;
                 span.classList.add('word');
-                if (words.indexOf(span.id) > -1) {
+                if (word_ids.indexOf(span.id) > -1) {
                     span.classList.add('highlight-word');
                 }
                 if (startedHighlight) {
                     startedHighlight.appendChild(span)
                 } else {
-                    const idAttribute = span.id ? `id="${span.id}"` : '';
-                    const classAttribute = span.className ? `class="${span.className}"` : '';
-                    const spanString = `<span ${idAttribute} ${classAttribute}>${span.textContent}</span>`;
-                    spanList.push(spanString);
+                    spanList.push(span.outerHTML);
                 }
             } else {
                 // Append punctuation as it is (without wrapping in <span>)
@@ -164,9 +168,25 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
             wordCount++;
             currentIndex += token.length
         }
-        console.log('spanList', spanList)
+        // console.log('spanList', spanList)
         this.unseenTextHtml = spanList.join('')
-        console.log('this.unseenTextHtml', this.unseenTextHtml)
+        // console.log('this.unseenTextHtml', this.unseenTextHtml)
+        setTimeout(() => {
+            $('.word').on('click', (e: any) => {
+                // console.log('e.target', e.target)
+                const id = e.target.id;
+                const value = e.target.innerText;
+                console.log('value', value)
+                const ids = this.currentUnseenWords.map(o => o.id);
+                const index = ids.indexOf(id);
+                if (index > -1) {
+                    this.currentUnseenWords.splice(index, 1);
+                } else {
+                    this.currentUnseenWords.push({id: id, value: value})
+                }
+                this.resetUnseenHtml();
+            })
+        })
     }
 
     addQuestionsToList(questions:any[], qType:string){
@@ -348,10 +368,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         const correct_answer = this.active_question.hints['correct_answer'];
         const guidance = this.active_question.hints['guidance'];
         const quotes = this.active_question.hints['quotes'];
-        console.log('correct_answer', correct_answer)
-        console.log('guidance', guidance)
-        console.log('quotes', quotes)
-        this.markCorrectAnswer()
+        // console.log('correct_answer', correct_answer)
+        // console.log('guidance', guidance)
+        // console.log('quotes', quotes)
+        this.markHint()
         // alert(this.active_question.hints['guidance'])
         // const data = {
         //   "source": "get_hints",
@@ -362,12 +382,24 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         // this.lessonService.Broadcast("slideEventRequest", data)
     }
 
-    markCorrectAnswer() {
+    closeHints() {
+        this.currentHint = '';
+        this.resetUnseenHtml();
+    }
+
+    resetUnseenHtml() {
+        if (this.currentHint) {
+            this.markHint();
+        } else {
+            this.setUpUnseenTextHtml(null, null, this.currentUnseenWords)
+        }
+    }
+
+    markHint() {
         const quotes = this.active_question.hints['quotes'];
         const startIndex = this.unseen_text.indexOf(quotes);
         const endIndex = startIndex + quotes.length;
-        this.setUpUnseenTextHtml(startIndex, endIndex)
-        // this.textElement.nativeElement
+        this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)
     }
 
 
