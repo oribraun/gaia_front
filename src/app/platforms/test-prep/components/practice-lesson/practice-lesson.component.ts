@@ -83,6 +83,8 @@ export class PracticeLessonComponent implements OnInit {
         template:'template',
         word_translator:'word_translator',
         unseen:'unseen',
+        hearing:'hearing',
+        speaking:'speaking',
         generic_slide:'generic_slide',
         embed_game:'embed_game'
     }
