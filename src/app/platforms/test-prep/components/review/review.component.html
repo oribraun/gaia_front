@@ -11,26 +11,38 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Lesson</th>
-                    <th scope="col">Word</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Subject</th>
                     <th scope="col">Difficulty</th>
-                    <th scope="col">Translate</th>
-                    <th scope="col">Type</th>
+                    <th scope="col">Pace</th>
+                    <th scope="col">Avg Pace</th>
+                    <th scope="col">Date</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let question of questions">
                     <td>{{question.created | datetimeFormat}}</td>
-                    <td>{{question.lesson_title}}</td>
+                    <td>{{question.title}}</td>
                     <!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
                     <td>{{question.word}}</td>
                     <td>{{question.difficulty}}</td>
                     <td>{{question.translation}}</td>
                     <td>{{question.presentation_slide_uuid ? 'User': 'System'}}</td>
+<!--                     'id': v.id,-->
+<!--            'created': v.created,-->
+<!--            'title': v.title,-->
+<!--            'type': v.type,-->
+<!--            'score': v.score,-->
+<!--            'difficulty': v.difficulty,-->
+<!--            'presentation_question_id': v.presentation_question_id,-->
+<!--            'pace': v.pace,-->
+<!--            'hint_used': v.hint_used,-->
+<!--            'user_lesson_id': v.user_lesson.id,-->
+<!--            'lesson_title': v.user_lesson.lesson.title,-->
                 </tr>
                 <tr class="text-center" *ngIf="!questions || !questions.length">
-                    <td colspan="6">No Questions</td>
+                    <td colspan="100%">No Questions</td>
                 </tr>
                 </tbody>
             </table>
