@@ -454,11 +454,14 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     }
 
     onRecognitionPTTResults = (results: any) => {
-        console.log("results",results)
+        console.log("onRecognitionPTTResults results",results)
         const recognitionText = results.text;
         if (results.isFinal) {
-            console.log('final', recognitionText)
+            console.log('onRecognitionPTTResults final', recognitionText)
             // this.onButtonClick(recognitionText);
+            this.messages.push(
+                new ChatMessage({type: 'user', message: recognitionText}),
+            )
         }
     }
 
@@ -471,6 +474,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     onPTTPressDown() {
         if (!this.disableButton) {
+            this.speechRecognitionService.PTTInProgress = true;
             this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
             this.speechRecognitionService.startListening();
             // this.speechRecognitionService.activateNativeLang(true);
@@ -480,8 +484,11 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         if (!this.disableButton) {
             // this.speechRecognitionService.resetToOrigLang();
             if (this.recognitionPPTSubscribe) {
-                this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
-                this.speechRecognitionService.stopListening();
+                setTimeout(() => {
+                    this.speechRecognitionService.PTTInProgress = false;
+                    this.speechRecognitionService.stopListening();
+                    this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+                }, 500)
             }
         }
     }
