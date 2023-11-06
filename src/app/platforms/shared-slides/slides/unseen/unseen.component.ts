@@ -38,7 +38,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     submited:boolean = false
 
     currentHint = '';
-    currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
+    // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
+    currentUnseenWords: any[] = [];
     excludeWords: string[] = []
     wordLength = 3;
     unseenTextHtml = '';

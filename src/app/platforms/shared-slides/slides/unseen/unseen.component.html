@@ -19,8 +19,10 @@
 
                     <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
                         <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
-                            <input type="checkbox" [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
-                            <div class="highlight"></div>
+                            <input type="checkbox"
+                                   [disabled]="submited"
+                                   [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+<!--                            <div class="highlight"></div>-->
                             <div class="circle"></div>
                             <p>{{option.answer}}</p>
                             <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
