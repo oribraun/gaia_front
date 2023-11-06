@@ -938,6 +938,43 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
 
+    resetSpeechRecognition() {
+        console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing)
+        if (this.speechRecognitionService.ASR_recognizing) {
+            this.speechRecognitionService.stopListening().then(() => {
+                this.startSpeechRecognition()
+            })
+        } else {
+            if (!this.speechRecognitionService.stoppingRecognition) {
+                this.startSpeechRecognition();
+            }
+        }
+    }
+
+    async startSpeechRecognition() {
+        console.log('startSpeechRecognition');
+        console.log('this.speechRecognitionService.ASR_recognizing', this.speechRecognitionService.ASR_recognizing);
+        console.log('this.speechRecognitionService.startingRecognition', this.speechRecognitionService.startingRecognition);
+        if (this.speechRecognitionService.mainRecognition &&
+            !this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.startingRecognition) {
+            await this.speechRecognitionService.startListening();
+        }
+    }
+
+    async stopSpeechRecognition() {
+        console.log('stopSpeechRecognition');
+        if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.stoppingRecognition) {
+            await this.speechRecognitionService.stopListening();
+        }
+    }
+
+    async abortSpeechRecognition() {
+        console.log('abortSpeechRecognition');
+        if (this.speechRecognitionService.ASR_recognizing && !this.speechRecognitionService.abortingRecognition) {
+            await this.speechRecognitionService.abortListening();
+        }
+    }
+
     clearForcedSlide() {
         this.forceChangeSlideInfo = false
         this.forcedChangeSlideInfo = {}

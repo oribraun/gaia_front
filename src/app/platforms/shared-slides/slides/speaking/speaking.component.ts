@@ -5,6 +5,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {ChatMessage} from "../../../main/entities/chat_message";
 import {environment} from "../../../../../environments/environment";
+import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
 
 declare var $: any;
 
@@ -52,9 +53,14 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     messages: ChatMessage[] = [];
 
+    disableButton = false;
+
+    recognitionPPTSubscribe: any
+
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
+        private speechRecognitionService: SpeechRecognitionService,
         private sanitizer: DomSanitizer
     ) {
         super(config, lessonService)
@@ -445,6 +451,38 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 }
             });
         })
+    }
 
+    onRecognitionPTTResults = (results: any) => {
+        console.log("results",results)
+        const recognitionText = results.text;
+        if (results.isFinal) {
+            console.log('final', recognitionText)
+            // this.onButtonClick(recognitionText);
+        }
+    }
+
+    onButtonClick(ans: string) {
+        // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
+        // const data = {"source": "word_translator_ans", "answer": ans}
+        // this.submitAnswerPending = true
+        // this.lessonService.Broadcast("slideEventRequest", data)
+    }
+
+    onPTTPressDown() {
+        if (!this.disableButton) {
+            this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
+            this.speechRecognitionService.startListening();
+            // this.speechRecognitionService.activateNativeLang(true);
+        }
+    }
+    onPTTPressUp () {
+        if (!this.disableButton) {
+            // this.speechRecognitionService.resetToOrigLang();
+            if (this.recognitionPPTSubscribe) {
+                this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+                this.speechRecognitionService.stopListening();
+            }
+        }
     }
 }
