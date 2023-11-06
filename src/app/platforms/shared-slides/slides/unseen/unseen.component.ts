@@ -21,6 +21,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
     question_text:string =''
     all_questions:any[] = []
     all_answers:any = {}
+    timers:any = {}
+    used_hints:any = {}
+    current_counter:any = {}
     multiple_choice_questions:any[] = []
     sentence_completion_questions:any[] = []
     open_questions:any[] = []
@@ -64,6 +67,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.unseen_headline = this.currentSlide.slide_title
         this.unseen_text = this.currentSlide.unseen_text
         this.all_questions = this.currentSlide.all_questions || []
+        
         this.all_answers = this.currentSlide.all_answers || {}
         this.question_index = this.currentSlide.question_index || 0
         this.question_index_str = String(this.question_index)
@@ -253,6 +257,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         } else {
             this.setCheckedAnswer()
         }
+        this.handleCounter(this.question_index)
+
     }
 
     async generateAllQuestions(){
@@ -294,11 +300,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
             "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
             "question_type":this.active_question.question_type,
             "question_idx":this.question_index,
+            "pace":this.current_counter.counter,
+            'hint_used':this.question_index in this.used_hints,
             'stopAudio': true
         }
         this.answers_texts['_'+String(this.question_index)] = this.answer_text
         this.submited_answers['_'+String(this.question_index)] = true
         this.submited=true
+        this.current_counter.submited=true
         this.lessonService.Broadcast("slideEventRequest", data)
     }
 
@@ -361,6 +370,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         const correct_answer = this.active_question.hints['correct_answer'];
         const guidance = this.active_question.hints['guidance'];
         const quotes = this.active_question.hints['quotes'];
+        this.used_hints[this.question_index] = true
         // console.log('correct_answer', correct_answer)
         // console.log('guidance', guidance)
         // console.log('quotes', quotes)
@@ -403,5 +413,41 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         }
 
         return true;
+    }
+
+    handleCounter(question_idx:number){
+        this.pauseAllCounters()
+        if(!this.timers.hasOwnProperty(question_idx)) {
+            this.timers[question_idx] = this.createTimer()
+        } else {
+            this.timers[question_idx].active = true
+        }
+        this.current_counter = this.timers[question_idx]
+    }
+
+    createTimer(){
+        let Timer = Object()
+        Timer.active = true
+        Timer.counter = 0
+        Timer.minutes = 0
+        Timer.seconds = 0
+        Timer.submited = false
+        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        return Timer
+
+    }
+ 
+    pauseAllCounters(){
+        for(const key in this.timers){
+            this.timers[key].active = false
+        }
+    }
+
+    progressTimer(self:any) {
+        if (self.active && !self.submited){
+            self.counter= self.counter+1
+            self.minutes = Math.floor(self.counter/60)
+            self.seconds = self.counter%60
+        }
     }
 }

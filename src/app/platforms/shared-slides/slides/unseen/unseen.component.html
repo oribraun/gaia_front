@@ -67,6 +67,7 @@
         <div class="col-6">
             <div class="box box-questions">
                 <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
+                <div class="question_timer">{{current_counter.minutes}}:{{current_counter.seconds}}</div>
                 <section class="questions">
                     <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>
                     <div class="bottom-panel">
