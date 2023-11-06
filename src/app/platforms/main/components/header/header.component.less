@@ -1,0 +1,171 @@
+.navbar {
+    background-color: #e3f2fd;
+    padding: 0;
+
+    .nav-item a {
+        white-space: nowrap;
+        text-align: left;
+        width: 45px;
+        text-align: center;
+        //padding: 8px;
+        //padding: 0.7rem 0.9rem 0.7rem 0.3rem;
+        .bi {
+            //min-width: 40px;
+            display: inline-block;
+            text-align: center;
+
+            &-no-min {
+                min-width: 0;
+            }
+        }
+
+        span {
+            padding-left: 17px;
+            display: none;
+        }
+
+        &.dropdown-toggle {
+            padding: 0.7rem 0.3rem;
+        }
+
+        &.active {
+            background-color: #0f3460;
+            color: #fff;
+        }
+    }
+
+    .link {
+        text-decoration: none;
+    }
+
+    .navbar-brand {
+        img {
+            height: 1em;
+            vertical-align: top;
+            margin-top: 0.2em;
+        }
+    }
+
+    .right-items {
+        div {
+            margin: 0 5px;
+            white-space: nowrap;
+        }
+        select {
+            outline: none;
+            box-shadow: none;
+        }
+        .logout {
+            img {
+                height: 1.2em;
+                vertical-align: top;
+                margin-top: 0.2em;
+            }
+        }
+    }
+}
+
+#loginModal {
+    .modal-dialog {
+        max-width: 400px;
+    }
+    .modal-body {
+        .relative-content {
+            position: relative;
+
+            .login {
+                max-width: 540px;
+                //background: #fff;
+                padding: 10px;
+                border-radius: 5px;
+
+                a {
+                    cursor: pointer;
+                }
+
+                .logo {
+                    position: relative;
+                    text-align: center;
+                    width: 90%;
+                    margin: 0 auto;
+                    padding: 10px;
+                    box-sizing: border-box;
+
+                    img {
+                        position: relative;
+                        max-width: 500px;
+                        width: 100%;
+                    }
+                }
+                .forgot-password, .sign-up, .log-in {
+                    color: rgb(24, 89, 169);
+                    text-decoration: none;
+                    cursor: pointer;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+                .forgot-password {
+                    font-size: .8em;
+                }
+                .divider {
+                    -webkit-box-align: center;
+                    -webkit-box-pack: justify;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    hr {
+                        height: 1px;
+                        border: none;
+                        flex: 1 1 0%;
+                        background-color: #aaaaaa;
+                        margin: 24px 0px;
+                    }
+                    span {
+                        font-size: 12px;
+                        line-height: 18px;
+                        padding: 0px 10px;
+                    }
+                }
+                .providers {
+                    position: relative;
+                    display: grid;
+                    gap: 16px;
+                    margin-bottom: 10px;
+                    button {
+                        background: transparent;
+                        border-radius: 4px;
+                        font-size: .9em;
+                        font-weight: bold;
+                        padding: 12px 16px;
+                        border: 1px solid #dee2e6;
+                        position: relative;
+                        width: 100%;
+                        .svg {
+                            position: absolute;
+                            height: 18px;
+                            width: 18px;
+                            left: 24px;
+                            top: 15px;
+                            &.google {
+                                fill: rgb(54, 59, 66);
+                            }
+                            &.facebook {
+                                fill: rgb(59, 89, 152);
+                            }
+                        }
+                        asl-google-signin-button {
+                            position: absolute;
+                            inset: 0;
+                            iframe {
+                                position: relative !important;
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

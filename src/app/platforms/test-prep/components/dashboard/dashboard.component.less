@@ -1,0 +1,92 @@
+.dashboard {
+    position: relative;
+    height: 100%;
+    padding: 0.75rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    .row {
+        position: relative;
+        height: 100%;
+        margin: 0;
+        div[class*="col-"] {
+            position: relative;
+        }
+        .panel {
+            position: relative;
+            background: #fff;
+            height: 100%;
+            padding: 0.75rem;
+            border-radius: 5px;
+            @marginTop: 15px;
+            .header {
+                color: #fb879b;
+            }
+            .box {
+                padding: 5px;
+                background: #ccc;
+                border-radius: 5px;
+                margin-top: @marginTop;
+                cursor: pointer;
+                .headline {
+                    font-size: 1.2em;
+                }
+                .desc {
+                    font-size: .8em;
+                }
+            }
+            .text-body {
+                margin-top: @marginTop;
+            }
+            .vocab-table {
+                position: relative;
+                margin-top: @marginTop;
+                th, td {
+                    background: #ccc;
+                    border-width: 3px;
+                    border-color: #fff;
+                }
+            }
+            .starts {
+                margin-top: @marginTop;
+                .start {
+                    position: relative;
+                    display: inline-block;
+                    margin-right: 5px;
+                    color: yellow;
+                    .start-fill {
+                        position: absolute;
+                        background: white;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                    }
+                }
+            }
+            .achievements-progress-bar {
+                margin-top: @marginTop;
+                .progress-bar {
+                    background-color: yellow;
+                }
+            }
+            .avg-grade {
+                margin-top: @marginTop;
+                align-items: center;
+                justify-content: center;
+            }
+            .buttons {
+                margin-top: @marginTop;
+                text-align: center;
+            }
+        }
+    }
+}
+
+#userLessonsModal {
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 1000px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+    }
+}

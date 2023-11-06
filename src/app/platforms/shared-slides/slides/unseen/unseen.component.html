@@ -1,0 +1,150 @@
+<ng-template #selected_question_container let-model="model">
+    <ng-container *ngIf="active_question">
+        <ng-container *ngIf="active_question.question_type===questionTypes.sentence_completion">
+            <ng-container *ngTemplateOutlet="sentence_completion;"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.open_question"><ng-container  *ngTemplateOutlet="open_question;"></ng-container></ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.multiple_choice"><ng-container  *ngTemplateOutlet="quiz;"></ng-container></ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #quiz let-model="model">
+    <div class="question-wrapper">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mcq">
+
+                    <h4 class="question-title">{{active_question.question.question}}</h4>
+                    <p>Mark all the correct answers</p>
+
+                    <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
+                        <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
+                            <input type="checkbox" [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+                            <div class="highlight"></div>
+                            <div class="circle"></div>
+                            <p>{{option.answer}}</p>
+                            <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
+                            <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
+                        </label>
+                    </ng-container>
+
+                </div>
+                <!-- MCQ visible demo ends here -->
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #sentence_completion let-model="model">
+    <div class="question-wrapper">
+        <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
+        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation">{{checked_answer_text}}</div>
+        <div id="sentence_start">{{active_question.question}}</div>
+    </div>
+</ng-template>
+
+<ng-template #open_question let-model="model">
+    <div class="question-wrapper">
+        <h4 class="question-title" id="question">{{active_question.question}}</h4>
+        <!-- <div id="question">{{active_question.question}}</div> -->
+        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation" >{{checked_answer_text}}</div>
+    </div>
+</ng-template>
+
+<div class="unseen">
+    <div class="row">
+        <div class="col-6">
+            <div class="box">
+                <h2>{{unseen_headline}}</h2>
+                <p  class="unseen_text" [innerHTML]="unseenTextHtml | safeHtml"></p>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="box box-questions">
+                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
+                <section class="questions">
+                    <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>
+                    <div class="bottom-panel">
+                        <div class="question-buttons">
+                            <button class="btn btn-primary" (click)="checkAnswer()">Submit</button>
+                            <button class="btn btn-primary" (click)="nextSlide()">Continue</button>
+                            <button class="btn btn-primary" (click)="getHints()">Hint</button>
+                        </div>
+                        <div class="pagination-wrapper">
+                            <div class="pagination pagination2">
+                                <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+                                <ng-container *ngFor="let question of all_questions; let index=index;">
+                                    <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
+                                </ng-container>
+                                <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </symbol>
+                </svg>
+
+                <div class="alert alert-success alert-dismissible position-absolute top-0 start-0 end-0 d-flexalign-items-center fade"
+                     [ngClass]="{
+                     'show': currentHint,
+                     'm-0 p-0': !currentHint
+                     }" role="alert">
+                    <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>
+<!--                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">-->
+<!--                        <use xlink:href="#check-circle-fill"/>-->
+<!--                    </svg>-->
+                    <div>
+                        {{currentHint}}
+                    </div>
+                    <button type="button" (click)="closeHints()" class="btn-close no-box-shadow no-outline" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="tabset">-->
+<!--    &lt;!&ndash; Tab 1 &ndash;&gt;-->
+<!--    <input type="radio" name="tabset" id="tab1" aria-controls="text" checked>-->
+<!--    <label for="tab1">Text</label>-->
+<!--    &lt;!&ndash; Tab 2 &ndash;&gt;-->
+<!--    <input type="radio" name="tabset" id="tab2" aria-controls="questions">-->
+<!--    <label for="tab2">Questions</label>-->
+
+
+<!--    <div class="tab-panels">-->
+<!--        <section id="text" class="tab-panel">-->
+<!--            <div id="unseen_wrapper">-->
+<!--                <h2>{{unseen_headline}}</h2>-->
+<!--                <p>{{unseen_text}}</p>-->
+<!--            </div>-->
+<!--        </section>-->
+<!--        <section id="questions" class="tab-panel">-->
+<!--            <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>-->
+<!--            <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>-->
+<!--            <div class="buttons_wrapper"><button (click)="checkAnswer()">Submit Answer</button>-->
+<!--                <button (click)="nextQuestion()">Next Question</button>-->
+<!--                <button (click)="prevQuestion()">Previous Question</button>-->
+<!--                <button (click)="nextSlide()">Continue</button>-->
+<!--                <button (click)="getHints()">Hint</button>-->
+<!--            </div>-->
+<!--            <div class="center">-->
+<!--                <div class="pagination pagination2">-->
+<!--                    <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>-->
+<!--                    <ng-container *ngFor="let question of all_questions; let index=index;">-->
+<!--                        <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>-->
+<!--                    </ng-container>-->
+<!--                    <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>-->
+<!--                </div></div>-->
+<!--        </section>-->
+
+<!--    </div>-->
+
+<!--</div>-->
+

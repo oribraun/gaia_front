@@ -1,0 +1,60 @@
+<div class="hearing">
+    <div class="audio">
+        <!--        https://css-tricks.com/lets-create-a-custom-audio-player/-->
+<!--        <div id="audio-player-container">-->
+<!--            &lt;!&ndash;            <p>Audio Player</p>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <button id="play-icon"></button>&ndash;&gt;-->
+<!--&lt;!&ndash;            <audio src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"&ndash;&gt;-->
+<!--&lt;!&ndash;                   preload="metadata" loop></audio>&ndash;&gt;-->
+<!--            <audio id="audio" style="">-->
+<!--                <source-->
+<!--                    src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"-->
+<!--                    type="audio/mpeg"-->
+<!--                    preload="metadata">-->
+<!--                Your browser does not support the audio element.-->
+<!--            </audio>-->
+<!--            <div id="play-icon" class="play-icon">-->
+<!--                <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>-->
+<!--            </div>-->
+<!--            <span id="current-time" class="time">0:00</span>-->
+<!--            <input class="range" type="range" id="seek-slider" max="100" value="0">-->
+<!--            <span id="duration" class="time">0:00</span>-->
+<!--            &lt;!&ndash;            <output id="volume-output">100</output>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <input class="range" type="range" id="volume-slider" max="100" value="100">&ndash;&gt;-->
+<!--        </div>-->
+            <audio id="audio" style="" controls>
+                <source
+                    src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
+                    type="audio/mpeg"
+                    preload="metadata">
+                Your browser does not support the audio element.
+            </audio>
+    </div>
+    <div class="questions-wrapper">
+        <div class="question-wrapper">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="mcq">
+
+                        <h4 class="question-title">{{active_question.question.question}}</h4>
+                        <p>Mark all the correct answers</p>
+
+                        <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
+                            <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
+                                <input type="checkbox" [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+                                <div class="highlight"></div>
+                                <div class="circle"></div>
+                                <p>{{option.answer}}</p>
+                                <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
+                                <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
+                            </label>
+                        </ng-container>
+
+                    </div>
+                    <!-- MCQ visible demo ends here -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

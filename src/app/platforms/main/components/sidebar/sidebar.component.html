@@ -1,0 +1,88 @@
+<main class="sidebar d-flex flex-nowrap">
+    <div class=" sidebar-inner d-flex flex-column flex-shrink-0 bg-light" bis_skin_checked="1">
+        <a href="/frontend/src/static" class="d-block link-dark text-decoration-none">
+            <svg class="bi pe-none" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="visually-hidden">Icon-only</span>
+        </a>
+        <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+            <li class="nav-item">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Home" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-house-door"></i> <span>Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="About" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-info"></i> <span>About</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                    <i class="bi bi-view-list"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
+                <a class="nav-link border-bottom rounded-0"
+                   data-bs-toggle="tooltip" data-bs-placement="right" title="Lesson" data-bs-custom-class="gaia-tooltip"
+                   [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">
+                    <i class="bi bi-award-fill"></i> <span>Lesson</span>
+                </a>
+            </li>
+            <!--            <ng-container *ngIf="this.user">-->
+            <!--                <li>-->
+            <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Prompt Optimizer"-->
+            <!--                       [routerLink]="['/prompt-optimizer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
+            <!--                        <i class="bi bi-speedometer2"></i> <span>Prompt Optimizer</span>-->
+            <!--                    </a>-->
+            <!--                </li>-->
+            <!--                <li>-->
+            <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Analyzer"-->
+            <!--                        [routerLink]="['/analyzer']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">-->
+            <!--                        <i class="bi bi-table"></i> <span>Analyzer</span>-->
+            <!--                    </a>-->
+            <!--                </li>-->
+            <!--                <li>-->
+            <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Products">-->
+            <!--                        <i class="bi bi-grid"></i> <span>Products</span>-->
+            <!--                    </a>-->
+            <!--                </li>-->
+            <!--                <li>-->
+            <!--                    <a href="#" class="nav-link border-bottom rounded-0"-->
+            <!--                       data-bs-toggle="tooltip" data-bs-placement="right" title="Customers">-->
+            <!--                        <i class="bi bi-person-circle"></i> <span>Customers</span>-->
+            <!--                    </a>-->
+            <!--                </li>-->
+            <!--            </ng-container>-->
+        </ul>
+        <div class="dropdown border-top dropend" bis_skin_checked="1">
+            <a href="#" class="d-flex align-items-center justify-content-center link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <!--                <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">-->
+                <i class="bi bi-no-min bi-person-add"></i>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <ng-container *ngIf="!user.id">
+                    <li>
+                        <a class="dropdown-item" href="#"
+                           [routerLink]="['/login']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact:false}">Sign in</a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="user.id">
+                    <h6 class="dropdown-header">Hello {{user.username}}</h6>
+                    <div class="dropdown-divider"></div>
+                    <!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
+                    <!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
+                    <!--                    <li><hr class="dropdown-divider"></li>-->
+                    <li><a class="dropdown-item" href="#" (click)="logout($event)">Sign out</a></li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</main>

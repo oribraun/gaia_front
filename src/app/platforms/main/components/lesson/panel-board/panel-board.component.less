@@ -1,0 +1,226 @@
+@import "../../../../../../vars";
+
+.right-panel {
+    @cam-height: 180px;
+    @button-height: 50px;
+    @help-height: 60px;
+    height: calc(100% - @header-height);
+    width: @panel-width;
+    margin-left: @padding;
+    display: inline-block;
+    vertical-align: top;
+    transition: all .3s ease-in-out;
+    overflow: hidden;
+    opacity: 1;
+    .cam-board {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        height: 100%;
+        width: 100%;
+
+        .teacher {
+            position: relative;
+            box-shadow: 0 0 5px var(--grey-background-color);
+            height: @cam-height;
+            border-radius: @border-radius;
+            background: var(--white-background-color);
+            overflow: hidden;
+            .user-box {
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                .user {
+                    position: relative;
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 100%;
+                    //background: #ccc;
+                    margin: 0 auto;
+                    .icon {
+                        position: absolute;
+                        top:0;//-3px;
+                        left:0;
+                        right:0;
+                        bottom: 0;
+                        text-align: center;
+                        overflow: hidden;
+                        //background: var(--gaia-background-color);
+                        border-radius: 100%;
+                        i {
+                            font-size: 100px;
+                            line-height: 1;
+                            vertical-align: top;
+                        }
+                        img {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            bottom: 0;
+                            right: 0;
+                            max-width: 100%;
+                            max-height: 100%;
+                        }
+                    }
+                    .circle {
+                        position: absolute;
+                        top:0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        border-radius: 100%;
+                        border: 1px solid #000;
+                    }
+                    .circle-animation {
+                        -webkit-animation: growUp 1.5s infinite; /* You can remove 1.5s if you don't want delay */
+                        -moz-animation: growUp 1.5s infinite;
+                        -ms-animation: growUp 1.5s infinite;
+                        -o-animation: growUp 1.5s infinite;
+                        animation: growUp 1.5s infinite;
+                    }
+                }
+            }
+            .gif-box {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                .user {
+                    position: absolute;
+                    width: 105px;
+                    height: 105px;
+                    border-radius: 100%;
+                    bottom: 15%;
+                    left: 52.5%;
+                    transform: translate(-50%, 0);
+                    //border: 1px solid;
+                }
+                .user-mobile {
+                    top: auto;
+                    left: 52.2%;
+                    bottom: 14%;
+                }
+                img {
+                    position: absolute;
+                    max-width: 100%;
+                    max-height: 100%;
+                    bottom: 0;
+                    left: 53.5%;
+                    transform: translate(-50%, 0);
+                }
+            }
+        }
+
+        .student {
+            position: relative;
+            box-shadow: 0 0 5px var(--grey-background-color);
+            height: @cam-height;
+            border-radius: @border-radius;
+            top: @padding;
+            background: var(--white-background-color);
+            overflow: hidden;
+            video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .today-plan {
+            @inner-padding: 20px;
+            box-shadow: 0 0 5px var(--grey-background-color);
+            height: calc(100% - @cam-height*2 - @padding*2);
+            position: relative;
+            top: @padding * 2;
+            padding: 10px 0;
+            border-radius: @border-radius;
+            background: var(--white-background-color);
+            h4 {
+                font-weight: bold;
+                margin-bottom: 0;
+            }
+            .plan {
+                height: calc(100% - 29px - @button-height - @help-height);
+                .table-line {
+                    width: 100%;
+                    padding: 3px @inner-padding;
+                    background: var(--grey-background-color);
+                    &:nth-child(2n) {
+                        background: var(--white-background-color);
+                    }
+
+                    &.active {
+                        color: var(--purple-background-color);
+                    }
+                    &.done {
+                        text-decoration: line-through;
+                    }
+                }
+            }
+            .help-container {
+                //position: absolute;
+                //bottom: 70px;
+                position: relative;
+                bottom: 0;
+                height: @help-height;
+                width: 100%;
+                margin: 0 auto;
+                // border: 1px solid;
+            }
+            .buttons {
+                position: relative;
+                height: @button-height;
+                padding: 0 @inner-padding;
+                button {
+                    text-align: center;
+                    padding: 8px 0;
+                    box-shadow: 0 0 5px var(--grey-background-color);
+                    border: none;
+                    //outline: none;
+                    width: 100%;
+                    border-radius: @border-radius;
+                    height: 100%;
+                    &:active {
+                        box-shadow: 0 0 5px var(--blue-background-color);
+                    }
+                    img {
+                        max-height: 100%;
+                        vertical-align: bottom;
+                    }
+                }
+            }
+        }
+    }
+}
+.right-panel-closed {
+    width: 0;
+    margin: 0;
+    opacity: 0;
+}
+.right-panel-full {
+    width: 100%;
+    margin: 0;
+    height: 100%;
+}
+
+
+.got-audio {
+    position: absolute;
+    z-index: 1;
+}
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .prev-button,.next-button {
+        font-size: 1.5em;
+        cursor: pointer;
+        padding-top: 5px;
+        margin: 0 5px;
+    }
+    .button {
+        span {
+            line-height: 1;
+            vertical-align: text-bottom;
+        }
+    }
+}
