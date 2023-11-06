@@ -40,6 +40,9 @@ export class BaseSlideComponent implements OnInit, OnDestroy {
         if (this.currentSlide.word_image_path && !this.checkIsFullUrl(this.currentSlide.word_image_path)) {
             this.currentSlide.word_image_path = (this.currentHost + this.currentSlide.word_image_path).replace(/(https?:\/\/)|(\/)+/g, "$1$2");
         }
+        if (this.currentSlide.audio_path && !this.checkIsFullUrl(this.currentSlide.audio_path)) {
+            this.currentSlide.audio_path = (this.currentHost + this.currentSlide.audio_path).replace(/(https?:\/\/)|(\/)+/g, "$1$2");
+        }
     }
 
     checkIsFullUrl(url: string) {
