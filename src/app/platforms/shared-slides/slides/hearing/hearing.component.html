@@ -1,60 +1,127 @@
-<div class="hearing">
-    <div class="audio">
-        <!--        https://css-tricks.com/lets-create-a-custom-audio-player/-->
-<!--        <div id="audio-player-container">-->
-<!--            &lt;!&ndash;            <p>Audio Player</p>&ndash;&gt;-->
-<!--            &lt;!&ndash;            <button id="play-icon"></button>&ndash;&gt;-->
-<!--&lt;!&ndash;            <audio src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"&ndash;&gt;-->
-<!--&lt;!&ndash;                   preload="metadata" loop></audio>&ndash;&gt;-->
-<!--            <audio id="audio" style="">-->
-<!--                <source-->
-<!--                    src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"-->
-<!--                    type="audio/mpeg"-->
-<!--                    preload="metadata">-->
-<!--                Your browser does not support the audio element.-->
-<!--            </audio>-->
-<!--            <div id="play-icon" class="play-icon">-->
-<!--                <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>-->
-<!--            </div>-->
-<!--            <span id="current-time" class="time">0:00</span>-->
-<!--            <input class="range" type="range" id="seek-slider" max="100" value="0">-->
-<!--            <span id="duration" class="time">0:00</span>-->
-<!--            &lt;!&ndash;            <output id="volume-output">100</output>&ndash;&gt;-->
-<!--            &lt;!&ndash;            <input class="range" type="range" id="volume-slider" max="100" value="100">&ndash;&gt;-->
-<!--        </div>-->
-            <audio id="audio" style="" controls>
-                <source
-                    src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
-                    type="audio/mpeg"
-                    preload="metadata">
-                Your browser does not support the audio element.
-            </audio>
+
+
+
+
+
+<ng-template #selected_question_container let-model="model">
+    <ng-container *ngIf="active_question">
+        <ng-container *ngIf="active_question.question_type===questionTypes.sentence_completion">
+            <ng-container *ngTemplateOutlet="sentence_completion;"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.open_question"><ng-container  *ngTemplateOutlet="open_question;"></ng-container></ng-container>
+        <ng-container *ngIf="active_question.question_type===questionTypes.multiple_choice"><ng-container  *ngTemplateOutlet="quiz;"></ng-container></ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #quiz let-model="model">
+    <div class="question-wrapper">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mcq">
+
+                    <h4 class="question-title">{{active_question.question.question}}</h4>
+                    <p>Mark all the correct answers</p>
+
+                    <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
+                        <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
+                            <input type="checkbox"
+                                   [disabled]="submited"
+                                   [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+<!--                            <div class="highlight"></div>-->
+                            <div class="circle"></div>
+                            <p>{{option.answer}}</p>
+                            <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
+                            <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
+                        </label>
+                    </ng-container>
+
+                </div>
+                <!-- MCQ visible demo ends here -->
+
+            </div>
+        </div>
     </div>
-    <div class="questions-wrapper">
-        <div class="question-wrapper">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="mcq">
+</ng-template>
 
-                        <h4 class="question-title">{{active_question.question.question}}</h4>
-                        <p>Mark all the correct answers</p>
+<ng-template #sentence_completion let-model="model">
+    <div class="question-wrapper">
+        <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
+        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation">{{checked_answer_text}}</div>
+        <div id="sentence_start">{{active_question.question}}</div>
+    </div>
+</ng-template>
 
-                        <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
-                            <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
-                                <input type="checkbox" [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
-                                <div class="highlight"></div>
-                                <div class="circle"></div>
-                                <p>{{option.answer}}</p>
-                                <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
-                                <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
-                            </label>
-                        </ng-container>
+<ng-template #open_question let-model="model">
+    <div class="question-wrapper">
+        <h4 class="question-title" id="question">{{active_question.question}}</h4>
+        <!-- <div id="question">{{active_question.question}}</div> -->
+        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
+        <div id="explanation" >{{checked_answer_text}}</div>
+    </div>
+</ng-template>
 
+<div class="unseen">
+    <div class="row">
+        <div class="col-6">
+            <div class="box">
+                <h2>{{unseen_headline}}</h2>
+                <div class="audio">
+                    <audio id="audio" style="" controls>
+                        <source
+                            src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
+                            type="audio/mpeg"
+                            preload="metadata">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="box box-questions">
+                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
+                <div class="question_timer">{{current_counter.minutes}}:{{current_counter.seconds}}</div>
+                <section class="questions">
+                    <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>
+                    <div class="bottom-panel">
+                        <div class="question-buttons">
+                            <button class="btn btn-primary" (click)="checkAnswer()">Submit</button>
+                            <button class="btn btn-primary" (click)="nextSlide()">Continue</button>
+                            <button class="btn btn-primary" (click)="getHints()">Hint</button>
+                        </div>
+                        <div class="pagination-wrapper">
+                            <div class="pagination pagination2">
+                                <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+                                <ng-container *ngFor="let question of all_questions; let index=index;">
+                                    <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
+                                </ng-container>
+                                <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>
+                            </div>
+                        </div>
                     </div>
-                    <!-- MCQ visible demo ends here -->
+                </section>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </symbol>
+                </svg>
 
+                <div class="alert alert-success alert-dismissible position-absolute top-0 start-0 end-0 d-flexalign-items-center fade"
+                     [ngClass]="{
+                     'show': currentHint,
+                     'm-0 p-0': !currentHint
+                     }" role="alert">
+                    <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>
+                    <div>
+                        {{currentHint}}
+                    </div>
+                    <button type="button" (click)="closeHints()" class="btn-close no-box-shadow no-outline" aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
