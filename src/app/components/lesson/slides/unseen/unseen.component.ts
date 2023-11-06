@@ -23,6 +23,7 @@ function isEmpty(obj:any) {
 export class UnseenComponent extends BaseSlideComponent implements OnInit{
   unseen_headline:string = 'Dummy Headline'
   unseen_text:string =''
+  audio_file:string = 'https://unseen-audio-files.s3.amazonaws.com/Black+Pumas+-+Colors+(Official+Live+Session).mp3'
   answer_text:string =''
   question_text:string =''
   all_questions:any[] = []
