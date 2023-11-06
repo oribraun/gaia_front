@@ -115,10 +115,12 @@ export class PracticeLessonComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe((params: ParamMap) => {
             const lesson_id = params.get('id')
-            const q_id = params.get('s_id')
             if (lesson_id) {
                 this.lesson_id = parseInt(lesson_id);
             }
+        })
+        this.route.queryParams.subscribe((params) => {
+            const q_id = params['q_id']
             if (q_id) {
                 this.question_id = parseInt(q_id);
             }
@@ -213,12 +215,25 @@ export class PracticeLessonComponent implements OnInit {
                 } else {
                     this.presentation = new Presentation(response.presentation);
                     console.log('this.presentation ', this.presentation)
-                    this.currentSectionIndex = this.presentation.current_section_index;
-                    this.currentSlideIndex = this.presentation.current_slide_index;
-                    this.currentObjectiveIndex = this.presentation.current_objective_index;
-                    this.estimatedDuration = this.presentation.estimated_duration;
-                    this.setCurrentSection();
-                    this.setData();
+                    if (this.question_id) {
+                        //     this.getIndexsByQuestionId();
+                        this.currentSectionIndex = this.presentation.current_section_index;
+                        this.currentSlideIndex = this.presentation.current_slide_index;
+                        this.currentObjectiveIndex = this.presentation.current_objective_index;
+                        this.estimatedDuration = this.presentation.estimated_duration;
+                        this.setCurrentSection();
+                        this.setData();
+                        this.currentSlide.question_index = this.question_id
+                        return;
+                    } else {
+                        this.currentSectionIndex = this.presentation.current_section_index;
+                        this.currentSlideIndex = this.presentation.current_slide_index;
+                        this.currentObjectiveIndex = this.presentation.current_objective_index;
+                        this.estimatedDuration = this.presentation.estimated_duration;
+                        this.setCurrentSection();
+                        this.setData();
+                    }
+                    console.log('this.currentSlide', this.currentSlide)
                     if (!this.mock) {
                         // this.restartCurrentSlide()
                         this.getNewSlideReply();
@@ -990,6 +1005,33 @@ export class PracticeLessonComponent implements OnInit {
             // this.socketRecorderEvents.onConnect.unsubscribe(this.onSocketRecorderConnect)
             this.socketRecorderService.ClearEvent('got-recorder-data');
             this.socketRecorderService.ClearEvent('hello-back')
+        }
+    }
+
+    getIndexsByQuestionId() {
+        console.log('adfs')
+        const counters: any = {s: 0, sl: 0, q: 0}
+        let slide: any;
+        for (let section of this.presentation.sections) {
+            for (slide of section.slides) {
+                if (!slide.all_questions) {
+                    return;
+                }
+                for (let q of slide.all_questions) {
+                    if (q.question_id === this.question_id) {
+                        this.presentation.current_section_index = counters.s
+                        this.presentation.current_slide_index = counters.sl
+                        this.presentation.current_objective_index = 0;
+                        this.currentSectionIndex = this.presentation.current_section_index;
+                        this.currentSlideIndex = this.presentation.current_slide_index;
+                        this.currentObjectiveIndex = this.presentation.current_objective_index;
+                        slide.question_index = counters.q
+                    }
+                    counters.q++;
+                }
+                counters.sl++;
+            }
+            counters.s++;
         }
     }
 

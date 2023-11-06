@@ -14,7 +14,7 @@ declare var $: any;
     encapsulation: ViewEncapsulation.None,
 })
 
-export class UnseenComponent extends BaseSlideComponent implements OnInit{
+export class UnseenComponent extends BaseSlideComponent implements OnInit {
     unseen_headline:string = 'Dummy Headline'
     unseen_text:string =''
     answer_text:string =''
@@ -67,8 +67,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         this.unseen_headline = this.currentSlide.slide_title
         this.unseen_text = this.currentSlide.unseen_text
         this.all_questions = this.currentSlide.all_questions || []
-        
+
         this.all_answers = this.currentSlide.all_answers || {}
+        console.log('this.currentSlide.question_index', this.currentSlide.question_index)
         this.question_index = this.currentSlide.question_index || 0
         this.question_index_str = String(this.question_index)
         console.log('all_questions', this.all_questions)
@@ -436,7 +437,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit{
         return Timer
 
     }
- 
+
     pauseAllCounters(){
         for(const key in this.timers){
             this.timers[key].active = false
