@@ -9,33 +9,39 @@
                 <tr>
                     <th scope="col">Title</th>
                     <th scope="col">Section</th>
-                    <th scope="col">Subject</th>
                     <th scope="col">Difficulty</th>
                     <th scope="col">Pace</th>
                     <th scope="col">Avg Pace</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Date</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let question of questions">
-                    <td>{{question.title}}</td>
+                    <td>
+                        <a [routerLink]="['/test_prep/practice/1']" [queryParams]="{q_id: question.presentation_question_id}">
+                            {{question.title}}
+                        </a>
+                    </td>
                     <td>{{question.section}}</td>
-                    <td>{{question.word}}</td>
                     <td>{{question.difficulty}}</td>
-                    <td>{{question.translation}}</td>
+                    <td>{{question.pace}}</td>
                     <td>{{question.avg_pace}}</td>
+                    <td>{{question.score}}</td>
+                    <td>{{question.type}}</td>
                     <td>{{question.created | datetimeFormat}}</td>
-<!--                     'id': v.id,-->
-<!--            'created': v.created,-->
-<!--            'title': v.title,-->
-<!--            'type': v.type,-->
-<!--            'score': v.score,-->
-<!--            'difficulty': v.difficulty,-->
-<!--            'presentation_question_id': v.presentation_question_id,-->
-<!--            'pace': v.pace,-->
-<!--            'hint_used': v.hint_used,-->
-<!--            'user_lesson_id': v.user_lesson.id,-->
-<!--            'lesson_title': v.user_lesson.lesson.title,-->
+                    <!--                     'id': v.id,-->
+                    <!--            'created': v.created,-->
+                    <!--            'title': v.title,-->
+                    <!--            'type': v.type,-->
+                    <!--            'score': v.score,-->
+                    <!--            'difficulty': v.difficulty,-->
+                    <!--            'presentation_question_id': v.presentation_question_id,-->
+                    <!--            'pace': v.pace,-->
+                    <!--            'hint_used': v.hint_used,-->
+                    <!--            'user_lesson_id': v.user_lesson.id,-->
+                    <!--            'lesson_title': v.user_lesson.lesson.title,-->
                 </tr>
                 <tr class="text-center" *ngIf="!questions || !questions.length">
                     <td colspan="100%">No Questions</td>

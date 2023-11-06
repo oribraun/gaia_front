@@ -23,6 +23,7 @@ export class PracticeLessonComponent implements OnInit {
     private user!: User;
     mock = environment.is_mock;
     lesson_id!: number;
+    question_id!: number;
 
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
@@ -114,8 +115,12 @@ export class PracticeLessonComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe((params: ParamMap) => {
             const lesson_id = params.get('id')
+            const q_id = params.get('s_id')
             if (lesson_id) {
                 this.lesson_id = parseInt(lesson_id);
+            }
+            if (q_id) {
+                this.question_id = parseInt(q_id);
             }
         })
 
