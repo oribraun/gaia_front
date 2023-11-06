@@ -183,7 +183,7 @@ export class PracticeLessonComponent implements OnInit {
         } else {
             if(!this.speechRecognitionService.mainRecognition) {
                 this.speechRecognitionService.setupSpeechRecognition();
-                this.speechRecognitionService.startListening();
+                // this.speechRecognitionService.startListening();
             }
             this.lessonService.resetHelpMode()
             this.listenForPauseEvnet()

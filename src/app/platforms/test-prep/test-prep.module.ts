@@ -6,6 +6,7 @@ import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import { VocabularyComponent } from './components/vocabulary/vocabulary.component';
+import { ReviewComponent } from './components/review/review.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { VocabularyComponent } from './components/vocabulary/vocabulary.componen
         DashboardComponent,
         PracticeLessonComponent,
         VocabularyComponent,
+        ReviewComponent,
     ],
     imports: [
         CommonModule,

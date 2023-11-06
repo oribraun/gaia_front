@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {VocabularyComponent} from "./components/vocabulary/vocabulary.component";
+import {ReviewComponent} from "./components/review/review.component";
 
 const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, pathMatch : 'full' },
     { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full' },
     { path: 'vocabulary', component: VocabularyComponent, pathMatch : 'full' },
+    { path: 'review', component: ReviewComponent, pathMatch : 'full' },
 ];
 
 @NgModule({
