@@ -37,6 +37,13 @@
                         <i class="bi bi-view-list"></i> <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'test_prep'">
+                    <a class="nav-link rounded-0"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Vocabulary" data-bs-custom-class="gaia-tooltip"
+                       [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                        <i class="bi bi-card-list"></i> <span>Vocabulary</span>
+                    </a>
+                </li>
                 <li class="nav-item" *ngIf="user.id  && user.gaia_admin">
                     <a class="nav-link rounded-0"
                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"
