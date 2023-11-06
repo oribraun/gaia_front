@@ -12,7 +12,7 @@ declare var $: any;
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.less']
 })
-export class TestPrepDashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
     user!: User;
     gettingGroupTypes = false;

@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {TestPrepDashboardComponent} from "./components/dashboard/dashboard.component";
+import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
+import {VocabularyComponent} from "./components/vocabulary/vocabulary.component";
 
 const routes: Routes = [
-    { path: 'dashboard', component: TestPrepDashboardComponent, pathMatch : 'full' },
+    { path: 'dashboard', component: DashboardComponent, pathMatch : 'full' },
     { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full' },
+    { path: 'vocabulary', component: VocabularyComponent, pathMatch : 'full' },
 ];
 
 @NgModule({
