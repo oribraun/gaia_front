@@ -1,0 +1,32 @@
+.vocabulary {
+    position: relative;
+    height: 100%;
+    padding: 0.75rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    @marginTop: 15px;
+    .panel {
+        background: #fff;
+        padding: 0.75rem;
+        .vocab-table {
+            position: relative;
+            margin-top: @marginTop;
+
+            th, td {
+                background: #ccc;
+                border-width: 3px;
+                border-color: #fff;
+            }
+        }
+        .buttons {
+            @marginTop: 15px;
+            text-align: center;
+            button {
+                margin:0 5px;
+            }
+        }
+        .no-vocabs {
+            text-align: center;
+        }
+    }
+}

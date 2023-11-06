@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
+import {User} from "../../../main/entities/user";
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../../main/entities/user";
 
 @Component({
-  selector: 'app-vocabulary',
-  templateUrl: './vocabulary.component.html',
-  styleUrls: ['./vocabulary.component.less']
+  selector: 'app-review',
+  templateUrl: './review.component.html',
+  styleUrls: ['./review.component.less']
 })
-export class VocabularyComponent implements OnInit {
+export class ReviewComponent implements OnInit {
     user!: User;
 
-    vocabulary!: any[];
-    gettingVocabulary = false;
+    questions!: any[];
+    gettingQuestions = false;
 
     constructor(
         private config: Config,
@@ -24,7 +24,7 @@ export class VocabularyComponent implements OnInit {
 
     ngOnInit(): void {
         this.getUser();
-        this.getVocabulary();
+        this.getQuestions();
     }
 
 
@@ -36,21 +36,21 @@ export class VocabularyComponent implements OnInit {
         })
     }
 
-    getVocabulary() {
-        this.vocabulary = []
-        this.gettingVocabulary = true;
-        this.apiService.getVocabulary({}).subscribe({
+    getQuestions() {
+        this.questions = []
+        this.gettingQuestions = true;
+        this.apiService.getQuestions({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('getVocabulary err', response)
                 } else {
-                    this.vocabulary = response.vocabulary;
+                    this.questions = response.questions;
                 }
-                this.gettingVocabulary = false;
+                this.gettingQuestions = false;
             },
             error: (error) => {
                 console.log('getVocabulary error', error)
-                this.gettingVocabulary = false;
+                this.gettingQuestions = false;
             },
         })
     }

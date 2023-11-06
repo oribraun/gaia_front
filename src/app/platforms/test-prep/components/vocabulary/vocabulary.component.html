@@ -23,14 +23,14 @@
                 <tr *ngFor="let voocab of vocabulary">
                     <td>{{voocab.created | datetimeFormat}}</td>
                     <td>{{voocab.lesson_title}}</td>
-<!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
+                    <!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
                     <td>{{voocab.word}}</td>
                     <td>{{voocab.difficulty}}</td>
                     <td>{{voocab.translation}}</td>
                     <td>{{voocab.presentation_slide_uuid ? 'User': 'System'}}</td>
                 </tr>
                 <tr class="text-center" *ngIf="!vocabulary || !vocabulary.length">
-                    <td colspan="6">No Vocabulary</td>
+                    <td colspan="100%">No Vocabulary</td>
                 </tr>
                 </tbody>
             </table>
@@ -42,10 +42,10 @@
         </div>
     </div>
     <div class="generic-loader-wrapper" *ngIf="gettingVocabulary">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
-                </div>
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
             </div>
         </div>
+    </div>
 </div>

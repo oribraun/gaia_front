@@ -495,6 +495,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getQuestions(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-questions', obj,
+            this.httpOptions
+        )
+    }
     // test_prep platform api
 
 }

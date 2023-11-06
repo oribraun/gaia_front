@@ -71,13 +71,13 @@
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
         ></app-generic>
-        <app-unseen
-            *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-unseen>
+<!--        <app-unseen-->
+<!--            *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"-->
+<!--            [currentSlide]="model.currentSlide"-->
+<!--            [slideData]="model.slideData"-->
+<!--        ></app-unseen>-->
         <app-hearing
-            *ngIf="model.currentSlide.slide_type === sectionTitles.hearing"
+            *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
         ></app-hearing>
