@@ -3,6 +3,8 @@ import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {ChatMessage} from "../../../main/entities/chat_message";
+import {environment} from "../../../../../environments/environment";
 
 declare var $: any;
 
@@ -48,12 +50,23 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     }
     unseen_questions: any;
 
+    messages: ChatMessage[] = [];
+
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
         private sanitizer: DomSanitizer
     ) {
         super(config, lessonService)
+
+        if (environment.is_mock) {
+            this.messages = [
+                new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
+                new ChatMessage({type: 'user', message: 'im good how are you?'}),
+                new ChatMessage({type: 'computer', message: 'fine'}),
+                new ChatMessage({type: 'user', message: 'hi'}),
+            ]
+        }
     }
 
     override ngOnInit(): void {
@@ -400,5 +413,38 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         }
 
         return true;
+    }
+
+    translate(index: number) {
+        if (!this.messages[index].translatedMessage) {
+            this.translateGoogle(this.messages[index]).then((translated_text: string) => {
+                this.messages[index].translatedMessage = translated_text;
+                this.messages[index].showTranslated = true;
+            }).catch((e) => {
+                console.log('translateGoogle e', e)
+            })
+        } else {
+            this.messages[index].showTranslated = !this.messages[index].showTranslated;
+        }
+    }
+
+    translateGoogle(currentMessage: ChatMessage): Promise<string> {
+        return new Promise((resolve, reject) => {
+            var sourceLang = 'en';
+            var targetLang = 'he';
+
+            var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
+
+            $.getJSON(url, (data: any) => {
+                let translated_text = '';
+                try {
+                    translated_text = data[0].map((o: any) => o[0]).join('')
+                    resolve(translated_text);
+                } catch (e) {
+                    reject(e)
+                }
+            });
+        })
+
     }
 }
