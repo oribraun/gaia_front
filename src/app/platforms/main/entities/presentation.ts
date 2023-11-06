@@ -124,8 +124,8 @@ export class PresentationSlide {
     writing!: string
     texts!: string[]
     loaded_text!: string
-    load_fields!: string[]      
-    section_variables!: string 
+    load_fields!: string[]
+    section_variables!: string
     add_loaded_text_to_dynamic_text!: boolean
     examples!: string[]
     word!: string
@@ -159,6 +159,7 @@ export class PresentationSlide {
     practice!:string
     section!:any
     core_instructions:any={}
+    audio_path!: string
 
 
     constructor(obj?: any) {
