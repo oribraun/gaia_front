@@ -12,8 +12,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class ReviewComponent implements OnInit {
     user!: User;
 
-    vocabulary!: any[];
-    gettingVocabulary = false;
+    questions!: any[];
+    gettingQuestions = false;
 
     constructor(
         private config: Config,
@@ -24,7 +24,7 @@ export class ReviewComponent implements OnInit {
 
     ngOnInit(): void {
         this.getUser();
-        this.getVocabulary();
+        this.getQuestions();
     }
 
 
@@ -36,21 +36,21 @@ export class ReviewComponent implements OnInit {
         })
     }
 
-    getVocabulary() {
-        this.vocabulary = []
-        this.gettingVocabulary = true;
-        this.apiService.getVocabulary({}).subscribe({
+    getQuestions() {
+        this.questions = []
+        this.gettingQuestions = true;
+        this.apiService.getQuestions({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('getVocabulary err', response)
                 } else {
-                    // this.vocabulary = response.vocabulary;
+                    this.questions = response.questions;
                 }
-                this.gettingVocabulary = false;
+                this.gettingQuestions = false;
             },
             error: (error) => {
                 console.log('getVocabulary error', error)
-                this.gettingVocabulary = false;
+                this.gettingQuestions = false;
             },
         })
     }

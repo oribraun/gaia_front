@@ -23,7 +23,7 @@
                 <tr *ngFor="let voocab of vocabulary">
                     <td>{{voocab.created | datetimeFormat}}</td>
                     <td>{{voocab.lesson_title}}</td>
-<!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
+                    <!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
                     <td>{{voocab.word}}</td>
                     <td>{{voocab.difficulty}}</td>
                     <td>{{voocab.translation}}</td>
@@ -42,10 +42,10 @@
         </div>
     </div>
     <div class="generic-loader-wrapper" *ngIf="gettingVocabulary">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
-                </div>
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
             </div>
         </div>
+    </div>
 </div>

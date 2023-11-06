@@ -1,7 +1,7 @@
 <div class="vocabulary">
-    <div class="panel" *ngIf="!gettingVocabulary">
+    <div class="panel" *ngIf="!gettingQuestions">
         <div class="header">
-            <h2>My Vocabulary</h2>
+            <h2>My Review</h2>
             <p>
                 Here you can see all the important words learned during the course with links to the relevant text.
                 <a href="" onclick="event.preventDefault()">Click</a> here to print in out.
@@ -20,17 +20,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let voocab of vocabulary">
-                    <td>{{voocab.created | datetimeFormat}}</td>
-                    <td>{{voocab.lesson_title}}</td>
-<!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
-                    <td>{{voocab.word}}</td>
-                    <td>{{voocab.difficulty}}</td>
-                    <td>{{voocab.translation}}</td>
-                    <td>{{voocab.presentation_slide_uuid ? 'User': 'System'}}</td>
+                <tr *ngFor="let question of questions">
+                    <td>{{question.created | datetimeFormat}}</td>
+                    <td>{{question.lesson_title}}</td>
+                    <!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
+                    <td>{{question.word}}</td>
+                    <td>{{question.difficulty}}</td>
+                    <td>{{question.translation}}</td>
+                    <td>{{question.presentation_slide_uuid ? 'User': 'System'}}</td>
                 </tr>
-                <tr class="text-center" *ngIf="!vocabulary || !vocabulary.length">
-                    <td colspan="6">No Vocabulary</td>
+                <tr class="text-center" *ngIf="!questions || !questions.length">
+                    <td colspan="6">No Questions</td>
                 </tr>
                 </tbody>
             </table>
@@ -41,11 +41,11 @@
             <button class="btn btn-primary">Print</button>
         </div>
     </div>
-    <div class="generic-loader-wrapper" *ngIf="gettingVocabulary">
-            <div class="loader">
-                <div class="spinner-border">
-                    <span class="sr-only"></span>
-                </div>
+    <div class="generic-loader-wrapper" *ngIf="gettingQuestions">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
             </div>
         </div>
+    </div>
 </div>

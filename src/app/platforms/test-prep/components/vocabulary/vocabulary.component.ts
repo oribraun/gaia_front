@@ -44,7 +44,7 @@ export class VocabularyComponent implements OnInit {
                 if (response.err) {
                     console.log('getVocabulary err', response)
                 } else {
-                    // this.vocabulary = response.vocabulary;
+                    this.vocabulary = response.vocabulary;
                 }
                 this.gettingVocabulary = false;
             },
