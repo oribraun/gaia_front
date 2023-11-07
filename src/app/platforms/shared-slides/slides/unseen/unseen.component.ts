@@ -31,9 +31,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     all_answers:any = {}
     private timers:any = {}
     private used_hints:any = {}
-    private multiple_choice_questions:any[] = []
-    private sentence_completion_questions:any[] = []
-    private open_questions:any[] = []
     private checked_answer:any={}
     private is_correct_answer:boolean=false
     private checked_answers:any  = {}
@@ -52,12 +49,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         multiple_choice: 'multiple_choice',
         open_question: 'open_question'
     }
-    // unseen_questions: any;
 
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
-        private sanitizer: DomSanitizer
     ) {
         super(config, lessonService)
     }
@@ -101,16 +96,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
-                if (resp_data.source == "generate_multiple_choice_questions") {
-                    this.multiple_choice_questions = resp_data.questions
-                    this.addQuestionsToList(this.multiple_choice_questions,'multiple_choice')
-                } else  if (resp_data.source == "generate_open_questions") {
-                    this.open_questions = resp_data.questions
-                    this.addQuestionsToList(this.open_questions,'open_question')
-                } else  if (resp_data.source == "generate_sentence_completion_questions") {
-                    this.sentence_completion_questions = resp_data.questions
-                    this.addQuestionsToList(this.sentence_completion_questions,'sentence_completion')
-                } else  if (resp_data.source == "check_answer") {
+                if (resp_data.source == "check_answer") {
                     this.setCheckedAnswer(resp_data.answer)
                 } else  if (resp_data.source == "get_hints") {
                     console.log('get_hints', resp_data)
@@ -197,31 +183,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         })
     }
 
-    addQuestionsToList(questions:any[], qType:string){
-        for(let q of questions){
-            let qq = Object()
-            qq.question_type = qType
-            qq.question = q
-            this.all_questions.push(qq)
-        }
-        this.active_question = this.all_questions.shift()
-        if(this.active_question.question_type == 'sentence_completion'){
-            this.answer_text = this.active_question.question
-        }
-
-        // this.all_questions.sort( () => Math.random() - 0.5 )
-        this.all_questions.unshift(this.active_question)
-        console.log('addQuestionsToList : ' +String(qType), this.all_questions)
-        console.log('active', this.active_question)
-        const save_questions_data = {
-            "source": 'save_all_questions',
-            "all_questions": this.all_questions ,
-            "background":true,
-            'stopAudio': true
-        }
-        this.lessonService.Broadcast("slideEventRequest", save_questions_data)
-    }
-
     setCheckedAnswer(checkedAnswer:any={'explanation':'','is_correct_answer':false, 'answer_text_or_options':{}, 'question_type':''}, question_index=-1){
         if(question_index == -1){
             question_index = this.question_index
@@ -270,38 +231,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         }
         this.handleCounter(this.question_index)
 
-    }
-
-    // async generateAllQuestions(){
-    //     const open_questions_data = {
-    //         "source": 'generate_open_questions',
-    //         "n_questions": 5,
-    //         "background":true,
-    //         'stopAudio': true
-    //     }
-    //     this.lessonService.Broadcast("slideEventRequest", open_questions_data)
-    //     console.log('generate_open_questions called')
-    //     const multiple_choice_data = {
-    //         "source": 'generate_multiple_choice_questions',
-    //         "n_questions": 5,
-    //         "background":true,
-    //         'stopAudio': true
-    //     }
-    //     this.lessonService.Broadcast("slideEventRequest", multiple_choice_data)
-    //     console.log('generate_multiple_choice_questions called')
-    //     const sentence_completion_data = {
-    //         "source": 'generate_sentence_completion_questions',
-    //         "n_questions": 5,
-    //         "background":true,
-    //         'stopAudio': true
-    //     }
-    //     this.lessonService.Broadcast("slideEventRequest", sentence_completion_data)
-    //     console.log('generate_sentence_completion_questions called')
-    //
-    // }
-
-    sanitizeHtmlContent(htmlContnet:string){
-        return this.sanitizer.bypassSecurityTrustHtml(htmlContnet)
     }
 
     checkAnswer(){
@@ -381,19 +310,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         const correct_answer = this.active_question.hints['correct_answer'];
         const guidance = this.active_question.hints['guidance'];
         const quotes = this.active_question.hints['quotes'];
-        this.used_hints[this.question_index] = true
-        // console.log('correct_answer', correct_answer)
-        // console.log('guidance', guidance)
-        // console.log('quotes', quotes)
+        this.used_hints[this.question_index] = true;
         this.markHint()
-        // alert(this.active_question.hints['guidance'])
-        // const data = {
-        //   "source": "get_hints",
-        //   "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
-        //   "question_type":this.active_question.question_type,
-        //   "question_idx":this.question_index
-        // }
-        // this.lessonService.Broadcast("slideEventRequest", data)
     }
 
     closeHints() {
