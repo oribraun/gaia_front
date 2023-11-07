@@ -15,6 +15,8 @@ declare var $: any;
 })
 
 export class UnseenComponent extends BaseSlideComponent implements OnInit {
+    @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
+
     unseen_headline:string = 'Dummy Headline'
     answer_text:string =''
     all_questions:any[] = []
@@ -332,6 +334,32 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         const startIndex = this.unseen_text.indexOf(quotes);
         const endIndex = startIndex + quotes.length;
         this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)
+        this.scrollToHint();
+    }
+
+    scrollToHint() {
+        setTimeout(() => {
+            if (this.unseen_text_box) {
+                const boxElement = this.unseen_text_box.nativeElement;
+                const boxREct = boxElement.getBoundingClientRect();
+                const hints = document.getElementsByClassName('hint')
+                if (hints && hints.length) {
+                    const hintElement: any = hints[0]
+                    const hintRect = hintElement.getBoundingClientRect();
+                    const isFullyVisible =
+                        hintRect.top >= boxREct.top &&
+                        hintRect.bottom <= boxREct.bottom;
+
+                    if (!isFullyVisible) {
+                        // Element is not fully visible within the container, so scroll to it.
+                        boxElement.scrollTo({
+                            top: hintElement.offsetTop - boxElement.offsetTop,
+                            behavior: 'smooth',
+                        });
+                    }
+                }
+            }
+        })
     }
 
     isEmpty(obj:any) {

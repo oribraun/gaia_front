@@ -1,7 +1,7 @@
 <div class="unseen">
     <div class="row">
         <div class="col-6">
-            <div class="box">
+            <div class="box" #unseen_text_box>
                 <h2>{{unseen_headline}}</h2>
                 <p  class="unseen_text" [innerHTML]="unseenTextHtml | safeHtml"></p>
             </div>
