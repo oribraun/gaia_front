@@ -17,24 +17,17 @@ declare var $: any;
 export class UnseenComponent extends BaseSlideComponent implements OnInit {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
 
-    unseen_headline:string = 'Dummy Headline'
-    answer_text:string =''
-    all_questions:any[] = []
     current_counter:any = {}
     question_index:number=0
-    question_index_str:string='0'
-    active_question:any=false
-    checked_answer_text:string = ''
-    submited:boolean = false
+    submitted:boolean = false;
     currentHint = '';
     unseenTextHtml = '';
     checked:any = {}
 
-    all_answers:any = {}
+    // all_answers:any = {}
     private timers:any = {}
     private multiple_choice_answers:any = {}
 
-    private unseen_text:string =''
     // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
     private currentUnseenWords: any[] = [];
     private excludeWords: string[] = []
@@ -57,16 +50,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.unseen_headline = this.currentSlide.slide_title
-        this.unseen_text = this.currentSlide.unseen_text
-        this.all_questions = this.currentSlide.all_questions || []
-        this.all_answers = this.currentSlide.all_answers || {}
         this.question_index = this.currentSlide.question_index || 0
-
-        console.log('this.currentSlide.question_index', this.currentSlide.question_index)
-        console.log('all_questions', this.all_questions)
-        console.log('all_answers', this.all_answers)
-        console.log('all_question_index', this.question_index)
 
         this.initUnseenAnswers();
         this.handleCounter(this.question_index)
@@ -103,7 +87,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 this.initMultipleOptions(q);
             }
         }
-        this.submited = submitted;
+        this.submitted = submitted;
     }
 
     initMultipleOptions(q: any) {
@@ -119,7 +103,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     setResponseAnswer(data: any) {
-        const current_question = this.all_questions[this.question_index];
+        const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].explanation = data.explanation;
         this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
     }
@@ -143,7 +127,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {
         // const words = this.unseen_text.split(/[ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+/);
         const word_ids = words.map(o => o.id);
-        const tokens = this.unseen_text.split(/([\s.,!?;:]+)/);
+        const tokens = this.currentSlide.unseen_text.split(/([\s.,!?;:]+)/);
         // console.log('tokens', tokens)
         const spanList = [];
         let wordCount = 0;
@@ -215,26 +199,27 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     checkAnswer(){
-        this.unseenAnswers[this.all_questions[this.question_index].question_id].pace = this.current_counter.counter;
+        const current_question = this.currentSlide.all_questions[this.question_index];
+        this.unseenAnswers[current_question.question_id].pace = this.current_counter.counter;
         const data = {
             "source": 'check_answer',
-            "answer": this.all_questions[this.question_index].question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.unseenAnswers[this.all_questions[this.question_index].question_id].answer_text,
-            "question":this.all_questions[this.question_index].question_type == 'multiple_choice' ? this.all_questions[this.question_index].question.question: this.all_questions[this.question_index].question,
-            "question_type":this.all_questions[this.question_index].question_type,
+            "answer": current_question.question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.unseenAnswers[current_question.question_id].answer_text,
+            "question":current_question.question_type == 'multiple_choice' ? current_question.question.question: current_question.question,
+            "question_type":current_question.question_type,
             "question_idx":this.question_index,
-            "question_id":this.all_questions[this.question_index].question_id,
-            "pace":this.unseenAnswers[this.all_questions[this.question_index].question_id].pace,
-            'hint_used':this.unseenAnswers[this.all_questions[this.question_index].question_id].hint_used,
+            "question_id":current_question.question_id,
+            "pace":this.unseenAnswers[current_question.question_id].pace,
+            'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
             'stopAudio': true
         }
-        console.log('data', data)
-        this.submited=true
-        this.current_counter.submited=true
-        this.lessonService.Broadcast("slideEventRequest", data)
+        console.log('data', data);
+        this.submitted = true;
+        this.current_counter.submited=true;
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
 
     nextQuestion(){
-        if(this.question_index+1<this.all_questions.length){
+        if(this.question_index+1<this.currentSlide.all_questions.length){
             this.question_index=this.question_index+1;
         }
     }
@@ -245,7 +230,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     goToQuestionNumber(number:number){
-        if(number>-1 && number<this.all_questions.length){
+        if(number>-1 && number<this.currentSlide.all_questions.length){
             this.question_index=number;
         }
     }
@@ -279,7 +264,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     getHints(){
 
-        const current_question = this.all_questions[this.question_index];
+        const current_question = this.currentSlide.all_questions[this.question_index];
         this.currentHint = current_question.hints['guidance'];
         const correct_answer = current_question.hints['correct_answer'];
         const guidance = current_question.hints['guidance'];
@@ -302,9 +287,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     markHint() {
-        const current_question = this.all_questions[this.question_index];
+        const current_question = this.currentSlide.all_questions[this.question_index];
         const quotes = current_question.hints['quotes'];
-        const startIndex = this.unseen_text.indexOf(quotes);
+        const startIndex = this.currentSlide.unseen_text.indexOf(quotes);
         const endIndex = startIndex + quotes.length;
         this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)
         this.scrollToHint();
