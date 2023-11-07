@@ -30,15 +30,19 @@
                                         <h4 class="question-title">{{q.question.question}}</h4>
                                         <p>Mark all the correct answers</p>
                                         <ng-container *ngFor="let option of q.question['answers']; let index=index;">
-                                            <label class="multiple-choice-question-answer" [ngClass]="{'incorrect':!option.is_correct&&submitted,'correct':option.is_correct&&submitted, 'checked_item':checked[option.answer + question_index] || false}">
+                                            <label class="multiple-choice-question-answer" [ngClass]="{
+                                            'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id],
+                                            'correct':option.is_correct&&currentSlide.all_answers[q.question_id],
+                                            'checked_item':checked[option.answer + question_index] || false}"
+                                            >
                                                 <input type="checkbox"
-                                                       [disabled]="submitted"
+                                                       [disabled]="currentSlide.all_answers[q.question_id]"
                                                        [checked]="checked[option.answer + question_index] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
                     <!--                            <div class="highlight"></div>-->
                                                 <div class="circle"></div>
                                                 <p>{{option.answer}}</p>
-                                                <span *ngIf="option.is_correct&&submitted" class="feedback">Correct</span>
-                                                <span *ngIf="!option.is_correct&&submitted" class="feedback">Incorrect</span>
+                                                <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Correct</span>
+                                                <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Incorrect</span>
                                             </label>
                                         </ng-container>
                                     </div>

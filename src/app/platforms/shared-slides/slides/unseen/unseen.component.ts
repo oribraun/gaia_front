@@ -19,7 +19,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     current_counter:any = {}
     question_index:number=0
-    submitted:boolean = false;
     currentHint = '';
     unseenTextHtml = '';
     checked:any = {}
@@ -61,13 +60,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     initUnseenAnswers() {
-        let submitted = false;
         for (let i = 0; i < this.currentSlide.all_questions.length; i++) {
             const q = this.currentSlide.all_questions[i];
             if (this.currentSlide.all_answers[q.question_id]) {
                 this.unseenAnswers[q.question_id] = this.currentSlide.all_answers[q.question_id];
                 this.unseenAnswers[q.question_id].explanation = "";
-                submitted = true;
             } else {
                 this.unseenAnswers[q.question_id] = {
                     "pace": 0,
@@ -87,7 +84,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 this.initMultipleOptions(q);
             }
         }
-        this.submitted = submitted;
     }
 
     initMultipleOptions(q: any) {
@@ -213,7 +209,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             'stopAudio': true
         }
         console.log('data', data);
-        this.submitted = true;
         this.current_counter.submited=true;
         this.lessonService.Broadcast("slideEventRequest", data);
     }

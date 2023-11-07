@@ -1,71 +1,8 @@
-
-
-
-
-
-<ng-template #selected_question_container let-model="model">
-    <ng-container *ngIf="active_question">
-        <ng-container *ngIf="active_question.question_type===questionTypes.sentence_completion">
-            <ng-container *ngTemplateOutlet="sentence_completion;"></ng-container>
-        </ng-container>
-        <ng-container *ngIf="active_question.question_type===questionTypes.open_question"><ng-container  *ngTemplateOutlet="open_question;"></ng-container></ng-container>
-        <ng-container *ngIf="active_question.question_type===questionTypes.multiple_choice"><ng-container  *ngTemplateOutlet="quiz;"></ng-container></ng-container>
-    </ng-container>
-</ng-template>
-
-<ng-template #quiz let-model="model">
-    <div class="question-wrapper">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="mcq">
-
-                    <h4 class="question-title">{{active_question.question.question}}</h4>
-                    <p>Mark all the correct answers</p>
-
-                    <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
-                        <label class="mcq-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
-                            <input type="checkbox"
-                                   [disabled]="submited"
-                                   [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
-<!--                            <div class="highlight"></div>-->
-                            <div class="circle"></div>
-                            <p>{{option.answer}}</p>
-                            <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>
-                            <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>
-                        </label>
-                    </ng-container>
-
-                </div>
-                <!-- MCQ visible demo ends here -->
-
-            </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #sentence_completion let-model="model">
-    <div class="question-wrapper">
-        <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
-        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
-        <div id="explanation">{{checked_answer_text}}</div>
-        <div id="sentence_start">{{active_question.question}}</div>
-    </div>
-</ng-template>
-
-<ng-template #open_question let-model="model">
-    <div class="question-wrapper">
-        <h4 class="question-title" id="question">{{active_question.question}}</h4>
-        <!-- <div id="question">{{active_question.question}}</div> -->
-        <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
-        <div id="explanation" >{{checked_answer_text}}</div>
-    </div>
-</ng-template>
-
 <div class="hearing">
     <div class="row">
         <div class="col-6">
-            <div class="box">
-                <h2>{{unseen_headline}}</h2>
+            <div class="box" #unseen_text_box>
+                <h2>{{currentSlide.slide_title}}</h2>
                 <div class="audio text-center">
                     <audio id="audio" style="" controls>
                         <source
@@ -75,15 +12,52 @@
                         Your browser does not support the audio element.
                     </audio>
                 </div>
-
             </div>
         </div>
         <div class="col-6">
             <div class="box box-questions">
-                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
+                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>
                 <div class="question_timer">{{current_counter.minutes}}:{{current_counter.seconds}}</div>
                 <section class="questions">
-                    <ng-container *ngTemplateOutlet="selected_question_container"></ng-container>
+                    <ng-container *ngFor="let q of currentSlide.all_questions; let i = index">
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
+                            <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
+                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+<!--                            <div id="sentence_start">{{q.question}}</div>-->
+                        </div>
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.open_question && i == question_index">
+                            <h4 class="question-title" id="question">{{q.question}}</h4>
+                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+                        </div>
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.multiple_choice && i == question_index">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="multiple-choice-question">
+                                        <h4 class="question-title">{{q.question.question}}</h4>
+                                        <p>Mark all the correct answers</p>
+                                        <ng-container *ngFor="let option of q.question['answers']; let index=index;">
+                                            <label class="multiple-choice-question-answer" [ngClass]="{
+                                            'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id],
+                                            'correct':option.is_correct&&currentSlide.all_answers[q.question_id],
+                                            'checked_item':checked[option.answer + question_index] || false}"
+                                            >
+                                                <input type="checkbox"
+                                                       [disabled]="currentSlide.all_answers[q.question_id]"
+                                                       [checked]="checked[option.answer + question_index] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+                    <!--                            <div class="highlight"></div>-->
+                                                <div class="circle"></div>
+                                                <p>{{option.answer}}</p>
+                                                <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Correct</span>
+                                                <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Incorrect</span>
+                                            </label>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                     <div class="bottom-panel">
                         <div class="question-buttons">
                             <button class="btn btn-primary" (click)="checkAnswer()">Submit</button>
@@ -93,10 +67,10 @@
                         <div class="pagination-wrapper">
                             <div class="pagination pagination2">
                                 <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
-                                <ng-container *ngFor="let question of all_questions; let index=index;">
+                                <ng-container *ngFor="let question of currentSlide.all_questions; let index=index;">
                                     <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
                                 </ng-container>
-                                <a  style="cursor:pointer" (click)="goToQuestionNumber(all_questions.length-1)">&raquo;</a>
+                                <a  style="cursor:pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;</a>
                             </div>
                         </div>
                     </div>
@@ -113,6 +87,9 @@
                      'm-0 p-0': !currentHint
                      }" role="alert">
                     <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>
+<!--                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">-->
+<!--                        <use xlink:href="#check-circle-fill"/>-->
+<!--                    </svg>-->
                     <div>
                         {{currentHint}}
                     </div>
@@ -122,6 +99,3 @@
         </div>
     </div>
 </div>
-
-
-
