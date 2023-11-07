@@ -4,6 +4,7 @@ import {Config} from "../../../main/config";
 import {BaseSlideComponent} from "../base-slide.component";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {start} from "repl";
+import {HelperService} from "../../../main/services/helper.service";
 
 declare var $: any;
 
@@ -44,6 +45,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     contextMenuPosition = { top: '0px', left: '0px' };
     isContextMenuOpen = false;
     contextMenuTarget: any;
+    currentMenuWord = {word: '', translate: ''};
 
     markups = [
         {startIndex: 0, endIndex: 15}
@@ -58,6 +60,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
+        protected helperService: HelperService,
     ) {
         super(config, lessonService)
     }
@@ -78,9 +81,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         const target = event.target as HTMLElement;
         if (target.classList.contains('word')) {
             event.preventDefault();
-            console.log('target', target)
             this.removeMenuHighLight();
             this.contextMenuTarget = target
+            this.currentMenuWord.word = target.innerText
             if (!this.contextMenuTarget.classList.contains('highlight-word')) {
                 this.contextMenuTarget.classList.add('highlight-word');
                 this.contextMenuTarget.classList.add('highlight-remove');
@@ -90,10 +93,19 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 left: `${event.clientX}px`
             };
             this.isContextMenuOpen = true;
+            document.addEventListener('click', this.closeContextMenuOnOutsideClick);
         } else {
             if (this.isContextMenuOpen) {
                 this.closeContextMenu();
             }
+        }
+    }
+
+    closeContextMenuOnOutsideClick = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        const contextMenu = target.closest('#contextMenu');
+        if (!contextMenu) {
+            this.closeContextMenu()
         }
     }
 
@@ -106,19 +118,28 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     closeContextMenu() {
         this.isContextMenuOpen = false;
+        this.currentMenuWord.word = '';
+        this.currentMenuWord.translate = '';
+
         this.removeMenuHighLight();
         this.contextMenuTarget = null;
+
+        document.removeEventListener('click', this.closeContextMenuOnOutsideClick);
     }
 
     handleMenuTranslateClick() {
-        const word = this.contextMenuTarget.innerText;
-        console.log(`handleMenuTranslateClick Clicked on ${word}`);
-        this.closeContextMenu();
+        console.log(`handleMenuTranslateClick Clicked on ${this.currentMenuWord.word}`);
+        this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
+            this.currentMenuWord.translate = translate_word;
+            // this.closeContextMenu();
+        })
     }
     handleMenuAddVocabClick() {
-        const word = this.contextMenuTarget.innerText;
-        console.log(`handleMenuAddVocabClick Clicked on ${word}`);
-        this.closeContextMenu();
+        this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
+            this.currentMenuWord.translate = translate_word;
+            this.lessonService.Broadcast("slideAddToVocab", {word: this.currentMenuWord.word, translate: translate_word });
+            this.closeContextMenu();
+        })
     }
 
     initUnseenAnswers() {
@@ -152,7 +173,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.multiple_choice_answers['_'+String(this.question_index)] = {}
         let options = q.question.answers
         for(let i in options){
-            console.log('o', options[i])
             let is_correct = options[i].is_correct
             let answer_text = options[i].answer
             this.multiple_choice_answers['_'+String(this.question_index)][answer_text] = is_correct

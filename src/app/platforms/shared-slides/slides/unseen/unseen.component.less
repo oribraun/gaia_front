@@ -1,6 +1,8 @@
 .unseen {
     position: relative;
     height: 100%;
+    @greenColor: #4caf50;
+    @blueColor: #4285F4;
     .row {
         height: 100%;
         div[class*='col-'] {
@@ -23,10 +25,10 @@
         &::-webkit-scrollbar-thumb {
             border-radius: 10px;
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-            background-color: #4285F4;
+            background-color: @blueColor;
         }
 
-        scrollbar-color: #4285F4 #F5F5F5;
+        scrollbar-color: @blueColor #F5F5F5;
         .unseen_text {
             transition: font-size .3s ease-in-out;
             &::selection, *::selection {
@@ -41,7 +43,7 @@
             }
             .highlight-word {
                 position: relative;
-                background: #4caf50;
+                background: @greenColor;
                 //&:after {
                 //    content: 'X';
                 //    position: absolute;
@@ -55,7 +57,7 @@
                 cursor: pointer;
                 //padding: 1px;
                 &:hover {
-                    background: #4caf50;
+                    background: @greenColor;
                 }
             }
         }
@@ -78,7 +80,7 @@
             padding: 0px;
             margin-left: 9px;
             font-size: 20px;
-            color: #168de4;
+            color: @blueColor;
         }
         .questions {
             display: flex;
@@ -258,7 +260,7 @@
                             padding: 8px 16px;
                             border-radius: 5px;
                             &.active {
-                                background-color: #4CAF50;
+                                background-color: @greenColor;
                                 color: #FFF;
                             }
                             &:hover:not(.active) {
@@ -291,6 +293,14 @@
             border: 1px solid #ccc;
             box-shadow: 2px 2px 5px #ccc;
             padding: 8px;
+            .word {
+                border-bottom: 1px solid;
+                color: @greenColor;
+            }
+            .translate {
+                border-top: 1px solid;
+                color: @greenColor;
+            }
         }
 
         .menu-item {

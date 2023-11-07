@@ -789,6 +789,28 @@ export class PracticeLessonComponent implements OnInit {
         this.lessonService.ListenFor("slideDestroy").subscribe((obj: any) => {
             console.log('slideDestroy Event')
         })
+        this.lessonService.ListenFor("slideAddToVocab").subscribe((obj: any) => {
+            console.log('slideAddToVocab Event')
+            const data = {
+                word: obj.word,
+                translate: obj.translate,
+                lesson_id: this.lesson_id,
+                slide_uuid: null,
+                slide_index: this.currentSlideIndex
+            }
+            this.apiService.saveVocab(data).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('saveVocab err', response)
+                } else {
+                    console.log('saveVocab success')
+                }
+            },
+            error: (error) => {
+                console.log('saveVocab error', error)
+            },
+        })
+        })
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
             this.getPresentationEventReplay(obj)
         })

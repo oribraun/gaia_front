@@ -500,6 +500,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    saveVocab(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/save-vocabulary', obj,
+            this.httpOptions
+        )
+    }
     // test_prep platform api
 
 }

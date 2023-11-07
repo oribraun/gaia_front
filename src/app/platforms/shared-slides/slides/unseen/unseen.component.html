@@ -12,16 +12,11 @@
                         <i class="bi bi-zoom-out"></i>
                     </div>
                 </div>
-                <ul id="contextMenu" class="dropdown-menu" role="menu">
-                    <li><a tabindex="-1" href="#">Action</a></li>
-                    <li><a tabindex="-1" href="#">Another action</a></li>
-                    <li><a tabindex="-1" href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a tabindex="-1" href="#">Separated link</a></li>
-                </ul>
-                <div *ngIf="isContextMenuOpen" [style.top]="contextMenuPosition.top" [style.left]="contextMenuPosition.left" class="context-menu">
+                <div id="contextMenu" *ngIf="isContextMenuOpen" [style.top]="contextMenuPosition.top" [style.left]="contextMenuPosition.left" class="context-menu">
+                    <div class="menu-item text-center word" *ngIf="currentMenuWord.word">{{currentMenuWord.word}}</div>
                     <div class="menu-item" (click)="handleMenuTranslateClick()">Translate</div>
                     <div class="menu-item" (click)="handleMenuAddVocabClick()">Add To Vocabulary</div>
+                    <div class="menu-item text-center translate" *ngIf="currentMenuWord.translate">{{currentMenuWord.translate}}</div>
                 </div>
             </div>
         </div>

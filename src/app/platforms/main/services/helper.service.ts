@@ -57,4 +57,23 @@ export class HelperService {
         }
         return returnUrl;
     }
+
+    translateGoogle(message: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            var sourceLang = 'en';
+            var targetLang = 'he';
+
+            var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(message);
+
+            $.getJSON(url, (data: any) => {
+                let translated_text = '';
+                try {
+                    translated_text = data[0].map((o: any) => o[0]).join('')
+                    resolve(translated_text);
+                } catch (e) {
+                    reject(e)
+                }
+            });
+        })
+    }
 }
