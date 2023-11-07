@@ -32,19 +32,15 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     all_answers:any = {}
     private timers:any = {}
-    private used_hints:any = {}
-    private checked_answer:any={}
-    private is_correct_answer:boolean=false
-    private checked_answers:any  = {}
-    private answers_texts:any  = {}
     private multiple_choice_answers:any = {}
-    private submited_answers:any = {}
 
     private unseen_text:string =''
     // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
     private currentUnseenWords: any[] = [];
     private excludeWords: string[] = []
     private wordLength = 3;
+
+    unseenAnswers: any = {}
 
     public questionTypes = {
         sentence_completion:'sentence_completion',
@@ -64,34 +60,68 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.unseen_headline = this.currentSlide.slide_title
         this.unseen_text = this.currentSlide.unseen_text
         this.all_questions = this.currentSlide.all_questions || []
-
         this.all_answers = this.currentSlide.all_answers || {}
-        console.log('this.currentSlide.question_index', this.currentSlide.question_index)
         this.question_index = this.currentSlide.question_index || 0
-        this.question_index_str = String(this.question_index)
+
+        console.log('this.currentSlide.question_index', this.currentSlide.question_index)
         console.log('all_questions', this.all_questions)
         console.log('all_answers', this.all_answers)
         console.log('all_question_index', this.question_index)
-        // if(this.all_questions.length==0){
-        //     this.generateAllQuestions();
-        // } else {
-        //     this.setUpActiveQuestion();
-        // }
-        this.setUpActiveQuestion();
 
-        this.initAnswers();
-        this.getCheckedAnswer();
+        this.initUnseenAnswers();
+        this.handleCounter(this.question_index)
         this.resetUnseenHtml();
 
         this.listenToSlideEvents();
 
     }
 
-    setUpActiveQuestion() {
-        this.active_question=this.all_questions[this.question_index]
-        if(this.active_question.question_type == 'sentence_completion'){
-            this.answer_text = this.active_question.question
+    initUnseenAnswers() {
+        let submitted = false;
+        for (let i = 0; i < this.currentSlide.all_questions.length; i++) {
+            const q = this.currentSlide.all_questions[i];
+            if (this.currentSlide.all_answers[q.question_id]) {
+                this.unseenAnswers[q.question_id] = this.currentSlide.all_answers[q.question_id];
+                this.unseenAnswers[q.question_id].explanation = "";
+                submitted = true;
+            } else {
+                this.unseenAnswers[q.question_id] = {
+                    "pace": 0,
+                    "score": 0,
+                    "hint_used": false,
+                    "answer_text": "",
+                    "explanation": "",
+                    "question_idx": i,
+                    "question_type": q.question_type,
+                    "is_correct_answer": false
+                }
+                if(q.question_type == 'sentence_completion'){
+                    this.unseenAnswers[q.question_id].answer_text = q.question
+                }
+            }
+            if(q.question_type == "multiple_choice" && !this.isEmpty(q.question.answers)){
+                this.initMultipleOptions(q);
+            }
         }
+        this.submited = submitted;
+    }
+
+    initMultipleOptions(q: any) {
+        this.multiple_choice_answers['_'+String(this.question_index)] = {}
+        let options = q.question.answers
+        for(let i in options){
+            console.log('o', options[i])
+            let is_correct = options[i].is_correct
+            let answer_text = options[i].answer
+            this.multiple_choice_answers['_'+String(this.question_index)][answer_text] = is_correct
+            this.checked[answer_text + String(this.question_index)] = true
+        }
+    }
+
+    setResponseAnswer(data: any) {
+        const current_question = this.all_questions[this.question_index];
+        this.unseenAnswers[current_question.question_id].explanation = data.explanation;
+        this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
     }
 
     listenToSlideEvents() {
@@ -99,7 +129,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             try {
                 let resp_data = resp.data
                 if (resp_data.source == "check_answer") {
-                    this.setCheckedAnswer(resp_data.answer)
+                    this.setResponseAnswer(resp_data.answer);
                 } else  if (resp_data.source == "get_hints") {
                     console.log('get_hints', resp_data)
                 }
@@ -107,7 +137,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             } catch (e) {
                 console.error(e)
             }
-
         })
     }
 
@@ -185,69 +214,20 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         })
     }
 
-    setCheckedAnswer(checkedAnswer:any={'explanation':'','is_correct_answer':false, 'answer_text_or_options':{}, 'question_type':''}, question_index=-1){
-        if(question_index == -1){
-            question_index = this.question_index
-        }
-        this.checked_answer = checkedAnswer
-        this.checked_answer_text = this.checked_answer.explanation
-        this.is_correct_answer = this.checked_answer.is_correct_answer
-        this.checked_answers['_'+String(question_index)] = checkedAnswer
-        if(this.answers_texts.hasOwnProperty('_'+String(question_index))){
-            this.answer_text = this.answers_texts['_'+String(question_index)]
-        } else {
-            this.answer_text = ''
-            if(this.active_question.question_type == 'sentence_completion'){
-                this.answer_text = this.active_question.question
-            }
-
-        }
-        if(checkedAnswer.question_type == "multiple_choice" && !this.isEmpty(checkedAnswer.answer_text_or_options)){
-            this.multiple_choice_answers['_'+String(question_index)] = {}
-            let options = checkedAnswer['answer_text_or_options']
-            for(let answer_text in options){
-                let is_correct = options[answer_text]
-                this.multiple_choice_answers['_'+String(question_index)][answer_text] = is_correct
-                this.checked[answer_text + String(question_index)] = true
-            }
-        }
-        this.submited= this.submited_answers.hasOwnProperty('_'+String(question_index)) ? true : false
-    }
-
-    initAnswers(){
-        for(let key in this.all_answers){
-            let answer = this.all_answers[key]
-            let question_index = answer['question_idx']
-            this.answers_texts[key] = answer['answer_text']
-            this.submited_answers[key] = true
-            let checkedAnswer:any = {'explanation':answer['explanation'],'is_correct_answer':answer['is_correct_answer'],'answer_text_or_options':answer['answer_text'], 'question_type':answer['question_type']}
-            this.setCheckedAnswer(checkedAnswer,question_index)
-        }
-    }
-
-    getCheckedAnswer(){
-        if(this.checked_answers.hasOwnProperty('_'+String(this.question_index))){
-            this.setCheckedAnswer(this.checked_answers['_'+String(this.question_index)])
-        } else {
-            this.setCheckedAnswer()
-        }
-        this.handleCounter(this.question_index)
-
-    }
-
     checkAnswer(){
+        this.unseenAnswers[this.all_questions[this.question_index].question_id].pace = this.current_counter.counter;
         const data = {
             "source": 'check_answer',
-            "answer": this.active_question.question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.answer_text,
-            "question":this.active_question.question_type == 'multiple_choice' ? this.active_question.question.question: this.active_question.question,
-            "question_type":this.active_question.question_type,
+            "answer": this.all_questions[this.question_index].question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.unseenAnswers[this.all_questions[this.question_index].question_id].answer_text,
+            "question":this.all_questions[this.question_index].question_type == 'multiple_choice' ? this.all_questions[this.question_index].question.question: this.all_questions[this.question_index].question,
+            "question_type":this.all_questions[this.question_index].question_type,
             "question_idx":this.question_index,
-            "pace":this.current_counter.counter,
-            'hint_used':this.question_index in this.used_hints,
+            "question_id":this.all_questions[this.question_index].question_id,
+            "pace":this.unseenAnswers[this.all_questions[this.question_index].question_id].pace,
+            'hint_used':this.unseenAnswers[this.all_questions[this.question_index].question_id].hint_used,
             'stopAudio': true
         }
-        this.answers_texts['_'+String(this.question_index)] = this.answer_text
-        this.submited_answers['_'+String(this.question_index)] = true
+        console.log('data', data)
         this.submited=true
         this.current_counter.submited=true
         this.lessonService.Broadcast("slideEventRequest", data)
@@ -255,31 +235,21 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     nextQuestion(){
         if(this.question_index+1<this.all_questions.length){
-            this.question_index=this.question_index+1
-            this.question_index_str = String(this.question_index)
-            this.active_question = this.all_questions[this.question_index]
-            this.getCheckedAnswer()
+            this.question_index=this.question_index+1;
         }
     }
     prevQuestion(){
         if(this.question_index>0){
-            this.question_index=this.question_index-1
-            this.question_index_str = String(this.question_index)
-            this.active_question = this.all_questions[this.question_index]
-            this.getCheckedAnswer()
+            this.question_index=this.question_index-1;
         }
     }
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.all_questions.length){
-            this.question_index=number
-            this.question_index_str = String(this.question_index)
-            this.active_question = this.all_questions[this.question_index]
-            this.getCheckedAnswer()
+            this.question_index=number;
         }
     }
     onMultipleChoiceQuestionChange(answer:any){
-
         if(this.multiple_choice_answers.hasOwnProperty('_'+String(this.question_index))){
             let ans = this.multiple_choice_answers['_'+String(this.question_index)]
             if(ans.hasOwnProperty(answer.answer)){
@@ -308,11 +278,13 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     getHints(){
-        this.currentHint = this.active_question.hints['guidance'];
-        const correct_answer = this.active_question.hints['correct_answer'];
-        const guidance = this.active_question.hints['guidance'];
-        const quotes = this.active_question.hints['quotes'];
-        this.used_hints[this.question_index] = true;
+
+        const current_question = this.all_questions[this.question_index];
+        this.currentHint = current_question.hints['guidance'];
+        const correct_answer = current_question.hints['correct_answer'];
+        const guidance = current_question.hints['guidance'];
+        const quotes = current_question.hints['quotes'];
+        this.unseenAnswers[current_question.question_id].hint_used = true;
         this.markHint()
     }
 
@@ -330,7 +302,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     markHint() {
-        const quotes = this.active_question.hints['quotes'];
+        const current_question = this.all_questions[this.question_index];
+        const quotes = current_question.hints['quotes'];
         const startIndex = this.unseen_text.indexOf(quotes);
         const endIndex = startIndex + quotes.length;
         this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)

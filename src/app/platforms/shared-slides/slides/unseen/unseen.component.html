@@ -11,29 +11,29 @@
                 <div class="question_number"><span>{{question_index+1}}</span>/<span>{{all_questions.length}}</span></div>
                 <div class="question_timer">{{current_counter.minutes}}:{{current_counter.seconds}}</div>
                 <section class="questions">
-                    <ng-container *ngIf="active_question">
-                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.sentence_completion">
+                    <ng-container *ngFor="let q of all_questions; let i = index">
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
                             <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
-                            <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
-                            <div id="explanation">{{checked_answer_text}}</div>
-                            <div id="sentence_start">{{active_question.question}}</div>
+                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+                            <div id="sentence_start">{{q.question}}</div>
                         </div>
-                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.open_question">
-                            <h4 class="question-title" id="question">{{active_question.question}}</h4>
-                            <textarea id="textarea" [(ngModel)]="answer_text"></textarea>
-                            <div id="explanation" >{{checked_answer_text}}</div>
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.open_question && i == question_index">
+                            <h4 class="question-title" id="question">{{q.question}}</h4>
+                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
                         </div>
-                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.multiple_choice">
+                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.multiple_choice && i == question_index">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="multiple-choice-question">
-                                        <h4 class="question-title">{{active_question.question.question}}</h4>
+                                        <h4 class="question-title">{{q.question.question}}</h4>
                                         <p>Mark all the correct answers</p>
-                                        <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">
-                                            <label class="multiple-choice-question-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">
+                                        <ng-container *ngFor="let option of q.question['answers']; let index=index;">
+                                            <label class="multiple-choice-question-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index] || false}">
                                                 <input type="checkbox"
                                                        [disabled]="submited"
-                                                       [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
+                                                       [checked]="checked[option.answer + question_index] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
                     <!--                            <div class="highlight"></div>-->
                                                 <div class="circle"></div>
                                                 <p>{{option.answer}}</p>
@@ -46,6 +46,41 @@
                             </div>
                         </div>
                     </ng-container>
+<!--                    <ng-container *ngIf="active_question">-->
+<!--                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.sentence_completion">-->
+<!--                            <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>-->
+<!--                            <textarea id="textarea" [(ngModel)]="answer_text"></textarea>-->
+<!--                            <div id="explanation">{{checked_answer_text}}</div>-->
+<!--                            <div id="sentence_start">{{active_question.question}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.open_question">-->
+<!--                            <h4 class="question-title" id="question">{{active_question.question}}</h4>-->
+<!--                            <textarea id="textarea" [(ngModel)]="answer_text"></textarea>-->
+<!--                            <div id="explanation" >{{checked_answer_text}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="question-wrapper" *ngIf="active_question.question_type===questionTypes.multiple_choice">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-12">-->
+<!--                                    <div class="multiple-choice-question">-->
+<!--                                        <h4 class="question-title">{{active_question.question.question}}</h4>-->
+<!--                                        <p>Mark all the correct answers</p>-->
+<!--                                        <ng-container *ngFor="let option of active_question.question['answers']; let index=index;">-->
+<!--                                            <label class="multiple-choice-question-answer" [ngClass]="{'incorrect':!option.is_correct&&submited,'correct':option.is_correct&&submited, 'checked_item':checked[option.answer + question_index_str] || false}">-->
+<!--                                                <input type="checkbox"-->
+<!--                                                       [disabled]="submited"-->
+<!--                                                       [checked]="checked[option.answer + question_index_str] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >-->
+<!--                    &lt;!&ndash;                            <div class="highlight"></div>&ndash;&gt;-->
+<!--                                                <div class="circle"></div>-->
+<!--                                                <p>{{option.answer}}</p>-->
+<!--                                                <span *ngIf="option.is_correct&&submited" class="feedback">Correct</span>-->
+<!--                                                <span *ngIf="!option.is_correct&&submited" class="feedback">Incorrect</span>-->
+<!--                                            </label>-->
+<!--                                        </ng-container>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
                     <div class="bottom-panel">
                         <div class="question-buttons">
                             <button class="btn btn-primary" (click)="checkAnswer()">Submit</button>
