@@ -16,7 +16,7 @@
                             <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
                             <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
                             <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
-<!--                            <div id="sentence_start">{{q.question}}</div>-->
+                            <!--                            <div id="sentence_start">{{q.question}}</div>-->
                         </div>
                         <div class="question-wrapper" *ngIf="q.question_type===questionTypes.open_question && i == question_index">
                             <h4 class="question-title" id="question">{{q.question}}</h4>
@@ -38,7 +38,7 @@
                                                 <input type="checkbox"
                                                        [disabled]="currentSlide.all_answers[q.question_id]"
                                                        [checked]="checked[option.answer + question_index] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
-                    <!--                            <div class="highlight"></div>-->
+                                                <!--                            <div class="highlight"></div>-->
                                                 <div class="circle"></div>
                                                 <p>{{option.answer}}</p>
                                                 <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Correct</span>
@@ -52,9 +52,19 @@
                     </ng-container>
                     <div class="bottom-panel">
                         <div class="question-buttons">
-                            <button class="btn btn-primary" (click)="checkAnswer()">Submit</button>
+                            <button class="btn btn-primary submit" (click)="checkAnswer()">
+                                Submit
+                                <div class="spinner-border" *ngIf="submitInProgress">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </button>
                             <button class="btn btn-primary" (click)="nextSlide()">Continue</button>
-                            <button class="btn btn-primary" (click)="getHints()">Hint</button>
+                            <button class="btn btn-primary hint" (click)="getHints()">
+                                Hint
+                                <div class="spinner-border" *ngIf="currentHintAudio">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </button>
                         </div>
                         <div class="pagination-wrapper">
                             <div class="pagination pagination2">
@@ -79,9 +89,9 @@
                      'm-0 p-0': !currentHint
                      }" role="alert">
                     <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>
-<!--                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">-->
-<!--                        <use xlink:href="#check-circle-fill"/>-->
-<!--                    </svg>-->
+                    <!--                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">-->
+                    <!--                        <use xlink:href="#check-circle-fill"/>-->
+                    <!--                    </svg>-->
                     <div>
                         {{currentHint}}
                     </div>

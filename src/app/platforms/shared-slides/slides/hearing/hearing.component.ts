@@ -28,6 +28,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     current_counter:any = {}
     question_index:number=0
     currentHint = '';
+    currentHintAudio: any;
     unseenTextHtml = '';
     checked:any = {}
 
@@ -41,6 +42,8 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     private wordLength = 3;
 
     unseenAnswers: any = {}
+
+    submitInProgress = false;
 
     public questionTypes = {
         sentence_completion:'sentence_completion',
@@ -118,6 +121,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
                 let resp_data = resp.data
                 if (resp_data.source == "check_answer") {
                     this.setResponseAnswer(resp_data.answer);
+                    this.submitInProgress = false;
                 } else  if (resp_data.source == "get_hints") {
                     console.log('get_hints', resp_data)
                 }
@@ -203,6 +207,9 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     }
 
     checkAnswer(){
+        if (this.submitInProgress) {
+            return;
+        }
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].pace = this.current_counter.counter;
         const data = {
@@ -217,6 +224,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             'stopAudio': true
         }
         console.log('data', data);
+        this.submitInProgress = true;
         this.current_counter.submited=true;
         this.lessonService.Broadcast("slideEventRequest", data);
     }
@@ -267,12 +275,17 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
     getHints(){
         const current_question = this.currentSlide.all_questions[this.question_index];
-        this.currentHint = current_question.hints['guidance'];
         const correct_answer = current_question.hints['correct_answer'];
+        const audio_path = current_question.hints['audio_path'];
         const guidance = current_question.hints['guidance'];
         const quotes = current_question.hints['quotes'];
         this.unseenAnswers[current_question.question_id].hint_used = true;
-        this.markHint()
+        if (audio_path) {
+            this.playHint(audio_path)
+        } else {
+            this.currentHint = current_question.hints['guidance'];
+            this.markHint()
+        }
     }
 
     closeHints() {
@@ -295,6 +308,18 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         const endIndex = startIndex + quotes.length;
         this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)
         this.scrollToHint();
+    }
+
+    playHint(audio_path: string) {
+        if (this.currentHintAudio) {
+            this.currentHintAudio.pause();
+            this.currentHintAudio = null;
+        } else {
+            const audio = new Audio()
+            this.currentHintAudio = audio;
+            audio.src = audio_path
+            audio.play();
+        }
     }
 
     scrollToHint() {
