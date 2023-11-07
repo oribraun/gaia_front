@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {Config} from "../../../main/config";
 import {BaseSlideComponent} from "../base-slide.component";
@@ -41,6 +41,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     zoomStep: number = .1;
     zoomLimits = {in: 2, out: .8}
 
+    contextMenuPosition = { top: '0px', left: '0px' };
+    isContextMenuOpen = false;
+    contextMenuTarget: any;
+
+    markups = [
+        {startIndex: 0, endIndex: 15}
+    ]
+
     public questionTypes = {
         sentence_completion:'sentence_completion',
         multiple_choice: 'multiple_choice',
@@ -63,7 +71,54 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.resetUnseenHtml();
 
         this.listenToSlideEvents();
+    }
 
+    @HostListener('contextmenu', ['$event'])
+    openContextMenu(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (target.classList.contains('word')) {
+            event.preventDefault();
+            console.log('target', target)
+            this.removeMenuHighLight();
+            this.contextMenuTarget = target
+            if (!this.contextMenuTarget.classList.contains('highlight-word')) {
+                this.contextMenuTarget.classList.add('highlight-word');
+                this.contextMenuTarget.classList.add('highlight-remove');
+            }
+            this.contextMenuPosition = {
+                top: `${event.clientY}px`,
+                left: `${event.clientX}px`
+            };
+            this.isContextMenuOpen = true;
+        } else {
+            if (this.isContextMenuOpen) {
+                this.closeContextMenu();
+            }
+        }
+    }
+
+    removeMenuHighLight() {
+        if (this.contextMenuTarget && this.contextMenuTarget.classList.contains('highlight-remove')) {
+            this.contextMenuTarget.classList.remove('highlight-word');
+            this.contextMenuTarget.classList.remove('highlight-remove');
+        }
+    }
+
+    closeContextMenu() {
+        this.isContextMenuOpen = false;
+        this.removeMenuHighLight();
+        this.contextMenuTarget = null;
+    }
+
+    handleMenuTranslateClick() {
+        const word = this.contextMenuTarget.innerText;
+        console.log(`handleMenuTranslateClick Clicked on ${word}`);
+        this.closeContextMenu();
+    }
+    handleMenuAddVocabClick() {
+        const word = this.contextMenuTarget.innerText;
+        console.log(`handleMenuAddVocabClick Clicked on ${word}`);
+        this.closeContextMenu();
     }
 
     initUnseenAnswers() {
@@ -136,20 +191,20 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         const spanList = [];
         let wordCount = 0;
         let currentIndex = 0;
-        let startedHighlight: any;
+        let startedHintHighlight: any;
         for (const token of tokens) {
             if (startIndex && endIndex) {
                 if (currentIndex >= startIndex && currentIndex <= endIndex) {
-                    if (!startedHighlight) {
-                        startedHighlight = document.createElement('span')
-                        startedHighlight.classList.add('hint');
-                        startedHighlight.classList.add('highlight');
+                    if (!startedHintHighlight) {
+                        startedHintHighlight = document.createElement('span')
+                        startedHintHighlight.classList.add('hint');
+                        startedHintHighlight.classList.add('highlight');
                     }
                 } else {
-                    if (startedHighlight) {
-                        spanList.push(startedHighlight.outerHTML);
+                    if (startedHintHighlight) {
+                        spanList.push(startedHintHighlight.outerHTML);
                     }
-                    startedHighlight = null;
+                    startedHintHighlight = null;
                 }
             }
             if (/\w+/.test(token)
@@ -163,15 +218,15 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 if (word_ids.indexOf(span.id) > -1) {
                     span.classList.add('highlight-word');
                 }
-                if (startedHighlight) {
-                    startedHighlight.appendChild(span)
+                if (startedHintHighlight) {
+                    startedHintHighlight.appendChild(span)
                 } else {
                     spanList.push(span.outerHTML);
                 }
             } else {
                 // Append punctuation as it is (without wrapping in <span>)
-                if (startedHighlight) {
-                    startedHighlight.appendChild(document.createTextNode(token))
+                if (startedHintHighlight) {
+                    startedHintHighlight.appendChild(document.createTextNode(token))
                 } else {
                     const span = document.createElement('span');
                     span.textContent = token;
