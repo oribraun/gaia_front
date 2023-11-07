@@ -28,6 +28,7 @@
 
         scrollbar-color: #4285F4 #F5F5F5;
         .unseen_text {
+            transition: font-size .3s ease-in-out;
             &::selection, *::selection {
                 background: yellow;
             }
@@ -267,6 +268,21 @@
                     }
                 }
             }
+        }
+        .icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 5px;
+            div {
+                display: inline-block;
+                margin: 0 5px;
+                cursor: pointer;
+                color: #168de4;
+            }
+        }
+        &-with-icons {
+            padding-top: 2em;
         }
     }
 }

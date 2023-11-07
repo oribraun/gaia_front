@@ -3,7 +3,15 @@
         <div class="col-6">
             <div class="box" #unseen_text_box>
                 <h2>{{currentSlide.slide_title}}</h2>
-                <p  class="unseen_text" [innerHTML]="unseenTextHtml | safeHtml"></p>
+                <div class="audio text-center">
+                    <audio id="audio" style="" controls>
+                        <source
+                            src="https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
+                            type="audio/mpeg"
+                            preload="metadata">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
             </div>
         </div>
         <div class="col-6">

@@ -1,4 +1,4 @@
-.hearing {
+.unseen {
     position: relative;
     height: 100%;
     .row {
@@ -28,6 +28,7 @@
 
         scrollbar-color: #4285F4 #F5F5F5;
         .unseen_text {
+            transition: font-size .3s ease-in-out;
             &::selection, *::selection {
                 background: yellow;
             }
@@ -229,6 +230,18 @@
                     .btn {
                         margin: 0 5px;
                     }
+                    .hint, .submit {
+                        position: relative;
+                        .spinner-border {
+                            position: absolute;
+                            top: calc(50% - 10px);
+                            left: calc(50% - 10px);
+                            width: 20px;
+                            height: 20px;
+                            border-width: 2px;
+
+                        }
+                    }
                 }
                 .pagination-wrapper {
                     display: inline-block;
@@ -255,6 +268,21 @@
                     }
                 }
             }
+        }
+        .icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 5px;
+            div {
+                display: inline-block;
+                margin: 0 5px;
+                cursor: pointer;
+                color: #168de4;
+            }
+        }
+        &-with-icons {
+            padding-top: 2em;
         }
     }
 }

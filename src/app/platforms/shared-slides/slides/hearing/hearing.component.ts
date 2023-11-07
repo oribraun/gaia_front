@@ -45,6 +45,10 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
     submitInProgress = false;
 
+    zoom: number = 1;
+    zoomStep: number = .1;
+    zoomLimits = {in: 2, out: .8}
+
     public questionTypes = {
         sentence_completion:'sentence_completion',
         multiple_choice: 'multiple_choice',
@@ -390,6 +394,17 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             self.counter= self.counter+1
             self.minutes = Math.floor(self.counter/60)
             self.seconds = self.counter%60
+        }
+    }
+
+    zoomIn() {
+        if (this.zoom < this.zoomLimits.in) {
+            this.zoom += this.zoomStep;
+        }
+    }
+    zoomOut() {
+        if (this.zoom > this.zoomLimits.out) {
+            this.zoom -= this.zoomStep;
         }
     }
 }

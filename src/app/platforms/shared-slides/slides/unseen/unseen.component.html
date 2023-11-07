@@ -1,9 +1,17 @@
 <div class="unseen">
     <div class="row">
         <div class="col-6">
-            <div class="box" #unseen_text_box>
+            <div class="box box-with-icons" #unseen_text_box>
                 <h2>{{currentSlide.slide_title}}</h2>
-                <p  class="unseen_text" [innerHTML]="unseenTextHtml | safeHtml"></p>
+                <p  class="unseen_text" [ngStyle]="{'font-size': zoom + 'em'}" [innerHTML]="unseenTextHtml | safeHtml"></p>
+                <div class="icons">
+                    <div class="zoom-in" (click)="zoomIn()">
+                        <i class="bi bi-zoom-in"></i>
+                    </div>
+                    <div class="zoom-out" (click)="zoomOut()">
+                        <i class="bi bi-zoom-out"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-6">
