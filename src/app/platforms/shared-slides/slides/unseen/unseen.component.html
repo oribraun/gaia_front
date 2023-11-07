@@ -3,7 +3,7 @@
         <div class="col-6">
             <div class="box box-with-icons" #unseen_text_box (contextmenu)="openContextMenu($event)">
                 <h2>{{currentSlide.slide_title}}</h2>
-                <p  class="unseen_text" [ngStyle]="{'font-size': zoom + 'em'}" [innerHTML]="unseenTextHtml | safeHtml"></p>
+                <p  class="unseen_text" (mouseup)="getSelection($event)" [ngStyle]="{'font-size': zoom + 'em'}" [innerHTML]="unseenTextHtml | safeHtml"></p>
                 <div class="icons">
                     <div class="zoom-in" (click)="zoomIn()">
                         <i class="bi bi-zoom-in"></i>

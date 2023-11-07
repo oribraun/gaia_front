@@ -17,6 +17,7 @@ declare var $: any;
 
 export class UnseenComponent extends BaseSlideComponent implements OnInit {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
+    @ViewChild('unseen_text') unseen_text!: ElementRef;
 
     current_counter:any = {}
     question_index:number=0
@@ -51,6 +52,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         {startIndex: 0, endIndex: 15}
     ]
 
+    markedCharIds: number[] = []
+
     public questionTypes = {
         sentence_completion:'sentence_completion',
         multiple_choice: 'multiple_choice',
@@ -84,8 +87,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             this.removeMenuHighLight();
             this.contextMenuTarget = target
             this.currentMenuWord.word = target.innerText
-            if (!this.contextMenuTarget.classList.contains('highlight-word')) {
-                this.contextMenuTarget.classList.add('highlight-word');
+            if (!this.contextMenuTarget.classList.contains('word-highlight')) {
+                this.contextMenuTarget.classList.add('word-highlight');
                 this.contextMenuTarget.classList.add('highlight-remove');
             }
             this.contextMenuPosition = {
@@ -111,7 +114,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     removeMenuHighLight() {
         if (this.contextMenuTarget && this.contextMenuTarget.classList.contains('highlight-remove')) {
-            this.contextMenuTarget.classList.remove('highlight-word');
+            this.contextMenuTarget.classList.remove('word-highlight');
             this.contextMenuTarget.classList.remove('highlight-remove');
         }
     }
@@ -231,12 +234,32 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 && token.length >= this.wordLength
                 && this.excludeWords.indexOf(token.toLowerCase()) == -1) {
                 // Create a <span> element for words
+
+                const tokenSpan = []
+                let letterCount = 0;
+                for (let t of token) {
+                    const span = document.createElement('span');
+                    span.textContent = t;
+                    span.id = 'char_' + (currentIndex + letterCount);
+                    span.classList.add(t + '_' + letterCount);
+                    if (!letterCount) {
+                        span.classList.add('word-char-first');
+                    }
+                    if (letterCount === token.length - 1) {
+                        span.classList.add('word-char-last');
+                    }
+                    if (this.markedCharIds.indexOf(currentIndex + letterCount) > -1) {
+                        span.classList.add('char-highlight');
+                    }
+                    tokenSpan.push(span.outerHTML);
+                    letterCount++;
+                }
                 const span = document.createElement('span');
-                span.textContent = token;
+                span.innerHTML = tokenSpan.join('');
                 span.id = token + '_' + wordCount;
                 span.classList.add('word');
                 if (word_ids.indexOf(span.id) > -1) {
-                    span.classList.add('highlight-word');
+                    span.classList.add('word-highlight');
                 }
                 if (startedHintHighlight) {
                     startedHintHighlight.appendChild(span)
@@ -245,12 +268,33 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 }
             } else {
                 // Append punctuation as it is (without wrapping in <span>)
+                let letterCount = 0;
+                const tokenSpan = []
                 if (startedHintHighlight) {
-                    startedHintHighlight.appendChild(document.createTextNode(token))
+                    for (let t of token) {
+                        const span = document.createElement('span');
+                        span.textContent = t;
+                        span.id = 'char_' + (currentIndex + letterCount);
+                        if (this.markedCharIds.indexOf(currentIndex + letterCount) > -1) {
+                            span.classList.add('char-highlight');
+                        }
+                        startedHintHighlight.appendChild(span)
+                        letterCount++;
+                    }
                 } else {
-                    const span = document.createElement('span');
-                    span.textContent = token;
-                    spanList.push(token);
+                    // const span = document.createElement('span');
+                    // span.textContent = token;
+                    for (let t of token) {
+                        const span = document.createElement('span');
+                        span.textContent = t;
+                        span.id = 'char_' + (currentIndex + letterCount);
+                        if (this.markedCharIds.indexOf(currentIndex + letterCount) > -1) {
+                            span.classList.add('char-highlight');
+                        }
+                        tokenSpan.push(span.outerHTML);
+                        letterCount++;
+                    }
+                    spanList.push(tokenSpan.join(''));
                 }
             }
             wordCount++;
@@ -262,8 +306,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         setTimeout(() => {
             $('.word').on('click', (e: any) => {
                 // console.log('e.target', e.target)
-                const id = e.target.id;
-                const value = e.target.innerText;
+                const word = e.target.closest('.word');
+                const id = word.id;
+                const value = word.innerText;
                 console.log('value', value)
                 const ids = this.currentUnseenWords.map(o => o.id);
                 const index = ids.indexOf(id);
@@ -275,6 +320,37 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 this.resetUnseenHtml();
             })
         })
+    }
+
+    getSelection(e: any) {
+        console.log('e', e)
+        let refreshHtml = false;
+        const selection = window.getSelection();
+        console.log('selection', selection)
+        if (selection && selection.toString() !== '' && selection.focusNode?.parentElement?.closest('.unseen_text')) {
+            console.log('Selected Text:', selection.toString());
+            const range = selection.getRangeAt(0);
+            const startContainer = range.startContainer;
+            const startOffset = range.startOffset;
+            const endContainer = range.endContainer;
+            const endOffset = range.endOffset;
+
+            const start_id = startContainer?.parentElement?.id.replace(/[^0-9]/g, '');
+            const end_id = endContainer?.parentElement?.id.replace(/[^0-9]/g, '');
+            if (start_id && end_id) {
+                for (let i = parseInt(start_id); i <= parseInt(end_id); i++) {
+                    if (this.markedCharIds.indexOf(i) === -1) {
+                        this.markedCharIds.push(i)
+                        refreshHtml = true;
+                    }
+                }
+            }
+            console.log('refreshHtml', refreshHtml)
+            console.log('this.markedCharIds', this.markedCharIds)
+            if (refreshHtml) {
+                this.resetUnseenHtml()
+            }
+        }
     }
 
     checkAnswer(){

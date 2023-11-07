@@ -3,6 +3,7 @@
     height: 100%;
     @greenColor: #4caf50;
     @blueColor: #4285F4;
+    @yellowColor: yellow;
     .row {
         height: 100%;
         div[class*='col-'] {
@@ -32,25 +33,14 @@
         .unseen_text {
             transition: font-size .3s ease-in-out;
             &::selection, *::selection {
-                background: yellow;
+                background: @yellowColor;
             }
             &::-moz-selection, *::-moz-selection {
-                background: yellow;
+                background: @yellowColor;
             }
             .highlight {
                 background: #d1e7dd;
                 border-radius: 5px;
-            }
-            .highlight-word {
-                position: relative;
-                background: @greenColor;
-                //&:after {
-                //    content: 'X';
-                //    position: absolute;
-                //    top: -0.76em;
-                //    right: -0.28em;
-                //    cursor: pointer;
-                //}
             }
             .word {
                 border-radius: 5px;
@@ -58,6 +48,43 @@
                 //padding: 1px;
                 &:hover {
                     background: @greenColor;
+                }
+                &-highlight {
+                    position: relative;
+                    background: @greenColor;
+                    //&:after {
+                    //    content: 'X';
+                    //    position: absolute;
+                    //    top: -0.76em;
+                    //    right: -0.28em;
+                    //    cursor: pointer;
+                    //}
+                    .char {
+                        &-highlight {
+                            position: relative;
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                border-top: 2px solid @greenColor;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                            }
+                            &:before {
+                                content: '';
+                                position: absolute;
+                                border-top: 2px solid @greenColor;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+            .char {
+                &-highlight {
+                    background: @yellowColor;
                 }
             }
         }
