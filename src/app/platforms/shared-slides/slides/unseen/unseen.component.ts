@@ -79,14 +79,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.listenToSlideEvents();
     }
 
-    @HostListener('contextmenu', ['$event'])
     openContextMenu(event: MouseEvent) {
         const target = event.target as HTMLElement;
-        if (target.classList.contains('word')) {
+        const targetContainWord = target.closest('.word') as HTMLElement;
+        if (targetContainWord) {
             event.preventDefault();
             this.removeMenuHighLight();
-            this.contextMenuTarget = target
-            this.currentMenuWord.word = target.innerText
+            this.contextMenuTarget = targetContainWord;
+            this.currentMenuWord.word = targetContainWord.innerText
             if (!this.contextMenuTarget.classList.contains('word-highlight')) {
                 this.contextMenuTarget.classList.add('word-highlight');
                 this.contextMenuTarget.classList.add('highlight-remove');
