@@ -555,4 +555,48 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.markedCharIds = [];
         this.resetUnseenHtml();
     }
+
+    printUnseen() {
+        window.print();
+        return;
+        // if (this.unseen_text_box) {
+        //     const myWindow = window.open('', 'my div', 'height=400,width=600');
+        //     if (myWindow) {
+        //         var style = window.getComputedStyle(this.unseen_text_box.nativeElement);
+        //         console.log('style', style)
+        //         myWindow.document.write(`
+        //             <html><head><style>
+        //                 h2 {
+        //                     font-size: calc(1.325rem + .9vw);
+        //                 }
+        //                 .box {
+        //                     position: relative;
+        //                     background: #ccc;
+        //                     padding: 1em;
+        //                     height: 100%;
+        //                     overflow: hidden;
+        //                     overflow-y: auto;
+        //                     scrollbar-color: #4285F4 #F5F5F5;
+        //                 }
+        //                 @media print {
+        //                     .box {
+        //                         position: relative;
+        //                         background: #ccc;
+        //                         padding: 1em;
+        //                         height: 100%;
+        //                         overflow: hidden;
+        //                         overflow-y: auto;
+        //                         scrollbar-color: #4285F4 #F5F5F5;
+        //                     }
+        //                 }
+        //             </style></head><body>
+        //         `);
+        //         myWindow.document.write(this.unseen_text_box.nativeElement.outerHTML);
+        //         myWindow.document.close();
+        //         myWindow.focus(); // necessary for IE >= 10
+        //         myWindow.print();
+        //         // myWindow.close();
+        //     }
+        // }
+    }
 }
