@@ -216,18 +216,7 @@ export class PracticeLessonComponent implements OnInit {
                     this.presentation = new Presentation(response.presentation);
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
-                        //     this.getIndexsByQuestionId();
-                        this.currentSectionIndex = this.presentation.current_section_index;
-                        this.currentSlideIndex = this.presentation.current_slide_index;
-                        this.currentObjectiveIndex = this.presentation.current_objective_index;
-                        this.estimatedDuration = this.presentation.estimated_duration;
-                        this.setCurrentSection();
-                        this.setData();
-                        const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id)
-                        const index = all_question_ids.indexOf(this.question_id);
-                        if (index > -1) {
-                            this.currentSlide.question_index = index
-                        }
+                        this.setIndexesByQuestionId();
                         return;
                     } else {
                         this.currentSectionIndex = this.presentation.current_section_index;
@@ -803,17 +792,17 @@ export class PracticeLessonComponent implements OnInit {
                 slide_index: this.currentSlideIndex
             }
             this.apiService.saveVocab(data).subscribe({
-            next: (response: any) => {
-                if (response.err) {
-                    console.log('saveVocab err', response)
-                } else {
-                    console.log('saveVocab success')
-                }
-            },
-            error: (error) => {
-                console.log('saveVocab error', error)
-            },
-        })
+                next: (response: any) => {
+                    if (response.err) {
+                        console.log('saveVocab err', response)
+                    } else {
+                        console.log('saveVocab success')
+                    }
+                },
+                error: (error) => {
+                    console.log('saveVocab error', error)
+                },
+            })
         })
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
             this.getPresentationEventReplay(obj)
@@ -1034,30 +1023,17 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
 
-    getIndexsByQuestionId() {
-        console.log('adfs')
-        const counters: any = {s: 0, sl: 0, q: 0}
-        let slide: any;
-        for (let section of this.presentation.sections) {
-            for (slide of section.slides) {
-                if (!slide.all_questions) {
-                    return;
-                }
-                for (let q of slide.all_questions) {
-                    if (q.question_id === this.question_id) {
-                        this.presentation.current_section_index = counters.s
-                        this.presentation.current_slide_index = counters.sl
-                        this.presentation.current_objective_index = 0;
-                        this.currentSectionIndex = this.presentation.current_section_index;
-                        this.currentSlideIndex = this.presentation.current_slide_index;
-                        this.currentObjectiveIndex = this.presentation.current_objective_index;
-                        slide.question_index = counters.q
-                    }
-                    counters.q++;
-                }
-                counters.sl++;
-            }
-            counters.s++;
+    setIndexesByQuestionId() {
+        this.currentSectionIndex = this.presentation.current_section_index;
+        this.currentSlideIndex = this.presentation.current_slide_index;
+        this.currentObjectiveIndex = this.presentation.current_objective_index;
+        this.estimatedDuration = this.presentation.estimated_duration;
+        this.setCurrentSection();
+        this.setData();
+        const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id)
+        const index = all_question_ids.indexOf(this.question_id);
+        if (index > -1) {
+            this.currentSlide.question_index = index
         }
     }
 
