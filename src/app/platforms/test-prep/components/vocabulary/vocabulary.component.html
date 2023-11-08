@@ -80,7 +80,7 @@
                     <td>{{voocab.translation}}</td>
                     <td>{{voocab.presentation_slide_uuid ? 'User': 'System'}}</td>
                 </tr>
-                <tr class="text-center" *ngIf="!vocabulary || !vocabulary.length">
+                <tr class="text-center" *ngIf="!vocabulary || !getFilterVocabs().length">
                     <td colspan="100%">No Vocabulary</td>
                 </tr>
                 </tbody>
