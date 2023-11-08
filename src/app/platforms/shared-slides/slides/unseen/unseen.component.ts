@@ -368,6 +368,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             "question_id":current_question.question_id,
             "pace":this.unseenAnswers[current_question.question_id].pace,
             'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
+            'markedChars': this.markedCharIds,
             'stopAudio': true
         }
         console.log('data', data);

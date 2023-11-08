@@ -17,6 +17,19 @@
                 border-width: 3px;
                 border-color: #fff;
             }
+            .dropdown {
+                display: inline-block;
+                float: right;
+                .dropdown-menu {
+                    position: relative;
+                }
+                .dropdown-toggle {
+                    color: inherit;
+                    &.active {
+                        color: #0d6efd;
+                    }
+                }
+            }
         }
         .buttons {
             @marginTop: 15px;
