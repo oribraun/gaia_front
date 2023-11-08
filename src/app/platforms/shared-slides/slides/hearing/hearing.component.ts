@@ -96,20 +96,21 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
                 }
             }
             if(q.question_type == "multiple_choice" && !this.isEmpty(q.question.answers)){
-                this.initMultipleOptions(q);
+                this.initMultipleOptions(q, i);
             }
         }
     }
 
-    initMultipleOptions(q: any) {
-        this.multiple_choice_answers['_'+String(this.question_index)] = {}
-        let options = q.question.answers
-        for(let i in options){
-            console.log('o', options[i])
-            let is_correct = options[i].is_correct
-            let answer_text = options[i].answer
-            this.multiple_choice_answers['_'+String(this.question_index)][answer_text] = is_correct
-            this.checked[answer_text + String(this.question_index)] = true
+    initMultipleOptions(q: any, question_index: number) {
+        if (this.unseenAnswers[q.question_id].answer_text) {
+            this.multiple_choice_answers['_' + String(question_index)] = {}
+            let options = q.question.answers
+            for (let i in options) {
+                let is_correct = options[i].is_correct
+                let answer_text = options[i].answer
+                this.multiple_choice_answers['_' + String(question_index)][answer_text] = is_correct
+                this.checked[answer_text + String(question_index)] = true;
+            }
         }
     }
 
@@ -117,6 +118,11 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].explanation = data.explanation;
         this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
+        if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)){
+            this.unseenAnswers[current_question.question_id].answer_text = this.multiple_choice_answers['_'+String(this.question_index)];
+            this.currentSlide.all_answers[current_question.question_id] = this.unseenAnswers[current_question.question_id]
+            this.initMultipleOptions(current_question, this.question_index);
+        }
     }
 
     listenToSlideEvents() {

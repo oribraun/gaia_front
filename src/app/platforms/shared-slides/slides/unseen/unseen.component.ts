@@ -173,7 +173,6 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     initMultipleOptions(q: any, question_index: number) {
-        console.log('this.unseenAnswers[q.question_id]', this.unseenAnswers[q.question_id])
         if (this.unseenAnswers[q.question_id].answer_text) {
             this.multiple_choice_answers['_' + String(question_index)] = {}
             let options = q.question.answers
