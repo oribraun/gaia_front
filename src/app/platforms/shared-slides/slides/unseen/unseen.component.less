@@ -32,6 +32,7 @@
         scrollbar-color: @blueColor #F5F5F5;
         .unseen_text {
             transition: font-size .3s ease-in-out;
+            white-space: break-spaces;
             &::selection, *::selection {
                 background: @yellowColor;
             }
@@ -45,6 +46,7 @@
             .word {
                 border-radius: 5px;
                 cursor: pointer;
+                white-space: nowrap;
                 //padding: 1px;
                 &:hover {
                     background: @greenColor;
