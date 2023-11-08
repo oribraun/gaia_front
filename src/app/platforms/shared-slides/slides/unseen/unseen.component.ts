@@ -550,4 +550,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             this.zoom -= this.zoomStep;
         }
     }
+
+    eraseMarks() {
+        this.markedCharIds = [];
+        this.resetUnseenHtml();
+    }
 }

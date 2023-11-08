@@ -11,6 +11,9 @@
                     <div class="zoom-out" (click)="zoomOut()">
                         <i class="bi bi-zoom-out"></i>
                     </div>
+                    <div class="eraser" (click)="eraseMarks()">
+                        <i class="bi bi-eraser-fill"></i>
+                    </div>
                 </div>
                 <div id="contextMenu" *ngIf="isContextMenuOpen" [style.top]="contextMenuPosition.top" [style.left]="contextMenuPosition.left" class="context-menu">
                     <div class="menu-item text-center word" *ngIf="currentMenuWord.word">{{currentMenuWord.word}}</div>
