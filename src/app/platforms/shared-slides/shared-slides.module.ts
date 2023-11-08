@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from "@angular/forms";
+
+import {AngularEditorModule} from "@kolkov/angular-editor";
+import {YouTubePlayerModule} from "@angular/youtube-player";
+
 import {GreetingComponent} from "./slides/greeting/greeting.component";
 import {BaseSlideComponent} from "./slides/base-slide.component";
 import {AgendaComponent} from "./slides/agenda/agenda.component";
@@ -17,9 +22,6 @@ import {VideoComponent} from "./slides/video/video.component";
 import {WordRepeaterComponent} from "./slides/word-repeater/word-repeater.component";
 import {WordTranslatorComponent} from "./slides/word-translator/word-translator.component";
 import {WritingComponent} from "./slides/writing/writing.component";
-import {AngularEditorModule} from "@kolkov/angular-editor";
-import {FormsModule} from "@angular/forms";
-import {YouTubePlayerModule} from "@angular/youtube-player";
 import {CapitalizePipe} from "./pipes/capitalize/capitalize.pipe";
 import {DatetimeFormatPipe} from "./pipes/datetime-format/datetime-format.pipe";
 import {RangePipe} from "./pipes/range/range.pipe";

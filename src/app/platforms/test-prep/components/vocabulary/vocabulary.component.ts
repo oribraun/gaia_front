@@ -16,9 +16,14 @@ export class VocabularyComponent implements OnInit {
     gettingVocabulary = false;
     lessonOptions: any[] = []
     typeOptions: any[] = ['User', 'System']
-    difficultyOptions = [1, 2, 3, 4, 5]
+    difficultyOptions: any[] = [
+        {key: 1, value: 'Easy'},
+        {key: 2, value: 'Medium'},
+        {key: 3, value: 'Hard'},
+        {key: 4, value: 'Vary Hard'}
+    ];
 
-    checkboxes: any = {
+    filters: any = {
         lessons: [],
         types: [],
         difficulty: [],
@@ -37,12 +42,12 @@ export class VocabularyComponent implements OnInit {
     }
 
     filter(obj_key: string, key: any) {
-        if (this.checkboxes[obj_key]) {
-            const index = this.checkboxes[obj_key].indexOf(key)
+        if (this.filters[obj_key]) {
+            const index = this.filters[obj_key].indexOf(key)
             if (index > -1) {
-                this.checkboxes[obj_key].splice(index, 1)
+                this.filters[obj_key].splice(index, 1)
             } else {
-                this.checkboxes[obj_key].push(key)
+                this.filters[obj_key].push(key)
             }
         }
     }
@@ -50,13 +55,13 @@ export class VocabularyComponent implements OnInit {
     getFilterVocabs() {
         return this.vocabulary.filter((o) => {
             let show = true;
-            if (this.checkboxes.lessons.length && this.checkboxes.lessons.indexOf(o.user_lesson_id) === -1) {
+            if (this.filters.lessons.length && this.filters.lessons.indexOf(o.user_lesson_id) === -1) {
                 show = false;
             }
-            if (this.checkboxes.difficulty.length && this.checkboxes.difficulty.indexOf(o.difficulty) === -1) {
+            if (this.filters.difficulty.length && this.filters.difficulty.indexOf(o.difficulty) === -1) {
                 show = false;
             }
-            if (this.checkboxes.types.length && this.checkboxes.types.indexOf((o.presentation_slide_uuid ? 'User': 'System')) === -1) {
+            if (this.filters.types.length && this.filters.types.indexOf((o.presentation_slide_uuid ? 'User': 'System')) === -1) {
                 show = false;
             }
             return show;

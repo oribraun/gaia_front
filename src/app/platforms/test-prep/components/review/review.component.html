@@ -3,6 +3,50 @@
         <div class="header">
             <h2>Review</h2>
         </div>
+        <div class="filters">
+            <div>
+                <small class="pointer" (click)="toggleFilters()">
+                    <i *ngIf="!showFilters" class="bi bi-caret-up-fill"></i>
+                    <i *ngIf="showFilters" class="bi bi-caret-down-fill"></i>
+                </small>
+                Filters
+            </div>
+            <div class="filters-panel" [@openClose]="showFilters ? 'open' : 'closed'" [@.disabled]="!gotFirstQuestions">
+                <div class="filter-group">
+                    <div class="head">Date</div>
+                    <div class="options">
+                        <div class="form-check" *ngFor="let o of dateOptions">
+                            <input class="form-check-input" [checked]="o === filters.date" (change)="filters.date = o" type="radio">
+                            <label class="form-check-label">
+                                {{o}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="head">Sections</div>
+                    <div class="options">
+                        <div class="form-check" *ngFor="let o of groupTypeOptions">
+                            <input class="form-check-input" [checked]="o === filters.group_type" (change)="filters.group_type = o" type="radio">
+                            <label class="form-check-label">
+                                {{o.value}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="head">Difficulty</div>
+                    <div class="options">
+                        <div *ngFor="let d of difficultyOptions">
+                            <div class="form-check" (click)="filter('difficulty', d.key)">
+                                <input type="checkbox" class="form-check-input" [checked]="filters.difficulty.indexOf(d.key) > -1">
+                                <label class="form-check-label">{{d.value}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="vocab-table">
             <table class="table table-bordered">
                 <thead>
@@ -18,7 +62,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let question of questions">
+                <tr *ngFor="let question of getFilterQuestions()">
                     <td>
                         <a [routerLink]="['/test_prep/practice/1']" [queryParams]="{q_id: question.presentation_question_id}">
                             {{question.title}}

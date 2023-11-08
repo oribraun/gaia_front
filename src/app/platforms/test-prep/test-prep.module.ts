@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from "@angular/forms";
 
 import { TestPrepRoutingModule } from './test-prep-routing.module';
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
@@ -7,6 +8,7 @@ import {PracticeLessonComponent} from "./components/practice-lesson/practice-les
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import { VocabularyComponent } from './components/vocabulary/vocabulary.component';
 import { ReviewComponent } from './components/review/review.component';
+
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { ReviewComponent } from './components/review/review.component';
     ],
     imports: [
         CommonModule,
+        FormsModule,
         SharedSlidesModule,
         TestPrepRoutingModule
     ]

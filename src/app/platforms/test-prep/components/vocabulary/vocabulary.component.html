@@ -16,13 +16,13 @@
                         Lesson
                         <div class="dropdown">
                             <a class="dropdown-toggle"
-                               [ngClass]="{'active': this.checkboxes.lessons.length}"
+                               [ngClass]="{'active': this.filters.lessons.length}"
                                href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" *ngFor="let l of lessonOptions">
                                         <div class="form-check" (click)="filter('lessons', l.key)">
-                                            <input type="checkbox" class="form-check-input" [checked]="checkboxes.lessons.indexOf(l.key) > -1">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.lessons.indexOf(l.key) > -1">
                                             <label class="form-check-label">{{l.value}}</label>
                                         </div>
                                     </div>
@@ -35,14 +35,14 @@
                         Difficulty
                         <div class="dropdown">
                             <a class="dropdown-toggle"
-                               [ngClass]="{'active': this.checkboxes.difficulty.length}"
+                               [ngClass]="{'active': this.filters.difficulty.length}"
                                href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" *ngFor="let d of difficultyOptions">
-                                        <div class="form-check" (click)="filter('difficulty', d)">
-                                            <input type="checkbox" class="form-check-input" [checked]="checkboxes.difficulty.indexOf(d) > -1">
-                                            <label class="form-check-label">{{d}}</label>
+                                        <div class="form-check" (click)="filter('difficulty', d.key)">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.difficulty.indexOf(d.key) > -1">
+                                            <label class="form-check-label">{{d.value}}</label>
                                         </div>
                                     </div>
                                 </li>
@@ -54,13 +54,13 @@
                         Type
                         <div class="dropdown">
                             <a class="dropdown-toggle"
-                               [ngClass]="{'active': this.checkboxes.types.length}"
+                               [ngClass]="{'active': this.filters.types.length}"
                                href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" *ngFor="let t of typeOptions">
                                         <div class="form-check" (click)="filter('types', t)">
-                                            <input type="checkbox" class="form-check-input" [checked]="checkboxes.types.indexOf(t) > -1">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.types.indexOf(t) > -1">
                                             <label class="form-check-label">{{t}}</label>
                                         </div>
                                     </div>
