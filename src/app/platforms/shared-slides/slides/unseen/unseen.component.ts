@@ -385,19 +385,16 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     }
 
     nextQuestion(){
-        if(this.question_index+1<this.currentSlide.all_questions.length){
-            this.question_index=this.question_index+1;
-        }
+        this.goToQuestionNumber(this.question_index+1)
     }
     prevQuestion(){
-        if(this.question_index>0){
-            this.question_index=this.question_index-1;
-        }
+        this.goToQuestionNumber(this.question_index-1)
     }
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.currentSlide.all_questions.length){
             this.question_index=number;
+            this.handleCounter(this.question_index)
         }
     }
     onMultipleChoiceQuestionChange(answer:any){
