@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
@@ -15,42 +15,65 @@ declare var $: any;
     styleUrls: ['./speaking.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnDestroy {
-    @ViewChild('scroller') scroller!: ElementRef;
+export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     messages: ChatMessage[] = [];
 
+    studentActiveASR:string[] = [];
     disableButton = false;
 
-    ASRInProgress = false;
-
     recognitionPPTSubscribe: any
+    recognitionResultsSubscribe: any
+    question: any;
+    all_questions_answered: any;
 
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
-        public speechRecognitionService: SpeechRecognitionService,
+        private speechRecognitionService: SpeechRecognitionService,
         private sanitizer: DomSanitizer
     ) {
         super(config, lessonService)
 
         if (environment.is_mock) {
             this.messages = [
-                new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
-                new ChatMessage({type: 'user', message: 'im good how are you?'}),
-                new ChatMessage({type: 'computer', message: 'fine'}),
-                new ChatMessage({type: 'user', message: 'hi'}),
+                new ChatMessage({type: 'computer', message: 'Hi'})
             ]
         }
     }
 
     override ngOnInit(): void {
         super.ngOnInit();
+
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
-                if (resp_data.source == "get_ptt_response") {
-
+                if (resp_data.source == "check_answer") {
+                    console.log('check_answer', resp_data)
+                } else if (resp_data.source == "get_hints") {
+                    console.log('get_hints', resp_data)
+                } else if (resp_data.source == "fix_asr") {
+                    this.messages[this.messages.length-1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
+                    console.log('fix_asr', resp_data)
+                } else if (resp_data.source  == 'next_question'){
+                    if(resp_data.need_to_generate_questions) {
+                        const data = {
+                            "source": "generate_questions",
+                            'stopAudio': true
+                        }
+                        this.lessonService.Broadcast("slideEventRequest", data)
+                    }
+                     
+                    this.question = resp_data.question 
+                    this.all_questions_answered =  resp_data.all_questions_answered 
+                    if (!this.all_questions_answered) {
+                        this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }))
+                    }
+                } else if (resp_data.source  == 'generate_questions'){
+                    console.log(resp_data)
+                } else if (resp_data.source == 'restart_session'){
+                    console.log(resp_data)
+                    this.nextQuestion()
                 }
 
             } catch (e) {
@@ -59,9 +82,16 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
         })
 
-        this.speechRecognitionService.startListening();
-        this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
+    }
+ 
+    isEmpty(obj:any) {
+        for (const prop in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+                return false;
+            }
+        }
 
+        return true;
     }
 
     translate(index: number) {
@@ -97,35 +127,68 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     }
 
     onRecognitionPTTResults = (results: any) => {
-        if (this.speechRecognitionService.PTTInProgress) {
-            this.ASRInProgress = true;
-            console.log("onRecognitionPTTResults results", results)
-            const recognitionText = results.text;
-            if (results.isFinal) {
-                console.log('onRecognitionPTTResults final', recognitionText)
-                // this.onButtonClick(recognitionText);
-                this.messages.push(
-                    new ChatMessage({type: 'user', message: recognitionText}),
-                )
-                setTimeout(() => {
-                    this.scrollToBottom2()
-                })
-                if (this.ASRInProgress) {
-                    if (this.speechRecognitionService.PTTInProgress) {
-                        this.speechRecognitionService.PTTInProgress = false;
-                    }
-                    this.ASRInProgress = false;
-                }
-            }
+        console.log("onRecognitionPTTResults results",results)
+        const recognitionText = results.text;
+        if (results.isFinal) {
+            console.log('onRecognitionPTTResults final', recognitionText)
+            // this.onButtonClick(recognitionText);
+            this.messages.push(
+                new ChatMessage({type: 'user', message: recognitionText}),
+            )
         }
     }
 
-    onButtonClick(ans: string) {
-        if (this.speechRecognitionService.PTTInProgress) {
-            this.speechRecognitionService.PTTInProgress = false;
-        } else {
-            this.speechRecognitionService.PTTInProgress = true;
+    //===== ASR Daniel
+    onRecognitionResults= (results: any) => {
+        if(results.isFinal){
+            if(!this.studentActiveASR.length){
+                this.messages.push(
+                    new ChatMessage({type: 'user', message:''}),
+                )
+            }
+            this.studentActiveASR.push(results.text)
+            this.messages[this.messages.length-1]['message'] = this.studentActiveASR.join('. ')
+            
         }
+    }
+
+    startAsr(){
+        this.studentActiveASR = []
+        this.recognitionResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+        this.speechRecognitionService.startListening();
+    }
+
+    stopAsr(){
+        this.speechRecognitionService.stopListening();
+        this.recognitionResultsSubscribe.unsubscribe(this.onRecognitionResults);
+        const data = {
+            "source": "fix_asr",
+            'stopAudio': true,
+            "student_response":this.studentActiveASR.join('. ')
+        }
+        this.lessonService.Broadcast("slideEventRequest", data)
+        this.studentActiveASR = []
+    }
+
+    // === End Asr Daniel
+
+    nextQuestion(){
+        const data = {
+            "source": "next_question",
+            'stopAudio': true
+        }
+        this.lessonService.Broadcast("slideEventRequest", data)
+    }
+
+    restartSession(){
+        const data = {
+            "source": "restart_session",
+            'stopAudio': true
+        }
+        this.lessonService.Broadcast("slideEventRequest", data)
+    }
+
+    onButtonClick(ans: string) {
         // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
         // const data = {"source": "word_translator_ans", "answer": ans}
         // this.submitAnswerPending = true
@@ -135,8 +198,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     onPTTPressDown() {
         if (!this.disableButton) {
             this.speechRecognitionService.PTTInProgress = true;
-            // this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
-            // this.speechRecognitionService.startListening();
+            this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
+            this.speechRecognitionService.startListening();
             // this.speechRecognitionService.activateNativeLang(true);
         }
     }
@@ -144,24 +207,12 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         if (!this.disableButton) {
             // this.speechRecognitionService.resetToOrigLang();
             if (this.recognitionPPTSubscribe) {
-                if (!this.ASRInProgress) {
+                setTimeout(() => {
                     this.speechRecognitionService.PTTInProgress = false;
-                }
+                    this.speechRecognitionService.stopListening();
+                    this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+                }, 500)
             }
         }
-    }
-
-    scrollToBottom2(animate=false, timeout=0){
-        if (this.scroller) {
-            setTimeout(() => {
-                const element = this.scroller.nativeElement;
-                element.scrollTop = element.scrollHeight
-            }, timeout)
-        }
-    }
-
-    override ngOnDestroy(): void {
-        super.ngOnDestroy();
-        this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
     }
 }
