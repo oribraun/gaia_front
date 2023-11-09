@@ -390,7 +390,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.unseenAnswers[current_question.question_id].multiple_answers[option.answer] = event.target.checked;
 
         // allow to change if not disabled and reset original answer
-        if(!this.disableMultipleOptionWhenSubmitted && this.currentSlide.all_answers[current_question.question_id].multiple_answers[option.answer] && !event.target.checked) {
+        if(!this.disableMultipleOptionWhenSubmitted
+            && this.currentSlide.all_answers[current_question.question_id]
+            && this.currentSlide.all_answers[current_question.question_id].multiple_answers[option.answer]
+            && !event.target.checked) {
             delete this.currentSlide.all_answers[current_question.question_id].multiple_answers[option.answer];
         }
     }
@@ -406,12 +409,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     getHints(){
         const current_question = this.currentSlide.all_questions[this.question_index];
         const correct_answer = current_question.hints['correct_answer'];
-        const audio_path = current_question.hints['audio_path'];
+        let audio_path = current_question.hints['audio_path'];
         const guidance = current_question.hints['guidance'];
         const quotes = current_question.hints['quotes'];
         this.unseenAnswers[current_question.question_id].hint_used = true;
         if (audio_path) {
-            this.playHint(audio_path)
+            if (audio_path && !this.checkIsFullUrl(audio_path)) {
+                audio_path = (this.currentHost + audio_path).replace(/(https?:\/\/)|(\/)+/g, "$1$2");
+            }
         } else {
             this.currentHint = current_question.hints['guidance'];
             this.markHint()
@@ -541,45 +546,5 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     printUnseen() {
         window.print();
-        return;
-        // if (this.unseen_text_box) {
-        //     const myWindow = window.open('', 'my div', 'height=400,width=600');
-        //     if (myWindow) {
-        //         var style = window.getComputedStyle(this.unseen_text_box.nativeElement);
-        //         console.log('style', style)
-        //         myWindow.document.write(`
-        //             <html><head><style>
-        //                 h2 {
-        //                     font-size: calc(1.325rem + .9vw);
-        //                 }
-        //                 .box {
-        //                     position: relative;
-        //                     background: #ccc;
-        //                     padding: 1em;
-        //                     height: 100%;
-        //                     overflow: hidden;
-        //                     overflow-y: auto;
-        //                     scrollbar-color: #4285F4 #F5F5F5;
-        //                 }
-        //                 @media print {
-        //                     .box {
-        //                         position: relative;
-        //                         background: #ccc;
-        //                         padding: 1em;
-        //                         height: 100%;
-        //                         overflow: hidden;
-        //                         overflow-y: auto;
-        //                         scrollbar-color: #4285F4 #F5F5F5;
-        //                     }
-        //                 }
-        //             </style></head><body>
-        //         `);
-        //         myWindow.document.write(this.unseen_text_box.nativeElement.outerHTML);
-        //         myWindow.document.close();
-        //         myWindow.focus(); // necessary for IE >= 10
-        //         myWindow.print();
-        //         // myWindow.close();
-        //     }
-        // }
     }
 }
