@@ -49,20 +49,21 @@
                                     <div class="multiple-choice-question">
                                         <h4 class="question-title">{{q.question.question}}</h4>
                                         <p>Mark all the correct answers</p>
-                                        <ng-container *ngFor="let option of q.question['answers']; let index=index;">
+                                        <ng-container *ngFor="let option of q.question.answers; let index=index;">
                                             <label class="multiple-choice-question-answer" [ngClass]="{
-                                            'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id],
-                                            'correct':option.is_correct&&currentSlide.all_answers[q.question_id],
-                                            'checked_item':checked[option.answer + question_index] || false}"
+                                            'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
+                                            'correct':option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
+                                            'checked_item':unseenAnswers[q.question_id].multiple_answers[option.answer],
+                                            'no-hover':disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {}}"
                                             >
                                                 <input type="checkbox"
-                                                       [disabled]="currentSlide.all_answers[q.question_id]"
-                                                       [checked]="checked[option.answer + question_index] || false" name ="question1" (change)="onMultipleChoiceQuestionChange(option)" >
-                                                <!--                            <div class="highlight"></div>-->
+                                                       [disabled]="(disableMultipleOptionWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers[option.answer])
+                                                       || (disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {})"
+                                                       [checked]="unseenAnswers[q.question_id].multiple_answers[option.answer]" name ="question1" (change)="onMultipleChoiceQuestionChange(option, $event)" >
                                                 <div class="circle"></div>
                                                 <p>{{option.answer}}</p>
-                                                <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Correct</span>
-                                                <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]" class="feedback">Incorrect</span>
+                                                <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Correct</span>
+                                                <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Incorrect</span>
                                             </label>
                                         </ng-container>
                                     </div>
