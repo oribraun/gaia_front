@@ -11,6 +11,7 @@ import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DomSanitizer} from "@angular/platform-browser";
+import {HelperService} from "../../../main/services/helper.service";
 // import { AnimationOptions } from 'ngx-lottie';
 // import {AnimationItem} from "ngx-lottie/lib/symbols";
 
@@ -27,15 +28,15 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
     current_counter:any = {}
     question_index:number=0
-    text_audio_path = '';
     currentHint = '';
     currentHintAudio: any;
     unseenTextHtml = '';
-    checked:any = {}
+
+    disableMultipleOptionWhenSubmitted = false;
+    disableAllMultipleOptionsWhenSubmitted = false;
 
     // all_answers:any = {}
     private timers:any = {}
-    private multiple_choice_answers:any = {}
 
     // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
     private currentUnseenWords: any[] = [];
@@ -56,9 +57,12 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         open_question: 'open_question'
     }
 
+    text_audio_path = '';
+
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
+        protected helperService: HelperService,
     ) {
         super(config, lessonService)
     }
@@ -79,14 +83,18 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         for (let i = 0; i < this.currentSlide.all_questions.length; i++) {
             const q = this.currentSlide.all_questions[i];
             if (this.currentSlide.all_answers[q.question_id]) {
-                this.unseenAnswers[q.question_id] = this.currentSlide.all_answers[q.question_id];
+                this.unseenAnswers[q.question_id] = JSON.parse(JSON.stringify(this.currentSlide.all_answers[q.question_id]));
                 this.unseenAnswers[q.question_id].explanation = "";
+                if (!this.unseenAnswers[q.question_id].multiple_answers) {
+                    this.unseenAnswers[q.question_id].multiple_answers = {}
+                }
             } else {
                 this.unseenAnswers[q.question_id] = {
                     "pace": 0,
                     "score": 0,
                     "hint_used": false,
                     "answer_text": "",
+                    "multiple_answers": {},
                     "explanation": "",
                     "question_idx": i,
                     "question_type": q.question_type,
@@ -96,33 +104,16 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
                     this.unseenAnswers[q.question_id].answer_text = q.question
                 }
             }
-            if(q.question_type == "multiple_choice" && !this.isEmpty(q.question.answers)){
-                this.initMultipleOptions(q, i);
-            }
         }
     }
 
-    initMultipleOptions(q: any, question_index: number) {
-        if (this.unseenAnswers[q.question_id].answer_text) {
-            this.multiple_choice_answers['_' + String(question_index)] = {}
-            let options = q.question.answers
-            for (let i in options) {
-                let is_correct = options[i].is_correct
-                let answer_text = options[i].answer
-                this.multiple_choice_answers['_' + String(question_index)][answer_text] = is_correct
-                this.checked[answer_text + String(question_index)] = true;
-            }
-        }
-    }
 
     setResponseAnswer(data: any) {
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].explanation = data.explanation;
         this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
         if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)){
-            this.unseenAnswers[current_question.question_id].answer_text = this.multiple_choice_answers['_'+String(this.question_index)];
-            this.currentSlide.all_answers[current_question.question_id] = this.unseenAnswers[current_question.question_id]
-            this.initMultipleOptions(current_question, this.question_index);
+            this.currentSlide.all_answers[current_question.question_id] = JSON.parse(JSON.stringify(this.unseenAnswers[current_question.question_id]));
         }
     }
 
@@ -225,7 +216,8 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         this.unseenAnswers[current_question.question_id].pace = this.current_counter.counter;
         const data = {
             "source": 'check_answer',
-            "answer": current_question.question_type == 'multiple_choice' ? this.multiple_choice_answers['_'+String(this.question_index)] : this.unseenAnswers[current_question.question_id].answer_text,
+            "answer": this.unseenAnswers[current_question.question_id].answer_text,
+            "multiple_answers": this.unseenAnswers[current_question.question_id].multiple_answers,
             "question":current_question.question_type == 'multiple_choice' ? current_question.question.question: current_question.question,
             "question_type":current_question.question_type,
             "question_idx":this.question_index,
@@ -241,38 +233,28 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     }
 
     nextQuestion(){
-        if(this.question_index+1<this.currentSlide.all_questions.length){
-            this.question_index=this.question_index+1;
-        }
+        this.goToQuestionNumber(this.question_index+1)
     }
     prevQuestion(){
-        if(this.question_index>0){
-            this.question_index=this.question_index-1;
-        }
+        this.goToQuestionNumber(this.question_index-1)
     }
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.currentSlide.all_questions.length){
             this.question_index=number;
+            this.handleCounter(this.question_index)
         }
     }
-    onMultipleChoiceQuestionChange(answer:any){
-        if(this.multiple_choice_answers.hasOwnProperty('_'+String(this.question_index))){
-            let ans = this.multiple_choice_answers['_'+String(this.question_index)]
-            if(ans.hasOwnProperty(answer.answer)){
-                delete ans[answer.answer]
-                delete this.checked[answer.answer + String(this.question_index)]
-                if(this.isEmpty(ans)){
-                    delete this.multiple_choice_answers['_'+String(this.question_index)]
-                }
-            } else {
-                ans[answer.answer] = answer.is_correct
-                this.checked[answer.answer + String(this.question_index)] = true
-            }
-        } else {
-            this.multiple_choice_answers['_'+String(this.question_index)] = {}
-            this.multiple_choice_answers['_'+String(this.question_index)][answer.answer] = answer.is_correct
-            this.checked[answer.answer + String(this.question_index)] = true
+    onMultipleChoiceQuestionChange(option:any, event: any){
+        const current_question = this.currentSlide.all_questions[this.question_index];
+        this.unseenAnswers[current_question.question_id].multiple_answers[option.answer] = event.target.checked;
+
+        // allow to change if not disabled and reset original answer
+        if(!this.disableMultipleOptionWhenSubmitted
+            && this.currentSlide.all_answers[current_question.question_id]
+            && this.currentSlide.all_answers[current_question.question_id].multiple_answers[option.answer]
+            && !event.target.checked) {
+            delete this.currentSlide.all_answers[current_question.question_id].multiple_answers[option.answer];
         }
     }
 
