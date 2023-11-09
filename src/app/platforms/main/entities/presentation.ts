@@ -143,6 +143,9 @@ export class PresentationSlide {
     essay_type!:string
     unseen_text!:string
     grades!:string
+    score!:number
+    min_number_of_words!:number
+    time_in_minutes!:number
     iframe_path!:string
     html!:string
     js!:string

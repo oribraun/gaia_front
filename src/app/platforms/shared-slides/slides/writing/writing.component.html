@@ -22,6 +22,9 @@
     <div class="image image-right" #youtube_player>
         <angular-editor [placeholder]="'Enter text here...'" [config]="editorConfig" [(ngModel)]="essayText"></angular-editor>
     </div>
+    <h1> {{timer.minutes}}:{{timer.seconds}} / you should spend up to {{currentSlide.time_in_minutes}} minutes</h1>
+    <h1> # words: {{essayText.split(" ").length}} / {{currentSlide.min_number_of_words}}</h1>
+    <h1 *ngIf="grades"> your score: {{score}} </h1>
     <div class="buttons_wrapper">
         <button class="btn btn-light" (click)="boostEssay()">
             AI boost
