@@ -24,14 +24,12 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     currentHint = '';
     currentHintAudio: any;
     unseenTextHtml = '';
-    checked:any = {}
 
     disableMultipleOptionWhenSubmitted = false;
     disableAllMultipleOptionsWhenSubmitted = false;
 
     // all_answers:any = {}
     private timers:any = {}
-    private multiple_choice_answers:any = {}
 
     // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
     private currentUnseenWords: any[] = [];
