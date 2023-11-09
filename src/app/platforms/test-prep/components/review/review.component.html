@@ -64,7 +64,7 @@
                 <tbody>
                 <tr *ngFor="let question of getFilterQuestions()">
                     <td>
-                        <a [routerLink]="['/test_prep/practice/1']" [queryParams]="{q_id: question.presentation_question_id}">
+                        <a [routerLink]="['/test_prep/practice/'+question.user_lesson_id]" [queryParams]="{q_id: question.presentation_question_id}">
                             {{question.title}}
                         </a>
                     </td>

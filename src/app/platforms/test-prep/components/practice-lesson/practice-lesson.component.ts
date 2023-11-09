@@ -788,7 +788,7 @@ export class PracticeLessonComponent implements OnInit {
                 word: obj.word,
                 translate: obj.translate,
                 lesson_id: this.lesson_id,
-                slide_uuid: null,
+                slide_uuid: this.currentSlide.slide_uid,
                 slide_index: this.currentSlideIndex
             }
             this.apiService.saveVocab(data).subscribe({

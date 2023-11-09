@@ -27,6 +27,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
     current_counter:any = {}
     question_index:number=0
+    text_audio_path = '';
     currentHint = '';
     currentHintAudio: any;
     unseenTextHtml = '';
@@ -65,7 +66,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     override ngOnInit(): void {
         super.ngOnInit();
         this.question_index = this.currentSlide.question_index || 0
-
+        this.text_audio_path = this.currentSlide.audio_path;
         this.initUnseenAnswers();
         this.handleCounter(this.question_index)
         this.resetUnseenHtml();
@@ -286,11 +287,14 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     getHints(){
         const current_question = this.currentSlide.all_questions[this.question_index];
         const correct_answer = current_question.hints['correct_answer'];
-        const audio_path = current_question.hints['audio_path'];
+        let audio_path = current_question.hints['audio_path'];
         const guidance = current_question.hints['guidance'];
         const quotes = current_question.hints['quotes'];
         this.unseenAnswers[current_question.question_id].hint_used = true;
         if (audio_path) {
+            if (audio_path && !this.checkIsFullUrl(audio_path)) {
+                audio_path = (this.currentHost + audio_path).replace(/(https?:\/\/)|(\/)+/g, "$1$2");
+            }
             this.playHint(audio_path)
         } else {
             this.currentHint = current_question.hints['guidance'];

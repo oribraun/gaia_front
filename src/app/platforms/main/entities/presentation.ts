@@ -103,6 +103,7 @@ export class PresentationSection {
 }
 
 export class PresentationSlide {
+    slide_uid!: string
     slide_title!: string
     slide_visual_description!: string
     slide_type!: string
