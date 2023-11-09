@@ -22,11 +22,13 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
     essayTopic:string = ''
     modalActive = false
     grades:string = ''
+    score:number = 0
     grades_html:any = ''
     practice:string = ''
     boostEssayInProgress:boolean =false;
     improveEssayInProgress:boolean =false;
     load_fields:string[] = []
+    timer:any = null
     add_loaded_text_to_dynamic_text:boolean = false
     section_variables:any = {}
     editorConfig: AngularEditorConfig = {
@@ -51,12 +53,13 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
       this.essayTopic = this.currentSlide.topic
       this.essayText = this.currentSlide.writing
       this.grades = this.currentSlide.grades
+      this.score = this.currentSlide.score
       this.grades_html = this.sanitizer.bypassSecurityTrustHtml(this.grades.replace(/(?:\r\n|\r|\n)/g, '<br/>'));
       this.practice = this.currentSlide.practice
       if(this.currentSlide.essay_type){
         this.essayType = this.currentSlide.essay_type
       }
-
+      this.timer = this.createTimer()
       this.load_fields = this.currentSlide.load_fields
       this.add_loaded_text_to_dynamic_text = this.currentSlide.add_loaded_text_to_dynamic_text
       this.loaded_text = ''
@@ -77,9 +80,12 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             this.checkEssayInProgress = false;
             console.log(resp_data.grades)
             this.grades = resp_data.grades
+            this.score = resp_data.score
+
             if (resp_data.grades!=""){
               this.grades_html = this.sanitizer.bypassSecurityTrustHtml(this.grades.replace(/(?:\r\n|\r|\n)/g, '<br/>'));
               console.log(this.grades)
+              console.log(this.score)
               this.openModal()
             }
           }
@@ -158,6 +164,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
           "essay_type": this.essayType,
           "essay_text": this.essayText,
           "essay_topic":this.essayTopic,
+          "time_in_sec":this.timer.minutes*60 + this.timer.seconds,
           'stopAudio': true
       }
       this.checkEssayInProgress = true;
@@ -177,6 +184,25 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
     this.endEssayInProgress = true;
     this.spinnerEnabled  = true;
     this.lessonService.Broadcast("slideEventRequest", data)
+  }
+
+  createTimer(){
+    let Timer = Object()
+    Timer.active = true
+    Timer.counter = 0
+    Timer.minutes = 0
+    Timer.seconds = 0
+    Timer.submited = false
+    Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+    return Timer
+}
+
+progressTimer(self:any) {
+    if (self.active && !self.submited){
+        self.counter= self.counter+1
+        self.minutes = Math.floor(self.counter/60)
+        self.seconds = self.counter%60
+    }
   }
 
 }

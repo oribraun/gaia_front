@@ -1030,10 +1030,12 @@ export class PracticeLessonComponent implements OnInit {
         this.estimatedDuration = this.presentation.estimated_duration;
         this.setCurrentSection();
         this.setData();
-        const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id)
-        const index = all_question_ids.indexOf(this.question_id);
-        if (index > -1) {
-            this.currentSlide.question_index = index
+        if (this.currentSlide.all_questions) {
+            const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id)
+            const index = all_question_ids.indexOf(this.question_id);
+            if (index > -1) {
+                this.currentSlide.question_index = index
+            }
         }
     }
 
