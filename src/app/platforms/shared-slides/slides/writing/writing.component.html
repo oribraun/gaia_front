@@ -10,7 +10,7 @@
     <div class="outer-scroller">
         <div class="inner-scroller">
                 <h1>{{currentSlide.slide_title}}</h1>
-                <h2>{{essayTopic}}</h2>
+                <h3>{{currentSlide.text}}</h3>
                 <p>{{loaded_text}}</p>
         </div>
     </div>
@@ -18,13 +18,16 @@
         <img [src]="currentSlide.background_image">
     </div>
 
+    <div *ngIf="currentSlide.image_path">
+        <img [src]="currentSlide.image_path">
+    </div>
 
     <div class="image image-right" #youtube_player>
         <angular-editor [placeholder]="'Enter text here...'" [config]="editorConfig" [(ngModel)]="essayText"></angular-editor>
     </div>
-    <h1> {{timer.minutes}}:{{timer.seconds}} / you should spend up to {{currentSlide.time_in_minutes}} minutes</h1>
-    <h1> # words: {{essayText.split(" ").length}} / {{currentSlide.min_number_of_words}}</h1>
-    <h1 *ngIf="grades"> your score: {{score}} </h1>
+    <h3> {{timer.minutes}}:{{timer.seconds}} / you should spend up to {{currentSlide.time_in_minutes}} minutes</h3>
+    <h3> # words: {{essayText.split(" ").length}} / {{currentSlide.min_number_of_words}}</h3>
+    <h3 *ngIf="grades"> your score: {{score}} </h3>
     <div class="buttons_wrapper">
         <button class="btn btn-light" (click)="boostEssay()">
             AI boost
