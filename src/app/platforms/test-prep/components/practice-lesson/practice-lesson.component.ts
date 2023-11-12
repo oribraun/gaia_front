@@ -208,7 +208,7 @@ export class PracticeLessonComponent implements OnInit {
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    if (response.errMessage.indexOf('PurchasedLesson') > -1) {
+                    if (response.errMessage.indexOf('lesson does not exist') > -1) {
                         this.router.navigate(['test_prep/dashboard'])
                     }
                     console.log('getPresentation err', response)
