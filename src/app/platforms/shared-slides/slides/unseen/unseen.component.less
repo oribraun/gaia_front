@@ -300,24 +300,28 @@
                             text-decoration: none;
                             padding: 8px 16px;
                             border-radius: 100%;
-                            border: 1px solid #2e6d6f;
                             margin: 0 4px;
                             color: #2e6d6f;
-                            &.active {
-                                background-color: var(--gaia-header-color);
-                                color: #FFF;
-                                box-shadow: 3px 3px 5px #777;
-                            }
-                            &.failed {
-                                background-color: red;
-                                color: #FFF;
-                            }
-                            &.success {
-                                background-color: #2ed22e;
-                                color: #FFF;
+                            &.circle {
+                                border: 1px solid #2e6d6f;
+                                &.active {
+                                    background-color: var(--gaia-header-color);
+                                    color: #FFF;
+                                    box-shadow: 3px 3px 5px #777;
+                                }
+
+                                &.failed {
+                                    background-color: red;
+                                    color: #FFF;
+                                }
+
+                                &.success {
+                                    background-color: #2ed22e;
+                                    color: #FFF;
+                                }
                             }
                             &:hover:not(.active) {
-                                background-color: #DDD;
+                                box-shadow: 3px 3px 5px #777;
                             }
                         }
                     }

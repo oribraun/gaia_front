@@ -399,6 +399,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     setUpPagination(number: number) {
         const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
         const stepAvg = Math.floor(this.paginationMaxItems / 2)
+        console.log('here')
         if (number > this.question_index && number >= avg) {
             const step = number - this.pagination.start - stepAvg;
             this.pagination.start += step;
@@ -412,9 +413,12 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             this.pagination.start = 0
             this.pagination.end = this.paginationMaxItems;
         }
-        if (this.pagination.end > this.currentSlide.all_questions.length - 1) {
-            this.pagination.end = this.currentSlide.all_questions.length - 1
+        if (this.pagination.end > this.currentSlide.all_questions.length) {
+            this.pagination.end = this.currentSlide.all_questions.length
             this.pagination.start = this.pagination.end - this.paginationMaxItems;
+             if (this.pagination.start < 0) {
+                 this.pagination.start = 0
+             }
         }
     }
     onMultipleChoiceQuestionChange(option:any, event: any){
