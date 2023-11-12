@@ -177,7 +177,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                     "is_correct_answer": false
                 }
                 if(q.question_type == 'sentence_completion'){
-                    this.unseenAnswers[q.question_id].answer_text = q.question
+                    // this.unseenAnswers[q.question_id].answer_text = q.question
                 }
             }
         }

@@ -52,6 +52,7 @@
                     <ng-container *ngFor="let q of currentSlide.all_questions; let i = index">
                         <div class="question-wrapper" *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
                             <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
+                             <div id="sentence_start"><b>Question:</b><br>{{q.question}}</div>
                             <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
                             <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
                             <!--                            <div id="sentence_start">{{q.question}}</div>-->
