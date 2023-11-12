@@ -94,7 +94,7 @@
                             <div class="pagination pagination2">
                                 <a class="pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
                                 <ng-container *ngFor="let question of currentSlide.all_questions | slice: pagination.start:pagination.end; let index=index;">
-                                    <a  style="cursor:pointer" (click)="goToQuestionNumber(pagination.start+index)"
+                                    <a class="pointer" (click)="goToQuestionNumber(pagination.start+index)"
                                         [ngClass]="{
                                             'active':pagination.start+index== question_index,
                                             'success':currentSlide.all_answers[question.question_id].is_correct_answer,
