@@ -25,6 +25,13 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     currentHintAudio: any;
     unseenTextHtml = '';
 
+    paginationMaxItems = 5;
+    pagination = {
+        start: 0,
+        end: this.paginationMaxItems,
+        current: 0,
+    }
+
     disableMultipleOptionWhenSubmitted = false;
     disableAllMultipleOptionsWhenSubmitted = false;
 
@@ -78,6 +85,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.resetUnseenHtml();
 
         this.listenToSlideEvents();
+        // this.currentSlide.all_questions = this.currentSlide.all_questions.concat(this.currentSlide.all_questions).concat(this.currentSlide.all_questions).concat(this.currentSlide.all_questions)
+        // console.log('this.currentSlide.all_questions', this.currentSlide.all_questions)
     }
 
     openContextMenu(event: MouseEvent) {
@@ -381,8 +390,31 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.currentSlide.all_questions.length){
+            this.setUpPagination(number);
             this.question_index=number;
             this.handleCounter(this.question_index)
+        }
+    }
+
+    setUpPagination(number: number) {
+        const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
+        const stepAvg = Math.floor(this.paginationMaxItems / 2)
+        if (number > this.question_index && number >= avg) {
+            const step = number - this.pagination.start - stepAvg;
+            this.pagination.start += step;
+            this.pagination.end += step;
+        } else if (number < this.question_index && number < avg) {
+            const step = this.pagination.end - 1 - number - stepAvg;
+            this.pagination.start -= step;
+            this.pagination.end -= step;
+        }
+        if (this.pagination.start < 0) {
+            this.pagination.start = 0
+            this.pagination.end = this.paginationMaxItems;
+        }
+        if (this.pagination.end > this.currentSlide.all_questions.length - 1) {
+            this.pagination.end = this.currentSlide.all_questions.length - 1
+            this.pagination.start = this.pagination.end - this.paginationMaxItems;
         }
     }
     onMultipleChoiceQuestionChange(option:any, event: any){
@@ -507,7 +539,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         Timer.active = true
         Timer.counter = 0
         Timer.minutes = 0
+        Timer.minutesStr = '00'
         Timer.seconds = 0
+        Timer.secondsStr = '00'
         Timer.submited = false
         Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
         return Timer
@@ -524,7 +558,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         if (self.active && !self.submited){
             self.counter= self.counter+1
             self.minutes = Math.floor(self.counter/60)
+            self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes: self.minutes
             self.seconds = self.counter%60
+            self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds: self.seconds
         }
     }
 

@@ -25,7 +25,7 @@
             padding-right: calc(var(--bs-gutter-x) * .5);
             border-bottom-left-radius: 15px;
             border-bottom-left-radius: 15px;
-            border: solid 1px var(--gaia-main-border-color);
+            //border: solid 1px var(--gaia-main-border-color);
             border-top: none;
             border-right: none;
         }
@@ -35,10 +35,11 @@
                 white-space: nowrap;
                 text-align: center;
                 font-size: 0.44em;
-                padding: 1em 0.5em;
+                padding: 1.5em 0.5em;
                 width: @header-height;
                 height: @header-height;
                 margin: 0 5px;
+                transition: all .1s ease-in-out;
 
                 .bi {
                     //min-width: 40px;
@@ -63,7 +64,12 @@
                     padding: 0.7rem 0.3rem;
                 }
 
-                &.active, &:hover {
+                &.active {
+                    box-shadow: 0 -6px 5px 0px #000;
+                    background-color: var(--gaia-background-color);
+                    transform: scale(1.03);
+                }
+                &:hover {
                     box-shadow: 0 -6px 5px 0px #000;
                     background-color: var(--gaia-background-color);
                 }
@@ -98,6 +104,8 @@
             select {
                 outline: none;
                 box-shadow: none;
+                background-color: transparent;
+                border: none;
             }
 
             .logout {

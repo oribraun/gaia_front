@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "animations.less";
 @import "vars.less";
+@import url('https://fonts.cdnfonts.com/css/digital-numbers');
 
 html {
     height: 100%;
@@ -12,6 +13,7 @@ html {
         margin: 0;
         padding: 0;
         background: var(--gaia-background-color);
+        font-family: 'Open Sans';
         //&:not(.modal-open){
         //    padding-right: 0px !important;
         //    overflow: inherit !important;
@@ -102,11 +104,22 @@ html {
             white-space: pre-line;
         }
         .general-box {
-            box-shadow: 0 0 5px var(--grey-background-color);
+            box-shadow: var(--gaia-shadow);
             padding: @padding;
             overflow-x: auto;
             overflow-y: hidden;
             white-space:nowrap;
+        }
+        .general-box-border {
+            border: 1px solid var(--gaia-main-border-color);
+            padding: @padding;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space:nowrap;
+        }
+        .general-box-no-edge {
+            border: none;
+            box-shadow: none;
         }
     }
 

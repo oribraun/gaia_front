@@ -1,21 +1,36 @@
-<div class="unseen">
+<div class="slide-board">
     <div class="row">
         <div class="col-6 visible-on-print">
             <div class="box box-with-icons" #unseen_text_box (contextmenu)="openContextMenu($event)">
                 <h2>{{currentSlide.slide_title}}</h2>
                 <p  class="unseen_text" (mouseup)="getSelection($event)" [ngStyle]="{'font-size': zoom + 'em'}" [innerHTML]="unseenTextHtml | safeHtml"></p>
                 <div class="icons">
-                    <div class="zoom-in" (click)="zoomIn()">
-                        <i class="bi bi-zoom-in"></i>
+                    <div class="icon-group">
+                        <div class="title">Marker</div>
+                        <div class="items">
+                            <div class="item eraser" (click)="eraseMarks()">
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Marker_icon.svg'" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <div class="zoom-out" (click)="zoomOut()">
-                        <i class="bi bi-zoom-out"></i>
+                    <div class="icon-group">
+                        <div class="title">Zoom</div>
+                        <div class="items">
+                            <div class="item zoom-in" (click)="zoomIn()">
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Zoom-in_icon.svg'" alt="">
+                            </div>
+                            <div class="item zoom-out" (click)="zoomOut()">
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Zoom-out_icon.svg'" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <div class="eraser" (click)="eraseMarks()">
-                        <i class="bi bi-eraser-fill"></i>
-                    </div>
-                    <div class="print" (click)="printUnseen()">
-                        <i class="bi bi-printer"></i>
+                    <div class="icon-group">
+                        <div class="title">Print</div>
+                        <div class="items">
+                            <div class="item print" (click)="printUnseen()">
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Print_icon.svg'" alt="">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="contextMenu" *ngIf="isContextMenuOpen" [style.top]="contextMenuPosition.top" [style.left]="contextMenuPosition.left" class="context-menu">
@@ -28,9 +43,12 @@
         </div>
         <div class="col-6 visible-on-screen">
             <div class="box box-questions">
-                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>
-                <div class="question_timer">{{current_counter.minutes}}:{{current_counter.seconds}}</div>
+                <!--                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>-->
                 <section class="questions">
+                    <div class="timers">
+                        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
+                        <!--                        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>-->
+                    </div>
                     <ng-container *ngFor="let q of currentSlide.all_questions; let i = index">
                         <div class="question-wrapper" *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
                             <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
@@ -72,6 +90,20 @@
                         </div>
                     </ng-container>
                     <div class="bottom-panel">
+                        <div class="pagination-wrapper">
+                            <div class="pagination pagination2">
+                                <a class="pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+                                <ng-container *ngFor="let question of currentSlide.all_questions | slice: pagination.start:pagination.end; let index=index;">
+                                    <a  style="cursor:pointer" (click)="goToQuestionNumber(pagination.start+index)"
+                                        [ngClass]="{
+                                            'active':pagination.start+index== question_index,
+                                            'success':currentSlide.all_answers[question.question_id].is_correct_answer,
+                                            'failed':!currentSlide.all_answers[question.question_id].is_correct_answer,
+                                        }">{{pagination.start+index+1}}</a>
+                                </ng-container>
+                                <a class="pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;</a>
+                            </div>
+                        </div>
                         <div class="question-buttons">
                             <button class="btn btn-primary submit" (click)="checkAnswer()">
                                 Submit
@@ -79,22 +111,13 @@
                                     <span class="sr-only"></span>
                                 </div>
                             </button>
-                            <button class="btn btn-primary" (click)="nextSlide()">Continue</button>
+                            <!--                            <button class="btn btn-primary" (click)="nextSlide()">Continue</button>-->
                             <button class="btn btn-primary hint" (click)="getHints()">
                                 Hint
                                 <div class="spinner-border" *ngIf="currentHintAudio">
                                     <span class="sr-only"></span>
                                 </div>
                             </button>
-                        </div>
-                        <div class="pagination-wrapper">
-                            <div class="pagination pagination2">
-                                <a  style="cursor:pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
-                                <ng-container *ngFor="let question of currentSlide.all_questions; let index=index;">
-                                    <a  style="cursor:pointer" (click)="goToQuestionNumber(index)" [ngClass]="{'active':index== question_index}">{{index+1}}</a>
-                                </ng-container>
-                                <a  style="cursor:pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;</a>
-                            </div>
                         </div>
                     </div>
                 </section>

@@ -1,9 +1,14 @@
-.unseen {
+@import "../../../../../slide-board";
+@import "../../../../../vars";
+
+.slide-board {
     position: relative;
     height: 100%;
-    @greenColor: #4caf50;
-    @blueColor: #4285F4;
-    @yellowColor: yellow;
+    @greenColor: var(--gaia-header-color);
+    @blueColor: var(--gaia-header-color);
+    //@greenColor: #4caf50;
+    //@blueColor: #4285F4;
+    @yellowColor: #fff82a;
     .row {
         height: 100%;
         div[class*='col-'] {
@@ -12,12 +17,14 @@
     }
     .box {
         position: relative;
-        background: #ccc;
-        padding: 1em;
-        text-align: justify;
+        background: #fff;
+        padding: 5px 1em 1em 1em;
         height: 100%;
         overflow: hidden;
         overflow-y: auto;
+        h2, h4 {
+            white-space: initial;
+        }
         &::-webkit-scrollbar {
             width: 12px;
             background-color: #F5F5F5;
@@ -93,7 +100,7 @@
         }
 
         &-questions {
-            padding-top: 2.5em;
+            background-color: #f2f2f2;
         }
         .question_number {
             position: absolute;
@@ -103,14 +110,23 @@
             color: #0b4746;
             font-size: 20px;
         }
-        .question_timer {
-            position: absolute;
-            left: 10px;
-            top: 8px;
-            padding: 0px;
-            margin-left: 9px;
-            font-size: 20px;
-            color: @blueColor;
+        .timers {
+            align-self: end;
+            margin-bottom: calc(1em - 5px);
+            .question_timer {
+                font-size: 1.1em;
+                color: var(--gaia-header-color);
+                font-family: 'Digital Numbers', sans-serif;
+                letter-spacing: 0px;
+                //border: solid 1px #2e6d6f;
+                display: inline-block;
+                vertical-align: top;
+                padding: 2px;
+                margin-right: 5px;
+            }
+            .question_timer:last-child {
+                margin-right: 0;
+            }
         }
         .questions {
             display: flex;
@@ -122,6 +138,8 @@
                 flex-direction: column;
                 justify-content: space-between;
                 height: 100%;
+                //background: #fff;
+                //padding: 1em;
                 .question-title {
                     position: relative;
                 }
@@ -129,19 +147,14 @@
                     position: relative;
                 }
                 #textarea {
+                    padding: 10px;
                     position: relative;
                     height: 100%;
                     font-size: 20px;
                     resize: none;
-                    line-height: 40px;
-                    padding-left: 100px;
-                    padding-right: 100px;
-                    padding-bottom: 34px;
-                    background-image: url(https://static.tumblr.com/maopbtg/E9Bmgtoht/lines.png), url(https://static.tumblr.com/maopbtg/nBUmgtogx/paper.png);
-                    // background-repeat: repeat-y, repeat;
-                    // border-radius: 12px;
-                    // box-shadow: 0px 1px 4px #000;
-                    border: 1px solid #f9f5f5b8;
+                    line-height: 1;
+                    outline: none;
+                    border: none;
                     &::-webkit-scrollbar {
                         width: 0;
                     }
@@ -255,7 +268,6 @@
             .bottom-panel {
                 text-align: center;
                 .question-buttons {
-                    display: inline-block;
                     vertical-align: top;
                     position: relative;
                     text-align: center;
@@ -278,21 +290,29 @@
                     }
                 }
                 .pagination-wrapper {
-                    display: inline-block;
                     vertical-align: top;
                     margin-top: 10px;
 
                     // paginagion
                     .pagination {
-                        display: inline-block;
+                        justify-content: center;
                         a {
                             text-decoration: none;
-                            color: #000;
-                            float: left;
                             padding: 8px 16px;
-                            border-radius: 5px;
+                            border-radius: 100%;
+                            border: 1px solid #2e6d6f;
+                            margin: 0 4px;
                             &.active {
-                                background-color: @greenColor;
+                                background-color: var(--gaia-header-color);
+                                color: #FFF;
+                                box-shadow: 3px 3px 5px #777;
+                            }
+                            &.failed {
+                                background-color: red;
+                                color: #FFF;
+                            }
+                            &.success {
+                                background-color: #2ed22e;
                                 color: #FFF;
                             }
                             &:hover:not(.active) {
@@ -308,15 +328,51 @@
             top: 0;
             left: 0;
             padding: 5px;
-            div {
-                display: inline-block;
-                margin: 0 5px;
-                cursor: pointer;
-                color: #168de4;
+            display: flex;
+            flex-direction: row;
+            //justify-content: center;
+            width: 100%;
+            .icon-group {
+                position: relative;
+                padding: 0 10px;
+                //color: #168de4;
+                .title {
+                    font-size: .5em;
+                    text-align: center;
+                }
+                .items {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    .item {
+                        //display: inline-block;
+                        cursor: pointer;
+                        vertical-align: top;
+                        width: 100%;
+                        img {
+                            width: 18px;
+                            height: 22px;
+                            vertical-align: top;
+                        }
+                    }
+                }
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 30%;
+                    bottom: 15%;
+                    left: 0;
+                    border: 1px solid #868685;
+                }
+            }
+            .icon-group:first-child {
+                &:before {
+                    content: none;
+                }
             }
         }
         &-with-icons {
-            padding-top: 2em;
+            padding-top: 3em;
         }
 
         .context-menu {
