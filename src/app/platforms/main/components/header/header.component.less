@@ -1,65 +1,111 @@
+@import "../../../../../vars";
+
 .navbar {
-    background-color: #e3f2fd;
+    //background-color: var(--gaia-header-color);
     padding: 0;
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+        .brand {
+            align-self: stretch;
+            height: @header-height;
+            background-color: var(--gaia-background-color);
+            padding-left: calc(var(--bs-gutter-x) * .5);
 
-    .nav-item a {
-        white-space: nowrap;
-        text-align: left;
-        width: 45px;
-        text-align: center;
-        //padding: 8px;
-        //padding: 0.7rem 0.9rem 0.7rem 0.3rem;
-        .bi {
-            //min-width: 40px;
-            display: inline-block;
-            text-align: center;
+            .navbar-brand {
+                img {
+                    height: 2em;
+                    vertical-align: top;
+                    margin-top: 0.2em;
+                }
+            }
+        }
+        .collapse {
+            background-color: var(--gaia-header-color);
+            padding-right: calc(var(--bs-gutter-x) * .5);
+            border-bottom-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            border: solid 1px var(--gaia-main-border-color);
+            border-top: none;
+            border-right: none;
+        }
 
-            &-no-min {
-                min-width: 0;
+        .nav-item {
+            a {
+                white-space: nowrap;
+                text-align: center;
+                font-size: 0.44em;
+                padding: 1em 0.5em;
+                width: @header-height;
+                height: @header-height;
+                margin: 0 5px;
+
+                .bi {
+                    //min-width: 40px;
+                    display: inline-block;
+                    text-align: center;
+
+                    &-no-min {
+                        min-width: 0;
+                    }
+                }
+
+                .title {
+                    margin-bottom: 3px;
+                }
+
+                span {
+                    padding-left: 17px;
+                    display: none;
+                }
+
+                &.dropdown-toggle {
+                    padding: 0.7rem 0.3rem;
+                }
+
+                &.active, &:hover {
+                    box-shadow: 0 -6px 5px 0px #000;
+                    background-color: var(--gaia-background-color);
+                }
+            }
+            &:first-child {
+                position: relative;
+                a {
+                    margin: 0 5px 0 0;
+                    &.active, &:hover {
+                        border-bottom-left-radius: 15px !important;
+                    }
+                }
             }
         }
 
-        span {
-            padding-left: 17px;
-            display: none;
+        img.icon {
+            //padding: 0.2em 1em .1em 1em;
+            width: 22px;
+            height: 22px;
         }
 
-        &.dropdown-toggle {
-            padding: 0.7rem 0.3rem;
+        .link {
+            text-decoration: none;
         }
 
-        &.active {
-            background-color: #0f3460;
-            color: #fff;
-        }
-    }
+        .right-items {
+            div {
+                margin: 0 5px;
+                white-space: nowrap;
+            }
 
-    .link {
-        text-decoration: none;
-    }
+            select {
+                outline: none;
+                box-shadow: none;
+            }
 
-    .navbar-brand {
-        img {
-            height: 1em;
-            vertical-align: top;
-            margin-top: 0.2em;
-        }
-    }
-
-    .right-items {
-        div {
-            margin: 0 5px;
-            white-space: nowrap;
-        }
-        select {
-            outline: none;
-            box-shadow: none;
-        }
-        .logout {
-            img {
-                height: 1.2em;
-                vertical-align: top;
-                margin-top: 0.2em;
+            .logout {
+                img {
+                    height: 1.2em;
+                    vertical-align: top;
+                    margin-top: 0.2em;
+                }
             }
         }
     }
