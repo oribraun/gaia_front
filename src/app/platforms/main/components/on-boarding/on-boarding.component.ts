@@ -361,6 +361,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     onFinish() {
+        this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = true;
         console.log('finish this.onBoardingObject', this.onBoardingObject)
         this.saveUserDetails(true);
