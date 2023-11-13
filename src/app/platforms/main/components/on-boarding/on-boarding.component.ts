@@ -53,26 +53,26 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     current_page = 'area_of_interest'
 
     areaOfInterestItems: any = {
-        "Fashion": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Sport": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Games": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Israel": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Cars": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "News": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Shopping": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Science": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "AI": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Soccer": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Politics": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Social Network": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "History": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Art": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Food and Cooking": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Music": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Travel": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Photography": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Computers": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']},
-        "Movies and TV": {image: "assets/images/lesson/lesson_placeholder.jpg", specific: ['First', 'Second', 'Third', 'Fourth', 'Five']}
+        "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli', 'Add your own 1', 'Add your own 2']},
+        "Sport": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/sport.jpg", specific: ['Basketball', 'Michael Jorden', 'Usain Bolt', 'Add your own 1', 'Add your own 2']},
+        "Games": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/games.jpg", specific: ['Minecraft', 'Call of Duty', 'Quests',  'Add your own 1', 'Add your own 2']},
+        "Israel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/israel.jpg", specific: ['Israel-Palastine Conflict', 'Israeli Calture', 'Famous People',  'Add your own 1', 'Add your own 2']},
+        "Cars": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/cars.jpg", specific: ['Formula I', 'MotoGP', 'Electric Cars',  'Add your own 1', 'Add your own 2']},
+        "News": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/news.jpg", specific: ['Politics', 'Financial News', 'Crypto',  'Add your own 1', 'Add your own 2']},
+        "Shopping": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/shopping.jpg", specific: ['Gadgets', 'Top brands', 'Toys',  'Add your own 1', 'Add your own 2']},
+        "Science": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/science.jpg", specific: ['Physics', 'Astronomy', 'Zoology',  'Add your own 1', 'Add your own 2']},
+        "AI": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/ai.jpg", specific: ['LLMs', 'Supervised Learning', 'Reinforcment lerarning',  'Add your own 1', 'Add your own 2']},
+        "Soccer": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/soccer.jpg", specific: ['Ronaldo', 'VAR', 'Manchester City',  'Add your own 1', 'Add your own 2']},
+        "Politics": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/politics.jpg", specific: ['Benjamin Netany', 'Donald Trump', 'Valdimir Putin',  'Add your own 1', 'Add your own 2']},
+        "Social Media": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/social_media.jpg", specific: ['Facebook', 'Gen Z', 'Reels',  'Add your own 1', 'Add your own 2']},
+        "History": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/history.jpg", specific: ['World War 2', 'Holocaust', 'Israel Wars',  'Add your own 1', 'Add your own 2']},
+        "Art": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/art.jpg", specific: ['Painting Styles', 'Famous sculpture', 'Van Gogh',  'Add your own 1', 'Add your own 2']},
+        "Food and Cooking": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/food.jpg", specific: ['Special Food', 'Best Resurants', 'Chocolatiers',  'Add your own 1', 'Add your own 2']},
+        "Music": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/music.jpg", specific: ['Queen', 'Noa Kirel', 'Justin Biber',  'Add your own 1', 'Add your own 2']},
+        "Travel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/travel.jpg", specific: ['Highest mountains', 'Beaches', '3rd world countries',  'Add your own 1', 'Add your own 2']},
+        "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras',  'Add your own 1', 'Add your own 2']},
+        "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing',  'Add your own 1', 'Add your own 2']},
+        "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot', 'Add your own 1', 'Add your own 2']}
     }
 
     beMoreSpecificSelected = 0;
@@ -100,16 +100,16 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         'Surreptitious',
     ]
 
-    videoAnswers = ['Coffee', 'Nothing', 'To Play', 'To complain']
+    videoAnswers = ['To take them to the party', 'To stop their argument', 'To Play with them', 'To join their dicussion']
     videoDetails: any = {
-        id: 'tQ5IPGritIo',
-        start_time: -1,
-        end_time: -1,
+        id: 'RjpvuPAzJUw',
+        start_time: 43,
+        end_time: 60,
         height: '',
         width: '',
     }
 
-    image = "assets/images/lesson/lesson_placeholder.jpg"
+    image = "https://unseen-audio-files.s3.amazonaws.com/onboarding/noa_kirel.jpg"
 
     constructor(
         private config: Config,
@@ -124,12 +124,6 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        // this.gotUserOnBoarding = true;
-        // console.log('this.gotUserOnBoarding', this.gotUserOnBoarding)
-        // this.initCurrentPage(false);
-        // setTimeout(() => {
-        //     this.setUpYoutubeVideo();
-        // })
         this.config.user_on_boarding_subject.subscribe((userOnBoarding) => {
             this.userOnBoarding = userOnBoarding;
             this.gotUserOnBoarding = true;

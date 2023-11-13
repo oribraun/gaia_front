@@ -33,12 +33,14 @@
                 display: inline-block;
                 margin: @padding 0;
                 vertical-align: top;
+                
                 .box {
                     padding: 35%;
                     background: #ccc;
                     position: relative;
                     background-repeat: no-repeat;
                     background-size: cover;
+                    // filter: brightness(0.8);
                     cursor: pointer;
                     .text {
                         position: absolute;
@@ -46,11 +48,14 @@
                         left: 50%;
                         transform: translate(-50%, -50%);
                         color: #fff;
-                        text-shadow: 2px 2px 5px #000;
+                        font-weight: bold;
+                        text-shadow: 0px 0px 8px #ffffff, 0px 0px 5px #000000;
                         width: 100%;
                         text-align: center;
                         padding: 0 5px;
-                    }
+                        font-size: x-large;
+                        z-index: 1;
+                    }    
                     .text-no-wrap {
                         white-space: nowrap;
                     }
@@ -58,12 +63,20 @@
                         &:hover {
                             //box-shadow: 0 0 5px #6c6c6c;
                             //background-color: #939393;
-                            filter: brightness(0.8);
+                            filter: brightness(1.2);
                         }
                     }
                     &.active {
-                        box-shadow: 0 0 5px #0f3460;
+                        box-shadow: 0 0 5px #000000;
+                        border: #588ee4;
+                        border-style:solid;
+                        border-width: thick;
+                        filter: brightness(1);
                     }
+                    &.not-active {
+                        filter: grayscale(100%);
+                    }                    
+                    z-index: 0;
                 }
                 .specific {
                     .item {

@@ -10,7 +10,7 @@
                     <div class="interest">
                         <div class="box-wrap" *ngFor="let item of areaOfInterestItems | keyvalue">
                             <div class="box box-hover"
-                                 [ngClass]="{'active': onBoardingObject.area_of_interest.indexOf(item.key) > -1}"
+                                 [ngClass]="{'active': onBoardingObject.area_of_interest.indexOf(item.key) > -1, 'not-active': onBoardingObject.area_of_interest.indexOf(item.key) === -1}"
                                  [ngStyle]="{'background-image': 'url(' + imageSrc + areaOfInterestItems[getString(item.key)].image + ')'}"
                                  (click)="selectInterest(item.key)">
                                 <div class="text">{{item.key}}</div>
@@ -95,6 +95,7 @@
                         >
                         </youtube-player>
                     </div>
+                    <div>{{"What Ross is tring to do?"}}"</div>
                     <div class="interest text-center">
                         <div class="box-wrap" *ngFor="let word of videoAnswers">
                             <div class="box box-hover"
