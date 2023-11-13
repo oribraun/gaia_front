@@ -260,7 +260,6 @@ export class PracticeLessonComponent implements OnInit {
         }).subscribe({
             next: (response: any) => {
                 this.eventHandlingInProgress = false;
-
                 if (response.err) {
                     console.log('response err', response)
                     this.handleOnReplayError()
@@ -427,6 +426,7 @@ export class PracticeLessonComponent implements OnInit {
             return;
         }
         const data = this.currentData
+        console.log('DANIEL', data)
         let currentObjectiveIndexChanged = false
         const additional_instructions =data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;

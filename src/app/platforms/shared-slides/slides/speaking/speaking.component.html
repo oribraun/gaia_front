@@ -1,4 +1,11 @@
 <div class="speaking">
+    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
     <div class="chat general-box">
         <div class="outer-scroller">
             <div class="inner-scroller" #scroller>
@@ -26,12 +33,40 @@
                 (touchend)="onPTTPressUp()"
         >Press To Talk</button> -->
     </div>
+    
+    <div class="main-btn_rec">
+        <div class="btn-rec-container" >
+            <input type="checkbox" id="btn" />
+            <label for="btn"></label>
+            <ng-container *ngIf="recordingIsActive"><button (click)="stopAsr()" id="recording" class="Rec">Recording</button></ng-container>
+            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording" class="notRec">Paused</button></ng-container>
+
+        <!--   <div class="time">
+            
+            <div class="h_m"></div>
+            <div class="s_ms"></div> 
+            </div>-->
+            <!-- <p class="tim" id="timer" >0</p> -->
+        </div>
+    </div>
     <div class="buttons">
-        <button class="btn btn-primary">Show Report</button>
+        <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">Show Report</button>
         <button class="btn btn-primary">Continue</button>
-        <button class="btn btn-primary" (click)="startAsr()">Start ASR</button>
-        <button class="btn btn-primary" (click)="stopAsr()">Stop ASR</button>
+        <button class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
+        <!-- <button class="btn btn-primary" (click)="startAsr()">Start ASR</button>
+        <button class="btn btn-primary" (click)="stopAsr()">Stop ASR</button> -->
         <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button>
         <button class="btn btn-primary" (click)="restartSession()">Restart</button>
     </div>
 </div>
+<!--modals-->
+<div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
+    <div>
+       <a  title="Close"  (click)="closeModel()"class="close">X</a>
+       <h2>Speaking Review</h2>
+       <div [innerHTML]="grades"></div>
+       <br>
+       <h2>Score</h2>
+       <p [innerHTML]="score"></p>
+     </div>
+ </div>

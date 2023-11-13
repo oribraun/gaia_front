@@ -6,6 +6,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {ChatMessage} from "../../../main/entities/chat_message";
 import {environment} from "../../../../../environments/environment";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
+import { NONE_TYPE } from '@angular/compiler';
 
 declare var $: any;
 
@@ -18,14 +19,19 @@ declare var $: any;
 export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     messages: ChatMessage[] = [];
-
+    spinnerEnabled:boolean = false;
     studentActiveASR:string[] = [];
     disableButton = false;
-
+    grades:string = ''
+    score:any = 0
+    gradeConversationInProgress:boolean = false;
     recognitionPPTSubscribe: any
     recognitionResultsSubscribe: any
     question: any;
+    question_idx:number | undefined;
     all_questions_answered: any;
+    recordingIsActive:boolean = false
+    modalActive: boolean = false;
 
     constructor(
         protected override config: Config,
@@ -44,7 +50,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     override ngOnInit(): void {
         super.ngOnInit();
-
+        this.buildChat()
+        this.grades = this.currentSlide.grades
+        this.score = this.currentSlide.score
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -54,7 +62,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                     console.log('get_hints', resp_data)
                 } else if (resp_data.source == "fix_asr") {
                     this.messages[this.messages.length-1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
-                    console.log('fix_asr', resp_data)
+                    this.handleStudentResponse(resp_data.llm_reply['corrected_text'])
                 } else if (resp_data.source  == 'next_question'){
                     if(resp_data.need_to_generate_questions) {
                         const data = {
@@ -65,16 +73,29 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                     }
                      
                     this.question = resp_data.question 
+                    this.question_idx = resp_data.question_idx 
                     this.all_questions_answered =  resp_data.all_questions_answered 
                     if (!this.all_questions_answered) {
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }))
+                    } else {
+                        alert('Session Ended')
+                        this.restartSession()
                     }
                 } else if (resp_data.source  == 'generate_questions'){
                     console.log(resp_data)
                 } else if (resp_data.source == 'restart_session'){
                     console.log(resp_data)
                     this.nextQuestion()
+                } else if(resp_data.source =='student_response') {
+                    this.nextQuestion()
+                    console.log(resp_data)
+                } else if(resp_data.source =='grade_conversation'){
+                    this.gradeConversationInProgress = false
+                    console.log(resp_data)
+                    this.grades = resp_data.llm_reply.conversation_review
+                    this.score = resp_data.llm_reply.score
                 }
+                this.spinnerEnabled  = false;
 
             } catch (e) {
                 console.error(e)
@@ -84,6 +105,19 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     }
  
+    buildChat(){
+        this.messages = []
+        const slideChat = this.currentSlide.slide_chat
+        for(let el of  slideChat){
+            if(el.speaker == 'student') {
+                this.messages.push(new ChatMessage({type: 'user', message: el.content}))
+            } else if(el.speaker == 'teacher'){
+                this.messages.push(new ChatMessage({type: 'computer', message: el.content}))
+            }
+            
+        }
+         
+    }
     isEmpty(obj:any) {
         for (const prop in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -156,38 +190,81 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.studentActiveASR = []
         this.recognitionResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
         this.speechRecognitionService.startListening();
+        this.recordingIsActive = true
     }
 
     stopAsr(){
         this.speechRecognitionService.stopListening();
         this.recognitionResultsSubscribe.unsubscribe(this.onRecognitionResults);
-        const data = {
-            "source": "fix_asr",
-            'stopAudio': true,
-            "student_response":this.studentActiveASR.join('. ')
+        const srudent_resp = this.studentActiveASR.join('. ').trim()
+        if(srudent_resp.length){
+            const data = {
+                "source": "fix_asr",
+                'stopAudio': true,
+                "student_response":srudent_resp
+            }
+            this.lessonService.Broadcast("slideEventRequest", data)
         }
-        this.lessonService.Broadcast("slideEventRequest", data)
         this.studentActiveASR = []
+        this.recordingIsActive = false
     }
 
     // === End Asr Daniel
+    gradeConversation(){
+        if (this.gradeConversationInProgress){
+            return;
+        }
+        this.gradeConversationInProgress = true
+        const data = {
+            "source": "grade_conversation",
+            'stopAudio': true
+        }
+        this.spinnerEnabled  = true;
+        this.lessonService.Broadcast("slideEventRequest", data)
+    }
 
     nextQuestion(){
         const data = {
             "source": "next_question",
+            "question_index":this.question_idx,
+            // "background":true,
             'stopAudio': true
         }
         this.lessonService.Broadcast("slideEventRequest", data)
     }
-
+    
     restartSession(){
         const data = {
             "source": "restart_session",
             'stopAudio': true
         }
         this.lessonService.Broadcast("slideEventRequest", data)
+        this.clearBlackBoard()
+        this.score=0
+        this.grades=''
     }
 
+    handleStudentResponse(student_reply:string){
+        const data = {
+            "source": "student_response",
+            "teacher_question": this.question,
+            "student_response":student_reply,
+            'stopAudio': true
+        }
+        this.lessonService.Broadcast("slideEventRequest", data)
+    }
+
+    clearBlackBoard(){
+        this.messages = []
+    }
+
+    toggleAsr(){
+        if(!this.recordingIsActive){
+            this.startAsr()
+        } else {
+            this.stopAsr()
+        }
+    }
     onButtonClick(ans: string) {
         // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
         // const data = {"source": "word_translator_ans", "answer": ans}
@@ -214,5 +291,14 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 }, 500)
             }
         }
+    }
+
+    openModal(){
+        this.modalActive = true
+    }
+    
+    
+    closeModel(){
+        this.modalActive = false
     }
 }

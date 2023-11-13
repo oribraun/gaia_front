@@ -48,7 +48,6 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
 
   override ngOnInit(): void {
       super.ngOnInit();
-      console.log('daniel',this.currentSlide)
       this.spinnerEnabled  = false;
       this.essayTopic = this.currentSlide.topic
       this.essayText = this.currentSlide.writing

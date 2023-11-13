@@ -108,6 +108,7 @@ export class PresentationSlide {
     slide_visual_description!: string
     slide_type!: string
     slide_objectives!: any[]
+    slide_chat!: any[]
     full_screen!: boolean
     estimated_duration!: number
     native_language_text!: any
@@ -172,7 +173,8 @@ export class PresentationSlide {
                 if (obj[key] !== undefined && obj[key] !== null) {
                     if (key === 'video_details') {
                         this[key] = new VideoDetails(obj[key]);
-                    } else {
+                    }
+                    else {
                         // @ts-ignore
                         this[key] = obj[key];
                     }
