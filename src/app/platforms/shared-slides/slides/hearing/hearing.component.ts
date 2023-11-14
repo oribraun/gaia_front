@@ -330,6 +330,9 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
 
     getHints(){
+        if (this.currentHint) {
+            return
+        }
         const current_question = this.currentSlide.all_questions[this.question_index];
         const correct_answer = current_question.hints['correct_answer'];
         let audio_path = current_question.hints['audio_path'];
