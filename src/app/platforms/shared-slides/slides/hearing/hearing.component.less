@@ -23,6 +23,10 @@
         height: 100%;
         overflow: hidden;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
         h2, h4 {
             white-space: initial;
         }
@@ -469,6 +473,22 @@
         .menu-item {
             cursor: pointer;
             margin: 4px 0;
+        }
+        .textarea {
+            padding: 10px;
+            position: relative;
+            height: 100%;
+            font-size: 20px;
+            resize: none;
+            line-height: 1;
+            outline: none;
+            border: none;
+            &::-webkit-scrollbar {
+                width: 0;
+            }
+        }
+        .notes {
+            background: #f2f2f2;
         }
     }
 }

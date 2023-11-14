@@ -67,6 +67,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
     }
 
     text_audio_path = '';
+    notes = ''
 
     constructor(
         protected override config: Config,
