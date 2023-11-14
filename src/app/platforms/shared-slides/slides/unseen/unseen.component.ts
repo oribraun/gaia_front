@@ -405,10 +405,12 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     setUpPagination(number: number) {
         const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
-        const stepAvg = Math.floor(this.paginationMaxItems / 2)
-        console.log('here')
+        const avgItems = this.paginationMaxItems / 2
+        const stepAvg = Math.floor(avgItems)
+        const extra = Math.ceil(avgItems) - stepAvg;
+        console.log('here', extra)
         this.pagination.start = number - stepAvg;
-        this.pagination.end = number + stepAvg + 1;
+        this.pagination.end = number + stepAvg + extra;
         if (this.pagination.start < 0) {
             this.pagination.start = 0
             this.pagination.end = this.paginationMaxItems;
@@ -433,15 +435,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                 const circleHeight = parseFloat(circleComputed.getPropertyValue('height'));
                 const circleMarginRight = parseFloat(circleComputed.getPropertyValue('margin-right'));
                 const circleMarginLeft = parseFloat(circleComputed.getPropertyValue('margin-left'));
-                console.log('questions BoxWidth', questionsBoxWidth)
-                console.log('questions circle', circle)
-                console.log('questions circleWidth', circleWidth)
-                console.log('questions clientHeight', circleHeight)
-                console.log('questions circleMarginRight', circleMarginRight)
-                console.log('questions circleMarginLeft', circleMarginLeft)
 
                 const totalWidth = circleWidth + circleMarginRight + circleMarginLeft;
-                const maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 2; // right and left arrows
+                const maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 4; // right and left arrows
                 this.paginationMaxItems = maxItemsForWidth;
                 this.pagination.end = this.paginationMaxItems;
                 this.pagination.start = 0;

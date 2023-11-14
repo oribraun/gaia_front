@@ -101,8 +101,9 @@
                     </div>
                     <div class="bottom-panel">
                         <div class="pagination-wrapper">
-                            <div class="pagination pagination2">
-                                <a class="pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
+                            <div class="pagination pagination2" onselectstart="return false;">
+                                <a class="pointer" (click)="goToQuestionNumber(0)">&laquo;&laquo;</a>
+                                <a class="pointer" (click)="goToQuestionNumber(question_index-1)">&laquo;</a>
                                 <ng-container *ngFor="let question of currentSlide.all_questions | slice: pagination.start:pagination.end; let index=index;">
                                     <a class="pointer circle" (click)="goToQuestionNumber(pagination.start+index)"
                                        [ngClass]="{
@@ -111,7 +112,8 @@
                                             'failed':unseenAnswers[question.question_id].is_correct_answer === false,
                                         }">{{pagination.start+index+1}}</a>
                                 </ng-container>
-                                <a class="pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;</a>
+                                <a class="pointer" (click)="goToQuestionNumber(question_index+1)">&raquo;</a>
+                                <a class="pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;&raquo;</a>
                             </div>
                         </div>
                         <div class="question-buttons">
