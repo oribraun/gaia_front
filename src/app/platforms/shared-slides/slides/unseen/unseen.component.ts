@@ -499,16 +499,16 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             }
             if (!isPopup || !e) {
                 this.showHint = false;
+                this.resetUnseenHtml();
                 setTimeout(() => {
                     this.currentHint = '';
-                    this.resetUnseenHtml();
                 }, 300)
             }
         }
     }
 
     resetUnseenHtml() {
-        if (this.currentHint) {
+        if (this.showHint) {
             this.markHint();
         } else {
             this.setUpUnseenTextHtml(null, null, this.currentUnseenWords)
