@@ -246,16 +246,16 @@
                         <div class="form-group">
                             <form>
                                 <label for="password">Old Password</label>
-                                <input type="password" name="password" class="form-control" id="password" [(ngModel)]="resetPassDetails.old_password" required>
+                                <input type="password" name="password" class="form-control" id="old_password" [(ngModel)]="resetPassDetails.old_password" required>
                                 <label for="password">New Password</label>
                                 <input type="password" name="password" class="form-control" id="password" [(ngModel)]="resetPassDetails.new_password" required>
                                 <label for="password">Confirm Password</label>
-                                <input type="password" name="password" class="form-control" id="password" [(ngModel)]="resetPassDetails.confirm_password" required>
+                                <input type="password" name="password" class="form-control" id="confirm_password" [(ngModel)]="resetPassDetails.confirm_password" required>
                                 <div class="text-center text-danger" *ngIf="resetPassDetails.errMessage" [innerHTML]="resetPassDetails.errMessage"></div>
                                 <div class="text-center text-success" *ngIf="resetPassDetails.successMessage" [innerHTML]="resetPassDetails.successMessage"></div>
                                 <br>
                                 <div class="text-center">
-                                    <button class="btn btn-primary" (click)="changePassword()">Sign up</button>
+                                    <button class="btn btn-primary" (click)="changePassword()">Submit</button>
                                 </div>
                             </form>
                         </div>

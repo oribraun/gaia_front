@@ -622,7 +622,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     async changePassword() {
-        this.resetChangePassword();
+        if (this.callInProgress) {
+            return;
+        }
         if (!this.resetPassDetails.old_password) {
             this.resetPassDetails.errMessage = 'Please fill old password'
             return;
@@ -646,12 +648,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 new_password: this.resetPassDetails.new_password,
                 confirm_password: this.resetPassDetails.confirm_password,
             }
-            const response: any = await lastValueFrom(this.apiService.changePassword(obj));
+            const response: any = await lastValueFrom(this.apiService.changeUserPassword(obj));
             if (!response.err) {
                 // console.log('email sent successfully, please check your email')
-                this.resetPassDetails.successMessage = 'email sent successfully, please check your email';
+                this.resetPassDetails.successMessage = response.message;
+                setTimeout(() => {
+                    this.hideResetPasswordModel();
+                    this.resetPassDetails.successMessage = '';
+                }, 3000)
+                this.resetChangePassword();
             } else {
-                this.resetPassDetails.errMessage = response.errMessage;
+                if (typeof response.errMessage === 'string') {
+                    this.resetPassDetails.errMessage = response.errMessage;
+                } else if (Array.isArray(response.errMessage)) {
+                    this.resetPassDetails.errMessage = response.errMessage.join('\n');
+                }
             }
             this.callInProgress = false;
         } catch (error: any) {
@@ -665,7 +676,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.resetPassDetails.old_password = '';
         this.resetPassDetails.new_password = '';
         this.resetPassDetails.confirm_password = '';
-        this.resetPassDetails.successMessage = '';
+        // this.resetPassDetails.successMessage = '';
         this.resetPassDetails.errMessage = '';
     }
 }
