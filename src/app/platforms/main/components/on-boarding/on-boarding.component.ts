@@ -4,6 +4,7 @@ import {User} from "../../../shared-slides/entities/user";
 import {OnStateChangeEvent, PlayerState} from "../../../shared-slides/slides/video/video.component";
 import {ApiService} from "../../services/api.service";
 import {Router} from "@angular/router";
+import {KeyValue} from "@angular/common";
 
 declare var $: any;
 @Component({
@@ -27,7 +28,15 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     imageSrc: string;
 
+    current_page = 'questions'
+
     onBoardingObject: any = {
+        questions: {
+            "Language Proficiency": ["","","","",],
+            "IELTS Specifics": ["","","",],
+            "Learning Goals and Preferences": ["","","",],
+            "Consent and Agreements": ["","",],
+        },
         area_of_interest: [
 
         ],
@@ -39,7 +48,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         ],
         video_answer: '',
         picture_sentence: '',
-        last_page: 'area_of_interest',
+        last_page: this.current_page,
         finished: false
     }
 
@@ -50,7 +59,28 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         familiar_words: 99
     }
 
-    current_page = 'area_of_interest'
+    questions: any = {
+        "Language Proficiency": [
+            "Country of Residence: Which country are you currently residing in?",
+            "First Language: What is your first language?",
+            "English Proficiency Level: How would you rate your current level of English? (Beginner/Intermediate/Advanced)",
+            "Previous English Learning: Have you taken any English language courses or tests before? If yes, please specify.",
+        ],
+        "IELTS Specifics": [
+            "IELTS Test Type: Are you preparing for IELTS Academic or IELTS General Training?",
+            "IELTS Experience: Have you taken the IELTS test before? If yes, what was your score?",
+            "Target IELTS Score: What is your target IELTS score?",
+        ],
+        "Learning Goals and Preferences": [
+            "Study Goals: What are your main goals for taking the IELTS exam? (e.g., education, immigration, professional certification)",
+            "Time Commitment: How much time can you dedicate to IELTS preparation each week?",
+            "Areas of Focus: Which areas do you feel you need the most improvement in? (Listening, Reading, Writing, Speaking)",
+        ],
+        "Consent and Agreements": [
+            "Privacy Policy Consent: Do you agree to the website's privacy policy and terms of use?",
+            "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?",
+        ],
+    }
 
     areaOfInterestItems: any = {
         "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli', 'Add your own 1', 'Add your own 2']},
@@ -111,6 +141,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     image = "https://unseen-audio-files.s3.amazonaws.com/onboarding/noa_kirel.jpg"
 
+    subscribe: any;
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -124,8 +156,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.config.user_on_boarding_subject.subscribe((userOnBoarding: any) => {
+        this.subscribe = this.config.user_on_boarding_subject.subscribe((userOnBoarding: any) => {
             this.setupOnBoarding(userOnBoarding)
+            if (this.subscribe) {
+                this.subscribe.unsubscribe();
+            }
         });
         if (this.config.user_on_boarding) {
             this.setupOnBoarding(this.config.user_on_boarding)
@@ -143,8 +178,16 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     validateUserOnboarding(userOnBoarding: any) {
+        let needReset = true;
+        // checking questions
+        if (!userOnBoarding.questions
+            || !userOnBoarding.questions["Language Proficiency"].length
+            || !userOnBoarding.questions["IELTS Specifics"].length
+            || !userOnBoarding.questions["Learning Goals and Preferences"].length
+            || !userOnBoarding.questions["Consent and Agreements"].length) {
+            needReset = true;
+        }
         // checking area of interest
-        let needReset = false
         const keys = Object.keys(this.areaOfInterestItems)
         if (!userOnBoarding.area_of_interest.every((item: string) => keys.includes(item))) {
             needReset = true;
@@ -298,6 +341,33 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             if (this.onBoardingObject.familiar_words.length == this.maxItems.familiar_words) {
             }
         }
+    }
+
+    onQuestionChange(key: string, index: number, e: any) {
+        if (this.onBoardingObject.questions[key]) {
+            this.onBoardingObject.questions[key][index] = e.target.value;
+        }
+    }
+
+    originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+        return 0;
+    }
+
+    showQuestionsNextButton() {
+        let show = true;
+        for (let key in this.onBoardingObject.questions) {
+            for (let i in this.onBoardingObject.questions[key]) {
+                if (!this.onBoardingObject.questions[key][i]) {
+                    show = false;
+                    break;
+                }
+            }
+        }
+        return show;
+    }
+
+    onQuestionsChange() {
+        this.onBoardingObjectChanged = true;
     }
 
     selectVideoAnswer(itemText: any) {

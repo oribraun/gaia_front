@@ -1,3 +1,5 @@
+@import "../../../../../vars";
+
 .on-boarding {
     padding: 5px;
     height: 100%;
@@ -33,7 +35,7 @@
                 display: inline-block;
                 margin: @padding 0;
                 vertical-align: top;
-                
+
                 .box {
                     padding: 35%;
                     background: #ccc;
@@ -55,7 +57,7 @@
                         padding: 0 5px;
                         font-size: x-large;
                         z-index: 1;
-                    }    
+                    }
                     .text-no-wrap {
                         white-space: nowrap;
                     }
@@ -75,7 +77,7 @@
                     }
                     &.not-active {
                         filter: grayscale(100%);
-                    }                    
+                    }
                     z-index: 0;
                 }
                 .specific {
@@ -160,6 +162,15 @@
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
+                }
+            }
+        }
+        .questions {
+             margin-bottom: @padding;
+            .question-group {
+                margin-top: @padding;
+                .question {
+                    padding-left: 10px;
                 }
             }
         }
