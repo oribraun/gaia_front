@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {IsActiveMatchOptions, Router} from "@angular/router";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
-import {User} from "../../entities/user";
+import {User} from "../../../shared-slides/entities/user";
 import {HelperService} from "../../services/helper.service";
 
 declare var $: any;

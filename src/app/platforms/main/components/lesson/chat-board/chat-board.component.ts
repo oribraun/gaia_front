@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {PresentationSlide} from "../../../entities/presentation";
+import {PresentationSlide} from "../../../../shared-slides/entities/presentation";
 import {LessonService} from "../../../services/lesson/lesson.service";
-import {ChatMessage} from "../../../entities/chat_message";
+import {ChatMessage} from "../../../../shared-slides/entities/chat_message";
 import {fromEvent, interval, Subscription} from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import {environment} from "../../../../../../environments/environment";

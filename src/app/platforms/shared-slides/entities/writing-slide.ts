@@ -2,7 +2,7 @@ interface AllAnswers {
     [key: string]: UnseenAnswer;
 }
 
-export class UnseenSlide {
+export class WritingSlide {
     unseen_text!: string;
     question_index!: number;
     all_questions: UnseenQuestion[] = [];

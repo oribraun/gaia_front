@@ -10,17 +10,17 @@ import {ApiService} from "../../services/api.service";
 import {SpeechRecognitionService} from "../../services/speech-recognition/speech-recognition.service";
 import {SpeechRecognitionEnhancerService} from "../../services/speech-recognition/speech-recognition-enhancer.service";
 import {firstValueFrom, lastValueFrom} from "rxjs";
-import {Presentation, PresentationSection, PresentationSlide} from "../../entities/presentation";
+import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
 import {AnimationsService} from "../../services/animations/animations.service";
 import {
     SocketSpeechRecognitionService
 } from "../../services/socket-speech-recognition/socket-speech-recognition.service";
 import {LessonService} from "../../services/lesson/lesson.service";
 import {environment} from "../../../../../environments/environment";
-import {ChatMessage} from "../../entities/chat_message";
-import { BlobItem } from 'src/app/platforms/main/entities/blob_item';
+import {ChatMessage} from "../../../shared-slides/entities/chat_message";
+import { BlobItem } from 'src/app/platforms/shared-slides/entities/blob_item';
 import {SocketRecorderService} from "../../services/socket-recorder/socket-recorder.service";
-import {User} from "../../entities/user";
+import {User} from "../../../shared-slides/entities/user";
 import {Config} from "../../config";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 

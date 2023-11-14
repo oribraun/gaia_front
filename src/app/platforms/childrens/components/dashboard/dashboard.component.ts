@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../../../main/services/api.service";
 import {Config} from "../../../main/config";
-import {User} from "../../../main/entities/user";
-import {Presentation} from "../../../main/entities/presentation";
+import {User} from "../../../shared-slides/entities/user";
+import {Presentation} from "../../../shared-slides/entities/presentation";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({

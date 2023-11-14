@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {PresentationSlide} from "../../../main/entities/presentation";
+import {PresentationSlide} from "../../entities/presentation";
 import {Config} from "../../../main/config";
 import {BaseSlideComponent} from "../base-slide.component";
 import {LessonService} from "../../../main/services/lesson/lesson.service";

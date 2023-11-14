@@ -3,7 +3,7 @@ import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DomSanitizer} from "@angular/platform-browser";
-import {ChatMessage} from "../../../main/entities/chat_message";
+import {ChatMessage} from "../../entities/chat_message";
 import {environment} from "../../../../../environments/environment";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
 import { NONE_TYPE } from '@angular/compiler';
@@ -71,10 +71,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                         }
                         this.lessonService.Broadcast("slideEventRequest", data)
                     }
-                     
-                    this.question = resp_data.question 
-                    this.question_idx = resp_data.question_idx 
-                    this.all_questions_answered =  resp_data.all_questions_answered 
+
+                    this.question = resp_data.question
+                    this.question_idx = resp_data.question_idx
+                    this.all_questions_answered =  resp_data.all_questions_answered
                     if (!this.all_questions_answered) {
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }))
                     } else {
@@ -104,7 +104,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         })
 
     }
- 
+
     buildChat(){
         this.messages = []
         const slideChat = this.currentSlide.slide_chat
@@ -114,9 +114,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             } else if(el.speaker == 'teacher'){
                 this.messages.push(new ChatMessage({type: 'computer', message: el.content}))
             }
-            
+
         }
-         
+
     }
     isEmpty(obj:any) {
         for (const prop in obj) {
@@ -182,7 +182,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             }
             this.studentActiveASR.push(results.text)
             this.messages[this.messages.length-1]['message'] = this.studentActiveASR.join('. ')
-            
+
         }
     }
 
@@ -232,7 +232,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         }
         this.lessonService.Broadcast("slideEventRequest", data)
     }
-    
+
     restartSession(){
         const data = {
             "source": "restart_session",
@@ -296,8 +296,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     openModal(){
         this.modalActive = true
     }
-    
-    
+
+
     closeModel(){
         this.modalActive = false
     }

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PresentationSection, PresentationSlide} from "../../../entities/presentation";
+import {PresentationSection, PresentationSlide} from "../../../../shared-slides/entities/presentation";
 import {Config} from "../../../config";
 import {ApiService} from "../../../services/api.service";
 

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Config} from "../../config";
-import {User} from "../../entities/user";
+import {User} from "../../../shared-slides/entities/user";
 import {OnStateChangeEvent, PlayerState} from "../../../shared-slides/slides/video/video.component";
 import {ApiService} from "../../services/api.service";
 import {Router} from "@angular/router";

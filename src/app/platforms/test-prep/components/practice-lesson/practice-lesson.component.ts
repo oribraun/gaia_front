@@ -8,10 +8,10 @@ import {SocketSpeechRecognitionService} from "../../../main/services/socket-spee
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {SpeechRecognitionEnhancerService} from "../../../main/services/speech-recognition/speech-recognition-enhancer.service";
 import {SocketRecorderService} from "../../../main/services/socket-recorder/socket-recorder.service";
-import {User} from "../../../main/entities/user";
+import {User} from "../../../shared-slides/entities/user";
 import {environment} from "../../../../../environments/environment";
-import {Presentation, PresentationSection, PresentationSlide} from "../../../main/entities/presentation";
-import {BlobItem} from "../../../main/entities/blob_item";
+import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
+import {BlobItem} from "../../../shared-slides/entities/blob_item";
 
 @Component({
     selector: 'app-practice-lesson',

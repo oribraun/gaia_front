@@ -10,7 +10,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import {Presentation, PresentationSlide} from "../../../entities/presentation";
+import {Presentation, PresentationSlide} from "../../../../shared-slides/entities/presentation";
 import {AnimationsService} from "../../../services/animations/animations.service";
 import {Config} from "../../../config";
 import {HelperService} from "../../../services/helper.service";

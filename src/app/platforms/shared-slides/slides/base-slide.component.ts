@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {PresentationSlide} from "../../main/entities/presentation";
+import {PresentationSlide} from "../entities/presentation";
 import {Config} from "../../main/config";
 import {LessonService} from "../../main/services/lesson/lesson.service";
 import {environment} from "../../../../environments/environment";
