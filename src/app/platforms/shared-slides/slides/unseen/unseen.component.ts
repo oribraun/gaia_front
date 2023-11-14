@@ -23,6 +23,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     current_counter:any = {}
     question_index:number=0
     currentHint = '';
+    showHint = false;
     currentHintAudio: any;
     unseenTextHtml = '';
 
@@ -395,6 +396,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.currentSlide.all_questions.length){
+            this.closeHints();
             this.setUpPagination(number);
             this.question_index=number;
             this.handleCounter(this.question_index)
@@ -414,9 +416,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         if (this.pagination.end > this.currentSlide.all_questions.length) {
             this.pagination.end = this.currentSlide.all_questions.length
             this.pagination.start = this.pagination.end - this.paginationMaxItems;
-             if (this.pagination.start < 0) {
-                 this.pagination.start = 0
-             }
+            if (this.pagination.start < 0) {
+                this.pagination.start = 0
+            }
         }
     }
 
@@ -484,13 +486,25 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             }
         } else {
             this.currentHint = current_question.hints['guidance'];
+            this.showHint = true;
             this.markHint()
         }
     }
 
-    closeHints() {
-        this.currentHint = '';
-        this.resetUnseenHtml();
+    closeHints(e: any = null) {
+        if (this.currentHint) {
+            let isPopup = false;
+            if (e) {
+                isPopup = e.target.closest('.hint-popup-main')
+            }
+            if (!isPopup || !e) {
+                this.showHint = false;
+                setTimeout(() => {
+                    this.currentHint = '';
+                    this.resetUnseenHtml();
+                }, 300)
+            }
+        }
     }
 
     resetUnseenHtml() {

@@ -49,54 +49,63 @@
                         <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
                         <!--                        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>-->
                     </div>
-                    <ng-container *ngFor="let q of currentSlide.all_questions; let i = index">
-                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
-                            <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
-                             <div id="sentence_start"><b>Question:</b><br>{{q.question}}</div>
-                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
-                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
-                            <!--                            <div id="sentence_start">{{q.question}}</div>-->
-                        </div>
-                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.open_question && i == question_index">
-                            <h4 class="question-title" id="question">{{q.question}}</h4>
-                            <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
-                            <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
-                        </div>
-                        <div class="question-wrapper" *ngIf="q.question_type===questionTypes.multiple_choice && i == question_index">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="multiple-choice-question">
-                                        <h4 class="question-title">{{q.question.question}}</h4>
-                                        <p>Mark all the correct answers</p>
-                                        <ng-container *ngFor="let option of q.question.answers; let index=index;">
-                                            <label class="multiple-choice-question-answer" [ngClass]="{
-                                            'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
-                                            'correct':option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
-                                            'checked_item':unseenAnswers[q.question_id].multiple_answers[option.answer],
-                                            'no-hover':disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {}}"
-                                            >
-                                                <input type="checkbox"
-                                                       [disabled]="(disableMultipleOptionWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers[option.answer])
-                                                       || (disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {})"
-                                                       [checked]="unseenAnswers[q.question_id].multiple_answers[option.answer]" name ="question1" (change)="onMultipleChoiceQuestionChange(option, $event)" >
-                                                <div class="circle"></div>
-                                                <p>{{option.answer}}</p>
-                                                <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Correct</span>
-                                                <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Incorrect</span>
-                                            </label>
-                                        </ng-container>
+                    <div class="question-wrapper">
+                        <ng-container *ngFor="let q of currentSlide.all_questions; let i = index">
+                            <ng-container *ngIf="q.question_type===questionTypes.sentence_completion && i == question_index">
+                                <h4 class="question-title" id="question">Complete the following sentence according to the text</h4>
+                                <div id="sentence_start"><b>Question:</b><br>{{q.question}}</div>
+                                <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                                <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+                                <!--                            <div id="sentence_start">{{q.question}}</div>-->
+                            </ng-container>
+                            <ng-container *ngIf="q.question_type===questionTypes.open_question && i == question_index">
+                                <h4 class="question-title" id="question">{{q.question}}</h4>
+                                <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text"></textarea>
+                                <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+                            </ng-container>
+                            <ng-container *ngIf="q.question_type===questionTypes.multiple_choice && i == question_index">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="multiple-choice-question">
+                                            <h4 class="question-title">{{q.question.question}}</h4>
+                                            <p>Mark all the correct answers</p>
+                                            <ng-container *ngFor="let option of q.question.answers; let index=index;">
+                                                <label class="multiple-choice-question-answer" [ngClass]="{
+                                                'incorrect':!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
+                                                'correct':option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer],
+                                                'checked_item':unseenAnswers[q.question_id].multiple_answers[option.answer],
+                                                'no-hover':disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {}}"
+                                                >
+                                                    <input type="checkbox"
+                                                           [disabled]="(disableMultipleOptionWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers[option.answer])
+                                                           || (disableAllMultipleOptionsWhenSubmitted && currentSlide.all_answers[q.question_id].multiple_answers !== {})"
+                                                           [checked]="unseenAnswers[q.question_id].multiple_answers[option.answer]" name ="question1" (change)="onMultipleChoiceQuestionChange(option, $event)" >
+                                                    <div class="circle"></div>
+                                                    <p>{{option.answer}}</p>
+                                                    <span *ngIf="option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Correct</span>
+                                                    <span *ngIf="!option.is_correct&&currentSlide.all_answers[q.question_id]&&currentSlide.all_answers[q.question_id].multiple_answers[option.answer]" class="feedback">Incorrect</span>
+                                                </label>
+                                            </ng-container>
+                                        </div>
                                     </div>
                                 </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="hint-popup" (click)="closeHints($event)" [ngClass]="{'hint-popup-show': showHint}">
+                            <div class="hint-popup-main alert-dismissible alert-success">
+                                <h4 class="alert-heading">Hint!</h4>
+                                <div class="body">{{currentHint}}</div>
+                                <button type="button" (click)="closeHints()" class="close btn-close no-box-shadow no-outline" aria-label="Close"></button>
                             </div>
                         </div>
-                    </ng-container>
+                    </div>
                     <div class="bottom-panel">
                         <div class="pagination-wrapper">
                             <div class="pagination pagination2">
                                 <a class="pointer" (click)="goToQuestionNumber(0)">&laquo;</a>
                                 <ng-container *ngFor="let question of currentSlide.all_questions | slice: pagination.start:pagination.end; let index=index;">
                                     <a class="pointer circle" (click)="goToQuestionNumber(pagination.start+index)"
-                                        [ngClass]="{
+                                       [ngClass]="{
                                             'active':pagination.start+index== question_index,
                                             'success':unseenAnswers[question.question_id].is_correct_answer === true,
                                             'failed':unseenAnswers[question.question_id].is_correct_answer === false,
@@ -127,21 +136,20 @@
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                     </symbol>
                 </svg>
-
-                <div class="alert alert-success alert-dismissible position-absolute top-0 start-0 end-0 d-flexalign-items-center fade"
-                     [ngClass]="{
-                     'show': currentHint,
-                     'm-0 p-0': !currentHint
-                     }" role="alert">
-                    <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>
-                    <!--                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">-->
-                    <!--                        <use xlink:href="#check-circle-fill"/>-->
-                    <!--                    </svg>-->
-                    <div>
-                        {{currentHint}}
-                    </div>
-                    <button type="button" (click)="closeHints()" class="btn-close no-box-shadow no-outline" aria-label="Close"></button>
-                </div>
+                <!--                <div class="alert alert-success alert-dismissible position-absolute top-0 start-0 end-0 d-flexalign-items-center fade"-->
+                <!--                     [ngClass]="{-->
+                <!--                     'show': currentHint,-->
+                <!--                     'm-0 p-0': !currentHint-->
+                <!--                     }" role="alert">-->
+                <!--                    <h4 class="alert-heading" *ngIf="currentHint">Hint!</h4>-->
+                <!--                    &lt;!&ndash;                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                        <use xlink:href="#check-circle-fill"/>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    </svg>&ndash;&gt;-->
+                <!--                    <div>-->
+                <!--                        {{currentHint}}-->
+                <!--                    </div>-->
+                <!--                    <button type="button" (click)="closeHints()" class="btn-close no-box-shadow no-outline" aria-label="Close"></button>-->
+                <!--                </div>-->
             </div>
         </div>
     </div>
