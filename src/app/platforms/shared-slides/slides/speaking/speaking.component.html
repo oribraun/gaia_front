@@ -53,8 +53,8 @@
         <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">Show Report</button>
         <button class="btn btn-primary">Continue</button>
         <button class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
-        <!-- <button class="btn btn-primary" (click)="startAsr()">Start ASR</button>
-        <button class="btn btn-primary" (click)="stopAsr()">Stop ASR</button> -->
+        <!-- <button class="btn btn-primary" (click)="startAsr()">Start ASR</button> -->
+        <button class="btn btn-primary" (click)="showDetailedQuestionReview()">Detailed Review</button>
         <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button>
         <button class="btn btn-primary" (click)="restartSession()">Restart</button>
     </div>
@@ -68,5 +68,21 @@
        <br>
        <h2>Score</h2>
        <p [innerHTML]="score"></p>
+     </div>
+ </div>
+
+ <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':showDetailedQuestionReviewActive}">
+    <div>
+       <a  title="Close"  (click)="closeModel()"class="close">X</a>
+       <h2>Speaking Detailed Questions/Answers Review</h2>
+       <ng-container *ngFor="let item of detailedQuestionsReviewList; let i = index">
+            <div>
+                <div><span class="" >Question: </span><span class="" >{{item.teacher_question}}</span></div>
+                <div><span class="" >Answer: </span><span class="" >{{item.student_response}}</span></div>
+                <div><span class="" >Review: </span><span class="" >{{item.student_response_review}}</span></div>
+                <div><span class="" >Alternative Improved Answer:</span><span class="" >{{item.alternative_response}}</span></div>
+            </div>
+            <span class="" >---</span>
+        </ng-container>
      </div>
  </div>
