@@ -44,12 +44,6 @@
             <ng-container *ngIf="recordingIsActive"><button (click)="stopAsr()" id="recording" class="Rec">Click to Stop</button></ng-container>
             <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording"  [ngClass]="{'start_session':!session_started, 'notRec':session_started}" [innerText]="session_started ? 'Click to Record':'Start'"></button></ng-container>
 
-        <!--   <div class="time">
-            
-            <div class="h_m"></div>
-            <div class="s_ms"></div> 
-            </div>-->
-            <!-- <p class="tim" id="timer" >0</p> -->
         </div>
     </div>
     <div class="buttons">

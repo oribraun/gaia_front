@@ -110,6 +110,8 @@ export class PresentationSlide {
     slide_objectives!: any[]
     slide_chat!: any[]
     qna_review!: any[]
+    pace!:number;
+    hint_used:boolean = false;
     full_screen!: boolean
     estimated_duration!: number
     native_language_text!: any

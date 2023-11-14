@@ -30,6 +30,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     recognitionPPTSubscribe: any
     recognitionResultsSubscribe: any
     question: any;
+    hint_used:boolean =false;
+    pace:number = 0;
     question_idx:number | undefined;
     all_questions_answered: any;
     recordingIsActive:boolean = false
@@ -58,8 +60,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.buildChat()
         this.grades = this.currentSlide.grades
         this.score = this.currentSlide.score
+        this.pace = this.currentSlide.pace
+        this.hint_used = this.currentSlide.hint_used
         this.initQnaReview(this.currentSlide.qna_review)
-        this.handleCounter(1)
+        this.handleCounter(1, this.pace)
         this.pauseAllCounters()
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
@@ -113,7 +117,6 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                     this.updateDetailedQuestionReview(response_review_obj)
                 } else if(resp_data.source =='grade_conversation'){
                     this.gradeConversationInProgress = false
-                    console.log(resp_data)
                     this.grades = resp_data.llm_reply.conversation_review
                     this.score = resp_data.llm_reply.score
                 }
@@ -261,12 +264,11 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     // === End Asr Daniel
     gradeConversation(){
-        if (this.gradeConversationInProgress){
-            return;
-        }
         this.gradeConversationInProgress = true
         const data = {
             "source": "grade_conversation",
+            "pace":this.current_counter.counter,
+            "backgroun":true,
             'stopAudio': true
         }
         this.spinnerEnabled  = true;
@@ -308,7 +310,12 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.detailedQuestionsReviewList = []
         this.score=0
         this.grades=''
+        this.pace=0
+        this.hint_used=false
         this.session_started = true
+        this.timers=[]
+        this.handleCounter(1,this.pace)
+        this.pauseAllCounters()
     }
 
     toggleAsr(){
@@ -377,24 +384,24 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.showDetailedQuestionReviewActive = false
     }
 
-    handleCounter(question_idx:number){
+    handleCounter(question_idx:number, pace=0){
         this.pauseAllCounters()
         if(!this.timers.hasOwnProperty(question_idx)) {
-            this.timers[question_idx] = this.createTimer()
+            this.timers[question_idx] = this.createTimer(pace)
         } else {
             this.timers[question_idx].active = true
         }
         this.current_counter = this.timers[question_idx]
     }
 
-    createTimer(){
+    createTimer(initial_value=0){
         let Timer = Object()
         Timer.active = true
-        Timer.counter = 0
-        Timer.minutes = 0
-        Timer.minutesStr = '00'
-        Timer.seconds = 0
-        Timer.secondsStr = '00'
+        Timer.counter = initial_value
+        Timer.minutes =  Math.floor(initial_value/60)
+        Timer.minutesStr = Timer.minutes.toString().length < 2 ? '0' + Timer.minutes: Timer.minutes
+        Timer.seconds = Timer.counter%60
+        Timer.secondsStr = Timer.seconds.toString().length < 2 ? '0' + Timer.seconds: Timer.seconds
         Timer.submited = false
         Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
         return Timer
