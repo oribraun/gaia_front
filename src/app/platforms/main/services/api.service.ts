@@ -136,6 +136,12 @@ export class ApiService {
         )
     }
 
+    changePassword(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'change-password', obj,
+            this.httpOptions
+        )
+    }
+
     promptOptimizer(prompt: string) {
         return this.http.post(this.serverBase + this.baseApiUser + 'prompt_optimizer', {
                 prompt: prompt

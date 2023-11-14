@@ -124,15 +124,22 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.config.user_subject.subscribe((user) => {
             this.user = user;
         });
-        this.config.user_on_boarding_subject.subscribe((userOnBoarding) => {
-            this.validateUserOnboarding(userOnBoarding)
-            this.gotUserOnBoarding = true;
-            console.log('this.gotUserOnBoarding', userOnBoarding)
-            this.initCurrentPage(false);
-            setTimeout(() => {
-                this.setUpYoutubeVideo();
-            })
+        this.config.user_on_boarding_subject.subscribe((userOnBoarding: any) => {
+            this.setupOnBoarding(userOnBoarding)
         });
+        if (this.config.user_on_boarding) {
+            this.setupOnBoarding(this.config.user_on_boarding)
+        }
+    }
+
+    setupOnBoarding(userOnBoarding: any) {
+        this.validateUserOnboarding(userOnBoarding)
+        this.gotUserOnBoarding = true;
+        console.log('this.gotUserOnBoarding', userOnBoarding)
+        this.initCurrentPage(false);
+        setTimeout(() => {
+            this.setUpYoutubeVideo();
+        })
     }
 
     validateUserOnboarding(userOnBoarding: any) {
@@ -145,12 +152,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
         // checking familiar words
         if (!userOnBoarding.familiar_words.every((item: string) => this.familiarWords.includes(item))) {
-             needReset = true;
+            needReset = true;
         }
 
         // checking video answer
         if (userOnBoarding.video_answer && this.videoAnswers.indexOf(userOnBoarding.video_answer) === -1) {
-             needReset = true;
+            needReset = true;
         }
         if (!needReset) {
             this.userOnBoarding = userOnBoarding;
@@ -366,6 +373,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                     //         this.config.user = user;
                     //     }
                     // }
+                    this.config.user_on_boarding = {...this.onBoardingObject};
                     if (redirect) {
                         console.log('redirect', redirect)
                         this.router.navigate(['/' + this.user.last_logged_platform + '/dashboard'])

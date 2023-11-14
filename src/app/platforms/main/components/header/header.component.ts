@@ -57,6 +57,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     imageSrc: string;
 
+    resetPassDetails = {
+        old_password: '',
+        new_password: '',
+        confirm_password: '',
+        successMessage: '',
+        errMessage: '',
+    }
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -88,6 +96,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.initOnBoarding();
         })
         this.setUpGoogle();
+
+        this.config.user_on_boarding_subject.subscribe(() => {
+            this.user_on_boarding_finished = this.config.user_on_boarding && this.config.user_on_boarding.finished;
+        })
     }
 
     initOnBoarding() {
@@ -587,5 +599,73 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         el.removeClass('show');
         el.modal('hide');
         $('.modal-backdrop').hide();
+    }
+
+    goTo(page: string) {
+        this.router.navigate(['/' + page])
+    }
+
+    resetPassword() {
+        this.showResetPasswordModel();
+
+    }
+
+    showResetPasswordModel() {
+        $('#resetPasswordModal').modal('show');
+    }
+
+    hideResetPasswordModel() {
+        const el = $('#resetPasswordModal');
+        el.removeClass('show');
+        el.modal('hide');
+        $('.modal-backdrop').hide();
+    }
+
+    async changePassword() {
+        this.resetChangePassword();
+        if (!this.resetPassDetails.old_password) {
+            this.resetPassDetails.errMessage = 'Please fill old password'
+            return;
+        }
+        if (!this.resetPassDetails.new_password) {
+            this.resetPassDetails.errMessage = 'Please fill new password'
+            return;
+        }
+        if (!this.resetPassDetails.confirm_password) {
+            this.resetPassDetails.errMessage = 'Please confirm new password'
+            return;
+        }
+        if (this.resetPassDetails.confirm_password !== this.resetPassDetails.new_password) {
+            this.resetPassDetails.errMessage = 'Passwords do not match'
+            return;
+        }
+        try {
+            this.callInProgress = true;
+            const obj = {
+                old_password: this.resetPassDetails.old_password,
+                new_password: this.resetPassDetails.new_password,
+                confirm_password: this.resetPassDetails.confirm_password,
+            }
+            const response: any = await lastValueFrom(this.apiService.changePassword(obj));
+            if (!response.err) {
+                // console.log('email sent successfully, please check your email')
+                this.resetPassDetails.successMessage = 'email sent successfully, please check your email';
+            } else {
+                this.resetPassDetails.errMessage = response.errMessage;
+            }
+            this.callInProgress = false;
+        } catch (error: any) {
+            console.error(error);
+            this.resetPassDetails.errMessage = error
+            this.callInProgress = false;
+        }
+    }
+
+    resetChangePassword() {
+        this.resetPassDetails.old_password = '';
+        this.resetPassDetails.new_password = '';
+        this.resetPassDetails.confirm_password = '';
+        this.resetPassDetails.successMessage = '';
+        this.resetPassDetails.errMessage = '';
     }
 }

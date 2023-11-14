@@ -4,12 +4,13 @@ import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {VocabularyComponent} from "./components/vocabulary/vocabulary.component";
 import {ReviewComponent} from "./components/review/review.component";
+import {UserOnboardingGuard} from "./components/guards/on-boarding.guard";
 
 const routes: Routes = [
-    { path: 'dashboard', component: DashboardComponent, pathMatch : 'full' },
-    { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full' },
-    { path: 'vocabulary', component: VocabularyComponent, pathMatch : 'full' },
-    { path: 'review', component: ReviewComponent, pathMatch : 'full' },
+    { path: 'dashboard', component: DashboardComponent, pathMatch : 'full', canActivate: [UserOnboardingGuard]},
+    { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full', canActivate: [UserOnboardingGuard] },
+    { path: 'vocabulary', component: VocabularyComponent, pathMatch : 'full', canActivate: [UserOnboardingGuard] },
+    { path: 'review', component: ReviewComponent, pathMatch : 'full', canActivate: [UserOnboardingGuard] },
 ];
 
 @NgModule({
