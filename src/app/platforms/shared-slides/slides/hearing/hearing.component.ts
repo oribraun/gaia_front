@@ -25,12 +25,21 @@ declare var $: any;
 })
 export class HearingComponent extends BaseSlideComponent implements OnInit {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
+    @ViewChild('questions') questions!: ElementRef;
 
     current_counter:any = {}
     question_index:number=0
     currentHint = '';
+    showHint = false;
     currentHintAudio: any;
     unseenTextHtml = '';
+
+    paginationMaxItems = 5;
+    pagination = {
+        start: 0,
+        end: this.paginationMaxItems,
+        current: 0,
+    }
 
     disableMultipleOptionWhenSubmitted = false;
     disableAllMultipleOptionsWhenSubmitted = false;
@@ -76,6 +85,10 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         this.resetUnseenHtml();
 
         this.listenToSlideEvents();
+
+        setTimeout(() => {
+            this.calcPaginationMaxItems();
+        })
 
     }
 
@@ -241,10 +254,59 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
 
     goToQuestionNumber(number:number){
         if(number>-1 && number<this.currentSlide.all_questions.length){
+            this.closeHints();
+            this.setUpPagination(number);
             this.question_index=number;
             this.handleCounter(this.question_index)
         }
     }
+
+    setUpPagination(number: number) {
+        const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
+        const avgItems = this.paginationMaxItems / 2
+        const stepAvg = Math.floor(avgItems)
+        const extra = Math.ceil(avgItems) - stepAvg;
+        console.log('here', extra)
+        this.pagination.start = number - stepAvg;
+        this.pagination.end = number + stepAvg + extra;
+        if (this.pagination.start < 0) {
+            this.pagination.start = 0
+            this.pagination.end = this.paginationMaxItems;
+        }
+        if (this.pagination.end > this.currentSlide.all_questions.length) {
+            this.pagination.end = this.currentSlide.all_questions.length
+            this.pagination.start = this.pagination.end - this.paginationMaxItems;
+            if (this.pagination.start < 0) {
+                this.pagination.start = 0
+            }
+        }
+    }
+
+    calcPaginationMaxItems() {
+        if (this.questions) {
+            const questionsElement = this.questions.nativeElement;
+            const questionsBoxWidth = questionsElement.clientWidth;
+            const circle = questionsElement.querySelector('.pagination .circle')
+            if (circle) {
+                var circleComputed = getComputedStyle(circle, null);
+                const circleWidth = parseFloat(circleComputed.getPropertyValue('width'));
+                const circleHeight = parseFloat(circleComputed.getPropertyValue('height'));
+                const circleMarginRight = parseFloat(circleComputed.getPropertyValue('margin-right'));
+                const circleMarginLeft = parseFloat(circleComputed.getPropertyValue('margin-left'));
+
+                const totalWidth = circleWidth + circleMarginRight + circleMarginLeft;
+                const maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 4; // right and left arrows
+                this.paginationMaxItems = maxItemsForWidth;
+                this.pagination.end = this.paginationMaxItems;
+                this.pagination.start = 0;
+                console.log('this.question_index', this.question_index)
+                this.goToQuestionNumber(this.question_index);
+
+                console.log('questions maxItemsForWidth', maxItemsForWidth)
+            }
+        }
+    }
+
     onMultipleChoiceQuestionChange(option:any, event: any){
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].multiple_answers[option.answer] = event.target.checked;
@@ -266,6 +328,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         this.lessonService.Broadcast("slideEventRequest", data)
     }
 
+
     getHints(){
         const current_question = this.currentSlide.all_questions[this.question_index];
         const correct_answer = current_question.hints['correct_answer'];
@@ -277,16 +340,30 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             if (audio_path && !this.checkIsFullUrl(audio_path)) {
                 audio_path = (this.currentHost + audio_path).replace(/(https?:\/\/)|(\/)+/g, "$1$2");
             }
-            this.playHint(audio_path)
+            this.currentHint = audio_path;
+            this.showHint = true;
+            // this.playHint(audio_path)
         } else {
             this.currentHint = current_question.hints['guidance'];
+            this.showHint = true;
             this.markHint()
         }
     }
 
-    closeHints() {
-        this.currentHint = '';
-        this.resetUnseenHtml();
+    closeHints(e: any = null) {
+        if (this.currentHint) {
+            let isPopup = false;
+            if (e) {
+                isPopup = e.target.closest('.hint-popup-main')
+            }
+            if (!isPopup || !e) {
+                this.showHint = false;
+                this.resetUnseenHtml();
+                setTimeout(() => {
+                    this.currentHint = '';
+                }, 300)
+            }
+        }
     }
 
     resetUnseenHtml() {
