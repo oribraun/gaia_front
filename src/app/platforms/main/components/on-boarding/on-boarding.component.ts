@@ -125,14 +125,36 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             this.user = user;
         });
         this.config.user_on_boarding_subject.subscribe((userOnBoarding) => {
-            this.userOnBoarding = userOnBoarding;
+            this.validateUserOnboarding(userOnBoarding)
             this.gotUserOnBoarding = true;
-            console.log('this.gotUserOnBoarding', this.gotUserOnBoarding)
+            console.log('this.gotUserOnBoarding', userOnBoarding)
             this.initCurrentPage(false);
             setTimeout(() => {
                 this.setUpYoutubeVideo();
             })
         });
+    }
+
+    validateUserOnboarding(userOnBoarding: any) {
+        // checking area of interest
+        let needReset = false
+        const keys = Object.keys(this.areaOfInterestItems)
+        if (!userOnBoarding.area_of_interest.every((item: string) => keys.includes(item))) {
+            needReset = true;
+        }
+
+        // checking familiar words
+        if (!userOnBoarding.familiar_words.every((item: string) => this.familiarWords.includes(item))) {
+             needReset = true;
+        }
+
+        // checking video answer
+        if (userOnBoarding.video_answer && this.videoAnswers.indexOf(userOnBoarding.video_answer) === -1) {
+             needReset = true;
+        }
+        if (!needReset) {
+            this.userOnBoarding = userOnBoarding;
+        }
     }
 
     ngAfterViewInit(): void {
