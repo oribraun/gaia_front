@@ -34,6 +34,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     all_questions_answered: any;
     recordingIsActive:boolean = false
     modalActive: boolean = false;
+    session_started: boolean = false;
+    current_counter:any = {}
+    private timers:any = {}
 
     constructor(
         protected override config: Config,
@@ -55,6 +58,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.buildChat()
         this.grades = this.currentSlide.grades
         this.score = this.currentSlide.score
+        this.initQnaReview(this.currentSlide.qna_review)
+        this.handleCounter(1)
+        this.pauseAllCounters()
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -128,16 +134,18 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     buildChat(){
         this.messages = []
         const slideChat = this.currentSlide.slide_chat
+        this.question = ''
         for(let el of  slideChat){
             if(el.speaker == 'student') {
                 this.messages.push(new ChatMessage({type: 'user', message: el.content}))
             } else if(el.speaker == 'teacher'){
                 this.messages.push(new ChatMessage({type: 'computer', message: el.content}))
+                this.question = el.content
             }
 
         }
-
     }
+
     isEmpty(obj:any) {
         for (const prop in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -192,6 +200,19 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         }
     }
 
+    initQnaReview(qna_review_list:any[]){
+        this.detailedQuestionsReviewList = []
+        
+        for(let qna of qna_review_list){
+            let response_review_obj:any = {}
+            response_review_obj['student_response'] = qna.response
+            response_review_obj['teacher_question'] = qna.question
+            response_review_obj['alternative_response'] = qna.alternative_response
+            response_review_obj['student_response_review'] = qna.response_review
+            this.updateDetailedQuestionReview(response_review_obj)
+        }
+    }
+
     //===== ASR Daniel
     onRecognitionResults= (results: any) => {
         if(results.isFinal){
@@ -207,10 +228,16 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     }
 
     startAsr(){
+        if(!this.session_started){
+            this.speakTheText()
+            this.session_started = true
+            return
+        }
         this.studentActiveASR = []
         this.recognitionResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
         this.speechRecognitionService.startListening();
         this.recordingIsActive = true
+        this.handleCounter(1)
     }
 
     stopAsr(){
@@ -229,6 +256,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         }
         this.studentActiveASR = []
         this.recordingIsActive = false
+        this.pauseAllCounters()
     }
 
     // === End Asr Daniel
@@ -262,8 +290,6 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         }
         this.lessonService.Broadcast("slideEventRequest", data)
         this.clearBlackBoard()
-        this.score=0
-        this.grades=''
     }
 
     handleStudentResponse(student_reply:string){
@@ -279,6 +305,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     clearBlackBoard(){
         this.messages = []
+        this.detailedQuestionsReviewList = []
+        this.score=0
+        this.grades=''
+        this.session_started = true
     }
 
     toggleAsr(){
@@ -288,6 +318,24 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             this.stopAsr()
         }
     }
+
+    speakTheText(text:string = ''){
+        text = text.trim()
+        if(!text.length){
+            text = this.question 
+        }
+        if(text.length){
+            const data = {
+                "source": "speak_the_text",
+                "text": text,
+                'background':true,
+                'stopAudio': true
+            }
+            this.lessonService.Broadcast("slideEventRequest", data)
+        }
+        this.session_started = true
+    }
+
     onButtonClick(ans: string) {
         // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
         // const data = {"source": "word_translator_ans", "answer": ans}
@@ -328,4 +376,44 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.modalActive = false
         this.showDetailedQuestionReviewActive = false
     }
-}
+
+    handleCounter(question_idx:number){
+        this.pauseAllCounters()
+        if(!this.timers.hasOwnProperty(question_idx)) {
+            this.timers[question_idx] = this.createTimer()
+        } else {
+            this.timers[question_idx].active = true
+        }
+        this.current_counter = this.timers[question_idx]
+    }
+
+    createTimer(){
+        let Timer = Object()
+        Timer.active = true
+        Timer.counter = 0
+        Timer.minutes = 0
+        Timer.minutesStr = '00'
+        Timer.seconds = 0
+        Timer.secondsStr = '00'
+        Timer.submited = false
+        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        return Timer
+
+    }
+
+    pauseAllCounters(){
+        for(const key in this.timers){
+            this.timers[key].active = false
+        }
+    }
+
+    progressTimer(self:any) {
+        if (self.active && !self.submited){
+            self.counter= self.counter+1
+            self.minutes = Math.floor(self.counter/60)
+            self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes: self.minutes
+            self.seconds = self.counter%60
+            self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds: self.seconds
+        }
+    }
+ }

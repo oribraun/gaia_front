@@ -109,6 +109,7 @@ export class PresentationSlide {
     slide_type!: string
     slide_objectives!: any[]
     slide_chat!: any[]
+    qna_review!: any[]
     full_screen!: boolean
     estimated_duration!: number
     native_language_text!: any

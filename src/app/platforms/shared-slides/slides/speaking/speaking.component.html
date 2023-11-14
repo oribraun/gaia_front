@@ -7,6 +7,9 @@
         </div>
     </div>
     <div class="chat general-box">
+        <!-- <div class="question_timer">08:26</div> -->
+        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
+
         <div class="outer-scroller">
             <div class="inner-scroller" #scroller>
                 <div class="messages">
@@ -38,8 +41,8 @@
         <div class="btn-rec-container" >
             <input type="checkbox" id="btn" />
             <label for="btn"></label>
-            <ng-container *ngIf="recordingIsActive"><button (click)="stopAsr()" id="recording" class="Rec">Recording</button></ng-container>
-            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording" class="notRec">Paused</button></ng-container>
+            <ng-container *ngIf="recordingIsActive"><button (click)="stopAsr()" id="recording" class="Rec">Click to Stop</button></ng-container>
+            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording"  [ngClass]="{'start_session':!session_started, 'notRec':session_started}" [innerText]="session_started ? 'Click to Record':'Start'"></button></ng-container>
 
         <!--   <div class="time">
             
@@ -53,7 +56,7 @@
         <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">Show Report</button>
         <button class="btn btn-primary">Continue</button>
         <button class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
-        <!-- <button class="btn btn-primary" (click)="startAsr()">Start ASR</button> -->
+        <button id="speak_the_text" class="btn btn-primary" (click)="speakTheText()">Speak The Question</button>
         <button class="btn btn-primary" (click)="showDetailedQuestionReview()">Detailed Review</button>
         <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button>
         <button class="btn btn-primary" (click)="restartSession()">Restart</button>
@@ -77,10 +80,10 @@
        <h2>Speaking Detailed Questions/Answers Review</h2>
        <ng-container *ngFor="let item of detailedQuestionsReviewList; let i = index">
             <div>
-                <div><span class="" >Question: </span><span class="" >{{item.teacher_question}}</span></div>
-                <div><span class="" >Answer: </span><span class="" >{{item.student_response}}</span></div>
-                <div><span class="" >Review: </span><span class="" >{{item.student_response_review}}</span></div>
-                <div><span class="" >Alternative Improved Answer:</span><span class="" >{{item.alternative_response}}</span></div>
+                <div class="review_span"><span class="review_span question_span" >Question: </span><span class="" >{{item.teacher_question}}</span></div>
+                <div class="review_span"><span class="review_span answer_span" >Answer: </span><span class="" >{{item.student_response}}</span></div>
+                <div class="review_span"><span class="review_span answer_review_span" >Review: </span><span class="" >{{item.student_response_review}}</span></div>
+                <div class="review_span"><span class="review_span alternative_ans_span" >Alternative Improved Answer:</span><span class="" >{{item.alternative_response}}</span></div>
             </div>
             <span class="" >---</span>
         </ng-container>

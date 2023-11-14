@@ -1,5 +1,7 @@
 @import "../../../../../vars";
-
+.general-box {
+    box-shadow: none !important;
+}
 .speaking {
     height: 100%;
 
@@ -31,6 +33,9 @@
         .notRec{
             background-color: darkred !important;
         }
+
+        .start_session {background-color: rgb(26, 111, 26) !important;}
+
         
         .Rec{
             animation-name: pulse;
@@ -51,7 +56,18 @@
             }
         }
         
-           
+        .question_timer {
+            font-size: 1.1em;
+            color: var(--gaia-header-color);
+            font-family: 'Digital Numbers', sans-serif;
+            letter-spacing: 0px;
+            //border: solid 1px #2e6d6f;
+            display: inline-block;
+            vertical-align: top;
+            padding: 2px;
+            margin-bottom: 15px;
+            position: relative;
+        }
         #recording {
             position: absolute;
             left: 50%;
@@ -64,6 +80,7 @@
             background: #e80415;
             cursor: pointer;
             border:none;
+            color:white;
             }
         .btn-rec-container #btn + label:before {
             position: absolute;
@@ -137,6 +154,7 @@
         .btn-rec-container #btn:checked ~ label ~ .tim{
             opacity:1;  
         }
+   
     .chat {
         width: 80%;
         height: 60%;
@@ -410,5 +428,12 @@
 .close:hover {
     background: #fa3f6f;
 }
-
 h1 {padding:15px}
+
+span.review_span {font-size: large; font-weight: bold; }
+.question_span {color:red; min-width:50px}
+.answer_span {color:rgba(43, 82, 212, 0.812); min-width:50px}
+.answer_review_span {color:cadetblue; min-width:50px}
+.alternative_ans_span {color:purple; min-width:50px}
+
+ 
