@@ -18,6 +18,7 @@ declare var $: any;
 export class UnseenComponent extends BaseSlideComponent implements OnInit {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
     @ViewChild('unseen_text') unseen_text!: ElementRef;
+    @ViewChild('questions') questions!: ElementRef;
 
     current_counter:any = {}
     question_index:number=0
@@ -87,7 +88,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.listenToSlideEvents();
         // this.currentSlide.all_questions = this.currentSlide.all_questions.concat(this.currentSlide.all_questions).concat(this.currentSlide.all_questions).concat(this.currentSlide.all_questions)
         // console.log('this.currentSlide.all_questions', this.currentSlide.all_questions)
+        setTimeout(() => {
+            this.calcPaginationMaxItems();
+        })
     }
+
 
     openContextMenu(event: MouseEvent) {
         const target = event.target as HTMLElement;
@@ -174,7 +179,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
                     "explanation": "",
                     "question_idx": i,
                     "question_type": q.question_type,
-                    "is_correct_answer": false
+                    "is_correct_answer": null
                 }
                 if(q.question_type == 'sentence_completion'){
                     // this.unseenAnswers[q.question_id].answer_text = q.question
@@ -400,15 +405,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
         const stepAvg = Math.floor(this.paginationMaxItems / 2)
         console.log('here')
-        if (number > this.question_index && number >= avg) {
-            const step = number - this.pagination.start - stepAvg;
-            this.pagination.start += step;
-            this.pagination.end += step;
-        } else if (number < this.question_index && number < avg) {
-            const step = this.pagination.end - 1 - number - stepAvg;
-            this.pagination.start -= step;
-            this.pagination.end -= step;
-        }
+        this.pagination.start = number - stepAvg;
+        this.pagination.end = number + stepAvg + 1;
         if (this.pagination.start < 0) {
             this.pagination.start = 0
             this.pagination.end = this.paginationMaxItems;
@@ -419,6 +417,37 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
              if (this.pagination.start < 0) {
                  this.pagination.start = 0
              }
+        }
+    }
+
+    calcPaginationMaxItems() {
+        if (this.questions) {
+            const questionsElement = this.questions.nativeElement;
+            const questionsBoxWidth = questionsElement.clientWidth;
+            const circle = questionsElement.querySelector('.pagination .circle')
+            if (circle) {
+                var circleComputed = getComputedStyle(circle, null);
+                const circleWidth = parseFloat(circleComputed.getPropertyValue('width'));
+                const circleHeight = parseFloat(circleComputed.getPropertyValue('height'));
+                const circleMarginRight = parseFloat(circleComputed.getPropertyValue('margin-right'));
+                const circleMarginLeft = parseFloat(circleComputed.getPropertyValue('margin-left'));
+                console.log('questions BoxWidth', questionsBoxWidth)
+                console.log('questions circle', circle)
+                console.log('questions circleWidth', circleWidth)
+                console.log('questions clientHeight', circleHeight)
+                console.log('questions circleMarginRight', circleMarginRight)
+                console.log('questions circleMarginLeft', circleMarginLeft)
+
+                const totalWidth = circleWidth + circleMarginRight + circleMarginLeft;
+                const maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 2; // right and left arrows
+                this.paginationMaxItems = maxItemsForWidth;
+                this.pagination.end = this.paginationMaxItems;
+                this.pagination.start = 0;
+                console.log('this.question_index', this.question_index)
+                this.goToQuestionNumber(this.question_index);
+
+                console.log('questions maxItemsForWidth', maxItemsForWidth)
+            }
         }
     }
     onMultipleChoiceQuestionChange(option:any, event: any){
@@ -586,5 +615,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
 
     printUnseen() {
         window.print();
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onWindowResize(e: any) {
+        this.calcPaginationMaxItems();
     }
 }

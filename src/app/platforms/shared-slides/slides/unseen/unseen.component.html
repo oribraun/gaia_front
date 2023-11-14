@@ -44,7 +44,7 @@
         <div class="col-6 visible-on-screen">
             <div class="box box-questions">
                 <!--                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>-->
-                <section class="questions">
+                <section class="questions" #questions>
                     <div class="timers">
                         <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
                         <!--                        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>-->
@@ -98,8 +98,8 @@
                                     <a class="pointer circle" (click)="goToQuestionNumber(pagination.start+index)"
                                         [ngClass]="{
                                             'active':pagination.start+index== question_index,
-                                            'success':unseenAnswers[question.question_id].is_correct_answer,
-                                            'failed':!unseenAnswers[question.question_id].is_correct_answer,
+                                            'success':unseenAnswers[question.question_id].is_correct_answer === true,
+                                            'failed':unseenAnswers[question.question_id].is_correct_answer === false,
                                         }">{{pagination.start+index+1}}</a>
                                 </ng-container>
                                 <a class="pointer" (click)="goToQuestionNumber(currentSlide.all_questions.length-1)">&raquo;</a>

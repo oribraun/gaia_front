@@ -76,9 +76,15 @@
                     background-color: var(--gaia-background-color);
                     transform: scale(1.03);
                 }
+                &:not(.active) {
+                    color: #fff;
+                    filter: brightness(999);
+                }
                 &:hover {
                     box-shadow: 0 -6px 5px 0px #000;
                     background-color: var(--gaia-background-color);
+                    color: initial;
+                    filter: brightness(1);
                 }
             }
             &:first-child {
@@ -113,6 +119,11 @@
                 box-shadow: none;
                 background-color: transparent;
                 border: none;
+                color: #fff;
+                filter: brightness(999);
+                option {
+                    color: initial;
+                }
             }
 
             .logout {
@@ -124,6 +135,10 @@
             }
             .profile {
                 position: relative;
+                color:#fff;
+                .icon {
+                    filter: brightness(999);
+                }
             }
         }
     }

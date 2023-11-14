@@ -104,211 +104,217 @@
         &-questions {
             background-color: #f2f2f2;
             .questions {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            .question-wrapper {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 height: 100%;
-                margin-top: @marginTop;
-                //background: #fff;
-                //padding: 1em;
-                .question-title {
-                    position: relative;
-                    margin: 0;
-                }
-                #sentence_start {
-                    margin-top: @marginTop;
-                }
-                .question-body {
-                    position: relative;
-                }
-                #textarea {
-                    padding: 10px;
-                    position: relative;
+                .question-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                     height: 100%;
-                    font-size: 20px;
-                    resize: none;
-                    line-height: 1;
-                    outline: none;
-                    border: none;
                     margin-top: @marginTop;
-                    &::-webkit-scrollbar {
-                        width: 0;
-                    }
-                }
-                #explanation {
-                    position: relative;
-                }
-                #sentence_start {
-                    position: relative;
-                }
-                .multiple-choice-question {
-                    .multiple-choice-question-answer {
+                    //background: #fff;
+                    //padding: 1em;
+                    .question-title {
                         position: relative;
-                        display: flex;
-                        flex-flow: row nowrap;
-                        align-items: center;
-                        justify-content: flex-start;
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        user-select: none;
-                        background: #F5F5F5;
-                        border: 1px solid #CCC;
-                        border-radius: 4px;
-                        padding-right: 120px;
-                        margin-bottom: 3px;
-                        cursor: pointer;
-                        p {
-                            display: block;
-                            margin: 1em;
-                            //z-index: 10;
+                        margin: 0;
+                    }
+                    #sentence_start {
+                        margin-top: @marginTop;
+                    }
+                    .question-body {
+                        position: relative;
+                    }
+                    #textarea {
+                        padding: 10px;
+                        position: relative;
+                        height: 100%;
+                        font-size: 20px;
+                        resize: none;
+                        line-height: 1;
+                        outline: none;
+                        border: none;
+                        margin-top: @marginTop;
+                        &::-webkit-scrollbar {
+                            width: 0;
                         }
-                        &:not(.no-hover) {
+                    }
+                    #explanation {
+                        position: relative;
+                    }
+                    #sentence_start {
+                        position: relative;
+                    }
+                    .multiple-choice-question {
+                        .multiple-choice-question-answer {
+                            position: relative;
+                            display: flex;
+                            flex-flow: row nowrap;
+                            align-items: center;
+                            justify-content: flex-start;
+                            -webkit-user-select: none;
+                            -moz-user-select: none;
+                            -ms-user-select: none;
+                            user-select: none;
+                            background: #F5F5F5;
+                            border: 1px solid #CCC;
+                            border-radius: 4px;
+                            padding-right: 120px;
+                            margin-bottom: 3px;
+                            cursor: pointer;
+                            p {
+                                display: block;
+                                margin: 1em;
+                                //z-index: 10;
+                            }
+                            &:not(.no-hover) {
+                                &:hover {
+                                    background-color: #CCC;
+                                }
+                            }
+                        }
+
+                        .circle {
+                            position: relative;
+                            height: 1em;
+                            width: 1em;
+                            margin-left: 1em;
+                            flex: 0 0 auto;
+                            border-radius: 50%;
+                            border: 0.3em solid #666677;
+                            background-color: transparent;
+                        }
+
+                        .feedback {
+                            position: absolute;
+                            top: 0px;
+                            right: 0px;
+                            color: white;
+                            min-height: 100%;
+                            max-width: 88.6%;
+                            min-width: 14%;
+                            padding: 1em 1em 1em 2em;
+                            //z-index: 100;
+                            opacity: 1;
+                            visibility: hidden;
+                        }
+
+                        .checked_item {
+                            background-color: #b3d2ed;
                             &:hover {
-                                background-color: #CCC;
+                                background-color: #b3d2ed;
+                            }
+                        }
+
+                        input {
+                            display: none;
+                            &:checked ~ .feedback {
+                                visibility: visible;
+                                -webkit-animation: feedbackfade 3s ease 3s;
+                                animation: feedbackfade 3s ease 3s;
+                                -webkit-animation-fill-mode: forwards;
+                                animation-fill-mode: forwards;
+                            }
+                        }
+                        .correct {
+                            background-color: #dff0d8;
+                            .feedback {
+                                background-color: #3c763d;
+                            }
+                            .circle {
+                                background-color: #d6e9c6;
+                                border-color: #3c763d;
+                            }
+                            &:hover {
+                                background-color: #dff0d8;
+                            }
+                        }
+
+                        .incorrect {
+                            background-color: #f2dede;
+                            .feedback {
+                                background-color: #a94442;
+                            }
+                            .circle {
+                                border-color: #a94442;
+                                background-color: #f2dede;
+                            }
+                            &:hover {
+                                background-color: #f2dede;
                             }
                         }
                     }
-
-                    .circle {
-                        position: relative;
-                        height: 1em;
-                        width: 1em;
-                        margin-left: 1em;
-                        flex: 0 0 auto;
-                        border-radius: 50%;
-                        border: 0.3em solid #666677;
-                        background-color: transparent;
-                    }
-
-                    .feedback {
-                        position: absolute;
-                        top: 0px;
-                        right: 0px;
-                        color: white;
-                        min-height: 100%;
-                        max-width: 88.6%;
-                        min-width: 14%;
-                        padding: 1em 1em 1em 2em;
-                        //z-index: 100;
-                        opacity: 1;
-                        visibility: hidden;
-                    }
-
-                    .checked_item {
-                        background-color: #b3d2ed;
-                        &:hover {
-                            background-color: #b3d2ed;
-                        }
-                    }
-
-                    input {
-                        display: none;
-                        &:checked ~ .feedback {
-                            visibility: visible;
-                            -webkit-animation: feedbackfade 3s ease 3s;
-                            animation: feedbackfade 3s ease 3s;
-                            -webkit-animation-fill-mode: forwards;
-                            animation-fill-mode: forwards;
-                        }
-                    }
-                    .correct {
-                        background-color: #dff0d8;
-                        .feedback {
-                            background-color: #3c763d;
-                        }
-                        .circle {
-                            background-color: #d6e9c6;
-                            border-color: #3c763d;
-                        }
-                        &:hover {
-                            background-color: #dff0d8;
-                        }
-                    }
-
-                    .incorrect {
-                        background-color: #f2dede;
-                        .feedback {
-                            background-color: #a94442;
-                        }
-                        .circle {
-                            border-color: #a94442;
-                            background-color: #f2dede;
-                        }
-                        &:hover {
-                            background-color: #f2dede;
-                        }
-                    }
                 }
-            }
-            .bottom-panel {
-                text-align: center;
-                margin-top: @marginTop;
-                .question-buttons {
-                    vertical-align: top;
-                    position: relative;
+                .bottom-panel {
                     text-align: center;
                     margin-top: @marginTop;
-
-                    .btn {
-                        margin: 0 5px;
-                    }
-                    .hint, .submit {
+                    .question-buttons {
+                        vertical-align: top;
                         position: relative;
-                        .spinner-border {
-                            position: absolute;
-                            top: calc(50% - 10px);
-                            left: calc(50% - 10px);
-                            width: 20px;
-                            height: 20px;
-                            border-width: 2px;
+                        text-align: center;
+                        margin-top: @marginTop;
 
+                        .btn {
+                            margin: 0 5px;
+                        }
+                        .hint, .submit {
+                            position: relative;
+                            .spinner-border {
+                                position: absolute;
+                                top: calc(50% - 10px);
+                                left: calc(50% - 10px);
+                                width: 20px;
+                                height: 20px;
+                                border-width: 2px;
+
+                            }
                         }
                     }
-                }
-                .pagination-wrapper {
-                    vertical-align: top;
+                    .pagination-wrapper {
+                        vertical-align: top;
 
-                    // paginagion
-                    .pagination {
-                        justify-content: center;
-                        a {
-                            text-decoration: none;
-                            padding: 8px 16px;
-                            border-radius: 100%;
-                            margin: 0 4px;
-                            color: #2e6d6f;
-                            &.circle {
-                                border: 1px solid #2e6d6f;
-                                &.active {
-                                    background-color: var(--gaia-header-color);
-                                    color: #FFF;
+                        // paginagion
+                        .pagination {
+                            justify-content: center;
+                            a {
+                                text-decoration: none;
+                                padding: 0.5em 0.1em;
+                                border-radius: 100%;
+                                margin: 0 4px;
+                                color: #2e6d6f;
+                                width: 42px;
+                                height: 42px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                flex-grow: 0;
+                                flex-shrink: 0;
+                                &.circle {
+                                    border: 1px solid #2e6d6f;
+                                    &.active {
+                                        background-color: #548be217;
+                                        //color: #FFF;
+                                        box-shadow: 3px 3px 5px #777;
+                                    }
+
+                                    &.failed {
+                                        background-color: #d2413ffa;
+                                        color: #FFF;
+                                    }
+
+                                    &.success {
+                                        background-color: #3c763d;
+                                        color: #FFF;
+                                    }
+                                }
+                                &:hover:not(.active) {
                                     box-shadow: 3px 3px 5px #777;
                                 }
-
-                                &.failed {
-                                    background-color: red;
-                                    color: #FFF;
-                                }
-
-                                &.success {
-                                    background-color: #2ed22e;
-                                    color: #FFF;
-                                }
-                            }
-                            &:hover:not(.active) {
-                                box-shadow: 3px 3px 5px #777;
                             }
                         }
                     }
                 }
             }
-        }
         }
         .question_number {
             position: absolute;
