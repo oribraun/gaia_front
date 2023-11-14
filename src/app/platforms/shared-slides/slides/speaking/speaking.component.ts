@@ -19,9 +19,11 @@ declare var $: any;
 export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     messages: ChatMessage[] = [];
+    detailedQuestionsReviewList:any[] = []
     spinnerEnabled:boolean = false;
     studentActiveASR:string[] = [];
     disableButton = false;
+    showDetailedQuestionReviewActive=false;
     grades:string = ''
     score:any = 0
     gradeConversationInProgress:boolean = false;
@@ -61,8 +63,17 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 } else if (resp_data.source == "get_hints") {
                     console.log('get_hints', resp_data)
                 } else if (resp_data.source == "fix_asr") {
-                    this.messages[this.messages.length-1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
                     this.handleStudentResponse(resp_data.llm_reply['corrected_text'])
+                    this.messages[this.messages.length-1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
+                    this.question = resp_data.question 
+                    this.question_idx = resp_data.question_idx 
+                    this.all_questions_answered =  resp_data.all_questions_answered 
+                    if (!this.all_questions_answered) {
+                        this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }))
+                    } else {
+                        alert('Session Ended')
+                        this.restartSession()
+                    }
                 } else if (resp_data.source  == 'next_question'){
                     if(resp_data.need_to_generate_questions) {
                         const data = {
@@ -87,8 +98,13 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                     console.log(resp_data)
                     this.nextQuestion()
                 } else if(resp_data.source =='student_response') {
-                    this.nextQuestion()
-                    console.log(resp_data)
+                    let response_review_obj:any = {}
+                    response_review_obj['student_response'] = resp_data.student_response
+                    response_review_obj['teacher_question'] = resp_data.teacher_question
+                    response_review_obj['alternative_response'] = resp_data.llm_reply.alternative_response
+                    response_review_obj['student_response_review'] = resp_data.llm_reply.student_response_review
+ 
+                    this.updateDetailedQuestionReview(response_review_obj)
                 } else if(resp_data.source =='grade_conversation'){
                     this.gradeConversationInProgress = false
                     console.log(resp_data)
@@ -103,6 +119,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
         })
 
+    }
+ 
+    updateDetailedQuestionReview(obj:any){
+        this.detailedQuestionsReviewList.push(obj)
     }
 
     buildChat(){
@@ -201,8 +221,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             const data = {
                 "source": "fix_asr",
                 'stopAudio': true,
+                'background':true,
                 "student_response":srudent_resp
             }
+            this.spinnerEnabled  = true;
             this.lessonService.Broadcast("slideEventRequest", data)
         }
         this.studentActiveASR = []
@@ -249,6 +271,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             "source": "student_response",
             "teacher_question": this.question,
             "student_response":student_reply,
+            'background':true,
             'stopAudio': true
         }
         this.lessonService.Broadcast("slideEventRequest", data)
@@ -292,7 +315,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             }
         }
     }
-
+    showDetailedQuestionReview(){
+        this.showDetailedQuestionReviewActive = true
+    }
+        
     openModal(){
         this.modalActive = true
     }
@@ -300,5 +326,6 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
 
     closeModel(){
         this.modalActive = false
+        this.showDetailedQuestionReviewActive = false
     }
 }
