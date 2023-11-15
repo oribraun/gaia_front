@@ -440,6 +440,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+     getUserActivity(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-user-activity', obj,
+            this.httpOptions
+        )
+    }
     // general platform api
 
     // children platform api

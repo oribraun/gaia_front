@@ -108,6 +108,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         if (this.user.id && this.user.last_logged_platform) {
             this.selectedPlatform = this.user.last_logged_platform;
             this.getUserOnBoarding();
+            if (this.user.last_logged_platform === 'test_prep') {
+                this.getUserActivity();
+            }
         }
     }
 
@@ -132,6 +135,25 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             },
             error: (error) => {
                 console.log('getUserOnBoarding error', error)
+            },
+        })
+    }
+
+    getUserActivity(redirectUser=false) {
+        this.apiService.getUserActivity(this.user.last_logged_platform, {}).subscribe({
+            next: async (response: any) => {
+                if (!response.err) {
+                    const user_activity = response.user_activity;
+                    if (user_activity) {
+                        this.user.last_lesson_id = user_activity.last_user_lesson;
+                    }
+                    console.log('user_activity', user_activity)
+                } else {
+                    console.log('getUserActivity errMessage', response.errMessage)
+                }
+            },
+            error: (error) => {
+                console.log('getUserActivity error', error)
             },
         })
     }
