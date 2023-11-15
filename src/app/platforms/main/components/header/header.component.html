@@ -92,8 +92,10 @@
                            (click)="setFormType('login')">Log In</a>
                     </div>
                     <div class="join align-self-center">
-                        <button class="btn btn-primary"
-                                (click)="setFormType('signup')">Join For Free</button>
+<!--                        <button class="btn btn-primary"-->
+<!--                                (click)="setFormType('signup')">Join For Free</button>-->
+                        <a class="link pointer"
+                           (click)="setFormType('signup')">Join For Free</a>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="user.id">
