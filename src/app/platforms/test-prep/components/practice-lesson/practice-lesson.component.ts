@@ -358,6 +358,7 @@ export class PracticeLessonComponent implements OnInit {
                         this.currentSlideIndex = data.current_slide_index;
                         this.currentObjectiveIndex = data.current_objective_index;
                         this.setCurrentSection();
+                        this.setData();
                         if (this.doNotDisturb) {
                             this.lessonService.Broadcast('endDoNotDisturb',{})
                         }

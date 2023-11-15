@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {Config} from "../../../main/config";
@@ -10,7 +10,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
     templateUrl: './writing.component.html',
     styleUrls: ['./writing.component.less']
 })
-export class WritingComponent extends BaseSlideComponent implements OnInit{
+export class WritingComponent extends BaseSlideComponent implements OnInit {
 
     checkEssayInProgress:boolean = false;
     spinnerEnabled:boolean = false
@@ -48,7 +48,12 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.spinnerEnabled  = false;
+        this.initWriting();
+        this.setUpListeners();
+    }
+
+    initWriting() {
+        this.spinnerEnabled = false;
         this.essayTopic = this.currentSlide.topic
         this.essayText = this.currentSlide.writing
         this.grades = this.currentSlide.grades
@@ -72,6 +77,9 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
                 this.loaded_text += this.section_variables[field]
             }
         }
+    }
+
+    setUpListeners() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -110,8 +118,6 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             } catch (e){
                 console.error(e)
             }
-
-
         })
     }
 
@@ -182,7 +188,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             'stopAudio': true
         }
         this.endEssayInProgress = true;
-        this.spinnerEnabled  = true;
+        // this.spinnerEnabled  = true;
         this.lessonService.Broadcast("slideEventRequest", data)
     }
 
@@ -208,5 +214,12 @@ export class WritingComponent extends BaseSlideComponent implements OnInit{
             self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds: self.seconds
         }
     }
+
+    override ngOnDestroy() {
+        super.ngOnDestroy();
+        this.lessonService.ClearEvent("slideEventReply");
+    }
+
+
 
 }

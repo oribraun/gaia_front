@@ -27,13 +27,13 @@
                         <div><b>Note:</b>&nbsp;<small>you should spend up to {{currentSlide.time_in_minutes}} minutes</small></div>
                         <h4> # words: {{essayText.split(" ").length}} / {{currentSlide.min_number_of_words}}</h4>
                         <h3 *ngIf="grades"> your score: {{score}} </h3>
-<!--                        <div class="hint-popup" (click)="closeHints($event)" [ngClass]="{'hint-popup-show': showHint}">-->
-<!--                            <div class="hint-popup-main alert-dismissible alert-success">-->
-<!--                                <h4 class="alert-heading">Hint!</h4>-->
-<!--                                <div class="body">{{currentHint}}</div>-->
-<!--                                <button type="button" (click)="closeHints()" class="close btn-close no-box-shadow no-outline" aria-label="Close"></button>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <!--                        <div class="hint-popup" (click)="closeHints($event)" [ngClass]="{'hint-popup-show': showHint}">-->
+                        <!--                            <div class="hint-popup-main alert-dismissible alert-success">-->
+                        <!--                                <h4 class="alert-heading">Hint!</h4>-->
+                        <!--                                <div class="body">{{currentHint}}</div>-->
+                        <!--                                <button type="button" (click)="closeHints()" class="close btn-close no-box-shadow no-outline" aria-label="Close"></button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                         <div class="bottom-panel">
                             <div class="question-buttons">
                                 <button class="btn btn-primary" (click)="boostEssay()">
@@ -48,6 +48,13 @@
                                 <button *ngIf="grades" class="btn btn-primary" (click)="endSlide()">
                                     Continue
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">
+                        <div class="loader">
+                            <div class="spinner-border">
+                                <span class="sr-only"></span>
                             </div>
                         </div>
                     </div>
