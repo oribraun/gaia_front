@@ -10,12 +10,14 @@ import {BuyComponent} from "./components/buy/buy.component";
 import {OnBoardingComponent} from "./components/on-boarding/on-boarding.component";
 import {AuthChildrenPlatformGuard} from "./guards/auth-children-platform.guard";
 import {AuthTestPrepPlatformGuard} from "./guards/auth-test-prep-platform.guard";
+import {PrivacyComponent} from "./components/privacy/privacy.component";
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch : 'full' },
     // { path: 'login', component: LoginComponent, pathMatch : 'full' },
     // { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
     { path: 'about', component: AboutComponent, pathMatch : 'full' },
+    { path: 'privacy-policy', component: PrivacyComponent, pathMatch : 'full' },
     { path: 'onBoarding', component: OnBoardingComponent, pathMatch : 'full', canActivate: [AuthGuard] },
 
     // for children app only

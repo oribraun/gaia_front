@@ -70,7 +70,7 @@
                     }
                     &.active {
                         box-shadow: 0 0 5px #000000;
-                        border: #588ee4;
+                        border: var(--gaia-main-border-color);
                         border-style:solid;
                         border-width: thick;
                         filter: brightness(1);
@@ -88,9 +88,19 @@
                         margin: 10px 0;
                         border-radius: 5px;
                         cursor: pointer;
+                        height: 34px;
                         &.active {
-                            background: #84e384;
+                            background: var(--gaia-header-color);
+                            color:#fff;
                         }
+                    }
+                    .specific-input {
+                        background: transparent;
+                        border: none;
+                        height: 100%;
+                        padding: 1px 5px;
+                        box-shadow: 0px 4px 2px -3px #999;
+                        color: inherit;
                     }
                 }
             }
@@ -166,11 +176,31 @@
             }
         }
         .questions {
-             margin-bottom: @padding;
+            margin-bottom: @padding;
             .question-group {
                 margin-top: @padding;
                 .question {
-                    padding-left: 10px;
+                    position: relative;
+                    padding-left: @padding;
+                    padding-bottom: @padding;
+                    .text {
+
+                    }
+                    .options {
+                        margin-bottom: @padding;
+                        text-align: center;
+                        .input-error {
+                            border-color: var(--gaia-error-color);
+                        }
+                    }
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        right: 0%;
+                        left: calc(15px + 0%);
+                        bottom: @padding;
+                        border-bottom: 1px solid #d6e5fd;
+                    }
                 }
             }
         }

@@ -34,13 +34,16 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         questions: {
             "Language Proficiency": ["","","","",],
             "IELTS Specifics": ["","","",],
-            "Learning Goals and Preferences": ["","","",],
+            "Learning Goals and Preferences": ["","",[],],
             "Consent and Agreements": ["","",],
         },
         area_of_interest: [
 
         ],
         be_more_specific: {
+
+        },
+        be_more_specific_custom: {
 
         },
         familiar_words: [
@@ -59,50 +62,59 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         familiar_words: 99
     }
 
-    questions: any = {
+    countries = [ "Afghanistan", "Åland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, The Democratic Republic of The", "Cook Islands", "Costa Rica", "Cote D'ivoire", "Croatia", "Cuba", "Curaçao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-bissau", "Guyana", "Haiti", "Heard Island and Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic of", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and The Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and The South Sandwich Islands", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Eswatini", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan (ROC)", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Timor-leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands, British", "Virgin Islands, U.S.", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe" ];
+    languages = [ "Brazilian Portuguese", "Canadian French", "English", "French Creole", "Haitian Creole", "Navajo", "Quechua", "Spanish", "Catalan", "Danish", "Dutch", "Faroese", "Finnish", "Flemish", "French", "German", "Greek", "Icelandic", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish", "UK English / British English", "Belarusian", "Bosnian", "Bulgarian", "Croatian", "Czech", "Estonian", "Hungarian", "Latvian", "Lithuanian", "Macedonian", "Polish", "Romanian", "Russian", "Serbian", "Slovak", "Slovenian", "Turkish", "Ukrainian", "Amharic (Ethiopia)", "Dinka (Sudan)", "Ibo (Nigeria)", "Kirundi", "Mandinka", "Nuer (Nilo-Saharan)", "Oromo (Ethiopia)", "Kinyarwanda", "Shona (Zimbabwe)", "Somali", "Swahili", "Tigrigna (Ethiopia)", "Wolof", "Xhosa", "Yoruba", "Zulu", "Arabic", "Dari", "Farsi", "Hebrew", "Kurdish", "Pashtu", "Punjabi", "Urdu (Pakistan)", "Armenian", "Azerbaijani", "Georgian", "Kazakh", "Mongolian", "Turkmen", "Uzbek", "Bengali", "Cham", "Chamorro (Guam)", "Gujarati (India)", "Hindi", "Indonesian", "Khmer (Cambodia)", "Kmhmu (Laos)", "Korean", "Laotian", "Malayalam", "Malay", "Marathi (India", "Marshallese", "Nepali", "Sherpa", "Tamil", "Thai", "Tibetan", "Trukese (Micronesia)", "Vietnamese", "Amoy", "Burmese", "Cantonese", "Chinese", "Chinese–Simplified", "Chinese–Traditional", "Chiu Chow", "Chow Jo", "Fukienese", "Hakka (China)", "Hmong", "Hainanese", "Japanese", "Mandarin", "Mien", "Shanghainese", "Taiwanese", "Taishanese", "Fijian", "Palauan", "Samoan", "Tongan", "Bikol", "Cebuano", "Ilocano", "Ilongo", "Pampangan", "Pangasinan", "Tagalog", "Visayan" ];
+
+    questions: any = { // type could be type = input, radio, checkbox, select-box, options = [''],
         "Language Proficiency": [
-            "Country of Residence: Which country are you currently residing in?",
-            "First Language: What is your first language?",
-            "English Proficiency Level: How would you rate your current level of English? (Beginner/Intermediate/Advanced)",
-            "Previous English Learning: Have you taken any English language courses or tests before? If yes, please specify.",
+            {text: "Country of Residence: Which country are you currently residing in?", type: 'select-box', options: this.countries, required: true},
+            {text: "First Language: What is your first language?", type: 'select-box', options: this.languages, required: true},
+            {text: "English Proficiency Level: How would you rate your current level of English?", type: 'radio', options: ['Beginner', 'Intermediate', 'Advanced'], required: true},
+            {text: "Previous English Learning: Have you taken any English language courses or tests before? If yes, please specify.", type: 'input'},
         ],
         "IELTS Specifics": [
-            "IELTS Test Type: Are you preparing for IELTS Academic or IELTS General Training?",
-            "IELTS Experience: Have you taken the IELTS test before? If yes, what was your score?",
-            "Target IELTS Score: What is your target IELTS score?",
+            {text: "IELTS Test Type: Are you preparing for IELTS Academic or IELTS General Training?", type: 'radio', options: ['IELTS Academic', 'IELTS General']},
+            {text: "IELTS Experience: Have you taken the IELTS test before? If yes, what was your score?", type: 'input'},
+            {text: "Target IELTS Score: What is your target IELTS score?", type: 'input'},
         ],
         "Learning Goals and Preferences": [
-            "Study Goals: What are your main goals for taking the IELTS exam? (e.g., education, immigration, professional certification)",
-            "Time Commitment: How much time can you dedicate to IELTS preparation each week?",
-            "Areas of Focus: Which areas do you feel you need the most improvement in? (Listening, Reading, Writing, Speaking)",
+            {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
+            {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'input'},
+            {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
         ],
         "Consent and Agreements": [
-            "Privacy Policy Consent: Do you agree to the website's privacy policy and terms of use?",
-            "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?",
+            {text: "Privacy Policy Consent: Do you agree to the website's <a href='#' (click)='test()'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
+            {text: "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?", type: 'radio-switch', options: ['Yes']},
         ],
+    }
+    questions_required_errors: any = {
+        "Language Proficiency": [false,false,false,false],
+        "IELTS Specifics": [false,false,false],
+        "Learning Goals and Preferences": [false,false,false],
+        "Consent and Agreements": [false,false,false],
     }
 
     areaOfInterestItems: any = {
-        "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli', 'Add your own 1', 'Add your own 2']},
-        "Sport": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/sport.jpg", specific: ['Basketball', 'Michael Jorden', 'Usain Bolt', 'Add your own 1', 'Add your own 2']},
-        "Games": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/games.jpg", specific: ['Minecraft', 'Call of Duty', 'Quests',  'Add your own 1', 'Add your own 2']},
-        "Israel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/israel.jpg", specific: ['Israel-Palastine Conflict', 'Israeli Calture', 'Famous People',  'Add your own 1', 'Add your own 2']},
-        "Cars": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/cars.jpg", specific: ['Formula I', 'MotoGP', 'Electric Cars',  'Add your own 1', 'Add your own 2']},
-        "News": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/news.jpg", specific: ['Politics', 'Financial News', 'Crypto',  'Add your own 1', 'Add your own 2']},
-        "Shopping": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/shopping.jpg", specific: ['Gadgets', 'Top brands', 'Toys',  'Add your own 1', 'Add your own 2']},
-        "Science": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/science.jpg", specific: ['Physics', 'Astronomy', 'Zoology',  'Add your own 1', 'Add your own 2']},
-        "AI": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/ai.jpg", specific: ['LLMs', 'Supervised Learning', 'Reinforcment lerarning',  'Add your own 1', 'Add your own 2']},
-        "Soccer": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/soccer.jpg", specific: ['Ronaldo', 'VAR', 'Manchester City',  'Add your own 1', 'Add your own 2']},
-        "Politics": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/politics.jpg", specific: ['Benjamin Netany', 'Donald Trump', 'Valdimir Putin',  'Add your own 1', 'Add your own 2']},
-        "Social Media": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/social_media.jpg", specific: ['Facebook', 'Gen Z', 'Reels',  'Add your own 1', 'Add your own 2']},
-        "History": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/history.jpg", specific: ['World War 2', 'Holocaust', 'Israel Wars',  'Add your own 1', 'Add your own 2']},
-        "Art": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/art.jpg", specific: ['Painting Styles', 'Famous sculpture', 'Van Gogh',  'Add your own 1', 'Add your own 2']},
-        "Food and Cooking": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/food.jpg", specific: ['Special Food', 'Best Resurants', 'Chocolatiers',  'Add your own 1', 'Add your own 2']},
-        "Music": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/music.jpg", specific: ['Queen', 'Noa Kirel', 'Justin Biber',  'Add your own 1', 'Add your own 2']},
-        "Travel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/travel.jpg", specific: ['Highest mountains', 'Beaches', '3rd world countries',  'Add your own 1', 'Add your own 2']},
-        "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras',  'Add your own 1', 'Add your own 2']},
-        "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing',  'Add your own 1', 'Add your own 2']},
-        "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot', 'Add your own 1', 'Add your own 2']}
+        "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli'], custom: ['','']},
+        "Sport": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/sport.jpg", specific: ['Basketball', 'Michael Jorden', 'Usain Bolt'], custom: ['','']},
+        "Games": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/games.jpg", specific: ['Minecraft', 'Call of Duty', 'Quests'], custom: ['','']},
+        "Israel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/israel.jpg", specific: ['Israel-Palastine Conflict', 'Israeli Calture', 'Famous People'], custom: ['','']},
+        "Cars": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/cars.jpg", specific: ['Formula I', 'MotoGP', 'Electric Cars'], custom: ['','']},
+        "News": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/news.jpg", specific: ['Politics', 'Financial News', 'Crypto'], custom: ['','']},
+        "Shopping": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/shopping.jpg", specific: ['Gadgets', 'Top brands', 'Toys'], custom: ['','']},
+        "Science": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/science.jpg", specific: ['Physics', 'Astronomy', 'Zoology'], custom: ['','']},
+        "AI": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/ai.jpg", specific: ['LLMs', 'Supervised Learning', 'Reinforcment lerarning'], custom: ['','']},
+        "Soccer": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/soccer.jpg", specific: ['Ronaldo', 'VAR', 'Manchester City'], custom: ['','']},
+        "Politics": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/politics.jpg", specific: ['Benjamin Netany', 'Donald Trump', 'Valdimir Putin'], custom: ['','']},
+        "Social Media": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/social_media.jpg", specific: ['Facebook', 'Gen Z', 'Reels'], custom: ['','']},
+        "History": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/history.jpg", specific: ['World War 2', 'Holocaust', 'Israel Wars'], custom: ['','']},
+        "Art": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/art.jpg", specific: ['Painting Styles', 'Famous sculpture', 'Van Gogh'], custom: ['','']},
+        "Food and Cooking": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/food.jpg", specific: ['Special Food', 'Best Resurants', 'Chocolatiers'], custom: ['','']},
+        "Music": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/music.jpg", specific: ['Queen', 'Noa Kirel', 'Justin Biber'], custom: ['','']},
+        "Travel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/travel.jpg", specific: ['Highest mountains', 'Beaches', '3rd world countries'], custom: ['','']},
+        "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras'], custom: ['','']},
+        "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing'], custom: ['','']},
+        "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot'], custom: ['','']}
     }
 
     beMoreSpecificSelected = 0;
@@ -151,6 +163,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.imageSrc = this.config.staticImagePath;
     }
 
+    test(e: any) {
+        e.preventDefault();
+        alert('a')
+    }
+
     ngOnInit(): void {
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
@@ -178,7 +195,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     validateUserOnboarding(userOnBoarding: any) {
-        let needReset = true;
+        let needReset = false;
         // checking questions
         if (!userOnBoarding.questions
             || !userOnBoarding.questions["Language Proficiency"].length
@@ -286,6 +303,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         for (let item in this.onBoardingObject.be_more_specific) {
             this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[item].length;
         }
+        for (let item in this.onBoardingObject.be_more_specific_custom) {
+            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific_custom[item].length;
+        }
         console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected)
     }
 
@@ -312,7 +332,6 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = false;
         const specificForItem = this.onBoardingObject.be_more_specific[item.key];
-        console.log('specificForItem', specificForItem)
         const index = specificForItem.indexOf(specificItem)
         if (index > -1) {
             this.onBoardingObject.be_more_specific[item.key].splice(index, 1);
@@ -323,6 +342,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             // if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
             // }
         }
+    }
+
+    inputBeMoreSpecific(item: any, e: any) {
+        const value = e.target.value;
+        console.log('value', value)
+        return;
     }
 
     selectFamiliarWords(itemText: any) {
@@ -366,8 +391,42 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         return show;
     }
 
+    onQuestionsNextButton(next_page: string) {
+        let proceed = true;
+        for (let key in this.onBoardingObject.questions) {
+            for (let i in this.onBoardingObject.questions[key]) {
+                if (this.questions[key][i].required) {
+                    if (Array.isArray(this.onBoardingObject.questions[key][i]) && !this.onBoardingObject.questions[key][i].length) {
+                        proceed = false;
+                        this.questions_required_errors[key][i] = true;
+                    } else if (typeof this.onBoardingObject.questions[key][i] === 'string' && !this.onBoardingObject.questions[key][i]) {
+                        proceed = false;
+                        this.questions_required_errors[key][i] = true;
+                    } else {
+                        this.questions_required_errors[key][i] = false;
+                    }
+                } else {
+                    this.questions_required_errors[key][i] = false;
+                }
+            }
+        }
+        console.log('this.questions_required_errors', this.questions_required_errors)
+        if (proceed) {
+            this.goToNextPage(next_page)
+        }
+    }
+
     onQuestionsChange() {
         this.onBoardingObjectChanged = true;
+    }
+
+    onQuestionCheckboxChanged(key: string, index: number, value: string) {
+        const valIndex = this.onBoardingObject.questions[key][index].indexOf(value);
+        if (valIndex > -1) {
+            this.onBoardingObject.questions[key][index].splice(valIndex, 1)
+        } else {
+            this.onBoardingObject.questions[key][index].push(value);
+        }
     }
 
     selectVideoAnswer(itemText: any) {
@@ -472,6 +531,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.resetBeMoreSpecific();
         for (let item of this.onBoardingObject.area_of_interest) {
             this.onBoardingObject.be_more_specific[item] = []
+            this.onBoardingObject.be_more_specific_custom[item] = this.onBoardingObject.area_of_interest[item].custom;
         }
         // }
     }

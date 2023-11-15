@@ -241,10 +241,10 @@
                         .incorrect {
                             background-color: #f2dede;
                             .feedback {
-                                background-color: #a94442;
+                                background-color: var(--gaia-error-color);
                             }
                             .circle {
-                                border-color: #a94442;
+                                border-color: var(--gaia-error-color);
                                 background-color: #f2dede;
                             }
                             &:hover {
@@ -305,12 +305,12 @@
                                     }
 
                                     &.failed {
-                                        background-color: #d2413ffa;
+                                        background-color: var(--gaia-error-color);
                                         color: #FFF;
                                     }
 
                                     &.success {
-                                        background-color: #3c763d;
+                                        background-color: var(--gaia-success-color);
                                         color: #FFF;
                                     }
                                     &:hover:not(.active) {
