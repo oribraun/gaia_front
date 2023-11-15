@@ -91,7 +91,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (type && this.formTypeOptions.indexOf(type) > -1) {
                 this.formType = type;
                 console.log('this.formType', this.formType)
-                this.showLoginModel();
+                setTimeout(() => {
+                    this.showLoginModel();
+                })
             }
             this.initOnBoarding();
         })
