@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
+            this.updateUserCookie();
         });
         this.getCurrentRoute();
         // setTimeout is because we need to wait for all components subscriptions to config changes
@@ -71,7 +72,7 @@ export class AppComponent implements OnInit {
         //   this.config.staticServerPath = STATIC_URL;
         // }
         if (typeof USER !== 'undefined' && USER !== 'AnonymousUser' && USER !== '{{ user | safe }}') {
-            this.config.user = JSON.parse(USER);
+            this.config.user =JSON.parse(USER);
         } else {
             this.config.user_subject.next('');
         }
@@ -100,6 +101,18 @@ export class AppComponent implements OnInit {
             this.config.resetUserCreds();
         }
 
+    }
+
+    updateUserCookie() {
+        const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
+        if (!clientRunningOnServerHost) {
+            let user = this.config.getCookie('user', true)
+            if (this.user && user) {
+                const user_exp = this.config.getCookie('user-exp', true)
+                const d = new Date(user_exp)
+                this.config.setCookie('user', JSON.stringify(this.user), d, true);
+            }
+        }
     }
 
     closeOnGmailCallback() {

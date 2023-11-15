@@ -5,6 +5,7 @@ import {ApiService} from "../../services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {lastValueFrom} from "rxjs";
 import {environment} from "../../../../../environments/environment";
+import {User} from "../../../shared-slides/entities/user";
 
 @Component({
     selector: 'app-login',
@@ -119,7 +120,7 @@ export class LoginComponent implements OnInit {
     }
 
     setupUser(response: any) {
-        this.user = response.user;
+        this.user = new User(response.user);
         this.config.user = response.user;
         this.config.token = response.token;
         this.setCookiesAfterLogin(response);

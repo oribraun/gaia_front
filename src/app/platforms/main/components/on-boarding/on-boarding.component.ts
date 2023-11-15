@@ -499,7 +499,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                     //         const user_exp = this.config.getCookie('user-exp', true)
                     //         const d = new Date(user_exp)
                     //         this.config.setCookie('user', JSON.stringify(user), d, true);
-                    //         this.config.user = user;
+                    //         this.config.user = new User(user);
                     //     }
                     // }
                     this.config.user_on_boarding = {...this.onBoardingObject};

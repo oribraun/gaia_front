@@ -13,7 +13,7 @@ export class User {
     last_name!: string;
     login_provider!: string;
     last_logged_platform!: string;
-    last_lesson_id!: string;
+    last_lesson_id!: number;
 
     constructor(v: Partial<User> = {}) {
         Object.assign(this, v);

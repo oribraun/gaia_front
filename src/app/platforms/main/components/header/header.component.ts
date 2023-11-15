@@ -163,7 +163,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 this.errMessage = '';
                 const response: any = await lastValueFrom(this.apiService.changeUserPlatform(this.selectedPlatform));
                 if (!response.err) {
-                    this.setUpUserLoggedPlatformCookies(this.selectedPlatform);
+                    this.user.last_logged_platform = this.selectedPlatform;
+                    this.config.user = this.user;
+                    // this.setUpUserLoggedPlatformCookies(this.selectedPlatform);
+                    // setTimeout(() => {
+                    //     const returnUrl = this.helperService.getUserReturnUrl(this.user)
+                    //     this.router.navigate([returnUrl])
+                    // }, 300)
                     this.reloadSystemAndRedirect();
                 } else {
                     console.log('changeUserPlatform errMessage', response.errMessage)

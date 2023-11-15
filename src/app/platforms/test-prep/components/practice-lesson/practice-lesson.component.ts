@@ -219,6 +219,8 @@ export class PracticeLessonComponent implements OnInit {
                         this.setIndexesByQuestionId();
                         return;
                     } else {
+                        this.user.last_lesson_id = this.lesson_id;
+                        this.config.user = this.user;
                         this.currentSectionIndex = this.presentation.current_section_index;
                         this.currentSlideIndex = this.presentation.current_slide_index;
                         this.currentObjectiveIndex = this.presentation.current_objective_index;
