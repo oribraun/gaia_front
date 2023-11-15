@@ -26,7 +26,7 @@ import { SwipeDirective } from './directives/swipe.directive';
 import { ScreenBoardComponent } from './components/lesson/screen-board/screen-board.component';
 import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.component';
 import { HelpComponent } from './components/lesson/panel-board/help/help.component';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { BuyComponent } from './components/buy/buy.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -68,7 +68,6 @@ import {ChildrensModule} from "../childrens/childrens.module";
         HttpClientModule,
         AppRoutingModule,
         YouTubePlayerModule,
-        AngularEditorModule,
         NgxEchartsModule.forRoot({
             /**
              * This will import all modules from echarts.
