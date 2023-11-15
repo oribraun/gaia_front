@@ -128,7 +128,7 @@
                                          [ngClass]="{'active': onBoardingObject.be_more_specific_custom[getString(item.key)][i]}">
                                         <input type="text" class="specific-input form-control"
                                                [(ngModel)]="onBoardingObject.be_more_specific_custom[getString(item.key)][i]"
-                                               (ngModelChange)="onQuestionsChange()">
+                                               (ngModelChange)="onCustomBeMoreSpecific(getString(item.key), i)">
                                     </div>
                             </div>
                         </div>

@@ -118,6 +118,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     beMoreSpecificSelected = 0;
+    beMoreSpecificCustomSelected: any = {};
 
     familiarWords = [
         'Cat',
@@ -300,11 +301,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     initExtraDetails() {
         this.current_page = this.onBoardingObject.last_page;
 
-        for (let item in this.onBoardingObject.be_more_specific) {
-            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[item].length;
+        for (let i in this.onBoardingObject.be_more_specific) {
+            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[i].length;
         }
-        for (let item in this.onBoardingObject.be_more_specific_custom) {
-            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific_custom[item].length;
+        for (let i in this.onBoardingObject.be_more_specific_custom) {
+            this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific_custom[i].filter((o:string) => o).length;
         }
         console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected)
     }
@@ -420,6 +421,22 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.onBoardingObjectChanged = true;
     }
 
+    onCustomBeMoreSpecific(key: string, i: number) {
+        this.onQuestionsChange();
+        if(this.onBoardingObject.be_more_specific_custom[key][i]) {
+            if (!this.beMoreSpecificCustomSelected[key]) {
+                this.beMoreSpecificCustomSelected[key] = {}
+            }
+            if(!this.beMoreSpecificCustomSelected[key][i]) {
+                this.beMoreSpecificCustomSelected[key][i] = true;
+                this.beMoreSpecificSelected++;
+            }
+        } else {
+            this.beMoreSpecificSelected--;
+        }
+        // this.beMoreSpecificSelected++;
+    }
+
     onQuestionCheckboxChanged(key: string, index: number, value: string) {
         const valIndex = this.onBoardingObject.questions[key][index].indexOf(value);
         if (valIndex > -1) {
@@ -532,7 +549,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         for (let item of this.onBoardingObject.area_of_interest) {
             this.onBoardingObject.be_more_specific[item] = []
             if (!this.onBoardingObject.be_more_specific_custom[item]) {
-                this.onBoardingObject.be_more_specific_custom[item] = this.areaOfInterestItems[item].custom;
+                this.onBoardingObject.be_more_specific_custom[item] = this.areaOfInterestItems[item].custom.slice(0);
             }
         }
         // }
@@ -542,6 +559,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.onBoardingObject.be_more_specific = {};
         this.beMoreSpecificSelected = 0;
         this.onBoardingObject.be_more_specific_custom = {};
+        this.beMoreSpecificCustomSelected = {};
     }
 
     getString(text: any) {
