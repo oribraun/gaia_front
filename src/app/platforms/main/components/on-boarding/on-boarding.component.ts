@@ -474,7 +474,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.scrollToTop();
         // this.current_page = page;
         if (page === 'be_more_specific') {
-            this.setUpBeMoreSpecific();
+            if (this.onBoardingObjectChanged) {
+                this.setUpBeMoreSpecific();
+            }
         }
         if (page === 'video_answer') {
             this.setVideoHeight();
