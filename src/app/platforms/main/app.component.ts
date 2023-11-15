@@ -47,9 +47,9 @@ export class AppComponent implements OnInit {
         });
         this.getCurrentRoute();
         // setTimeout is because we need to wait for all components subscriptions to config changes
-        // setTimeout(() => {
-        //     this.setupCredsFromServer()
-        // })
+        setTimeout(() => {
+            this.setupCredsFromServer()
+        })
 
         let redirectUser = false;
         this.route.queryParams.subscribe((params) => {
@@ -71,7 +71,9 @@ export class AppComponent implements OnInit {
         // if (typeof STATIC_URL !== 'undefined' && STATIC_URL !== "{% static 'client/' %}") {
         //   this.config.staticServerPath = STATIC_URL;
         // }
+        let gotUserFromServer = false;
         if (typeof USER !== 'undefined' && USER !== 'AnonymousUser' && USER !== '{{ user | safe }}') {
+            gotUserFromServer = true;
             this.config.user =JSON.parse(USER);
         } else {
             this.config.user_subject.next('');
@@ -93,7 +95,7 @@ export class AppComponent implements OnInit {
             this.config.token = token;
         }
         const user = this.config.getCookie('user', true)
-        if (user) {
+        if (user && !gotUserFromServer) {
             this.config.user = JSON.parse(user);
         }
         if (!csrftoken || !token || !user) {
