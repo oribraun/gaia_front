@@ -531,7 +531,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.resetBeMoreSpecific();
         for (let item of this.onBoardingObject.area_of_interest) {
             this.onBoardingObject.be_more_specific[item] = []
-            this.onBoardingObject.be_more_specific_custom[item] = this.areaOfInterestItems[item].custom;
+            if (!this.onBoardingObject.be_more_specific_custom[item]) {
+                this.onBoardingObject.be_more_specific_custom[item] = this.areaOfInterestItems[item].custom;
+            }
         }
         // }
     }
