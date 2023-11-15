@@ -186,9 +186,11 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     }
 
     setupOnBoarding(userOnBoarding: any) {
-        this.validateUserOnboarding(userOnBoarding)
+        if (userOnBoarding) {
+            this.validateUserOnboarding(userOnBoarding)
+            console.log('this.gotUserOnBoarding', userOnBoarding)
+        }
         this.gotUserOnBoarding = true;
-        console.log('this.gotUserOnBoarding', userOnBoarding)
         this.initCurrentPage(false);
         setTimeout(() => {
             this.setUpYoutubeVideo();
