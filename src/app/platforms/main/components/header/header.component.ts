@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, IsActiveMatchOptions, Router} from "@angular/router";
+import {ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router} from "@angular/router";
 import {User} from "../../../shared-slides/entities/user";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     password: string = '';
     username: string = '';
     planId!: number;
+    isPlansPage = false;
     // user: any = {};
     errMessage = '';
     successMessage = '';
@@ -107,6 +108,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.config.user_on_boarding_subject.subscribe(() => {
             this.user_on_boarding_finished = this.config.user_on_boarding && this.config.user_on_boarding.finished;
         })
+        this.checkIfPlansPage();
     }
 
     initOnBoarding() {
@@ -718,5 +720,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.resetPassDetails.confirm_password = '';
         // this.resetPassDetails.successMessage = '';
         this.resetPassDetails.errMessage = '';
+    }
+
+    checkIfPlansPage() {
+        this.router.events.subscribe((routerEvent) => {
+            if(routerEvent instanceof NavigationEnd) {
+                // Get your url
+                const l = routerEvent.url.replace(/\?.*/,'').split('/')
+                if (l[l.length - 1] === 'plans') {
+                    this.isPlansPage = true;
+                } else {
+                    this.isPlansPage = false;
+                }
+            }
+        });
     }
 }

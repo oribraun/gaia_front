@@ -80,7 +80,7 @@
             <div class="right-items d-flex">
                 <select class="form-select form-select-sm align-self-center"
                         (change)="changePlatform($event)"
-                        *ngIf="platforms.length > 1">
+                        *ngIf="platforms.length > 1 && !isPlansPage">
                     <option
                         [selected]="p.value === selectedPlatform"
                         *ngFor="let p of platforms"
