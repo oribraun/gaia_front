@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Config} from "../../config";
 import {User} from "../../../shared-slides/entities/user";
 import {OnStateChangeEvent, PlayerState} from "../../../shared-slides/slides/video/video.component";
@@ -12,7 +12,7 @@ declare var $: any;
     templateUrl: './on-boarding.component.html',
     styleUrls: ['./on-boarding.component.less']
 })
-export class OnBoardingComponent implements OnInit, AfterViewInit {
+export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('video', { static: false }) video!: ElementRef;
     loading_player = false;
@@ -34,7 +34,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         questions: {
             "Language Proficiency": ["","","","",],
             "IELTS Specifics": ["","","",],
-            "Learning Goals and Preferences": ["","",[],],
+            "Learning Goals and Preferences": ["","",[],""],
             "Consent and Agreements": ["","",],
         },
         area_of_interest: [
@@ -80,17 +80,18 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         "Learning Goals and Preferences": [
             {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
             {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'input'},
+            {text: "What is The Exact Date Of your exam?", type: 'date'},
             {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
         ],
         "Consent and Agreements": [
-            {text: "Privacy Policy Consent: Do you agree to the website's <a href='#' (click)='test()'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
+            {text: "Privacy Policy Consent: Do you agree to the website's <a id='privacy-policy' class='pointer'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
             {text: "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?", type: 'radio-switch', options: ['Yes']},
         ],
     }
     questions_required_errors: any = {
         "Language Proficiency": [false,false,false,false],
         "IELTS Specifics": [false,false,false],
-        "Learning Goals and Preferences": [false,false,false],
+        "Learning Goals and Preferences": [false,false,false,false],
         "Consent and Agreements": [false,false,false],
     }
 
@@ -164,9 +165,19 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.imageSrc = this.config.staticImagePath;
     }
 
-    test(e: any) {
+    privacyPolicyClick(e: any) {
         e.preventDefault();
-        alert('a')
+        this.showPrivacyPolicyModel();
+    }
+    showPrivacyPolicyModel() {
+        $('#privacyPolicyModal').modal('show');
+    }
+
+    hidePrivacyPolicyModel() {
+        const el = $('#privacyPolicyModal');
+        el.removeClass('show');
+        el.modal('hide');
+        $('.modal-backdrop').hide();
     }
 
     ngOnInit(): void {
@@ -207,6 +218,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             || !userOnBoarding.questions["Consent and Agreements"].length) {
             needReset = true;
         }
+        const equalTypes1 = this.areArraysEqualInType(this.onBoardingObject.questions["Language Proficiency"], userOnBoarding.questions["Language Proficiency"]);
+        const equalTypes2 = this.areArraysEqualInType(this.onBoardingObject.questions["IELTS Specifics"], userOnBoarding.questions["IELTS Specifics"]);
+        const equalTypes3 = this.areArraysEqualInType(this.onBoardingObject.questions["Learning Goals and Preferences"], userOnBoarding.questions["Learning Goals and Preferences"]);
+        const equalTypes4 = this.areArraysEqualInType(this.onBoardingObject.questions["Consent and Agreements"], userOnBoarding.questions["Consent and Agreements"]);
+        if (!equalTypes1 || !equalTypes2 || !equalTypes3 || !equalTypes4) {
+            needReset = true;
+        }
         // checking area of interest
         const keys = Object.keys(this.areaOfInterestItems)
         if (!userOnBoarding.area_of_interest.every((item: string) => keys.includes(item))) {
@@ -225,6 +243,35 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         if (!needReset) {
             this.userOnBoarding = userOnBoarding;
         }
+    }
+
+    areArraysEqualInType(arr1: any[], arr2: any[]) {
+        // Check if arrays have the same length
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        // Iterate through the arrays and compare types
+        for (let i = 0; i < arr1.length; i++) {
+            // Use typeof to get the type of the element
+            const type1 = typeof arr1[i];
+            const type2 = typeof arr2[i];
+
+            // Compare types
+            if (type1 !== type2) {
+                return false;
+            }
+
+            // If the element is an array, recursively check its elements
+            if (type1 === 'object' && Array.isArray(arr1[i]) && Array.isArray(arr2[i])) {
+                if (!this.areArraysEqualInType(arr1[i], arr2[i])) {
+                    return false;
+                }
+            }
+        }
+
+        // If all types are equal, return true
+        return true;
     }
 
     ngAfterViewInit(): void {
@@ -246,6 +293,15 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             this.videoDetails.height = this.video.nativeElement.offsetHeight;
             this.videoDetails.width = this.video.nativeElement.clientWidth;
         })
+    }
+
+    listenToPrivacyPolicyClick() {
+        const ele = $('#privacy-policy');
+        if (ele) {
+            ele.on('click', (e: any) => {
+                this.privacyPolicyClick(e);
+            })
+        }
     }
 
 
@@ -296,6 +352,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                     this.onBoardingObject[item] = obj[item]
                 }
             }
+        }
+        if (this.onBoardingObject.current_page === 'questions') {
+            this.listenToPrivacyPolicyClick();
         }
         console.log('this.onBoardingObject', this.onBoardingObject)
     }
@@ -421,6 +480,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     onQuestionsChange() {
         this.onBoardingObjectChanged = true;
+        this.onBoardingObject.finished = false;
     }
 
     onCustomBeMoreSpecific(key: string, i: number) {
@@ -492,6 +552,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     goToPrevPage(page: string) {
         this.scrollToTop();
         // this.current_page = page;
+        if (page === 'questions') {
+            this.listenToPrivacyPolicyClick();
+        }
         if (page === 'video_answer') {
             this.setVideoHeight();
         }
@@ -606,4 +669,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         //     }
         // }, this.stateTimeout)
     }
+
+    ngOnDestroy(): void {
+        this.hidePrivacyPolicyModel();
+    }
+
+
 }

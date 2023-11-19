@@ -9,7 +9,7 @@
                             <ng-container *ngIf="item.key">
                                 <div class="question"  *ngFor="let q of questions[item.key.toString()]; let i = index;">
                                     <ng-container *ngIf="q.type === 'input'">
-                                        <p class="text">{{q.text}}</p>
+                                        <p class="text" [innerHTML]="q.text"></p>
                                         <div class="options">
                                             <input class="form-control" type="text"
                                                    [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
@@ -18,7 +18,7 @@
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="q.type === 'radio'">
-                                        <p class="text">{{q.text}}</p>
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
                                         <div class="options">
                                             <div class="form-check form-check-inline" *ngFor="let o of q.options">
                                                 <input class="form-check-input" type="radio"
@@ -31,7 +31,7 @@
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="q.type === 'radio-switch'">
-                                        <p class="text">{{q.text}}</p>
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
                                         <div class="options">
                                             <div class="options">
                                                 <div class="form-check form-check-inline form-switch" *ngFor="let o of q.options">
@@ -46,7 +46,7 @@
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="q.type === 'checkbox'">
-                                        <p class="text">{{q.text}}</p>
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
                                         <div class="options">
                                             <div class="form-check form-check-inline" *ngFor="let o of q.options">
                                                 <input class="form-check-input" type="checkbox"
@@ -59,7 +59,7 @@
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="q.type === 'select-box'">
-                                        <p class="text">{{q.text}}</p>
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
                                         <div class="options">
                                             <select class="form-select"
                                                     [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
@@ -68,6 +68,15 @@
                                                 <option value="">-- Select --</option>
                                                 <option *ngFor="let o of q.options" [value]="o">{{o}}</option>
                                             </select>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'date'">
+                                        <p class="text" [innerHTML]="q.text"></p>
+                                        <div class="options">
+                                            <input class="form-control" type="date"
+                                                   [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                   [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                   (ngModelChange)="onQuestionsChange()">
                                         </div>
                                     </ng-container>
                                 </div>
@@ -238,3 +247,17 @@
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="privacyPolicyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-privacy></app-privacy>
+            </div>
+        </div>
+    </div>
+</div>
