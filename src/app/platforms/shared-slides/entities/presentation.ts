@@ -160,6 +160,8 @@ export class PresentationSlide {
     target_sentence !:string[]
     all_questions !:any[]
     all_answers !:any
+    marked_chars:number[] = []
+    notes:string = ""
     blanked_sentence !:string
     video_details!: VideoDetails
     prev:any=null

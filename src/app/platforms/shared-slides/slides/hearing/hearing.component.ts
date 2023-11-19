@@ -81,6 +81,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         super.ngOnInit();
         this.question_index = this.currentSlide.question_index || 0
         this.text_audio_path = this.currentSlide.audio_path;
+        this.notes = this.currentSlide.notes;
         this.initUnseenAnswers();
         this.handleCounter(this.question_index)
         this.resetUnseenHtml();
@@ -238,6 +239,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             "question_id":current_question.question_id,
             "pace":this.unseenAnswers[current_question.question_id].pace,
             'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
+            'notes':this.notes,
             'stopAudio': true
         }
         console.log('data', data);

@@ -81,6 +81,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
     override ngOnInit(): void {
         super.ngOnInit();
         this.question_index = this.currentSlide.question_index || 0
+        this.markedCharIds = this.currentSlide.marked_chars;
 
         this.initUnseenAnswers();
         this.handleCounter(this.question_index)
@@ -378,7 +379,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
             "question_id":current_question.question_id,
             "pace":this.unseenAnswers[current_question.question_id].pace,
             'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
-            'markedChars': this.markedCharIds,
+            'marked_chars': this.markedCharIds,
             'stopAudio': true
         }
         console.log('data', data);
