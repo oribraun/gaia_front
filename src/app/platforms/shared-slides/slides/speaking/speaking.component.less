@@ -4,6 +4,9 @@
 }
 .speaking {
     height: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: @padding;
 
     .main-btn_rec {
         position: relative;
@@ -21,29 +24,29 @@
         }
         .btn-rec-container #btn {
             display: none;
-            
+
             width: 60px;
             height: 60px;
             position: relative;
             left: 50px;
             /* top: 55px; */
-        
+
         }
-        
+
         .notRec{
             background-color: darkred !important;
         }
 
         .start_session {background-color: rgb(26, 111, 26) !important;}
 
-        
+
         .Rec{
             animation-name: pulse;
             animation-duration: 1.5s;
             animation-iteration-count: infinite;
             animation-timing-function: linear;
         }
-        
+
         @keyframes pulse{
             0%{
                 box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
@@ -55,7 +58,7 @@
                 box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
             }
         }
-        
+
         .question_timer {
             font-size: 1.1em;
             color: var(--gaia-header-color);
@@ -139,7 +142,7 @@
             margin: -37px -37px;
             }
         }
-        
+
         #timer{
             position:relative;
             top:30%;
@@ -150,20 +153,20 @@
             text-align:center;
             opacity:0;
         }
-        
+
         .btn-rec-container #btn:checked ~ label ~ .tim{
-            opacity:1;  
+            opacity:1;
         }
-   
+
     .chat {
-        width: 80%;
+        //width: 80%;
         height: 60%;
         background: var(--white-background-color);
         border-radius: @border-radius;
         margin:auto;
-        margin-bottom: 10px;
-        margin-top: 45px;
-        
+        //margin-bottom: 10px;
+        //margin-top: 45px;
+
         .messages {
             flex: 1 1 auto;
             //color: rgba(255, 255, 255, .5);
@@ -436,4 +439,3 @@ span.review_span {font-size: large; font-weight: bold; }
 .answer_review_span {color:cadetblue; min-width:50px}
 .alternative_ans_span {color:purple; min-width:50px}
 
- 
