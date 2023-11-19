@@ -8,6 +8,7 @@ import {PracticeLessonComponent} from "./components/practice-lesson/practice-les
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import { VocabularyComponent } from './components/vocabulary/vocabulary.component';
 import { ReviewComponent } from './components/review/review.component';
+import { PlanComponent } from './components/plan/plan.component';
 
 
 
@@ -17,6 +18,7 @@ import { ReviewComponent } from './components/review/review.component';
         PracticeLessonComponent,
         VocabularyComponent,
         ReviewComponent,
+        PlanComponent,
     ],
     imports: [
         CommonModule,

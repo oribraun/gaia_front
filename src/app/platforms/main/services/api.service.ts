@@ -511,6 +511,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getPlans(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/pb/get-plans', obj,
+            this.httpOptions
+        )
+    }
     saveVocab(obj: any) {
         return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/save-vocabulary', obj,
             this.httpOptions

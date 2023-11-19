@@ -31,7 +31,6 @@ const routes: Routes = [
     {
         path: 'childrens',
         loadChildren: () => import('../childrens/childrens.module').then(m => m.ChildrensModule),
-        canActivate: [AuthChildrenPlatformGuard]
     },
     // for children app only
 
@@ -39,7 +38,6 @@ const routes: Routes = [
     {
         path: 'test_prep',
         loadChildren: () => import('../test-prep/test-prep.module').then(m => m.TestPrepModule),
-        canActivate: [AuthTestPrepPlatformGuard]
     },
     // for test_prep app only
 
