@@ -6,8 +6,20 @@
     overflow: hidden;
     #onBoardingCarousel {
         height: 100%;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
+        .carousel-inner {
+            height: 100%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            //.carousel-item:not(.carousel-item-start):not(.carousel-item-end) {
+            .carousel-item {
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+        }
     }
     .page {
         position: relative;

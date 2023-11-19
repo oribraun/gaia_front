@@ -34,7 +34,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         questions: {
             "Language Proficiency": ["","","","",],
             "IELTS Specifics": ["","","",],
-            "Learning Goals and Preferences": ["","",[],""],
+            "Learning Goals and Preferences": ["","","",[]],
             "Consent and Agreements": ["","",],
         },
         area_of_interest: [
@@ -222,6 +222,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         const equalTypes2 = this.areArraysEqualInType(this.onBoardingObject.questions["IELTS Specifics"], userOnBoarding.questions["IELTS Specifics"]);
         const equalTypes3 = this.areArraysEqualInType(this.onBoardingObject.questions["Learning Goals and Preferences"], userOnBoarding.questions["Learning Goals and Preferences"]);
         const equalTypes4 = this.areArraysEqualInType(this.onBoardingObject.questions["Consent and Agreements"], userOnBoarding.questions["Consent and Agreements"]);
+        console.log('equalTypes1', equalTypes1)
+        console.log('equalTypes2', equalTypes2)
+        console.log('equalTypes3', equalTypes3)
+        console.log('equalTypes4', equalTypes4)
         if (!equalTypes1 || !equalTypes2 || !equalTypes3 || !equalTypes4) {
             needReset = true;
         }
@@ -296,12 +300,26 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     listenToPrivacyPolicyClick() {
-        const ele = $('#privacy-policy');
-        if (ele) {
-            ele.on('click', (e: any) => {
-                this.privacyPolicyClick(e);
-            })
-        }
+        setTimeout(() => {
+            const ele = $('#privacy-policy');
+            if (ele) {
+                ele.on('click', (e: any) => {
+                    this.privacyPolicyClick(e);
+                })
+            }
+        })
+    }
+
+    setUpDateMin() {
+        setTimeout(() => {
+            const elements = $('input[type="date"]');
+            if (elements && elements.length) {
+                const ele = elements[0];
+                const now = new Date();
+                const minDate = now.toISOString().substring(0,10);
+                ele.setAttribute('min', minDate);
+            }
+        })
     }
 
 
@@ -353,8 +371,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         }
-        if (this.onBoardingObject.current_page === 'questions') {
+        if (this.onBoardingObject.last_page === 'questions') {
             this.listenToPrivacyPolicyClick();
+            this.setUpDateMin();
         }
         console.log('this.onBoardingObject', this.onBoardingObject)
     }
@@ -554,6 +573,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.current_page = page;
         if (page === 'questions') {
             this.listenToPrivacyPolicyClick();
+            this.setUpDateMin();
         }
         if (page === 'video_answer') {
             this.setVideoHeight();
