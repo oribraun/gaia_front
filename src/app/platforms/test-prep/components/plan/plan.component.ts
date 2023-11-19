@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {User} from "../../../shared-slides/entities/user";
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-plan',
-  templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.less']
+    selector: 'app-plan',
+    templateUrl: './plan.component.html',
+    styleUrls: ['./plan.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PlanComponent implements OnInit {
 
@@ -44,7 +45,7 @@ export class PlanComponent implements OnInit {
                 if (response.err) {
                     console.log('getPlans err', response)
                 } else {
-                    this.plans = response.questions;
+                    this.plans = response.plans;
                 }
                 this.gettingPlans = false;
             },

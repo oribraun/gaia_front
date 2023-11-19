@@ -85,11 +85,12 @@ export class ApiService {
         )
     }
 
-    login(email: string, password: string, platform: string = '') {
+    login(email: string, password: string, platform: string = '', planId: number = -1) {
         return this.http.post(this.serverBase + this.baseApiAuth + 'login', {
                 email: email,
                 password: password,
-                platform: platform
+                platform: platform,
+                planId: planId
             },
             this.httpOptions
         )

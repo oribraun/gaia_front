@@ -391,7 +391,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform));
+            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform, this.planId));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
@@ -421,7 +421,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.errMessage = '';
             const response: any = await lastValueFrom(this.apiService.loginSocial({
                 user_details: user_details,
-                platform: this.selectedPlatform
+                platform: this.selectedPlatform,
+                planId: this.planId
             }));
             const data = response.data;
             if (!response.err) {
