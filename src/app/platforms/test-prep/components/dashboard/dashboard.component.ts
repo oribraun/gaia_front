@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from "../../../main/services/api.service";
 import {Config} from "../../../main/config";
 import {User} from "../../../shared-slides/entities/user";
@@ -12,7 +12,7 @@ declare var $: any;
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.less']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
     user!: User;
     gettingGroupTypes = false;
@@ -193,6 +193,10 @@ export class DashboardComponent implements OnInit {
 
     reset() {
         this.groupTypes = []
+    }
+
+    ngOnDestroy(): void {
+        this.hideUserLessonsModal();
     }
 
 }

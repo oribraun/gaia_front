@@ -1,4 +1,6 @@
 import {NgModule, Provider} from '@angular/core';
+import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 // Injection token for the Http Interceptors multi-provider
@@ -10,20 +12,16 @@ import {MyHttpInterceptor} from "./interceptors/my-http-interceptor";
 export const httpInterceptorProviders: Provider =
   { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true };
 
-import { AppRoutingModule } from './app-routing.module';
-import {YouTubePlayerModule} from '@angular/youtube-player';
-import { AppComponent } from './app.component';
 import {Config} from "./config";
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
-import {FormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { AboutComponent } from './components/about/about.component';
-// import {APP_BASE_HREF} from "@angular/common";
-import { NgxEchartsModule } from 'ngx-echarts';
+import {PrivacyComponent} from "./components/privacy/privacy.component";
 import {RangePipe} from "./pipes/range/range.pipe";
 import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe';
 import { SafePipe } from './pipes/safe.pipe';
@@ -40,7 +38,8 @@ import { BuyComponent } from './components/buy/buy.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
 
-
+import { NgxEchartsModule } from 'ngx-echarts';
+import {YouTubePlayerModule} from '@angular/youtube-player';
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import {TestPrepModule} from "../test-prep/test-prep.module";
 import {ChildrensModule} from "../childrens/childrens.module";
@@ -55,6 +54,7 @@ import {ChildrensModule} from "../childrens/childrens.module";
         SafeHtmlPipe,
         RangePipe,
         AboutComponent,
+        PrivacyComponent,
         DatetimeFormatPipe,
         SafePipe,
         LessonComponent,

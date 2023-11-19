@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Config} from "../../config";
 import {User} from "../../../shared-slides/entities/user";
 import {OnStateChangeEvent, PlayerState} from "../../../shared-slides/slides/video/video.component";
@@ -12,7 +12,7 @@ declare var $: any;
     templateUrl: './on-boarding.component.html',
     styleUrls: ['./on-boarding.component.less']
 })
-export class OnBoardingComponent implements OnInit, AfterViewInit {
+export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('video', { static: false }) video!: ElementRef;
     loading_player = false;
@@ -83,7 +83,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
             {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
         ],
         "Consent and Agreements": [
-            {text: "Privacy Policy Consent: Do you agree to the website's <a href='#' (click)='test()'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
+            {text: "Privacy Policy Consent: Do you agree to the website's <a id='privacy-policy' class='pointer'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
             {text: "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?", type: 'radio-switch', options: ['Yes']},
         ],
     }
@@ -164,9 +164,19 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         this.imageSrc = this.config.staticImagePath;
     }
 
-    test(e: any) {
+    privacyPolicyClick(e: any) {
         e.preventDefault();
-        alert('a')
+        this.showPrivacyPolicyModel();
+    }
+    showPrivacyPolicyModel() {
+        $('#privacyPolicyModal').modal('show');
+    }
+
+    hidePrivacyPolicyModel() {
+        const el = $('#privacyPolicyModal');
+        el.removeClass('show');
+        el.modal('hide');
+        $('.modal-backdrop').hide();
     }
 
     ngOnInit(): void {
@@ -248,6 +258,15 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         })
     }
 
+    listenToPrivacyPolicyClick() {
+        const ele = $('#privacy-policy');
+        if (ele) {
+            ele.on('click', (e: any) => {
+                this.privacyPolicyClick(e);
+            })
+        }
+    }
+
 
 
     initCurrentPage(demo= false) {
@@ -296,6 +315,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
                     this.onBoardingObject[item] = obj[item]
                 }
             }
+        }
+        if (this.onBoardingObject.current_page === 'questions') {
+             this.listenToPrivacyPolicyClick();
         }
         console.log('this.onBoardingObject', this.onBoardingObject)
     }
@@ -421,6 +443,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
 
     onQuestionsChange() {
         this.onBoardingObjectChanged = true;
+        this.onBoardingObject.finished = false;
     }
 
     onCustomBeMoreSpecific(key: string, i: number) {
@@ -492,6 +515,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
     goToPrevPage(page: string) {
         this.scrollToTop();
         // this.current_page = page;
+        if (page === 'questions') {
+            this.listenToPrivacyPolicyClick();
+        }
         if (page === 'video_answer') {
             this.setVideoHeight();
         }
@@ -606,4 +632,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit {
         //     }
         // }, this.stateTimeout)
     }
+
+    ngOnDestroy(): void {
+        this.hidePrivacyPolicyModel();
+    }
+
+
 }
