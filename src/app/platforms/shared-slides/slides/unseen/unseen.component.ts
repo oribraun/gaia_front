@@ -314,21 +314,25 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit {
         this.unseenTextHtml = spanList.join('')
         // console.log('this.unseenTextHtml', this.unseenTextHtml)
         setTimeout(() => {
-            $('.word').on('click', (e: any) => {
-                // console.log('e.target', e.target)
-                const word = e.target.closest('.word');
-                const id = word.id;
-                const value = word.innerText;
-                console.log('value', value)
-                const ids = this.currentUnseenWords.map(o => o.id);
-                const index = ids.indexOf(id);
-                if (index > -1) {
-                    this.currentUnseenWords.splice(index, 1);
-                } else {
-                    this.currentUnseenWords.push({id: id, value: value})
-                }
-                this.resetUnseenHtml();
-            })
+            // this.listenToWordClick();
+        })
+    }
+
+    listenToWordClick() {
+        $('.word').on('click', (e: any) => {
+            // console.log('e.target', e.target)
+            const word = e.target.closest('.word');
+            const id = word.id;
+            const value = word.innerText;
+            console.log('value', value)
+            const ids = this.currentUnseenWords.map(o => o.id);
+            const index = ids.indexOf(id);
+            if (index > -1) {
+                this.currentUnseenWords.splice(index, 1);
+            } else {
+                this.currentUnseenWords.push({id: id, value: value})
+            }
+            this.resetUnseenHtml();
         })
     }
 
