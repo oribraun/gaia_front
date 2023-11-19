@@ -146,4 +146,13 @@
         </div>
         <div class="disabled-board" *ngIf="isPause"></div>
     </div>
+
+    <div class="floating-buttons" *ngIf="currentSection.slides.length > 1">
+        <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
 </div>

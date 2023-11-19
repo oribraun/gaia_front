@@ -976,6 +976,22 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
 
+    onNextSlide(e: any) {
+        this.setForcedSlide(0)
+        if(this.forceChangeSlideInfo){
+            this.stopAudio()
+            this.changeSlideReply()
+        }
+    }
+
+    onPrevSlide(e: any) {
+        this.setForcedSlide(-2)
+        if(this.forceChangeSlideInfo){
+            this.stopAudio()
+            this.changeSlideReply()
+        }
+    }
+
     resetSpeechRecognition() {
         console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing)
         if (this.speechRecognitionService.ASR_recognizing) {

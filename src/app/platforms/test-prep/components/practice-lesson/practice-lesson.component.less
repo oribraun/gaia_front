@@ -420,4 +420,25 @@
         100% { color: inherit; }
     }
 
+    .floating-buttons {
+        position: absolute;
+        bottom:0;
+        left:50%;
+        transform: translateX(-50%);
+        font-size: 4em;
+        button {
+            border: none;
+            background: none;
+            i {
+                vertical-align: text-top;
+            }
+        }
+        button:enabled {
+            color: var(--gaia-main-border-color);
+            &:hover {
+                text-shadow: 0 0 5px #979797;
+            }
+        }
+    }
+
 }
