@@ -79,7 +79,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         ],
         "Learning Goals and Preferences": [
             {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
-            {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'input'},
+            {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'radio', options: ['daily', 'once a week', 'twice a week', '3-4 times a week']},
             {text: "What is The Exact Date Of your exam?", type: 'date'},
             {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
         ],
