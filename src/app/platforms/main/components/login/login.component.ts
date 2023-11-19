@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
         this.resetMessages();
         try {
             this.errMessage = '';
-            const response: any = await this.apiService.register(this.email, this.username, this.password).toPromise();
+            const response: any = await this.apiService.register(this.email, this.username, this.password, -1).toPromise();
             if (!response.err) {
                 const data = response.data;
                 const success_message = data.message;
