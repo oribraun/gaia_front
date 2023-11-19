@@ -573,20 +573,24 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         // }
         const token = this.config.getCookie('token', true)
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
-            const csrftoken_exp = response.csrftoken_exp
+            // const csrftoken_exp = response.csrftoken_exp
+            const cookie_age = response.cookie_age
             const token = response.token
-            const d = new Date(csrftoken_exp)
+            const d = new Date()
+            d.setSeconds(d.getSeconds() + cookie_age)
             this.config.setCookie('token', token, d, true);
             this.config.token = this.config.getCookie('token', true);
         }
 
         const user = this.config.getCookie('user', true)
         if (!user || !clientRunningOnServerHost) { // meaning it's not served by django server
-            const csrftoken_exp = response.csrftoken_exp
+            // const csrftoken_exp = response.csrftoken_exp
+            const cookie_age = response.cookie_age
             const user = response.user
-            const d = new Date(csrftoken_exp)
+            const d = new Date()
+            d.setSeconds(d.getSeconds() + cookie_age)
             this.config.setCookie('user', JSON.stringify(user), d, true);
-            this.config.setCookie('user-exp', csrftoken_exp, d, true);
+            this.config.setCookie('user-exp', d.toISOString(), d, true);
             const new_user = this.config.getCookie('user', true)
             this.config.user = JSON.parse(new_user);
         } else {

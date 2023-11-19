@@ -148,7 +148,7 @@ export class Config {
                 final_val = val;
             }
         }
-        var c_value = final_val + "; expires=" + exp.toUTCString() + '; path=/';
+        var c_value = final_val + "; expires=" + exp.toUTCString() + '; path=/;';
         document.cookie = name + "=" + c_value;
     }
 

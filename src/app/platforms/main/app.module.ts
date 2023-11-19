@@ -1,6 +1,14 @@
-import { NgModule } from '@angular/core';
+import {NgModule, Provider} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+// Injection token for the Http Interceptors multi-provider
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import {MyHttpInterceptor} from "./interceptors/my-http-interceptor";
+
+/** Provider for the Noop Interceptor. */
+export const httpInterceptorProviders: Provider =
+  { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true };
 
 import { AppRoutingModule } from './app-routing.module';
 import {YouTubePlayerModule} from '@angular/youtube-player';
@@ -82,7 +90,8 @@ import {ChildrensModule} from "../childrens/childrens.module";
     ],
     providers: [
         // {provide: APP_BASE_HREF, useValue: '/static/client/'},
-        Config
+        Config,
+        httpInterceptorProviders
     ],
     exports: [
         SafePipe,
