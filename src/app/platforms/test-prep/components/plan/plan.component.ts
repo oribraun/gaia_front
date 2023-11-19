@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../../shared-slides/entities/user";
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-plan',
@@ -18,6 +19,8 @@ export class PlanComponent implements OnInit {
     constructor(
         private config: Config,
         private apiService: ApiService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
     }
 
@@ -49,6 +52,14 @@ export class PlanComponent implements OnInit {
                 console.log('getPlans error', error)
                 this.gettingPlans = false;
             },
+        })
+    }
+
+    selectedItem(e: any, plan_id: number) {
+        e.preventDefault();
+        this.router.navigate(['.'], { relativeTo: this.route, queryParams: { }});
+        setTimeout(() => {
+            this.router.navigate(['.'], { relativeTo: this.route, queryParams: { authType: 'signup', plan: plan_id}});
         })
     }
 

@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     email: string = '';
     password: string = '';
     username: string = '';
+    planId!: number;
     // user: any = {};
     errMessage = '';
     successMessage = '';
@@ -88,12 +89,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
         this.route.queryParams.subscribe((params) => {
             const type = params['authType']
-            if (type && this.formTypeOptions.indexOf(type) > -1) {
-                this.formType = type;
+            if (type && this.formTypeOptions.indexOf(type.toLowerCase()) > -1) {
+                this.formType = type.toLowerCase();
                 console.log('this.formType', this.formType)
                 setTimeout(() => {
                     this.showLoginModel();
                 })
+            }
+            const planId = params['planId']
+            if (planId) {
+                this.planId = planId;
             }
             this.initOnBoarding();
         })
@@ -446,7 +451,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.register(this.email, this.username, this.password));
+            const response: any = await lastValueFrom(this.apiService.register(this.email, this.username, this.password, this.planId));
             if (!response.err) {
                 const data = response.data;
                 const success_message = data.message;
@@ -472,7 +477,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.registerSocial({user_details: user_details}));
+            const response: any = await lastValueFrom(this.apiService.registerSocial({user_details: user_details, planId: this.planId}));
             if (!response.err) {
                 const data = response.data;
                 console.log('data', data)

@@ -96,10 +96,10 @@
                 </div>
 
                 <div class="pricing-column-header pricing-footer">
-                    <a href="/subscribe/premium-1-month" class="btn btn-secondary btn-default btn-lg">Academic - Sign Up Now</a>
+                    <a href="/subscribe/premium-1-month" (click)="selectedItem($event, 1)" class="btn btn-secondary btn-default btn-lg">Academic - Sign Up Now</a>
                 </div>
                 <div class="pricing-column-footer pricing-footer">
-                    <a href="/subscribe/premium-1-month" class="btn btn-secondary btn-default btn-lg">General Training - Sign Up Now</a>
+                    <a href="/subscribe/premium-1-month" (click)="selectedItem($event, 2)" class="btn btn-secondary btn-default btn-lg">General Training - Sign Up Now</a>
                 </div>
             </div>
         </div>
@@ -197,10 +197,10 @@
                 </div>
 
                 <div class="pricing-column-header pricing-footer">
-                    <a href="/register/premium-6-month" class="btn btn-secondary btn-lg">Academic - Sign Up Now</a>
+                    <a href="/register/premium-6-month" (click)="selectedItem($event, 3)" class="btn btn-secondary btn-lg">Academic - Sign Up Now</a>
                 </div>
                 <div class="pricing-column-footer pricing-footer">
-                    <a href="/register/premium-6-month" class="btn btn-secondary btn-lg">General Training - Sign Up Now</a>
+                    <a href="/register/premium-6-month" (click)="selectedItem($event, 4)" class="btn btn-secondary btn-lg">General Training - Sign Up Now</a>
                 </div>
             </div>
         </div>

@@ -105,11 +105,12 @@ export class ApiService {
             this.httpOptions
         )
     }
-    register(email: string, username: string, password: string) {
+    register(email: string, username: string, password: string, planId: number) {
         return this.http.post(this.serverBase + this.baseApiAuth + 'register', {
                 email: email,
                 username: username,
-                password: password
+                password: password,
+                planId: planId
             },
             this.httpOptions
         )
