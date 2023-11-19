@@ -123,7 +123,8 @@ export class DashboardComponent implements OnInit {
         this.generateNewLesson().then((id) => {
             this.hideUserLessonsModal();
             this.router.navigate(['test_prep/practice/' + id])
-        })
+        }).catch((err) => {})
+
     }
 
     generateNewLesson() {
@@ -134,7 +135,7 @@ export class DashboardComponent implements OnInit {
                     this.gettingNewLesson = false;
                     if (response.err) {
                         console.log('generateNewLesson err', response)
-                        reject()
+                        reject("")
                     } else {
                         const id = response.id
                         resolve(id)
@@ -143,7 +144,7 @@ export class DashboardComponent implements OnInit {
                 error: (error) => {
                     console.log('generateNewLesson error', error)
                     this.gettingNewLesson = false;
-                    reject()
+                    reject("")
                 },
             })
         })
