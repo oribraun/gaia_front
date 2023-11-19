@@ -34,7 +34,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         questions: {
             "Language Proficiency": ["","","","",],
             "IELTS Specifics": ["","","",],
-            "Learning Goals and Preferences": ["","",[],],
+            "Learning Goals and Preferences": ["","",[],""],
             "Consent and Agreements": ["","",],
         },
         area_of_interest: [
@@ -80,6 +80,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         "Learning Goals and Preferences": [
             {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
             {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'input'},
+            {text: "What is The Exact Date Of your exam?", type: 'date'},
             {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
         ],
         "Consent and Agreements": [
@@ -90,7 +91,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     questions_required_errors: any = {
         "Language Proficiency": [false,false,false,false],
         "IELTS Specifics": [false,false,false],
-        "Learning Goals and Preferences": [false,false,false],
+        "Learning Goals and Preferences": [false,false,false,false],
         "Consent and Agreements": [false,false,false],
     }
 
@@ -217,6 +218,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             || !userOnBoarding.questions["Consent and Agreements"].length) {
             needReset = true;
         }
+        const equalTypes1 = this.areArraysEqualInType(this.onBoardingObject.questions["Language Proficiency"], userOnBoarding.questions["Language Proficiency"]);
+        const equalTypes2 = this.areArraysEqualInType(this.onBoardingObject.questions["IELTS Specifics"], userOnBoarding.questions["IELTS Specifics"]);
+        const equalTypes3 = this.areArraysEqualInType(this.onBoardingObject.questions["Learning Goals and Preferences"], userOnBoarding.questions["Learning Goals and Preferences"]);
+        const equalTypes4 = this.areArraysEqualInType(this.onBoardingObject.questions["Consent and Agreements"], userOnBoarding.questions["Consent and Agreements"]);
+        if (!equalTypes1 || !equalTypes2 || !equalTypes3 || !equalTypes4) {
+            needReset = true;
+        }
         // checking area of interest
         const keys = Object.keys(this.areaOfInterestItems)
         if (!userOnBoarding.area_of_interest.every((item: string) => keys.includes(item))) {
@@ -235,6 +243,35 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!needReset) {
             this.userOnBoarding = userOnBoarding;
         }
+    }
+
+    areArraysEqualInType(arr1: any[], arr2: any[]) {
+        // Check if arrays have the same length
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        // Iterate through the arrays and compare types
+        for (let i = 0; i < arr1.length; i++) {
+            // Use typeof to get the type of the element
+            const type1 = typeof arr1[i];
+            const type2 = typeof arr2[i];
+
+            // Compare types
+            if (type1 !== type2) {
+                return false;
+            }
+
+            // If the element is an array, recursively check its elements
+            if (type1 === 'object' && Array.isArray(arr1[i]) && Array.isArray(arr2[i])) {
+                if (!this.areArraysEqualInType(arr1[i], arr2[i])) {
+                    return false;
+                }
+            }
+        }
+
+        // If all types are equal, return true
+        return true;
     }
 
     ngAfterViewInit(): void {
@@ -317,7 +354,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         }
         if (this.onBoardingObject.current_page === 'questions') {
-             this.listenToPrivacyPolicyClick();
+            this.listenToPrivacyPolicyClick();
         }
         console.log('this.onBoardingObject', this.onBoardingObject)
     }

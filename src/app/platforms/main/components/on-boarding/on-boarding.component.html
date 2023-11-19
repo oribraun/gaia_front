@@ -70,6 +70,15 @@
                                             </select>
                                         </div>
                                     </ng-container>
+                                    <ng-container *ngIf="q.type === 'date'">
+                                        <p class="text" [innerHTML]="q.text"></p>
+                                        <div class="options">
+                                            <input class="form-control" type="date"
+                                                   [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                   [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                   (ngModelChange)="onQuestionsChange()">
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </ng-container>
                         </div>
