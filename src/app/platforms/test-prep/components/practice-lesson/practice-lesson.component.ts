@@ -24,6 +24,7 @@ export class PracticeLessonComponent implements OnInit {
     mock = environment.is_mock;
     lesson_id!: number;
     question_id!: number;
+    slide_id!: string;
 
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
@@ -124,6 +125,10 @@ export class PracticeLessonComponent implements OnInit {
             if (q_id) {
                 this.question_id = parseInt(q_id);
             }
+            const s_id = params['s_id']
+            if (s_id) {
+                this.slide_id = s_id;
+            }
         })
 
         this.getUser();
@@ -217,6 +222,7 @@ export class PracticeLessonComponent implements OnInit {
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         this.setIndexesByQuestionId();
+                        this.gettingPresentation = false;
                         return;
                     } else {
                         this.user.last_lesson_id = this.lesson_id;
