@@ -24,7 +24,7 @@ export class PracticeLessonComponent implements OnInit {
     mock = environment.is_mock;
     lesson_id!: number;
     question_id!: number;
-    slide_id!: string;
+    slide_uid!: string;
 
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
@@ -125,9 +125,9 @@ export class PracticeLessonComponent implements OnInit {
             if (q_id) {
                 this.question_id = parseInt(q_id);
             }
-            const s_id = params['s_id']
-            if (s_id) {
-                this.slide_id = s_id;
+            const s_uid = params['s_uid']
+            if (s_uid) {
+                this.slide_uid = s_uid;
             }
         })
 
@@ -221,7 +221,11 @@ export class PracticeLessonComponent implements OnInit {
                     this.presentation = new Presentation(response.presentation);
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
-                        this.setIndexesByQuestionId();
+                        let get_slide_from_presentation = true;
+                        if (this.slide_uid) {
+                            get_slide_from_presentation = this.setSlideBySlideUid();
+                        }
+                        this.setIndexesByQuestionId(get_slide_from_presentation);
                         this.gettingPresentation = false;
                         return;
                     } else {
@@ -1048,10 +1052,33 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
 
-    setIndexesByQuestionId() {
-        this.currentSectionIndex = this.presentation.current_section_index;
-        this.currentSlideIndex = this.presentation.current_slide_index;
-        this.currentObjectiveIndex = this.presentation.current_objective_index;
+    setSlideBySlideUid() {
+        let section_index = 0;
+        for (let section of this.presentation.sections) {
+            let slide_index = 0;
+            for (let slide of section.slides) {
+                console.log("slide.slide_uid, this.slide_uid", slide.slide_uid, this.slide_uid)
+                if (slide.slide_uid == this.slide_uid) {  
+                    this.currentSectionIndex = section_index;
+                    this.currentSlideIndex = slide_index;
+                    this.currentObjectiveIndex = 0;
+                    this.setCurrentSection();
+                    this.setData();
+                    return false;
+                }
+                slide_index++;
+            }
+            section_index++;
+        }
+        return true;
+    }
+    setIndexesByQuestionId(get_slide_from_presentation: boolean) {
+        if (get_slide_from_presentation)
+        {        
+            this.currentSectionIndex = this.presentation.current_section_index;
+            this.currentSlideIndex = this.presentation.current_slide_index;
+            this.currentObjectiveIndex = this.presentation.current_objective_index;
+        }
         this.estimatedDuration = this.presentation.estimated_duration;
         this.setCurrentSection();
         this.setData();
