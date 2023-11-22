@@ -237,6 +237,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
             "question_type":current_question.question_type,
             "question_idx":this.question_index,
             "question_id":current_question.question_id,
+            "slide_id":this.currentSlide.slide_uid,
             "pace":this.unseenAnswers[current_question.question_id].pace,
             'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
             'notes':this.notes,
