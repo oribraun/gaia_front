@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
@@ -17,6 +17,8 @@ declare var $: any;
     encapsulation: ViewEncapsulation.None
 })
 export class SpeakingComponent extends BaseSlideComponent implements OnInit {
+
+    @ViewChild('scroller') scroller!: ElementRef;
 
     messages: ChatMessage[] = [];
     detailedQuestionsReviewList:any[] = []
@@ -75,9 +77,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 } else if (resp_data.source == "fix_asr") {
                     this.handleStudentResponse(resp_data.llm_reply['corrected_text'])
                     this.messages[this.messages.length-1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
-                    this.question = resp_data.question 
-                    this.question_idx = resp_data.question_idx 
-                    this.all_questions_answered =  resp_data.all_questions_answered 
+                    this.question = resp_data.question
+                    this.question_idx = resp_data.question_idx
+                    this.all_questions_answered =  resp_data.all_questions_answered
                     if (!this.all_questions_answered) {
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }))
                     } else {
@@ -113,7 +115,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                     response_review_obj['teacher_question'] = resp_data.teacher_question
                     response_review_obj['alternative_response'] = resp_data.llm_reply.alternative_response
                     response_review_obj['student_response_review'] = resp_data.llm_reply.student_response_review
- 
+
                     this.updateDetailedQuestionReview(response_review_obj)
                 } else if(resp_data.source =='grade_conversation'){
                     this.gradeConversationInProgress = false
@@ -129,7 +131,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         })
 
     }
- 
+
     updateDetailedQuestionReview(obj:any){
         this.detailedQuestionsReviewList.push(obj)
     }
@@ -147,6 +149,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             }
 
         }
+        this.scrollToBottom2();
     }
 
     isEmpty(obj:any) {
@@ -200,12 +203,13 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             this.messages.push(
                 new ChatMessage({type: 'user', message: recognitionText}),
             )
+            this.scrollToBottom2();
         }
     }
 
     initQnaReview(qna_review_list:any[]){
         this.detailedQuestionsReviewList = []
-        
+
         for(let qna of qna_review_list){
             let response_review_obj:any = {}
             response_review_obj['student_response'] = qna.response
@@ -223,6 +227,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 this.messages.push(
                     new ChatMessage({type: 'user', message:''}),
                 )
+                this.scrollToBottom2();
             }
             this.studentActiveASR.push(results.text)
             this.messages[this.messages.length-1]['message'] = this.studentActiveASR.join('. ')
@@ -329,7 +334,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     speakTheText(text:string = ''){
         text = text.trim()
         if(!text.length){
-            text = this.question 
+            text = this.question
         }
         if(text.length){
             const data = {
@@ -373,7 +378,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
     showDetailedQuestionReview(){
         this.showDetailedQuestionReviewActive = true
     }
-        
+
     openModal(){
         this.modalActive = true
     }
@@ -423,4 +428,13 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds: self.seconds
         }
     }
- }
+
+    scrollToBottom2(animate=false, timeout=0){
+        if (this.scroller) {
+            setTimeout(() => {
+                const element = this.scroller.nativeElement;
+                element.scrollTop = element.scrollHeight
+            }, timeout)
+        }
+    }
+}

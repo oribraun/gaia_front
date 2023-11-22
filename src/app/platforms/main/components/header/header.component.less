@@ -11,6 +11,11 @@
         padding-right: 0;
         background-color: var(--gaia-background-color);
         align-items: stretch;
+        @media(min-width: 1920px) {
+            max-width: none;
+            padding-left: calc((100% - @max-width)/2);
+            margin-right: calc((100% - @max-width)/2);
+        }
         .brand {
             align-self: stretch;
             height: @header-height;

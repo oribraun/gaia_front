@@ -8,21 +8,23 @@
     </div>
     <div class="chat general-box">
         <!-- <div class="question_timer">08:26</div> -->
-        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
+        <div class="timer-wrapper">
+            <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
 
-        <div class="outer-scroller">
-            <div class="inner-scroller" #scroller>
-                <div class="messages">
-                    <ng-container *ngFor="let item of messages; let i = index">
-                        <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
-                            <!--                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
-                            <span class="translate-icon"(click)="translate(i)">
-                            <i class="bi bi-translate"></i>
-                        </span>
-                            <i class="text" *ngIf="!item.showTranslated">{{item.message}}</i>
-                            <i class="text" *ngIf="item.showTranslated">{{item.translatedMessage}}</i>
-                        </div>
-                    </ng-container>
+            <div class="outer-scroller">
+                <div class="inner-scroller" #scroller>
+                    <div class="messages">
+                        <ng-container *ngFor="let item of messages; let i = index">
+                            <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
+                                <!--                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
+                                <span class="translate-icon"(click)="translate(i)">
+                                <i class="bi bi-translate"></i>
+                            </span>
+                                <i class="text" *ngIf="!item.showTranslated">{{item.message}}</i>
+                                <i class="text" *ngIf="item.showTranslated">{{item.translatedMessage}}</i>
+                            </div>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +38,7 @@
                 (touchend)="onPTTPressUp()"
         >Press To Talk</button> -->
     </div>
-    
+
     <div class="main-btn_rec">
         <div class="btn-rec-container" >
             <input type="checkbox" id="btn" />
