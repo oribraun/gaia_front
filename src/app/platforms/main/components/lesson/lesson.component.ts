@@ -1161,6 +1161,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         const n_slide_objectives = data.n_slide_objectives;
         const presentation_done = data.presentation_done;
+        const all_presentation_tasks_completed= data.all_presentation_tasks_completed;
         const text = data.text;
         this.broadCastMessage('computer', text, true);
         const help_sound_url = data.help_sound_url;
