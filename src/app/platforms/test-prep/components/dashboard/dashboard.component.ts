@@ -18,8 +18,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     gettingGroupTypes = false;
 
     groupTypes: any = [];
-    courses: any = [];
+    courses: any = {};
     statusMapping: any = {};
+    coursePlan: any = null;
+    currentCoursePlanPartIndex: any = null;
 
     currentCourseType: any;
     currentCourseLessons: any;
@@ -72,6 +74,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.groupTypes = response.group_types;
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;
+                    this.coursePlan = response.current_course_plan;
+                    if (this.coursePlan && this.coursePlan.parts && this.coursePlan.parts.length) {
+                        this.currentCoursePlanPartIndex = 0
+                    }
+                    this.demoPlanPartsAnimation();
                     // this.purchasedCourses = response.purchased_courses;
                 }
                 this.gettingGroupTypes = false;
@@ -95,6 +102,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.getCourseInfo(this.currentCourseType)
         } else {
             this.showUserLessonsModal();
+        }
+    }
+
+    selectCourseByName(courseTypeName: any) {
+        const map = this.groupTypes.map((o: any) => o.name)
+        const index = map.indexOf(courseTypeName)
+        let courseType: any = null;
+        if (index > -1) {
+            courseType = this.groupTypes[index]
+        }
+        if (courseType) {
+            if (this.currentCourseType !== courseType) {
+                this.resetCurrentCourse();
+                this.currentCourseType = courseType
+                this.getCourseInfo(this.currentCourseType)
+            } else {
+                this.showUserLessonsModal();
+            }
         }
     }
 
@@ -194,6 +219,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     reset() {
         this.groupTypes = []
+    }
+
+    selectCoursePart(index: number) {
+        this.currentCoursePlanPartIndex = index;
+    }
+
+    getCourseFinished(key: any) {
+        if (this.courses[key]) {
+            return Number(this.courses[key].finished);
+        } else {
+            return 0;
+        }
+    }
+
+    demoPlanPartsAnimation() {
+        try {
+            const orig = JSON.parse(JSON.stringify(this.courses))
+            const timeout = 1000;
+            setTimeout(() => {
+                this.courses.hearing.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.hearing;
+                setTimeout(() => {
+                    this.courses.reading.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.reading;
+                    setTimeout(() => {
+                        this.courses.speaking.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.speaking;
+                        setTimeout(() => {
+                            this.courses.writing.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.writing;
+                            setTimeout(() => {
+                                this.courses = JSON.parse(JSON.stringify(orig));
+                            }, timeout)
+                        }, timeout)
+                    }, timeout)
+                }, timeout)
+            }, timeout)
+        } catch (e: any) {}
+    }
+    getString(str: any) {
+        return str.toString();
     }
 
     ngOnDestroy(): void {

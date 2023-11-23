@@ -1,6 +1,6 @@
 .dashboard {
     position: relative;
-    height: 100%;
+    min-height: 100%;
     padding: 0.75rem 0;
     max-width: 1200px;
     margin: 0 auto;
@@ -11,6 +11,268 @@
         div[class*="col-"] {
             position: relative;
         }
+        @margin: 15px;
+        @borderRadius: 5px;
+        .panel-box {
+            position: relative;
+            background: #fff;
+            padding: 0.75rem;
+            border-radius: @borderRadius;
+            overflow-x: hidden;
+            margin-top: @margin;
+            width: 100%;
+            .header {
+                color: #fb879b;
+            }
+            .text-body {
+                margin-top: @margin;
+            }
+            .plan-parts {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                .date, .items {
+                    margin: 0 5px;
+                    align-self: center;
+                    white-space: nowrap;
+                }
+                .items {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    width: 100%;
+                    .item {
+                        padding: 5px 5px;
+                        background: var(--gaia-header-color);
+                        color:#fff;
+                        align-self: center;
+                        width: 100%;
+                        font-size: 1.2em;
+                        text-align: center;
+                        cursor: pointer;
+                        &:nth-child(1) {
+                            background: #588ee4;
+                        }
+                        &:nth-child(2) {
+                            background: #588ee4f2;
+                        }
+                        &:nth-child(3) {
+                            background: #588ee4e3;
+                        }
+                        &:nth-child(4) {
+                            background: #588ee4d4;
+                        }
+                        &:nth-child(5) {
+                            background: #588ee4c7;
+                        }
+                        &:hover {
+                            box-shadow: 2px 3px 6px -3px #000;
+                        }
+                        &.active {
+                            box-shadow: 2px 3px 6px -3px #000;
+                        }
+                    }
+
+                    .lesson-item {
+                        padding: 5px 5px;
+                        align-self: center;
+                        width: 100%;
+                        font-size: 1.2em;
+                        text-align: center;
+                        margin: 0 10px;
+                        width: 100%;
+                        &.quickstart {
+                            width: auto;
+                        }
+                        .lesson-total {}
+                        .lesson-timeline {
+                            list-style-type: none;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: .9em;
+                            @transitionTime: 1000ms;
+                            li {
+                                transition: all @transitionTime ease-in;
+                                width: 100%;
+                                &.complete {
+                                    .status {
+                                        .status-circle-fill {
+                                            height: 100%;
+                                        }
+                                        .status-complete-full {
+                                            .status-complete-fill {
+                                                width: 100%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            li:not(:first-child):not(:last-child) {
+                                &.complete {
+                                    .status {
+                                        .status-complete-left {
+                                            .status-complete-fill {
+                                                width: 50%;
+                                            }
+                                        }
+                                        .status-complete-right {
+                                            .status-complete-fill {
+                                                width: 50%;
+                                                left:50%;
+                                            }
+                                        }
+                                        .status-complete-full {
+                                            .status-complete-fill {
+                                                width: 100%;
+                                                left:0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            li:first-child {
+                                .status {
+                                    .status-complete {
+                                        left: 50%;
+                                    }
+                                }
+                                &.complete {
+                                    .status {
+                                        .status-complete-full {
+                                            .status-complete-fill {
+                                                width: 50%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            li:last-child {
+                                .status {
+                                    .status-complete {
+                                        right: 50%;
+                                        width: 50%;
+                                    }
+                                }
+                            }
+                            .timestamp {
+                                margin-bottom: 20px;
+                                padding: 0px 40px;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                font-weight: 100;
+                            }
+                            .status {
+                                padding: 25px 40px;
+                                display: flex;
+                                justify-content: center;
+                                position: relative;
+                                //transition: all @transitionTime ease-in;
+                                .status-complete {
+                                    position: absolute;
+                                    left:0;
+                                    right:0;
+                                    top: -2px;
+                                    height: 2px;
+                                    border-top: 2px solid #D6DCE0;
+                                    z-index: 0;
+                                    width: 100%;
+                                    .status-complete-fill {
+                                        position: absolute;
+                                        left:0;
+                                        top: -2px;
+                                        height: 2px;
+                                        border-top: 2px solid #66DC71;
+                                        z-index: 1;
+                                        transition: width @transitionTime ease-in-out;
+                                        width: 0;
+                                    }
+                                }
+                                .status-circle {
+                                    @size: 40px;
+                                    width: @size;
+                                    height: @size;
+                                    background-color: white;
+                                    border-radius: @size;
+                                    border: 1px solid #ddd;
+                                    position: absolute;
+                                    top: calc(-@size/2);;
+                                    left: calc(50% - @size/2);
+                                    //transition: all @transitionTime ease-in;
+                                    z-index: 1;
+                                    overflow: hidden;
+                                    padding: 1px 8px;
+                                    font-size: 1.5em;
+                                    cursor: pointer;
+                                    .status-circle-fill {
+                                        position: absolute;
+                                        bottom: 0;
+                                        left:0;
+                                        right:0;
+                                        height: 0;
+                                        background-color: #66DC71;
+                                        transition: height @transitionTime ease-in-out;
+                                    }
+                                    i {
+                                        position: relative;
+                                        z-index: 2;
+                                    }
+                                }
+                                //&:after {
+                                //    content: '';
+                                //    position: absolute;
+                                //    left:0;
+                                //    right:0;
+                                //    top: -2px;
+                                //    height: 2px;
+                                //    border-top: 2px solid #D6DCE0;
+                                //    z-index: 0;
+                                //}
+                                //&:before {
+                                //    content: '';
+                                //    width: 25px;
+                                //    height: 25px;
+                                //    background-color: white;
+                                //    border-radius: 25px;
+                                //    border: 1px solid #ddd;
+                                //    position: absolute;
+                                //    top: -15px;
+                                //    left: 42%;
+                                //    transition: all @transitionTime ease-in;
+                                //    z-index: 1;
+                                //}
+                            }
+                            h4 {
+                                font-weight: 600;
+                                font-size: .9em;
+                                cursor: pointer;
+                            }
+                        }
+                        .lesson-title {}
+                    }
+                }
+            }
+        }
+        .panel-box-no-margin {
+            margin-top: 0;
+        }
+
+        .dynamic-part-area {
+            .left {
+                width: 60%;
+                margin-right: @margin;
+            }
+            .right {
+                .test-yourself {
+                    height: 100%;
+                    display: flex;
+                }
+            }
+        }
+
+
+
         .panel {
             position: relative;
             background: #fff;
