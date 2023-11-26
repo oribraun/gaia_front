@@ -156,9 +156,12 @@
         </button>
     </div>
 
-    <div *ngIf="presentation.presentation_done" class="floating-buttons fadein-wrapper" style="width:400px; height:80px; border:1px solid red">
+    <div *ngIf="enable_end_lesson_button" class="floating-buttons fadein-wrapper" style="width:400px; height:80px; border:1px solid red">
         <h5>Good Job, You have completed this lesson</h5>
-        <div style="position:absolute; top:0">
+        <div *ngIf="!vocabulary_was_added" style="position:absolute; top:0">
+            <button class="btn btn-primary" (click)="openVocabularyModal()">Review Vocabulary</button>
+        </div>
+        <div *ngIf="vocabulary_was_added "style="position:absolute; top:0">
             <button class="btn btn-primary" (click)="backToDashboard()">Back to Dashboard</button>
         </div>
     </div>

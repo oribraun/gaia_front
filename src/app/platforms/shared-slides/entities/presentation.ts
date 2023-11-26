@@ -8,6 +8,7 @@ export class Presentation {
     presentation_done!: boolean
     presentation_title!: string
     presentation_topic!: string
+    test_mode!: boolean
     sections!: PresentationSection[]
     slides_flat: object[] = []
     teacher!: any

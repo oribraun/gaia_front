@@ -25,6 +25,8 @@ export class PracticeLessonComponent implements OnInit {
     lesson_id!: number;
     question_id!: number;
     modalActive:boolean=false;
+    enable_end_lesson_button:boolean=false;
+    vocabulary_was_added:boolean=true;
     slide_uid!: string;
 
     socketRecorderEvents: any = {};
@@ -509,9 +511,10 @@ export class PracticeLessonComponent implements OnInit {
             this.stopAudio();
             return;
         }
-
+        console.log("all_presentation_tasks_completed",all_presentation_tasks_completed)
         if (all_presentation_tasks_completed){
-             this.modalActive=true;
+            this.enable_end_lesson_button = true; 
+            // this.modalActive=true;
         }
 
         if (presentation_content_updated) {
@@ -1099,7 +1102,7 @@ export class PracticeLessonComponent implements OnInit {
         this.router.navigate(['/test_prep/dashboard']);
     }
 
-    openModal(){
+    openVocabularyModal(){
         this.modalActive = true
     }
 
