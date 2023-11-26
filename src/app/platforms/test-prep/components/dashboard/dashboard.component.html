@@ -49,7 +49,10 @@
                                                              'status-complete-right-old': !first && !last && ($any(l.value) <= courses[getString(l.key)].finished)
                                                              }"
                                                         ><div class="status-complete-fill"></div></div>
-                                                        <div class="status-circle"><i class="bi bi-play"></i><div class="status-circle-fill"></div></div>
+                                                        <div class="status-circle" (click)="startNewUserLessonByName(l.key, $event)">
+                                                            <i class="bi bi-play"></i>
+                                                            <div class="status-circle-fill"></div>
+                                                        </div>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -65,11 +68,40 @@
                                         <!--                                        </div>-->
                                     </div>
                                 </div>
+                                <div class="recommended-videos" *ngIf="recommendedVideos.length">
+                                    <p>Recommended videos for this part:</p>
+                                    <div class="videos-list">
+                                        <div class="video" *ngFor="let item of recommendedVideos">
+                                            <video [src]="item.url"></video>
+                                            <div class="desc">{{item.desc}}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="achievements flex-fill">
                                 <div class="panel-box">
-                                    <div class="header">
-                                        Achievements
+                                    <div class="header d-flex justify-content-between">
+                                        <span>Achievements</span>
+                                        <span class="float-end">
+                                            <button class="btn btn-light" (click)="gotToReview()">Review my work</button>
+                                        </span>
+                                    </div>
+                                    <div class="text-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="lst">
+                                                <ul>
+                                                    <li class="text-primary"><span class="text-dark">Progress <span>?</span></span></li>
+                                                    <li class="text-danger"><span class="text-dark">Score <span>?</span></span></li>
+                                                    <li class="text-warning"><span class="text-dark">Pace <span>?</span></span></li>
+                                                </ul>
+                                            </div>
+                                            <div class="charts d-flex flex-row">
+                                                <div class="chart"></div>
+                                                <div class="chart"></div>
+                                                <div class="chart"></div>
+                                                <div class="chart"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,6 +113,43 @@
                         <div class="panel-box">
                             <div class="header">
                                 Test yourself
+                            </div>
+                            <div class="text-body">
+                                Taking test will help you better prepare to the upcoming exam and will help us customize the practice level.
+                            </div>
+                            <div class="text-body text-center">
+                                <div class="take-test">
+                                    <div class="icon">
+                                        <i class="bi bi-play-fill"></i>
+                                    </div>
+                                    <p>Take a test</p>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Grade</th>
+                                            <th scope="col">Review</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>16.6.2023</td>
+                                            <td>5</td>
+                                            <td>link</td>
+                                        </tr>
+                                        <tr>
+                                            <td>16.6.2023</td>
+                                            <td>5</td>
+                                            <td>link</td>
+                                        </tr>
+                                        <tr>
+                                            <td>16.6.2023</td>
+                                            <td>5</td>
+                                            <td>link</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,9 +271,9 @@
                     <h5 class="modal-title">{{currentCourseType.name | capitalize: 'word'}}</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="start-new">
-                        <a (click)="startNewUserLesson($event)" href="">Start New</a>
-                    </div>
+                    <!--                    <div class="start-new">-->
+                    <!--                        <a (click)="startNewUserLesson($event)" href="">Start New</a>-->
+                    <!--                    </div>-->
                     <table class="table" *ngIf="currentCourseLessons && currentCourseLessons.length">
                         <thead>
                         <tr>

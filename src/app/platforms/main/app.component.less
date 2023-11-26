@@ -15,10 +15,11 @@
 }
 .main-window-header-fixed {
     position: relative;
-    padding-top: @header-height;
-    height: 100%;
+    height: calc(100% - @header-height);
     max-width: @max-width;
     margin: 0 auto;
+    overflow: auto;
+    margin-top: @header-height;
 }
 .lesson {
     margin: 0;

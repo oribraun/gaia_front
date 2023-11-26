@@ -1,0 +1,4 @@
+<div class="my-alert fade show" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
+    <span [innerHTML]="message.text"></span>
+<!--    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+</div>

@@ -43,6 +43,7 @@ import {YouTubePlayerModule} from '@angular/youtube-player';
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import {TestPrepModule} from "../test-prep/test-prep.module";
 import {ChildrensModule} from "../childrens/childrens.module";
+import { AlertComponent } from './components/alert/alert.component';
 // only for childrens app
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import {ChildrensModule} from "../childrens/childrens.module";
         BuyComponent,
         HeaderComponent,
         OnBoardingComponent,
+        AlertComponent,
     ],
     imports: [
         BrowserModule,
