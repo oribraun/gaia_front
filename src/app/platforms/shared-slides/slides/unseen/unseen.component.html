@@ -1,6 +1,6 @@
 <div class="slide-board">
     <div class="row">
-        <div class="col-6 visible-on-print">
+        <div class="col-md-6 visible-on-print">
             <div class="box box-with-icons" #unseen_text_box (contextmenu)="openContextMenu($event)">
                 <h2>{{currentSlide.slide_title}}</h2>
                 <p  class="unseen_text" (mouseup)="getSelection($event)" [ngStyle]="{'font-size': zoom + 'em'}" [innerHTML]="unseenTextHtml | safeHtml"></p>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 visible-on-screen">
+        <div class="col-md-6 visible-on-screen">
             <div class="box box-questions">
                 <!--                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>-->
                 <section class="questions" #questions>

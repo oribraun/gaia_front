@@ -1,6 +1,6 @@
 <div class="slide-board">
     <div class="row">
-        <div class="col-6">
+        <div class="col-md-6">
             <div class="box" #unseen_text_box>
                 <h2>{{currentSlide.slide_title}}</h2>
                 <div class="audio text-center">
@@ -16,7 +16,7 @@
                 <textarea class="textarea notes" [(ngModel)]="notes" placeholder="Write your notes here"></textarea>
             </div>
         </div>
-        <div class="col-6 visible-on-screen">
+        <div class="col-md-6 visible-on-screen">
             <div class="box box-questions">
                 <!--                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>-->
                 <section class="questions" #questions>
