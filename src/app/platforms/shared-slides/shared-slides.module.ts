@@ -63,7 +63,7 @@ import { SpeakingComponent } from './slides/speaking/speaking.component';
         DatetimeFormatPipe,
         RangePipe,
         SafeHtmlPipe,
-        SafePipe
+        SafePipe,
     ],
     imports: [
         CommonModule,

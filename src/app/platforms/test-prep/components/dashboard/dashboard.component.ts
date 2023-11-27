@@ -5,6 +5,7 @@ import {User} from "../../../shared-slides/entities/user";
 import {Presentation} from "../../../shared-slides/entities/presentation";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../main/services/alert.service";
+import {HelperService} from "../../../main/services/helper.service";
 
 declare var $: any;
 
@@ -22,6 +23,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     courses: any = {};
     statusMapping: any = {};
     coursePlan: any = null;
+    // courseAchievements: Partial<{ [key in SomeArray]: string[] }> = null;
+    courseAchievements!: Partial<{[key: string]: number[]}>;
     recommendedVideos: any = [
         {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
         {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
@@ -31,8 +34,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     currentCourseType: any;
     currentCourseLessons: any;
+
     gettingCourseInfo = false;
     gettingNewLesson = false;
+    gettingUserAchievements = false;
 
     coursesType: string = 'in_progress';
 
@@ -41,12 +46,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     imageSrc: string = ''
 
+    achievements = {
+        labels: ['Progress', 'Score', 'Pace'],
+        colors: ['rgb(13,110,253)', 'rgb(220,53,69)', 'rgb(255,193,7)'],
+    }
+
     constructor(
         private config: Config,
         private apiService: ApiService,
         private router: Router,
         private route: ActivatedRoute,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private helperService: HelperService
     ) {
         this.imageSrc = this.config.staticImagePath;
     }
@@ -82,9 +93,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;
                     this.coursePlan = response.current_course_plan;
+                    this.courseAchievements = response.achievements;
                     if (this.coursePlan && this.coursePlan.parts && this.coursePlan.parts.length) {
-                        this.currentCoursePlanPartIndex = 0
+                        this.selectCoursePart(0);
                     }
+                    this.helperService.applyTooltip();
                     this.demoPlanPartsAnimation();
                     // this.purchasedCourses = response.purchased_courses;
                 }
@@ -108,7 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.currentCourseType = courseType
             this.getCourseInfo(this.currentCourseType)
         } else {
-            this.showUserLessonsModal();
+            this.alertOrShowUserLessonModel();
         }
     }
 
@@ -125,26 +138,44 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.currentCourseType = courseType
                 this.getCourseInfo(this.currentCourseType)
             } else {
-                this.showUserLessonsModal();
+                this.alertOrShowUserLessonModel();
             }
         }
     }
 
     getCourseInfo(courseType: any) {
         this.gettingCourseInfo = true;
-        this.apiService.getUserLessons(courseType).subscribe({
+        this.apiService.getUserLessons({course_type_id: courseType.id, plan_id: this.coursePlan.id}).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('getCourseInfo err', response)
                 } else {
                     this.currentCourseLessons = response.lessons;
-                    this.showUserLessonsModal();
+                    this.alertOrShowUserLessonModel();
                 }
                 this.gettingCourseInfo = false;
             },
             error: (error) => {
                 console.log('getCourseInfo error', error)
                 this.gettingCourseInfo = false;
+            },
+        })
+    }
+
+    getUserLessonAchievements() {
+        this.gettingUserAchievements = true;
+        this.apiService.getUserLessonAchievements({plan_id: this.coursePlan.id}).subscribe({
+            next: (response: any) => {
+                if (response.err) {
+                    console.log('getUserLessonAchievements err', response)
+                } else {
+                    this.courseAchievements = response.achievements;
+                }
+                this.gettingUserAchievements = false;
+            },
+            error: (error) => {
+                console.log('getUserLessonAchievements error', error)
+                this.gettingUserAchievements = false;
             },
         })
     }
@@ -178,7 +209,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     generateNewLesson(courseTypeId: any) {
         return new Promise((resolve, reject) => {
             this.gettingNewLesson = true;
-            this.apiService.getUserNewLesson({current_course_id: courseTypeId}).subscribe({
+            this.apiService.getUserNewLesson({
+                current_course_id: courseTypeId,
+                plan_id: this.coursePlan.id
+            }).subscribe({
                 next: (response: any) => {
                     this.gettingNewLesson = false;
                     if (response.err) {
@@ -217,6 +251,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.router.navigate(['test_prep/practice/' + id])
     }
 
+    alertOrShowUserLessonModel() {
+        if (this.currentCourseLessons.length) {
+            this.showUserLessonsModal();
+        } else {
+            this.alertService.info('your should start a new lesson by pressing the play button', false, 5000)
+        }
+    }
+
     showUserLessonsModal() {
         $('#userLessonsModal').modal('show');
     }
@@ -246,7 +288,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     selectCoursePart(index: number) {
-        this.currentCoursePlanPartIndex = index;
+        if (index !== this.currentCoursePlanPartIndex) {
+            this.currentCoursePlanPartIndex = index;
+        }
     }
 
     getCourseFinished(key: any) {

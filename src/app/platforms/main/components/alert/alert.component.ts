@@ -14,7 +14,7 @@ import {AlertService} from "../../services/alert.service";
 })
 
 export class AlertComponent {
-    public message: any;
+    public message: any = {};
     public messageTimeout: any;
     private alertService: AlertService;
 
@@ -28,7 +28,7 @@ export class AlertComponent {
             clearTimeout(this.messageTimeout);
             this.messageTimeout = setTimeout(() => {
                 this.clear()
-            }, 3000);
+            }, this.message.timeout);
         });
     }
 

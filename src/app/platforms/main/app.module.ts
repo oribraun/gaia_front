@@ -38,7 +38,6 @@ import { BuyComponent } from './components/buy/buy.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
 
-import { NgxEchartsModule } from 'ngx-echarts';
 import {YouTubePlayerModule} from '@angular/youtube-player';
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 import {TestPrepModule} from "../test-prep/test-prep.module";
@@ -78,14 +77,6 @@ import { AlertComponent } from './components/alert/alert.component';
         HttpClientModule,
         AppRoutingModule,
         YouTubePlayerModule,
-        NgxEchartsModule.forRoot({
-            /**
-             * This will import all modules from echarts.
-             * If you only need custom modules,
-             * please refer to [Custom Build] section.
-             */
-            echarts: () => import('echarts'), // or import('./path-to-my-custom-echarts')
-        }),
         SharedSlidesModule,
         TestPrepModule,
         ChildrensModule

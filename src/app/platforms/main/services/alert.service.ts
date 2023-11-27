@@ -29,14 +29,19 @@ export class AlertService {
         });
     }
 
-    success(message: string, keepAfterNavigationChange = false) {
+    success(message: string, keepAfterNavigationChange = false, timeout = 3000) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'success', text: message });
+        this._subject.next({ type: 'success', text: message, timeout: timeout });
     }
 
-    error(message: string, keepAfterNavigationChange = false) {
+    info(message: string, keepAfterNavigationChange = false, timeout = 3000) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'error', text: message });
+        this._subject.next({ type: 'info', text: message, timeout: timeout });
+    }
+
+    error(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+        this._keepAfterNavigationChange = keepAfterNavigationChange;
+        this._subject.next({ type: 'error', text: message, timeout: timeout });
     }
     clearError():void {
         this._subject.next("");
