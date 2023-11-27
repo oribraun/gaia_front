@@ -365,6 +365,7 @@
         .activity {
             width: 100%;
             position: relative;
+            margin-right: @gap;
             .chart {
                 width: 100%;
                 height: 300px;
@@ -384,15 +385,17 @@
                     svg {
                         width: 100%;
                         max-width: 150px;
+                        fill: #ee843c;
                     }
                     .number {
                         position: absolute;
                         top: 0;
-                        left:0;
+                        left: 0;
                         right: 0;
                         bottom: 0;
-                        padding: 20%;
+                        padding: 29% 32% 35% 32%;
                         text-align: center;
+                        font-size: 2em;
                     }
                 }
             }
@@ -400,15 +403,24 @@
         .vocabulary {
             width: 100%;
             position: relative;
-            .chart {
+            .chart-wrapper {
+                min-height: 100%;
                 width: 100%;
-                //height: 150px;
-                //max-width: 150px;
-                position: relative;
-                //box-shadow: 0 0 5px #000;
-            }
-            .strike {
-                width: 100%;
+                .chart {
+                    width: 100%;
+                    height: 300px;
+                    //max-width: 150px;
+                    position: relative;
+                    //box-shadow: 0 0 5px #000;
+                }
+
+                .text {
+                    //position: absolute;
+                    //bottom: 0;
+                    //left:0;
+                    //right:0;
+                    font-size: 1em;
+                }
             }
         }
 

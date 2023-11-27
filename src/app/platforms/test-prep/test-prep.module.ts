@@ -13,6 +13,7 @@ import { ReviewComponent } from './components/review/review.component';
 import { PlanComponent } from './components/plan/plan.component';
 import {PieChartComponent} from "./components/charts/pie-chart/pie-chart.component";
 import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { DonutChartComponent } from './components/charts/donut-chart/donut-chart.component';
 
 
 
@@ -24,7 +25,8 @@ import { BarChartComponent } from './components/charts/bar-chart/bar-chart.compo
         ReviewComponent,
         PlanComponent,
         PieChartComponent,
-        BarChartComponent
+        BarChartComponent,
+        DonutChartComponent
     ],
     imports: [
         CommonModule,

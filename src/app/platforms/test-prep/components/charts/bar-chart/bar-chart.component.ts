@@ -34,7 +34,7 @@ export class BarChartComponent {
     setUpOptions() {
         this.options = {
             grid: {
-                containLabel: true,
+                // containLabel: true,
                 // width: '50%'
             },
             tooltip: {

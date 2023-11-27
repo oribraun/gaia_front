@@ -51,6 +51,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         colors: ['rgb(13,110,253)', 'rgb(220,53,69)', 'rgb(255,193,7)'],
     }
 
+    difficulty: any = []
+    words_learned: any = {
+        labels: [],
+        data: [],
+    }
+    activity: any = {
+        labels: [],
+        data: [],
+        strike_num: 0
+    }
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -94,6 +105,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.statusMapping = response.status_mapping;
                     this.coursePlan = response.current_course_plan;
                     this.courseAchievements = response.achievements;
+                    this.activity = response.activity;
+                    this.difficulty = response.difficulty;
+                    this.words_learned = response.words_learned;
                     if (this.coursePlan && this.coursePlan.parts && this.coursePlan.parts.length) {
                         this.selectCoursePart(0);
                     }
@@ -301,8 +315,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    gotToReview() {
-        this.router.navigate(['/test_prep/review'])
+    gotTo(route: string) {
+        this.router.navigate([route])
     }
 
     demoPlanPartsAnimation() {
