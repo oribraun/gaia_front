@@ -2,7 +2,7 @@
 
 .white-board {
     position: relative;
-    height: calc(100% - (@chat-height + @padding));
+    height: calc(100% - (@chat-height + @gap));
     width: 100%;
     display: inline-block;
     vertical-align: top;
@@ -11,7 +11,7 @@
     border-radius: @border-radius;
     overflow: hidden;
     .slides {
-        height: calc(100% - (@native-lang-height + @padding));
+        height: calc(100% - (@native-lang-height + @gap));
         max-width: 100%;
         padding: 0;
         &-relative {
@@ -65,9 +65,9 @@
                     background: var(--white-background-color);
 
                     .slide-board {
-                        height: calc(100% - (@native-lang-height + @padding));
+                        height: calc(100% - (@native-lang-height + @gap));
                         border-radius: @border-radius;
-                        padding: @padding;
+                        padding: @gap;
 
                         .image {
                             display: inline-block;
@@ -214,9 +214,9 @@
                     background: var(--white-background-color);
 
                     .slide-board {
-                        height: calc(100% - (@native-lang-height + @padding));
+                        height: calc(100% - (@native-lang-height + @gap));
                         border-radius: @border-radius;
-                        padding: @padding;
+                        padding: @gap;
 
                         .image {
                             display: inline-block;
@@ -360,9 +360,9 @@
     .text-board {
         position: relative;
         z-index: 1;
-        margin-top: calc(@padding/2);
-        margin-right: calc(@padding/2);
-        margin-left: calc(@padding/2);
+        margin-top: calc(@gap/2);
+        margin-right: calc(@gap/2);
+        margin-left: calc(@gap/2);
         height: @native-lang-height;
         border-radius: @border-radius;
         background: var(--white-background-color);

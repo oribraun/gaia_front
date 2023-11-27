@@ -6,7 +6,7 @@
     @help-height: 60px;
     height: calc(100% - @header-height);
     width: @panel-width;
-    margin-left: @padding;
+    margin-left: @gap;
     display: inline-block;
     vertical-align: top;
     transition: all .3s ease-in-out;
@@ -115,7 +115,7 @@
             box-shadow: 0 0 5px var(--grey-background-color);
             height: @cam-height;
             border-radius: @border-radius;
-            top: @padding;
+            top: @gap;
             background: var(--white-background-color);
             overflow: hidden;
             video {
@@ -128,9 +128,9 @@
         .today-plan {
             @inner-padding: 20px;
             box-shadow: 0 0 5px var(--grey-background-color);
-            height: calc(100% - @cam-height*2 - @padding*2);
+            height: calc(100% - @cam-height*2 - @gap*2);
             position: relative;
-            top: @padding * 2;
+            top: @gap * 2;
             padding: 10px 0;
             border-radius: @border-radius;
             background: var(--white-background-color);

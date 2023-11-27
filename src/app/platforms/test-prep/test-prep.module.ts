@@ -12,6 +12,7 @@ import { VocabularyComponent } from './components/vocabulary/vocabulary.componen
 import { ReviewComponent } from './components/review/review.component';
 import { PlanComponent } from './components/plan/plan.component';
 import {PieChartComponent} from "./components/charts/pie-chart/pie-chart.component";
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
 
 
 
@@ -22,7 +23,8 @@ import {PieChartComponent} from "./components/charts/pie-chart/pie-chart.compone
         VocabularyComponent,
         ReviewComponent,
         PlanComponent,
-        PieChartComponent
+        PieChartComponent,
+        BarChartComponent
     ],
     imports: [
         CommonModule,

@@ -29,13 +29,13 @@
 .screen-board {
     position: relative;
     height: calc(100% - @header-height);
-    width: calc(100% - (@panel-width + @padding));
+    width: calc(100% - (@panel-width + @gap));
     display: inline-block;
     vertical-align: top;
     //transition: width .3s ease-in-out;
     .white-board {
         position: relative;
-        height: calc(100% - (@chat-height + @padding));
+        height: calc(100% - (@chat-height + @gap));
         width: 100%;
         display: inline-block;
         vertical-align: top;
@@ -44,7 +44,7 @@
         border-radius: @border-radius;
         overflow: hidden;
         .slides {
-            height: calc(100% - (@native-lang-height + @padding));
+            height: calc(100% - (@native-lang-height + @gap));
             max-width: 100%;
             .row {
                 height: 100%;
@@ -53,9 +53,9 @@
                     background: var(--white-background-color);
 
                     .slide-board {
-                        height: calc(100% - (@native-lang-height + @padding));
+                        height: calc(100% - (@native-lang-height + @gap));
                         border-radius: @border-radius;
-                        padding: @padding;
+                        padding: @gap;
 
                         .image {
                             display: inline-block;
@@ -191,7 +191,7 @@
             }
         }
         .text-board {
-            margin-top: calc(@padding/2);
+            margin-top: calc(@gap/2);
             height: @native-lang-height;
             border-radius: @border-radius;
             background: var(--white-background-color);
