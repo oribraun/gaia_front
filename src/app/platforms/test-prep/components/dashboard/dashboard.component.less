@@ -49,6 +49,9 @@
                     flex-direction: row;
                     justify-content: center;
                     width: 100%;
+                    @media(max-width: 850px) {
+                        flex-direction: column !important;
+                    }
                     .item {
                         padding: 5px 5px;
                         background: var(--gaia-header-color);
@@ -96,12 +99,13 @@
                             width: auto;
                         }
                         .lesson-total {}
-                        .lesson-timeline {
+                        ul.lesson-timeline {
                             list-style-type: none;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             font-size: .9em;
+                            padding: 0;
                             @transitionTime: 1000ms;
                             li {
                                 transition: all @transitionTime ease-in;
@@ -168,14 +172,13 @@
                             }
                             .timestamp {
                                 margin-bottom: 20px;
-                                padding: 0px 40px;
                                 display: flex;
                                 flex-direction: column;
                                 align-items: center;
                                 font-weight: 100;
                             }
                             .status {
-                                padding: 25px 40px;
+                                padding-top: 25px;
                                 display: flex;
                                 justify-content: center;
                                 position: relative;
@@ -359,6 +362,21 @@
                     height: 100%;
                     display: flex;
                 }
+            }
+            @media(max-width: 1200px) {
+                flex-direction: column !important;
+                .left {
+                    width: 100%;
+                }
+                .right {
+                    width: 100%;
+                    max-width: 100%;
+                }
+            }
+        }
+        .vocab-activity {
+            @media(max-width: 800px) {
+                flex-direction: column !important;
             }
         }
 
