@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     statusMapping: any = {};
     coursePlan: any = null;
     // courseAchievements: Partial<{ [key in SomeArray]: string[] }> = null;
-    courseAchievements!: Partial<{[key: string]: number[]}>;
+    // courseAchievements!: Partial<{[key: string]: number[]}>;
     recommendedVideos: any = [
         {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
         {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
@@ -46,10 +46,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     imageSrc: string = ''
 
-    achievements = {
-        labels: ['Progress', 'Score', 'Pace'],
+    achievements: any = {
+        labels: [{name:'Progress', tip: 'tooltip Progress'}, {name:'Score', tip: 'tooltip Score'}, {name:'Pace', tip: 'tooltip Pace'}],
         colors: ['rgb(13,110,253)', 'rgb(220,53,69)', 'rgb(255,193,7)'],
+        data: {'hearing': [50, 40, 80], 'reading': [80, 30, 50], 'speaking': [70, 20, 100],'writing': [20, 70, 1]}
     }
+    achievementsLabels = ['Progress', 'Score', 'Pace']
 
     difficulty: any = []
     words_learned: any = {
@@ -104,7 +106,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;
                     this.coursePlan = response.current_course_plan;
-                    this.courseAchievements = response.achievements;
+                    if (response.achievements) {
+                        if (response.achievements.labels) {
+                            this.achievements.labels = response.achievements.labels;
+                            this.achievementsLabels = this.achievements.labels.map((o: any) => o.name)
+                        }
+                        if (response.achievements.data) {
+                            this.achievements.data = response.achievements.data;
+                        }
+                    }
                     this.activity = response.activity;
                     this.difficulty = response.difficulty;
                     this.words_learned = response.words_learned;
@@ -183,7 +193,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 if (response.err) {
                     console.log('getUserLessonAchievements err', response)
                 } else {
-                    this.courseAchievements = response.achievements;
+                    this.achievements = response.achievements;
                 }
                 this.gettingUserAchievements = false;
             },

@@ -90,24 +90,20 @@
                                         <div class="d-flex flex-row">
                                             <div class="lst">
                                                 <ul>
-                                                    <li [ngStyle]="{'color':  achievements.colors[0]}"><span class="text-dark">Progress
-                                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Progress" data-bs-custom-class="gaia-tooltip">?</span>
-                                                    </span></li>
-                                                    <li [ngStyle]="{'color':  achievements.colors[1]}"><span class="text-dark">Score
-                                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Score" data-bs-custom-class="gaia-tooltip">?</span>
-                                                    </span></li>
-                                                    <li [ngStyle]="{'color':  achievements.colors[2]}"><span class="text-dark">Pace
-                                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Pace" data-bs-custom-class="gaia-tooltip">?</span>
-                                                    </span></li>
+                                                    <li *ngFor="let l of achievements.labels" [ngStyle]="{'color':  achievements.colors[0]}">
+                                                        <span class="text-dark">{{l.name}}
+                                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{l.tip}}" data-bs-custom-class="gaia-tooltip">?</span>
+                                                        </span>
+                                                    </li>
                                                 </ul>
                                             </div>
-                                            <div class="charts d-flex flex-row" *ngIf="courseAchievements">
-                                                <div class="chart-wrapper" *ngFor="let l of courseAchievements | keyvalue;">
+                                            <div class="charts d-flex flex-row" *ngIf="achievements">
+                                                <div class="chart-wrapper" *ngFor="let l of achievements.data | keyvalue;">
                                                     <div class="chart">
                                                         <ng-container *ngIf="l.value">
                                                             <app-pie-chart
-                                                                [labels]="achievements.labels"
-                                                                [data]="l.value"
+                                                                [labels]="achievementsLabels"
+                                                                [data]="achievements.data[getString(l.key)]"
                                                                 [colors]="achievements.colors"
                                                             ></app-pie-chart>
                                                         </ng-container>
