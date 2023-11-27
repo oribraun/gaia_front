@@ -222,10 +222,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         const equalTypes2 = this.areArraysEqualInType(this.onBoardingObject.questions["IELTS Specifics"], userOnBoarding.questions["IELTS Specifics"]);
         const equalTypes3 = this.areArraysEqualInType(this.onBoardingObject.questions["Learning Goals and Preferences"], userOnBoarding.questions["Learning Goals and Preferences"]);
         const equalTypes4 = this.areArraysEqualInType(this.onBoardingObject.questions["Consent and Agreements"], userOnBoarding.questions["Consent and Agreements"]);
-        console.log('equalTypes1', equalTypes1)
-        console.log('equalTypes2', equalTypes2)
-        console.log('equalTypes3', equalTypes3)
-        console.log('equalTypes4', equalTypes4)
+        // console.log('equalTypes1', equalTypes1)
+        // console.log('equalTypes2', equalTypes2)
+        // console.log('equalTypes3', equalTypes3)
+        // console.log('equalTypes4', equalTypes4)
         if (!equalTypes1 || !equalTypes2 || !equalTypes3 || !equalTypes4) {
             needReset = true;
         }
@@ -251,7 +251,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     areArraysEqualInType(arr1: any[], arr2: any[]) {
         // Check if arrays have the same length
-        if (arr1.length !== arr2.length) {
+        if (arr1.length !== arr2.length || !arr1 || !arr2) {
             return false;
         }
 
