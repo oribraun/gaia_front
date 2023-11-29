@@ -29,6 +29,7 @@ import {SafeHtmlPipe} from "./pipes/safe-html.pipe";
 import {SafePipe} from "./pipes/safe.pipe";
 import { HearingComponent } from './slides/hearing/hearing.component';
 import { SpeakingComponent } from './slides/speaking/speaking.component';
+import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
 // import { LottieModule } from 'ngx-lottie';
 //
 //
@@ -58,6 +59,7 @@ import { SpeakingComponent } from './slides/speaking/speaking.component';
         WritingComponent,
         HearingComponent,
         SpeakingComponent,
+        VideoIeltsComponent,
 
         CapitalizePipe,
         DatetimeFormatPipe,
@@ -91,6 +93,7 @@ import { SpeakingComponent } from './slides/speaking/speaking.component';
         WritingComponent,
         HearingComponent,
         SpeakingComponent,
+        VideoIeltsComponent,
 
         CapitalizePipe,
         DatetimeFormatPipe,

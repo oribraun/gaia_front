@@ -81,6 +81,7 @@ export class PracticeLessonComponent implements OnInit {
         agenda: 'agenda',
         ending: 'ending',
         video: 'video',
+        video_ielts: 'video-ielts',
         blanks:'blanks',
         title:'title',
         random_selector:'random_selector',
@@ -513,7 +514,7 @@ export class PracticeLessonComponent implements OnInit {
         }
         console.log("all_presentation_tasks_completed",all_presentation_tasks_completed)
         if (all_presentation_tasks_completed){
-            this.enable_end_lesson_button = true; 
+            this.enable_end_lesson_button = true;
             // this.modalActive=true;
         }
 
@@ -1066,7 +1067,7 @@ export class PracticeLessonComponent implements OnInit {
             let slide_index = 0;
             for (let slide of section.slides) {
                 console.log("slide.slide_uid, this.slide_uid", slide.slide_uid, this.slide_uid)
-                if (slide.slide_uid == this.slide_uid) {  
+                if (slide.slide_uid == this.slide_uid) {
                     this.currentSectionIndex = section_index;
                     this.currentSlideIndex = slide_index;
                     this.currentObjectiveIndex = 0;
@@ -1082,7 +1083,7 @@ export class PracticeLessonComponent implements OnInit {
     }
     setIndexesByQuestionId(get_slide_from_presentation: boolean) {
         if (get_slide_from_presentation)
-        {        
+        {
             this.currentSectionIndex = this.presentation.current_section_index;
             this.currentSlideIndex = this.presentation.current_slide_index;
             this.currentObjectiveIndex = this.presentation.current_objective_index;
@@ -1111,7 +1112,7 @@ export class PracticeLessonComponent implements OnInit {
         this.modalActive = false
     }
 
- 
+
     ngOnDestroy() {
         this.stopAudio();
         this.unsubscribeAllHttpEvents();
@@ -1119,6 +1120,6 @@ export class PracticeLessonComponent implements OnInit {
         this.clearSocketRecorderServices();
     }
 
-    
+
 
 }

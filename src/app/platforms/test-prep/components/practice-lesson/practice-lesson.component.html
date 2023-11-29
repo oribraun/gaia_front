@@ -1,76 +1,10 @@
 <div class="practice-lesson">
     <ng-template #selected_slide_container let-model="model">
-        <app-greeting
-            *ngIf="model.currentSlide.slide_type === sectionTitles.greeting"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-greeting>
-        <app-reading
-            *ngIf="model.currentSlide.slide_type === sectionTitles.reading"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-reading>
-        <app-template
-            *ngIf="model.currentSlide.slide_type === sectionTitles.template"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-template>
         <app-writing
             *ngIf="model.currentSlide.slide_type === sectionTitles.writing"
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
         ></app-writing>
-        <app-word-repeater
-            *ngIf="model.currentSlide.slide_type === sectionTitles.word_repeater"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-            [recognitionText]="''"
-        ></app-word-repeater>
-        <app-image-generator
-            *ngIf="model.currentSlide.slide_type === sectionTitles.image_generator"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-image-generator>
-        <app-agenda
-            *ngIf="model.currentSlide.slide_type === sectionTitles.agenda"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-agenda>
-        <app-ending
-            *ngIf="model.currentSlide.slide_type === sectionTitles.ending"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-ending>
-        <app-blanks
-            *ngIf="model.currentSlide.slide_type === sectionTitles.blanks"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-blanks>
-        <app-video
-            *ngIf="model.currentSlide.slide_type === sectionTitles.video"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-video>
-        <app-title
-            *ngIf="model.currentSlide.slide_type === sectionTitles.title"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-title>
-        <app-word-translator
-            *ngIf="model.currentSlide.slide_type === sectionTitles.word_translator"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-word-translator>
-        <app-random-selector
-            *ngIf="model.currentSlide.slide_type === sectionTitles.random_selector"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-random-selector>
-        <app-generic
-            *ngIf="model.currentSlide.slide_type === sectionTitles.generic_slide"
-            [currentSlide]="model.currentSlide"
-            [slideData]="model.slideData"
-        ></app-generic>
         <app-unseen
             *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
             [currentSlide]="model.currentSlide"
@@ -86,12 +20,11 @@
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
         ></app-speaking>
-        <app-embed-game
-            *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
+        <app-video-ielts
+            *ngIf="model.currentSlide.slide_type === sectionTitles.video"
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
-        ></app-embed-game>
-
+        ></app-video-ielts>
     </ng-template>
     <div class="white-board">
         <!-- If it is a bundle -->

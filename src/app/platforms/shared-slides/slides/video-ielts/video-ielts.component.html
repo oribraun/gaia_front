@@ -1,0 +1,89 @@
+<div class="video-ielts" [ngClass]="{'video-ielts-with-panel': showPanel}">
+    <div class="wrapper">
+        <div class="video">
+            <div class="player" #youtube_player>
+                <youtube-player
+                    *ngIf="currentSlide.video_details"
+                    [videoId]="currentSlide.video_details.id"
+                    [startSeconds]="currentSlide.video_details.start_time"
+                    [endSeconds]="currentSlide.video_details.end_time"
+                    [height]="videoHeight"
+                    [width]="videoWidth"
+                    (ready)="onPlayerReady($event)"
+                    (stateChange)="onPlayerStateChange($event)"
+                >
+                </youtube-player>
+            </div>
+        </div>
+        <div class="notes">
+            <textarea name="" id="" [(ngModel)]="notes" placeholder="Take Your Notes here"></textarea>
+        </div>
+        <div class="transcript">
+        <div class="outer-scroller">
+            <div class="inner-scroller">
+                <h4>Transcript</h4>
+                {{currentSlide.text}}
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="right-panel">
+        <div class="panel">
+            <div class="teacher">
+                <div class="circle" #teacher>
+                    <img [src]="imageSrc + 'assets/gifs/teacher_listening_front.gif'">
+                </div>
+            </div>
+            <div class="chat">
+                <div class="outer-scroller">
+                    <div class="inner-scroller" #scroller>
+                        <div class="messages">
+                            <ng-container *ngFor="let item of messages; let i = index">
+                                <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
+                                    <!--                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
+                                    <span class="translate-icon"(click)="translate(i)">
+                                    <i class="bi bi-translate"></i>
+                                </span>
+                                    <i class="text" *ngIf="!item.showTranslated">{{item.message}}</i>
+                                    <i class="text" *ngIf="item.showTranslated">{{item.translatedMessage}}</i>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()" class="input form-control" placeholder="Your message">
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    <div class="outer-scroller">-->
+<!--        <div class="inner-scroller">-->
+<!--            <div class="video-title">-->
+<!--                <h1>{{currentSlide.slide_title}}</h1>-->
+<!--            </div>-->
+<!--            <div class="video-text">-->
+<!--                <h4>{{currentSlide.text}}</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="background-image" *ngIf="currentSlide.background_image">-->
+<!--        <img [src]="currentSlide.background_image">-->
+<!--    </div>-->
+
+    <!--    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">-->
+
+    <!--    </div>-->
+<!--    <div class="image image-right" #youtube_player>-->
+<!--&lt;!&ndash;        <youtube-player videoId="-sPwShzNyGQ"></youtube-player>&ndash;&gt;-->
+<!--        <youtube-player-->
+<!--            *ngIf="currentSlide.video_details"-->
+<!--            [videoId]="currentSlide.video_details.id"-->
+<!--            [startSeconds]="currentSlide.video_details.start_time"-->
+<!--            [endSeconds]="currentSlide.video_details.end_time"-->
+<!--            [height]="videoHeight"-->
+<!--            [width]="videoWidth"-->
+<!--            (ready)="onPlayerReady($event)"-->
+<!--            (stateChange)="onPlayerStateChange($event)"-->
+<!--        >-->
+<!--        </youtube-player>-->
+<!--    </div>-->
+</div>
