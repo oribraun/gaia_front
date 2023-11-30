@@ -54,7 +54,7 @@
                     </div>
                     <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()" class="input form-control" placeholder="Your message">
                 </div>
-                <div class="generic-loader-wrapper" *ngIf="replayInProgress">
+                <div class="generic-loader-wrapper" *ngIf="showSpinner">
                     <div class="loader">
                         <div class="spinner-border">
                             <span class="sr-only"></span>

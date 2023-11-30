@@ -73,6 +73,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     replayInProgress = false;
 
+    showSpinner = false;
+
     drag: any = {
         mousedown: false,
         startPos: null,
@@ -150,6 +152,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.startListenToAsr();
             }
             this.replayInProgress = false;
+            this.showSpinner = false;
         })
 
         this.startListenToAsr();
@@ -175,6 +178,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             )
             this.sendUserReplay(recognitionText);
             this.scrollToBottom2();
+            this.showSpinner = false;
         }
     }
 
@@ -187,10 +191,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     sendUserReplay(student_response: string) {
-        if (this.replayInProgress) {
-            return;
-        }
         this.replayInProgress = true;
+        this.showSpinner = true;
         this.stopListenToAsr();
         const data = {
             "source": "video-ielts",
@@ -278,6 +280,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     sendMessage() {
+        if (this.replayInProgress) {
+            return;
+        }
         this.messages.push(
             new ChatMessage({type: 'user', message: this.message}),
         )
