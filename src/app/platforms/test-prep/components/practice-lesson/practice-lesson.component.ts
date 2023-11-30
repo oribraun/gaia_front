@@ -202,8 +202,12 @@ export class PracticeLessonComponent implements OnInit {
                 // this.speechRecognitionService.startListening();
             }
             this.lessonService.resetHelpMode()
-            this.listenForPauseEvnet()
-            this.listenForSlideEventRequests()
+            if (!this.initApplicationDone) {
+                // adding listeners only once
+                this.listenForPauseEvnet()
+                this.listenForSlideEventRequests()
+            }
+            this.initApplicationDone = true;
             // this.setupPresentationMock();
             this.getPresentation();
             // this.setRandomCircleAnimation();
@@ -291,6 +295,43 @@ export class PracticeLessonComponent implements OnInit {
                     const data = {'type': 'additional_instructions', 'data': {source: 'image_generator_button_click_error'}}
                     this.lessonService.Broadcast("slideEventReply", data)
                 }
+            },
+        })
+    }
+
+    async getPresentationReplay(text: string = '') {
+        if (this.presentationNoReplayIsInProgress) {
+            return;
+        }
+        let message = text;
+
+        this.presentationReplayIsInProgress = true;
+        this.lessonService.Broadcast('student_reply_request', message)
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+            practice_lesson_id: this.lesson_id,
+            app_data: {
+                type:'student_reply',
+                student_text: message,
+                help_mode: this.lessonService.helpMode,
+                array_buffer: this.enableArrayBuffer,
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+            }
+        }).subscribe({
+            next: (response: any) => {
+                this.presentationReplayIsInProgress = false;
+                this.lessonService.Broadcast('student_reply_response', response);
+
+                if (response.err) {
+                    console.log('response err', response)
+                    this.handleOnReplayError()
+                } else {
+                    this.currentData = response.data;
+                    this.handleOnPresentationReplay();
+                }
+            },
+            error: (error) => {
+                console.log('getPresentationReplay error', error)
+                this.presentationReplayIsInProgress = false;
             },
         })
     }
@@ -647,7 +688,8 @@ export class PracticeLessonComponent implements OnInit {
                             console.log('end_blobItem', blobItem)
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
                                 console.log('change gif - listening')
-                                this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
+                                // this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
+                                this.lessonService.Broadcast('audio_finished', {});
                             }
                             this.speakInProgress = false;
                             // this.resetSpeechRecognition();
@@ -778,6 +820,12 @@ export class PracticeLessonComponent implements OnInit {
                 this.stopAudio();
             }
             this.getPresentationEventReplay(obj)//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        })
+        this.lessonService.ListenFor("PresentationReplayRequest").subscribe((obj: any) => {
+            if (obj.stopAudio) {
+                this.stopAudio();
+            }
+            this.getPresentationReplay(obj.student_response)
         })
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
             if(!this.doNotDisturb){

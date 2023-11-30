@@ -219,8 +219,12 @@ export class LessonComponent implements OnInit, OnDestroy {
                 this.speechRecognitionService.startListening();
             }
             this.lessonService.resetHelpMode()
-            this.listenForPauseEvnet()
-            this.listenForSlideEventRequests()
+            if (!this.initApplicationDone) {
+                // adding listeners only once
+                this.listenForPauseEvnet()
+                this.listenForSlideEventRequests()
+            }
+            this.initApplicationDone = true;
             // this.setupPresentationMock();
             this.getPresentation();
             // this.setRandomCircleAnimation();

@@ -76,4 +76,35 @@ export class HelperService {
             });
         })
     }
+
+    /**
+     * Get the pointer position
+     * param {any} e (event)
+     * param {any} preventTouch
+     * return {Object} { x: , y: }
+     */
+    getPointerPos(e: any, preventTouch: boolean) {
+        let x = 0;
+        let y = 0;
+        if (e.clientX !== undefined && e.clientY !== undefined) {
+            x = e.clientX;
+            y = e.clientY;
+        } else if (e.taretTouches) {
+            if (preventTouch) {
+                e.preventDefault();
+            }
+            x = e.taretTouches[0].clientX;
+            y = e.taretTouches[0].clientY;
+        } else if (e.touches) {
+            if (preventTouch) {
+                e.preventDefault();
+            }
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        }
+        return {
+            x: x,
+            y: y
+        };
+    }
 }

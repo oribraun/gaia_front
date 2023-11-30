@@ -2,18 +2,21 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
-    HostListener,
-    Input,
+    HostListener, Inject,
+    Input, OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
+import {DOCUMENT} from '@angular/common';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {Config} from "../../../main/config";
 import {BaseSlideComponent} from "../base-slide.component";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {ChatMessage} from "../../entities/chat_message";
 import {environment} from "../../../../../environments/environment";
+import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
+import {HelperService} from "../../../main/services/helper.service";
 
 export enum PlayerState
 {
@@ -41,7 +44,8 @@ declare var $: any;
     styleUrls: ['./video-ielts.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, AfterViewInit{
+export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, AfterViewInit, OnDestroy {
+    private document!: Document;
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
     @ViewChild('teacher', { static: false }) teacher!: ElementRef;
     @ViewChild('scroller', { static: false }) scroller!: ElementRef;
@@ -65,48 +69,136 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     showPanel = false;
 
+    recognitionSubscribe: any
+
+    replayInProgress = false;
+
+    drag: any = {
+        mousedown: false,
+        startPos: null,
+        width: 300,
+        maxWidth: 500,
+        minWidth: 200
+    }
+
+    dragStarted = false;
+
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
-        protected override lessonService: LessonService
+        protected override lessonService: LessonService,
+        private speechRecognitionService: SpeechRecognitionService,
+        private helperService: HelperService,
+        @Inject(DOCUMENT) document?: any
     ) {
         super(config, lessonService)
+        this.document = document;
         this.embeddedVideo =""
 
         if (environment.is_mock) {
             this.messages = [
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hi'}),
-
+                new ChatMessage({type: 'user', message: 'Hello'}),
+                new ChatMessage({type: 'computer', message: 'Hi'}),
+                new ChatMessage({type: 'user', message: 'Hello'}),
             ]
         }
     }
     override ngOnInit(): void {
         super.ngOnInit();
+        this.showPanel = true;
         setTimeout(() => {
             this.scrollToBottom2();
-            this.showPanel = true;
-        })
+        });
         // this.createVideo();
+
+        this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
+            try {
+                let resp_data = resp.data
+                if (resp_data && resp_data.text) {
+                    this.messages.push(
+                        new ChatMessage({type: 'user', message: resp_data.text})
+                    );
+                    this.scrollToBottom2();
+                }
+                console.log('resp_data', resp_data)
+                // if (resp_data.source == "fix_asr") {
+                //     this.messages.push(
+                //         new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
+                //     );
+                // }
+            } catch (e) {
+            }
+        })
+        this.lessonService.ListenFor("audio_finished").subscribe((resp:any) => {
+            console.log('audio_finished')
+            if (!this.recognitionSubscribe) {
+                this.startListenToAsr();
+            }
+            this.replayInProgress = false;
+        })
+
+        this.startListenToAsr();
     }
 
     ngAfterViewInit(): void {
         this.setUpYoutubePlayer();
         this.setUpTeacherSize();
+    }
+
+    startListenToAsr() {
+        this.recognitionSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+        this.speechRecognitionService.startListening();
+    }
+
+    onRecognitionResults = (results: any) => {
+        console.log("onRecognitionResults results", results)
+        const recognitionText = results.text;
+        if (results.isFinal) {
+            console.log('onRecognitionResults final', recognitionText)
+            this.messages.push(
+                new ChatMessage({type: 'user', message: recognitionText}),
+            )
+            this.sendUserReplay(recognitionText);
+            this.scrollToBottom2();
+        }
+    }
+
+    stopListenToAsr() {
+        if (this.recognitionSubscribe) {
+            this.speechRecognitionService.stopListening();
+            this.recognitionSubscribe.unsubscribe(this.onRecognitionResults);
+            this.recognitionSubscribe = null;
+        }
+    }
+
+    sendUserReplay(student_response: string) {
+        if (this.replayInProgress) {
+            return;
+        }
+        this.replayInProgress = true;
+        this.stopListenToAsr();
+        const data = {
+            "source": "video-ielts",
+            'stopAudio': true,
+            'background':true,
+            "student_response":student_response
+        }
+        this.lessonService.Broadcast("PresentationReplayRequest", data)
     }
 
     setUpYoutubePlayer() {
@@ -177,19 +269,19 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     scrollToBottom2(animate=false, timeout=0){
-        console.log('this.scroller', this.scroller)
-        if (this.scroller) {
-            setTimeout(() => {
-                const element = this.scroller.nativeElement;
-                element.scrollTop = element.scrollHeight
-            }, timeout)
-        }
+         if (this.scroller) {
+             setTimeout(() => {
+                 const element = this.scroller.nativeElement;
+                 element.scrollTop = element.scrollHeight
+             }, timeout)
+         }
     }
 
     sendMessage() {
         this.messages.push(
             new ChatMessage({type: 'user', message: this.message}),
         )
+        this.sendUserReplay(this.message);
         this.message = "";
         this.scrollToBottom2();
     }
@@ -231,6 +323,57 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.videoHeight = this.youtube_player.nativeElement.offsetHeight;
         this.videoWidth = this.youtube_player.nativeElement.clientWidth;
         this.setUpTeacherSize();
+    }
+
+    onDragStarted(e: Event) {
+        const pos = this.helperService.getPointerPos(e, false);
+        this.drag.mousedown = true;
+        this.drag.startPos = pos;
+        this.dragStarted = true;
+        const el = this.document.getElementById('wrapper');
+        if (el) {
+            el.classList.add('disable-pointer-events');
+        }
+    }
+
+    @HostListener('document:mousemove', ['$event'])
+    @HostListener('document:touchmove', ['$event'])
+    onDragMove(e: Event) {
+        if (this.dragStarted) {
+            e.preventDefault();
+            e.stopPropagation();
+            const pos = this.helperService.getPointerPos(e, false);
+            console.log('pos', pos)
+            const moveX = pos.x - this.drag.startPos.x;
+            console.log('moveX', moveX)
+            console.log('this.drag.width', this.drag.width)
+            this.drag.width -= moveX;
+            if(this.drag.width > this.drag.maxWidth) {
+                this.drag.width = this.drag.maxWidth
+            } else if(this.drag.width < this.drag.minWidth) {
+                this.drag.width = this.drag.minWidth
+            } else {
+                this.onWindowResize();
+            }
+            this.drag.startPos = pos;
+        }
+    }
+
+    @HostListener('document:mouseup', ['$event'])
+    @HostListener('document:touchend', ['$event'])
+    onDragEnded(e: Event) {
+        this.dragStarted = false;
+        this.drag.mousedown = false;
+        this.drag.startPos = null;
+        const el = this.document.getElementById('wrapper');
+        if (el) {
+            el.classList.remove('disable-pointer-events');
+        }
+    }
+
+    override ngOnDestroy(): void {
+        this.stopListenToAsr();
+        super.ngOnDestroy();
     }
 }
 
