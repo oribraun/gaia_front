@@ -516,7 +516,6 @@ export class PracticeLessonComponent implements OnInit {
         if (reason === 'new_slide') {
             blob = await this.getSpeakNative();
         }
-
         if (additional_instructions) {
             const data = {
                 type: 'additional_instructions',
@@ -527,6 +526,7 @@ export class PracticeLessonComponent implements OnInit {
         }
 
         if (help_sound_buffer || blob) {
+            this.lessonService.Broadcast("init-audio-playing", data)
             if(this.handleCoreFunctionalityOfSlide('speak')){
                 if (blob && this.currentSlide.index_in_bundle == 0) {
                     console.log('speakNative before');

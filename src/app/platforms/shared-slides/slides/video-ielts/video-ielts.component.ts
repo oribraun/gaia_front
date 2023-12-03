@@ -138,6 +138,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.startListenToAsr();
             }
         })
+        this.lessonService.ListenFor("audio-playing").subscribe((resp:any) => {
+            this.waitForAudioAfterSlideEventReplay = true;
+            this.stopListenToAsr();
+        })
         this.lessonService.ListenFor("audio_finished").subscribe((resp:any) => {
             if (this.waitForAudioAfterSlideEventReplay) {
                 this.waitForAudioAfterSlideEventReplay = false;
