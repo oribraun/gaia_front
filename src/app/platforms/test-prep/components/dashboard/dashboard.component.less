@@ -6,6 +6,11 @@
     padding: 0.75rem 0;
     //max-width: 1200px;
     //margin: 0 @gap;
+    @plan0Background: #588ee4;
+    @plan1Background: #f1727d;
+    @plan2Background: #fa8939;
+    @plan3Background: #b08b8a;
+    @plan4Background: #8bb3b2;
     .row {
         position: relative;
         div[class*="col-"] {
@@ -63,19 +68,19 @@
                         cursor: pointer;
                         transition: all .3s ease-in-out;
                         &:nth-child(1) {
-                            background: #588ee4;
+                            background: @plan0Background;
                         }
                         &:nth-child(2) {
-                            background: #f1727d;
+                            background: @plan1Background;
                         }
                         &:nth-child(3) {
-                            background: #fa8939;
+                            background: @plan2Background;
                         }
                         &:nth-child(4) {
-                            background: #b08b8a;
+                            background: @plan3Background;
                         }
                         &:nth-child(5) {
-                            background: #8bb3b2;
+                            background: @plan4Background;
                         }
                         &:hover {
                             box-shadow: 2px 3px 6px -3px #000;
@@ -329,6 +334,37 @@
             .left {
                 width: 60%;
                 margin-right: @margin;
+                .part {
+                    @borderWidth: 3px;
+                    .panel-box {
+                        transition: border .3s ease-in-out;
+                    }
+                    &-0 {
+                        .panel-box {
+                            border: @borderWidth solid @plan0Background;
+                        }
+                    }
+                    &-1 {
+                        .panel-box {
+                            border: @borderWidth solid @plan1Background;
+                        }
+                    }
+                    &-2 {
+                        .panel-box {
+                            border: @borderWidth solid @plan2Background;
+                        }
+                    }
+                    &-3 {
+                        .panel-box {
+                            border: @borderWidth solid @plan3Background;
+                        }
+                    }
+                    &-4 {
+                        .panel-box {
+                            border: @borderWidth solid @plan4Background;
+                        }
+                    }
+                }
                 .achievements {
                     .lst {
                         white-space: nowrap;

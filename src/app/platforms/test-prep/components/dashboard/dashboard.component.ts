@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         this.selectCoursePart(0);
                     }
                     this.helperService.applyTooltip();
-                    this.demoPlanPartsAnimation();
+                    // this.demoPlanPartsAnimation();
                     // this.purchasedCourses = response.purchased_courses;
                 }
                 this.gettingGroupTypes = false;
