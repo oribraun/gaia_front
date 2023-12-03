@@ -439,28 +439,30 @@ export class PracticeLessonComponent implements OnInit {
         return new Promise((resolve, reject) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
                 this.lessonService.speakNativeOnWaiting=true;
-                this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({
-                    'app_data':{'text':obj.text, 'lang':'iw'}
-                }).subscribe({
-                    next: async (response: any) => {
-                        if (response.err) {
-                            console.log('textToSpeech err', response)
-                        } else {
-                            const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
-                            console.log('textToSpeech - ', arrayBuffer)
-                            let blob = null;
-                            if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                                blob = new BlobItem({arrayBuffer:arrayBuffer,
-                                    action:'speakNative',
-                                    type:'audio'})
+                if (obj.text) {
+                    this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({
+                        'app_data':{'text':obj.text, 'lang':'iw'}
+                    }).subscribe({
+                        next: async (response: any) => {
+                            if (response.err) {
+                                console.log('textToSpeech err', response)
+                            } else {
+                                const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
+                                console.log('textToSpeech - ', arrayBuffer)
+                                let blob = null;
+                                if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                                    blob = new BlobItem({arrayBuffer:arrayBuffer,
+                                        action:'speakNative',
+                                        type:'audio'})
+                                }
+                                resolve(blob);
                             }
-                            resolve(blob);
-                        }
-                    },
-                    error: (error) => {
-                        console.log('getPresentation error', error)
-                    },
-                })
+                        },
+                        error: (error) => {
+                            console.log('getPresentation error', error)
+                        },
+                    })
+                }
             }
         })
     }

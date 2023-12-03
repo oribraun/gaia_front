@@ -131,6 +131,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.messages.push(
                     new ChatMessage({type: 'computer', message: teacher_text})
                 );
+                this.setUpHeyGenVideoByText(teacher_text);
             }
             if (resp.withAudio) {
                 this.waitForAudioAfterSlideEventReplay = true;
@@ -150,6 +151,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         })
         this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
             try {
+                console.log('student_reply_response resp', resp)
                 let resp_data = resp.data
                 if (resp_data && resp_data.text) {
                     this.messages.push(
@@ -169,14 +171,20 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.showSpinner = false;
         })
 
-        this.startListenToAsr();
+        // this.startListenToAsr();
         // this.startHeyGen();
+        
+        
     }
 
     ngAfterViewInit(): void {
         this.setUpPlayerListeners();
         this.setUpTeacherSize();
-        this.setUpHeyGenDefaultAvatar()
+        this.messages.push(
+            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."}),
+        );
+        this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
+        // this.setUpHeyGenDefaultAvatar()
     }
 
     startListenToAsr() {
@@ -228,6 +236,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.videoState = PlayerState.PLAYING;
             this.stopListenToAsr();
             data['video_event'] = "playing";
+            this.heygenMediaElement.nativeElement.pause()
+            this.heygenMediaElement.nativeElement.trigger('ended');
             this.lessonService.Broadcast("DoNotDisturb", data)
         }
     }
@@ -498,23 +508,37 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     setUpHeyGenVideoByText(text:string){
+        console.log('setUpHeyGenVideoByText text', text)
         if (this.heygenMediaElement) {
+            console.log('setUpHeyGenVideoByText text', text)
             this.heygenMediaElement.nativeElement.srcObject = undefined;
             // "Gaia, what are the subjects of those articles?": "The reading articles encompasses a wide range of topics, reflecting the diversity found in college materials. This prepares you for various academic and professional scenarios. However, for practice, we'll concentrate on areas of your interest to maintain engagement and interest.",
             // "Thanks. Can I skip this video and start practicing": "We don't really recommend skipping the video lessons, but if you really want to, just head over to the dashboard and hit the 'start practice reading' button."           
             // "I see you paused the video. Do you have any question?"
             if(text === "The reading articles encompasses a wide range of topics, reflecting the diversity found in college materials. This prepares you for various academic and professional scenarios. However, for practice, we'll concentrate on areas of your interest to maintain engagement and interest.") {
                 this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_3.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
                 this.heygenMediaElement.nativeElement.play();
             } else if (text === "We don't really recommend skipping the video lessons, but if you really want to, just head over to the dashboard and hit the 'start practice reading' button.") {
                 this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_4.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
                 this.heygenMediaElement.nativeElement.play();
             } else if (text === "I see you paused the video. Do you have any question?") {
                 this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_1.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
                 this.heygenMediaElement.nativeElement.play();
+            
             } else if (text === "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.") {
                 this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_2.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
                 this.heygenMediaElement.nativeElement.play();
+                this.heygenMediaElement.nativeElement.addEventListener("ended", (event: any) => {
+                    this.setUpHeyGenDefaultAvatar();
+                    this.startListenToAsr();
+                    console.log(
+                      event, "Video stopped either because it has finished playing or no further data is available.",
+                    );
+                  });
             }
             else {
                 this.setUpHeyGenDefaultAvatar();
