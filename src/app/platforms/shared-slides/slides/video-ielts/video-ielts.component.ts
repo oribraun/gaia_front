@@ -52,7 +52,7 @@ export interface OnStateChangeEvent
 })
 export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, AfterViewInit, OnDestroy {
     private document!: Document;
-    @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
+    @ViewChild('video', { static: false }) video!: ElementRef;
     @ViewChild('teacher', { static: false }) teacher!: ElementRef;
     @ViewChild('scroller', { static: false }) scroller!: ElementRef;
     @ViewChild('heygenMediaElement', { static: false }) heygenMediaElement!: ElementRef;
@@ -143,19 +143,21 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.showSpinner = false;
         })
 
-        this.startListenToAsr();
+        // this.startListenToAsr();
         // this.startHeyGen();
     }
 
     ngAfterViewInit(): void {
-        this.setUpYoutubePlayer();
+        this.setUpPlayerListeners();
         this.setUpTeacherSize();
         this.setUpHeyGenVideoByText(this.currentSlide.text);
     }
 
     startListenToAsr() {
-        this.recognitionSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
-        this.speechRecognitionService.startListening();
+        if (!this.recognitionSubscribe) {
+            this.recognitionSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+            this.speechRecognitionService.startListening();
+        }
     }
 
     onRecognitionResults = (results: any) => {
@@ -193,14 +195,82 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.lessonService.Broadcast("PresentationReplayRequest", data)
     }
 
-    setUpYoutubePlayer() {
-        this.loading_player = true;
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        this.youtube_player.nativeElement.appendChild(tag);
-        setTimeout(() => {
-            this.onWindowResize();
-        })
+    setUpPlayerListeners() {
+        if (this.video) {
+            const data: any = {"source": "video_player"}
+            let lastTime = 0;
+            let lastState = PlayerState.UNSTARTED;
+            this.video.nativeElement.onseeked = (e: any) => {
+                console.log('onseeked')
+            }
+            this.video.nativeElement.onpause = (e: any) => {
+                if (lastState === PlayerState.PAUSED) {
+                    console.log('onpause')
+                }
+                // if (lastTime === this.video.nativeElement.currentTime) {
+                //     if (lastState === PlayerState.PLAYING) {
+                //         console.log('onpause')
+                //     }
+                //     lastState = PlayerState.PAUSED;
+                // }
+                // this.startListenToAsr();
+                // data['video_event'] = "paused";
+                // data['noToggle'] = true;
+                // this.lessonService.Broadcast("endDoNotDisturb", data)
+                // this.lessonService.Broadcast("slideEventRequest", data)
+            }
+            this.video.nativeElement.onplay = (e: any) => {
+                console.log('onplay')
+                if (lastState === PlayerState.PAUSED || lastState === PlayerState.UNSTARTED) {
+                    console.log('onplay')
+                }
+                // console.log('this.video.nativeElement.currentTime', this.video.nativeElement.currentTime)
+                // console.log('lastTime', lastTime)
+                // if (lastState === PlayerState.PAUSED) {
+                //     console.log('onplay')
+                // }
+                lastState = PlayerState.PLAYING;
+                // this.stopListenToAsr();
+                // data['video_event'] = "playing";
+                // this.lessonService.Broadcast("DoNotDisturb", data)
+            }
+            this.video.nativeElement.ontimeupdate = (e: any) => {
+                // if (lastState === PlayerState.PLAYING) {
+                //     lastTime = this.video.nativeElement.currentTime;
+                //     console.log('ontimeupdate', this.video.nativeElement.currentTime)
+                // }
+            }
+            this.video.nativeElement.onended = (e: any) => {
+                console.log('onended')
+                // this.startListenToAsr();
+                // data['video_event'] = "ended";
+                // data['noToggle'] = true;
+                // this.lessonService.Broadcast("endDoNotDisturb", data)
+                // this.lessonService.Broadcast("slideEventRequest", data)
+            }
+            // if (e.data == PlayerState.ENDED) {
+            //     this.currentState = PlayerState.ENDED;
+            //     console.log('video ended')
+            //     data['video_event'] = "ended";
+            //     data['noToggle'] = true;
+            //     this.lessonService.Broadcast("endDoNotDisturb", data)
+            //     this.lessonService.Broadcast("slideEventRequest", data)
+            // }
+            // if (e.data == PlayerState.PAUSED) {
+            //     this.currentState = PlayerState.PAUSED;
+            //     console.log('video paused')
+            //     data['video_event'] = "paused";
+            //     data['noToggle'] = true;
+            //     this.lessonService.Broadcast("endDoNotDisturb", data)
+            //     this.lessonService.Broadcast("slideEventRequest", data)
+            // }
+            // if (e.data == PlayerState.PLAYING) {
+            //     this.currentState = PlayerState.PLAYING;
+            //     console.log('video playing')
+            //     data['video_event'] = "playing";
+            //     this.lessonService.Broadcast("DoNotDisturb", data)
+            // }
+        }
     }
 
     setUpTeacherSize() {
@@ -315,8 +385,6 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     @HostListener('window:resize')
     onWindowResize() {
-        this.videoHeight = this.youtube_player.nativeElement.offsetHeight;
-        this.videoWidth = this.youtube_player.nativeElement.clientWidth;
         this.setUpTeacherSize();
     }
 

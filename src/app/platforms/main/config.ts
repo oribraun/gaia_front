@@ -32,7 +32,7 @@ export class Config {
 
     set user_on_boarding(value: any) {
         this._user_on_boarding = value;
-        this.user_on_boarding_subject.next(this.user_on_boarding);
+        this.user_on_boarding_subject.next(this._user_on_boarding);
     }
 
     get user_on_boarding_subject(): Subject<any> {

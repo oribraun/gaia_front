@@ -2,23 +2,13 @@
     [ngStyle]="{'margin-right': showPanel ? drag.width + 'px' : ''}">
     <div class="wrapper" id="wrapper">
         <div class="video">
-            <div class="player" #youtube_player>
+            <div class="player">
                 <video
+                    #video
                     *ngIf="currentSlide.video_details"
                     [src]="currentSlide.video_details.url"
                     controls
                 ></video>
-<!--                <youtube-player-->
-<!--                    *ngIf="currentSlide.video_details"-->
-<!--                    [videoId]="currentSlide.video_details.id"-->
-<!--                    [startSeconds]="currentSlide.video_details.start_time"-->
-<!--                    [endSeconds]="currentSlide.video_details.end_time"-->
-<!--                    [height]="videoHeight"-->
-<!--                    [width]="videoWidth"-->
-<!--                    (ready)="onPlayerReady($event)"-->
-<!--                    (stateChange)="onPlayerStateChange($event)"-->
-<!--                >-->
-<!--                </youtube-player>-->
             </div>
         </div>
         <div class="notes">
