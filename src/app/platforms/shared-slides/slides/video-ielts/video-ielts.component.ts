@@ -199,8 +199,12 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     playVideo() {
         if (this.video) {
+             const data: any = {"source": "video_player"}
             this.video.nativeElement.play();
             this.videoState = PlayerState.PLAYING;
+            this.stopListenToAsr();
+            data['video_event'] = "playing";
+            this.lessonService.Broadcast("DoNotDisturb", data)
         }
     }
 
@@ -212,6 +216,19 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.video.nativeElement.onclick = (e: any) => {
                 this.video.nativeElement.pause();
                 this.videoState = PlayerState.PAUSED;
+                this.startListenToAsr();
+                data['video_event'] = "paused";
+                data['noToggle'] = true;
+                this.lessonService.Broadcast("endDoNotDisturb", data)
+                this.lessonService.Broadcast("slideEventRequest", data)
+            }
+            this.video.nativeElement.onended = (e: any) => {
+                this.videoState = PlayerState.PAUSED;
+                this.startListenToAsr();
+                data['video_event'] = "ended";
+                data['noToggle'] = true;
+                this.lessonService.Broadcast("endDoNotDisturb", data)
+                this.lessonService.Broadcast("slideEventRequest", data)
             }
             // this.video.nativeElement.onseeked = (e: any) => {
             //     console.log('onseeked')
