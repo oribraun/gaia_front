@@ -6,9 +6,9 @@ export class Presentation {
 
     estimated_duration!: number
     presentation_done!: boolean
+    all_presentation_tasks_completed!: boolean
     presentation_title!: string
     presentation_topic!: string
-    test_mode!: boolean
     sections!: PresentationSection[]
     slides_flat: object[] = []
     teacher!: any
