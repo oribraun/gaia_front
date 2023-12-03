@@ -27,13 +27,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // courseAchievements!: Partial<{[key: string]: number[]}>;
     recommendedVideos: any = [
         // {'presentation_data': {'presentation_lesson_data':
-        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //             { presentation_thumbnail: "https://unseen-audio-files.s3.amazonaws.com/videos/reading+overview+thumb.png", presentation_title: ' example desc'}
         //     }},
         // {'presentation_data': {'presentation_lesson_data':
-        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //             { presentation_thumbnail: "https://unseen-audio-files.s3.amazonaws.com/videos/reading+overview+thumb.png", presentation_title: ' example desc'}
         //     }},
         // {'presentation_data': {'presentation_lesson_data':
-        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //             { presentation_thumbnail: "https://unseen-audio-files.s3.amazonaws.com/videos/reading+overview+thumb.png", presentation_title: ' example desc'}
         //     }},
     ];
     currentCoursePlanPartIndex: any = null;

@@ -72,7 +72,8 @@
                                     <p>Recommended videos for this part:</p>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of recommendedVideos">
-                                            <video [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"></video>
+                                            <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail" />
+<!--                                            <video [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"></video>-->
                                             <div class="desc">{{item.presentation_data.presentation_lesson_data.presentation_title}}</div>
                                         </div>
                                     </div>
