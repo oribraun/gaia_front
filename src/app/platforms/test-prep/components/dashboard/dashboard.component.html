@@ -15,21 +15,22 @@
                     </div>
                     <div class="date"><small>Exam Date</small><br>{{coursePlan.end_date}}</div>
                 </div>
-                <div class="text-body" *ngIf="coursePlan.tip">Tip: {{coursePlan.tip}}</div>
+                <div style="font-style:italic;" class="text-body" *ngIf="coursePlan.tip">Tip: {{coursePlan.tip}}</div>
             </div>
             <div class="dynamic-part-area d-flex flex-row">
                 <div class="left flex-fill">
                     <div class="d-flex flex-column">
                         <div class="part flex-fill" [ngClass]="'part-' + currentCoursePlanPartIndex">
                             <div class="panel-box">
-                                <div class="header">
+                                <h4 class="header">
                                     {{coursePlan.parts[currentCoursePlanPartIndex].title}}
-                                </div>
+                                </h4>
+                                <h5 class="practice_headline">Practice Exercises</h5>
                                 <div class="text-body plan-parts">
                                     <div class="items">
-                                        <div class="lesson-item quickstart">
+                                        <!-- <div class="lesson-item quickstart">
                                             Quickstart
-                                        </div>
+                                        </div> -->
                                         <div class="lesson-item">
                                             <ul class="lesson-timeline" id="timeline">
                                                 <li class="li complete"
@@ -69,7 +70,8 @@
                                     </div>
                                 </div>
                                 <div class="recommended-videos" *ngIf="recommendedVideos.length">
-                                    <p>Recommended videos for this part:</p>
+                                    <!-- <p>Recommended videos for this part:</p> -->
+                                    <h5 class="practice_headline">Theory Lessons</h5>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of recommendedVideos">
                                             <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail" />
@@ -82,12 +84,12 @@
                         </div>
                         <div class="achievements flex-fill">
                             <div class="panel-box">
-                                <div class="header d-flex justify-content-between">
+                                <h4 class="header d-flex justify-content-between">
                                     <span>Achievements</span>
                                     <span class="float-end">
                                             <button class="btn btn-light" (click)="gotTo('/test_prep/review')">Review my work</button>
                                         </span>
-                                </div>
+                                </h4>
                                 <div class="text-body">
                                     <div class="d-flex flex-row">
                                         <div class="lst">
@@ -121,9 +123,9 @@
                 <div class="right flex-fill">
                     <div class="test-yourself">
                         <div class="panel-box">
-                            <div class="header">
+                            <h4 class="header">
                                 Test yourself
-                            </div>
+                            </h4>
                             <div class="text-body">
                                 Taking test will help you better prepare to the upcoming exam and will help us customize the practice level.
                             </div>
@@ -167,9 +169,9 @@
             </div>
             <div class="vocab-activity d-flex align-items-stretch">
                 <div class="activity panel-box">
-                    <div class="header">
+                    <h4 class="header">
                         Activity
-                    </div>
+                    </h4>
                     <div class="d-flex flex-row">
                         <div class="chart" *ngIf="activity.labels.length">
                             <app-bar-chart
@@ -189,12 +191,12 @@
                     </div>
                 </div>
                 <div class="vocabulary panel-box">
-                    <div class="header d-flex justify-content-between">
+                    <h4 class="header d-flex justify-content-between">
                         <span>Vocabulary</span>
                         <span class="float-end">
                             <button class="btn btn-light" (click)="gotTo('/test_prep/vocabulary')">My Vocabulary</button>
                         </span>
-                    </div>
+                    </h4>
                     <div class="d-flex flex-row">
                         <div class="chart-wrapper">
                             <div class="chart" *ngIf="difficulty.length">
