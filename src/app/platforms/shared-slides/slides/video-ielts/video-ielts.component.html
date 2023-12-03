@@ -7,8 +7,12 @@
                     #video
                     *ngIf="currentSlide.video_details"
                     [src]="currentSlide.video_details.url"
-                    controls
                 ></video>
+                <div class="play-button" *ngIf="videoState !== 1" (click)="playVideo();">
+                    <div class="play">
+                        <i class="bi bi-play-fill"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="notes">

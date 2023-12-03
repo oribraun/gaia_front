@@ -96,6 +96,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     sessionInfo: any = null;
     peerConnection: any = null;
 
+    videoState = PlayerState.UNSTARTED;
+
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
@@ -195,59 +197,70 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.lessonService.Broadcast("PresentationReplayRequest", data)
     }
 
+    playVideo() {
+        if (this.video) {
+            this.video.nativeElement.play();
+            this.videoState = PlayerState.PLAYING;
+        }
+    }
+
     setUpPlayerListeners() {
         if (this.video) {
             const data: any = {"source": "video_player"}
             let lastTime = 0;
             let lastState = PlayerState.UNSTARTED;
-            this.video.nativeElement.onseeked = (e: any) => {
-                console.log('onseeked')
+            this.video.nativeElement.onclick = (e: any) => {
+                this.video.nativeElement.pause();
+                this.videoState = PlayerState.PAUSED;
             }
-            this.video.nativeElement.onpause = (e: any) => {
-                if (lastState === PlayerState.PAUSED) {
-                    console.log('onpause')
-                }
-                // if (lastTime === this.video.nativeElement.currentTime) {
-                //     if (lastState === PlayerState.PLAYING) {
-                //         console.log('onpause')
-                //     }
-                //     lastState = PlayerState.PAUSED;
-                // }
-                // this.startListenToAsr();
-                // data['video_event'] = "paused";
-                // data['noToggle'] = true;
-                // this.lessonService.Broadcast("endDoNotDisturb", data)
-                // this.lessonService.Broadcast("slideEventRequest", data)
-            }
-            this.video.nativeElement.onplay = (e: any) => {
-                console.log('onplay')
-                if (lastState === PlayerState.PAUSED || lastState === PlayerState.UNSTARTED) {
-                    console.log('onplay')
-                }
-                // console.log('this.video.nativeElement.currentTime', this.video.nativeElement.currentTime)
-                // console.log('lastTime', lastTime)
-                // if (lastState === PlayerState.PAUSED) {
-                //     console.log('onplay')
-                // }
-                lastState = PlayerState.PLAYING;
-                // this.stopListenToAsr();
-                // data['video_event'] = "playing";
-                // this.lessonService.Broadcast("DoNotDisturb", data)
-            }
-            this.video.nativeElement.ontimeupdate = (e: any) => {
-                // if (lastState === PlayerState.PLAYING) {
-                //     lastTime = this.video.nativeElement.currentTime;
-                //     console.log('ontimeupdate', this.video.nativeElement.currentTime)
-                // }
-            }
-            this.video.nativeElement.onended = (e: any) => {
-                console.log('onended')
-                // this.startListenToAsr();
-                // data['video_event'] = "ended";
-                // data['noToggle'] = true;
-                // this.lessonService.Broadcast("endDoNotDisturb", data)
-                // this.lessonService.Broadcast("slideEventRequest", data)
-            }
+            // this.video.nativeElement.onseeked = (e: any) => {
+            //     console.log('onseeked')
+            // }
+            // this.video.nativeElement.onpause = (e: any) => {
+            //     if (lastState === PlayerState.PAUSED) {
+            //         console.log('onpause')
+            //     }
+            //     // if (lastTime === this.video.nativeElement.currentTime) {
+            //     //     if (lastState === PlayerState.PLAYING) {
+            //     //         console.log('onpause')
+            //     //     }
+            //     //     lastState = PlayerState.PAUSED;
+            //     // }
+            //     // this.startListenToAsr();
+            //     // data['video_event'] = "paused";
+            //     // data['noToggle'] = true;
+            //     // this.lessonService.Broadcast("endDoNotDisturb", data)
+            //     // this.lessonService.Broadcast("slideEventRequest", data)
+            // }
+            // this.video.nativeElement.onplay = (e: any) => {
+            //     console.log('onplay')
+            //     if (lastState === PlayerState.PAUSED || lastState === PlayerState.UNSTARTED) {
+            //         console.log('onplay')
+            //     }
+            //     // console.log('this.video.nativeElement.currentTime', this.video.nativeElement.currentTime)
+            //     // console.log('lastTime', lastTime)
+            //     // if (lastState === PlayerState.PAUSED) {
+            //     //     console.log('onplay')
+            //     // }
+            //     lastState = PlayerState.PLAYING;
+            //     // this.stopListenToAsr();
+            //     // data['video_event'] = "playing";
+            //     // this.lessonService.Broadcast("DoNotDisturb", data)
+            // }
+            // this.video.nativeElement.ontimeupdate = (e: any) => {
+            //     // if (lastState === PlayerState.PLAYING) {
+            //     //     lastTime = this.video.nativeElement.currentTime;
+            //     //     console.log('ontimeupdate', this.video.nativeElement.currentTime)
+            //     // }
+            // }
+            // this.video.nativeElement.onended = (e: any) => {
+            //     console.log('onended')
+            //     // this.startListenToAsr();
+            //     // data['video_event'] = "ended";
+            //     // data['noToggle'] = true;
+            //     // this.lessonService.Broadcast("endDoNotDisturb", data)
+            //     // this.lessonService.Broadcast("slideEventRequest", data)
+            // }
             // if (e.data == PlayerState.ENDED) {
             //     this.currentState = PlayerState.ENDED;
             //     console.log('video ended')
