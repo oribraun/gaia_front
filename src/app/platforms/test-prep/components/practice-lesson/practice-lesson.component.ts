@@ -512,17 +512,21 @@ export class PracticeLessonComponent implements OnInit {
 
         this.handleCoreFunctionalityOfSlide()
 
-        if (additional_instructions) {
-            const data = {'type': 'additional_instructions', 'data': additional_instructions}
-            this.lessonService.Broadcast("slideEventReply", data)
-        }
-
         let blob = null;
         if (reason === 'new_slide') {
             blob = await this.getSpeakNative();
         }
+        if (additional_instructions) {
+            const data = {
+                type: 'additional_instructions',
+                data: additional_instructions,
+                withAudio: (help_sound_buffer || blob)
+            }
+            this.lessonService.Broadcast("slideEventReply", data)
+        }
 
         if (help_sound_buffer || blob) {
+            this.lessonService.Broadcast("init-audio-playing", data)
             if(this.handleCoreFunctionalityOfSlide('speak')){
                 if (blob && this.currentSlide.index_in_bundle == 0) {
                     console.log('speakNative before');

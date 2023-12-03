@@ -21,8 +21,7 @@ import {HelperService} from "../../../main/services/helper.service";
 declare var $: any;
 declare var apiRTC: any;
 
-// const apiKey = "ODU1NDg1MThlOGEwNDMxMGI1OGIzOTc1NjUwNzUzNGUtMTcwMTM2NDI2NQ=="
-const apiKey = "M2Y5ZTgzM2JhZDJlNDEwNGE1MDlkM2MxM2U1ZjQwNmYtMTcwMDkyOTMyMQ=="
+const apiKey = ""
 const SERVER_URL = "https://api.heygen.com";
 // https://github.com/HeyGen-Official/RealtimeAvatarDemo/blob/main/index.js
 
@@ -98,6 +97,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     videoState = PlayerState.UNSTARTED;
 
+    waitForAudioAfterSlideEventReplay = false;
+
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
@@ -124,6 +125,29 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         });
         // this.createVideo();
 
+        this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
+            if (resp.type == "additional_instructions") {
+                const teacher_text = resp.data.teacher_text;
+                this.messages.push(
+                    new ChatMessage({type: 'computer', message: teacher_text})
+                );
+            }
+            if (resp.withAudio) {
+                this.waitForAudioAfterSlideEventReplay = true;
+            } else {
+                this.startListenToAsr();
+            }
+        })
+        this.lessonService.ListenFor("audio-playing").subscribe((resp:any) => {
+            this.waitForAudioAfterSlideEventReplay = true;
+            this.stopListenToAsr();
+        })
+        this.lessonService.ListenFor("audio_finished").subscribe((resp:any) => {
+            if (this.waitForAudioAfterSlideEventReplay) {
+                this.waitForAudioAfterSlideEventReplay = false;
+                this.startListenToAsr();
+            }
+        })
         this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -199,7 +223,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     playVideo() {
         if (this.video) {
-             const data: any = {"source": "video_player"}
+            const data: any = {"source": "video_player"}
             this.video.nativeElement.play();
             this.videoState = PlayerState.PLAYING;
             this.stopListenToAsr();
@@ -216,7 +240,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.video.nativeElement.onclick = (e: any) => {
                 this.video.nativeElement.pause();
                 this.videoState = PlayerState.PAUSED;
-                this.startListenToAsr();
+                // this.startListenToAsr();
                 data['video_event'] = "paused";
                 data['noToggle'] = true;
                 this.lessonService.Broadcast("endDoNotDisturb", data)
@@ -224,7 +248,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             }
             this.video.nativeElement.onended = (e: any) => {
                 this.videoState = PlayerState.PAUSED;
-                this.startListenToAsr();
+                // this.startListenToAsr();
                 data['video_event'] = "ended";
                 data['noToggle'] = true;
                 this.lessonService.Broadcast("endDoNotDisturb", data)
