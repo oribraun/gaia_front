@@ -467,7 +467,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     setUpHeyGenDefaultAvatar() {
         if (this.heygenMediaElement) {
             this.heygenMediaElement.nativeElement.srcObject = undefined;
-            this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/example_video.mp4";
+            this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/silent_2.mp4";
             this.heygenMediaElement.nativeElement.loop = true;
             // this.heygenMediaElement.nativeElement.mute = true;
         }
@@ -475,11 +475,24 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     setUpHeyGenVideoByText(text:string){
         if (this.heygenMediaElement) {
-            if(text === "some_text") {
-                this.heygenMediaElement.nativeElement.srcObject = undefined;
-                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/example_video_.mp4";
+            this.heygenMediaElement.nativeElement.srcObject = undefined;
+            // "Gaia, what are the subjects of those articles?": "The reading articles encompasses a wide range of topics, reflecting the diversity found in college materials. This prepares you for various academic and professional scenarios. However, for practice, we'll concentrate on areas of your interest to maintain engagement and interest.",
+            // "Thanks. Can I skip this video and start practicing": "We don't really recommend skipping the video lessons, but if you really want to, just head over to the dashboard and hit the 'start practice reading' button."           
+            // "I see you paused the video. Do you have any question?"
+            if(text === "The reading articles encompasses a wide range of topics, reflecting the diversity found in college materials. This prepares you for various academic and professional scenarios. However, for practice, we'll concentrate on areas of your interest to maintain engagement and interest.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_3.mp4";
                 this.heygenMediaElement.nativeElement.play();
-            } else {
+            } else if (text === "We don't really recommend skipping the video lessons, but if you really want to, just head over to the dashboard and hit the 'start practice reading' button.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_4.mp4";
+                this.heygenMediaElement.nativeElement.play();
+            } else if (text === "I see you paused the video. Do you have any question?") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_1.mp4";
+                this.heygenMediaElement.nativeElement.play();
+            } else if (text === "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_2.mp4";
+                this.heygenMediaElement.nativeElement.play();
+            }
+            else {
                 this.setUpHeyGenDefaultAvatar();
             }
         }
