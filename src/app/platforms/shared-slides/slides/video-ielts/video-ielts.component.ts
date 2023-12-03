@@ -109,7 +109,6 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         super(config, lessonService)
         this.document = document;
         this.embeddedVideo =""
-
         if (environment.is_mock) {
             this.messages = [
                 new ChatMessage({type: 'computer', message: 'Hi'}),
@@ -130,10 +129,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 let resp_data = resp.data
                 if (resp_data && resp_data.text) {
                     this.messages.push(
-                        new ChatMessage({type: 'user', message: resp_data.text})
+                        new ChatMessage({type: 'computer', message: resp_data.text})
                     );
                     this.scrollToBottom2();
-                    this.setUpHeyGenVideoByText("some_text");
+                    this.setUpHeyGenVideoByText(resp_data.text);
                 }
             } catch (e) {}
         })
@@ -146,7 +145,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.showSpinner = false;
         })
 
-        // this.startListenToAsr();
+        this.startListenToAsr();
         // this.startHeyGen();
     }
 
