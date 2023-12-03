@@ -41,6 +41,10 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
+        // TODO remove after demo
+        if (this.user.id) {
+            this.redirectUser();
+        }
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             this.updateUserCookie();

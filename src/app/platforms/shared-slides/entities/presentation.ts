@@ -215,6 +215,7 @@ export class VideoDetails {
     id!: string
     start_time!: number
     end_time!: number
+    url!: string;
 
     constructor(obj?: any) {
         if (obj) {
