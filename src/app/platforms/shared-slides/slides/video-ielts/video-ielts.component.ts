@@ -133,6 +133,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                         new ChatMessage({type: 'user', message: resp_data.text})
                     );
                     this.scrollToBottom2();
+                    this.setUpHeyGenVideoByText("some_text");
                 }
             } catch (e) {}
         })
@@ -152,7 +153,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     ngAfterViewInit(): void {
         this.setUpPlayerListeners();
         this.setUpTeacherSize();
-        this.setUpHeyGenVideoByText(this.currentSlide.text);
+        this.setUpHeyGenDefaultAvatar()
     }
 
     startListenToAsr() {
@@ -475,9 +476,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     setUpHeyGenVideoByText(text:string){
         if (this.heygenMediaElement) {
-            if(text === 'some text') {
+            if(text === "some_text") {
                 this.heygenMediaElement.nativeElement.srcObject = undefined;
-                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/some-video.mp4";
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/example_video_.mp4";
                 this.heygenMediaElement.nativeElement.play();
             } else {
                 this.setUpHeyGenDefaultAvatar();
