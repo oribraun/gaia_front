@@ -18,6 +18,14 @@ import {environment} from "../../../../../environments/environment";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
 import {HelperService} from "../../../main/services/helper.service";
 
+declare var $: any;
+declare var apiRTC: any;
+
+// const apiKey = "ODU1NDg1MThlOGEwNDMxMGI1OGIzOTc1NjUwNzUzNGUtMTcwMTM2NDI2NQ=="
+const apiKey = "M2Y5ZTgzM2JhZDJlNDEwNGE1MDlkM2MxM2U1ZjQwNmYtMTcwMDkyOTMyMQ=="
+const SERVER_URL = "https://api.heygen.com";
+// https://github.com/HeyGen-Official/RealtimeAvatarDemo/blob/main/index.js
+
 export enum PlayerState
 {
     UNSTARTED = -1,
@@ -36,8 +44,6 @@ export interface OnStateChangeEvent
     target:any;
 }
 
-declare var $: any;
-
 @Component({
     selector: 'app-video-ielts',
     templateUrl: './video-ielts.component.html',
@@ -49,6 +55,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
     @ViewChild('teacher', { static: false }) teacher!: ElementRef;
     @ViewChild('scroller', { static: false }) scroller!: ElementRef;
+    @ViewChild('heygenMediaElement', { static: false }) heygenMediaElement!: ElementRef;
 
     embeddedVideo: SafeHtml;
 
@@ -85,6 +92,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     dragStarted = false;
 
+    // HEYGEN
+    sessionInfo: any = null;
+    peerConnection: any = null;
+
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
@@ -99,22 +110,6 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
         if (environment.is_mock) {
             this.messages = [
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-                new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
                 new ChatMessage({type: 'computer', message: 'Hi'}),
                 new ChatMessage({type: 'user', message: 'Hello'}),
             ]
@@ -137,14 +132,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                     );
                     this.scrollToBottom2();
                 }
-                console.log('resp_data', resp_data)
-                // if (resp_data.source == "fix_asr") {
-                //     this.messages.push(
-                //         new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']})
-                //     );
-                // }
-            } catch (e) {
-            }
+            } catch (e) {}
         })
         this.lessonService.ListenFor("audio_finished").subscribe((resp:any) => {
             console.log('audio_finished')
@@ -156,11 +144,13 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         })
 
         this.startListenToAsr();
+        // this.startHeyGen();
     }
 
     ngAfterViewInit(): void {
         this.setUpYoutubePlayer();
         this.setUpTeacherSize();
+        this.setUpHeyGenVideoByText(this.currentSlide.text);
     }
 
     startListenToAsr() {
@@ -271,12 +261,12 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     scrollToBottom2(animate=false, timeout=0){
-         if (this.scroller) {
-             setTimeout(() => {
-                 const element = this.scroller.nativeElement;
-                 element.scrollTop = element.scrollHeight
-             }, timeout)
-         }
+        if (this.scroller) {
+            setTimeout(() => {
+                const element = this.scroller.nativeElement;
+                element.scrollTop = element.scrollHeight
+            }, timeout)
+        }
     }
 
     sendMessage() {
@@ -374,6 +364,248 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         if (el) {
             el.classList.remove('disable-pointer-events');
         }
+    }
+
+    setUpHeyGenDefaultAvatar() {
+        if (this.heygenMediaElement) {
+            this.heygenMediaElement.nativeElement.srcObject = undefined;
+            this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/example_video.mp4";
+            this.heygenMediaElement.nativeElement.loop = true;
+            // this.heygenMediaElement.nativeElement.mute = true;
+        }
+    }
+
+    setUpHeyGenVideoByText(text:string){
+        if (this.heygenMediaElement) {
+            if(text === 'some text') {
+                this.heygenMediaElement.nativeElement.srcObject = undefined;
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/some-video.mp4";
+                this.heygenMediaElement.nativeElement.play();
+            } else {
+                this.setUpHeyGenDefaultAvatar();
+            }
+        }
+    }
+
+    async startHeyGen() {
+        const avatar = "example";
+        const voice = "example";
+
+        // call the new interface to get the server's offer SDP and ICE server to create a new RTCPeerConnection
+        this.sessionInfo = await this.newSession("high", avatar, voice);
+        const { sdp: serverSdp, ice_servers: iceServers } = this.sessionInfo;
+        this.peerConnection = new RTCPeerConnection({ iceServers: [] });
+        let formattedIceServers = iceServers.map((server: any) => ({ urls: server }));
+        this.peerConnection.setConfiguration({ iceServers: formattedIceServers });
+
+        // When ICE candidate is available, send to the server
+        this.peerConnection.onicecandidate = ({ candidate }: any) => {
+            console.log("Received ICE candidate:", candidate);
+            if (candidate) {
+                this.handleICE(this.sessionInfo.session_id, candidate.toJSON());
+            }
+        };
+
+        // When ICE connection state changes, display the new state
+        this.peerConnection.oniceconnectionstatechange = (event: any) => {
+
+        };
+
+        // When audio and video streams are received, display them in the video element
+        const mediaElement: any = document.querySelector("#mediaElement");
+        this.peerConnection.ontrack = (event: any) => {
+            console.log("Received the track");
+            if (event.track.kind === "audio" || event.track.kind === "video") {
+                mediaElement.srcObject = event.streams[0];
+            }
+        };
+
+        // Set server's SDP as remote description
+        const remoteDescription = new RTCSessionDescription(serverSdp);
+        await this.peerConnection.setRemoteDescription(remoteDescription);
+    }
+
+    async newSession(quality: string, avatar_name: string, voice_name: string) {
+        const response = await fetch(`${SERVER_URL}/v1/realtime.new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ quality, avatar_name, voice_name }),
+        });
+        if (response.status === 200) {
+            const data = await response.json();
+            console.log(data.data);
+            return data.data;
+        } else {
+            console.error("Server error");
+            throw new Error("Server error");
+        }
+    }
+
+    async handleICE(session_id: any, candidate: any) {
+        const response = await fetch(`${SERVER_URL}/v1/realtime.ice`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ session_id, candidate }),
+        });
+        if (response.status === 200) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.error("Server error");
+            throw new Error("Server error");
+        }
+    }
+
+    async startAndDisplaySession() {
+        if (!this.sessionInfo) {
+            console.log("Please create a connection first")
+            return;
+        }
+
+        console.log("Starting session... please wait")
+
+        // Create and set local SDP description
+        const localDescription = await this.peerConnection.createAnswer();
+        await this.peerConnection.setLocalDescription(localDescription);
+
+        // Start session
+        await this.startSession(this.sessionInfo.session_id, localDescription);
+        console.log("Session started successfully")
+    }
+
+    async startSession(session_id: any, sdp: any) {
+        const response = await fetch(`${SERVER_URL}/v1/realtime.start`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ session_id, sdp }),
+        });
+        if (response.status === 200) {
+            const data = await response.json();
+            return data.data;
+        } else {
+            console.error("Server Error. Please ask the staff if the service has been turned on");
+            throw new Error("Server error");
+        }
+    }
+
+    async createHeyGenNewSession(apiKey: string) {
+        const response: any = await fetch(`${'https://api.heygen.com'}/v1/realtime.new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ quality: "high" }),
+        });
+
+        const message = response.message;
+        const data = response.data;
+        console.log('message', message)
+        console.log('data', data)
+        this.heyGenStartNewSession(apiKey, data)
+
+    }
+    async heyGenStartNewSession(apiKey: string, data: any) {
+        const response: any = await fetch(`${'https://api.heygen.com'}/v1/realtime.start`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({
+                session_id: data.session_id,
+                sdp: data.sdp
+            }),
+        });
+        //
+        // const message = response.message;
+        // const data = response.data;
+        // console.log('message', message)
+        // console.log('data', data)
+
+    }
+
+    getOrcreateConversation() {
+        let localStream: any = null;
+        //==============================
+        // 1/ CREATE USER AGENT
+        //==============================
+        const api_key = "ODU1NDg1MThlOGEwNDMxMGI1OGIzOTc1NjUwNzUzNGUtMTcwMTM2NDI2NQ=="
+        var ua = new apiRTC.UserAgent({
+            uri: `apzkey:${api_key}`
+        });
+        //==============================
+        // 2/ REGISTER
+        //==============================
+        ua.register().then((session: any) => {
+            //==============================
+            // 3/ CREATE CONVERSATION
+            //==============================
+            const conversation = session.getConversation('');
+            //==========================================================
+            // 4/ ADD EVENT LISTENER : WHEN NEW STREAM IS AVAILABLE IN CONVERSATION
+            //==========================================================
+            conversation.on('streamListChanged', (streamInfo: any) => {
+                console.log("streamListChanged :", streamInfo);
+                if (streamInfo.listEventType === 'added') {
+                    if (streamInfo.isRemote === true) {
+                        conversation.subscribeToMedia(streamInfo.streamId)
+                            .then((stream: any) => {
+                                console.log('subscribeToMedia success');
+                            }).catch((err: any) => {
+                            console.error('subscribeToMedia error', err);
+                        });
+                    }
+                }
+            });
+            //=====================================================
+            // 4 BIS/ ADD EVENT LISTENER : WHEN STREAM IS ADDED/REMOVED TO/FROM THE CONVERSATION
+            //=====================================================
+            conversation.on('streamAdded', (stream: any) => {
+                stream.addInDiv('remote-container', 'remote-media-' + stream.streamId, {}, false);
+            }).on('streamRemoved', (stream: any) => {
+                stream.removeFromDiv('remote-container', 'remote-media-' + stream.streamId);
+            });
+            //==============================
+            // 5/ CREATE LOCAL STREAM
+            //==============================
+            ua.createStream({
+                constraints: {
+                    audio: true,
+                    video: true
+                }
+            })
+                .then((stream: any) => {
+                    console.log('createStream :', stream);
+                    // Save local stream
+                    localStream = stream;
+                    stream.removeFromDiv('local-container', 'local-media');
+                    stream.addInDiv('local-container', 'local-media', {}, true);
+                    //==============================
+                    // 6/ JOIN CONVERSATION
+                    //==============================
+                    conversation.join()
+                        .then((response: any) => {
+                            //==============================
+                            // 7/ PUBLISH LOCAL STREAM
+                            //==============================
+                            conversation.publish(localStream);
+                        }).catch((err: any) => {
+                        console.error('Conversation join error', err);
+                    });
+                }).catch((err: any) => {
+                console.error('create stream error', err);
+            });
+        });
     }
 
     override ngOnDestroy(): void {

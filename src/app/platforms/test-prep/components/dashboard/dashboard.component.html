@@ -90,9 +90,8 @@
                                         <div class="d-flex flex-row">
                                             <div class="lst">
                                                 <ul>
-                                                    <li *ngFor="let l of achievements.labels" [ngStyle]="{'color':  achievements.colors[0]}">
-                                                        <span class="text-dark">{{l.name}}
-                                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{l.tip}}" data-bs-custom-class="gaia-tooltip">?</span>
+                                                    <li *ngFor="let l of achievements.labels; let i = index;" [ngStyle]="{'color':  achievements.colors[i]}">
+                                                        <span class="text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="{{l.tip}}" data-bs-custom-class="gaia-tooltip">{{l.name}}
                                                         </span>
                                                     </li>
                                                 </ul>
@@ -167,9 +166,9 @@
             </div>
             <div class="vocab-activity d-flex align-items-stretch">
                 <div class="activity panel-box">
-                    <h4 class="header">
+                    <div class="header">
                         Activity
-                    </h4>
+                    </div>
                     <div class="d-flex flex-row">
                         <div class="chart" *ngIf="activity.labels.length">
                             <app-bar-chart

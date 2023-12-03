@@ -12,6 +12,11 @@
     height: calc(100% - @header-height);
     max-width: @max-width;
     margin: 0 auto;
+    @media(min-width: @max-width) {
+        max-width: none;
+        padding-left: calc((100% - @max-width)/2);
+        padding-right: calc((100% - @max-width)/2);
+    }
 }
 .main-window-header-fixed {
     position: relative;
@@ -20,6 +25,11 @@
     margin: 0 auto;
     overflow: auto;
     margin-top: @header-height;
+    @media(min-width: @max-width) {
+        max-width: none;
+        padding-left: calc((100% - @max-width)/2);
+        padding-right: calc((100% - @max-width)/2);
+    }
 }
 .lesson {
     margin: 0;
