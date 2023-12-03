@@ -26,9 +26,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // courseAchievements: Partial<{ [key in SomeArray]: string[] }> = null;
     // courseAchievements!: Partial<{[key: string]: number[]}>;
     recommendedVideos: any = [
-        {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
-        {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
-        {'url': 'https://www.w3schools.com/html/mov_bbb.mp4', desc: ' example desc'},
+        // {'presentation_data': {'presentation_lesson_data':
+        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //     }},
+        // {'presentation_data': {'presentation_lesson_data':
+        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //     }},
+        // {'presentation_data': {'presentation_lesson_data':
+        //             { presentation_thumbnail: 'https://www.w3schools.com/html/mov_bbb.mp4', presentation_title: ' example desc'}
+        //     }},
     ];
     currentCoursePlanPartIndex: any = null;
 
@@ -103,6 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     console.log('getGroupTypes err', response)
                 } else {
                     this.groupTypes = response.group_types;
+                    this.recommendedVideos = response.recommended_videos;
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;
                     this.coursePlan = response.current_course_plan;
@@ -230,13 +237,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     }
 
-    generateNewLesson(courseTypeId: any) {
+    generateNewLesson(courseTypeId: any, specific_lesson_id: number = -1) {
         return new Promise((resolve, reject) => {
             this.gettingNewLesson = true;
-            this.apiService.getUserNewLesson({
+            const obj: any = {
                 current_course_id: courseTypeId,
-                plan_id: this.coursePlan.id
-            }).subscribe({
+                plan_id: this.coursePlan.id,
+            }
+            if (specific_lesson_id > -1) {
+                obj['specific_lesson_id'] = specific_lesson_id
+            }
+            this.apiService.getUserNewLesson(obj).subscribe({
                 next: (response: any) => {
                     this.gettingNewLesson = false;
                     if (response.err) {
@@ -273,6 +284,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log('tryAgainUserLesson', id)
         this.hideUserLessonsModal();
         this.router.navigate(['test_prep/practice/' + id])
+    }
+
+    startVideoLesson(id: number, lesson_group_type_id: number) {
+        console.log('id', id)
+        console.log('lesson_group_type_id', lesson_group_type_id)
+        this.generateNewLesson(lesson_group_type_id, id).then((id) => {
+            this.router.navigate(['test_prep/practice/' + id])
+        }).catch((err) => {})
     }
 
     alertOrShowUserLessonModel() {
