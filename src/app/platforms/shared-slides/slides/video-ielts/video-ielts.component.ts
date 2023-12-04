@@ -21,7 +21,8 @@ import {HelperService} from "../../../main/services/helper.service";
 declare var $: any;
 declare var apiRTC: any;
 
-const apiKey = ""
+// TODO remove key
+const apiKey = "M2Y5ZTgzM2JhZDJlNDEwNGE1MDlkM2MxM2U1ZjQwNmYtMTcwMDkyOTMyMQ=="
 const SERVER_URL = "https://api.heygen.com";
 // https://github.com/HeyGen-Official/RealtimeAvatarDemo/blob/main/index.js
 
@@ -95,8 +96,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     // HEYGEN
     sessionInfo: any = null;
     peerConnection: any = null;
+    taskInterval: any = null;
 
     videoState = PlayerState.UNSTARTED;
+
+    unsDemo = true;
 
     constructor(
         protected override config: Config,
@@ -130,7 +134,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                     new ChatMessage({type: 'computer', message: teacher_text})
                 );
                 this.scrollToBottom2();
-                this.setUpHeyGenVideoByText(teacher_text);
+                if (this.unsDemo) {
+                    this.setUpHeyGenVideoByText(teacher_text);
+                } else {
+                    this.startSessionTask(this.sessionInfo.session_id, teacher_text);
+                }
             }
         })
         this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
@@ -142,7 +150,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                         new ChatMessage({type: 'computer', message: resp_data.text})
                     );
                     this.scrollToBottom2();
-                    this.setUpHeyGenVideoByText(resp_data.text);
+                    if (this.unsDemo) {
+                        this.setUpHeyGenVideoByText(resp_data.text);
+                    } else {
+                        this.startSessionTask(this.sessionInfo.session_id, resp_data.text);
+                    }
                 }
                 this.showSpinner = false;
             } catch (e) {}
@@ -163,8 +175,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.messages.push(
             new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."}),
         );
-        this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
-        // this.setUpHeyGenDefaultAvatar()
+        if (this.unsDemo) {
+            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
+        } else {
+            this.startHeyGen();
+        }
     }
 
     sendUserReplay(student_response: string) {
@@ -511,9 +526,15 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     async startHeyGen() {
-        const avatar = "example";
-        const voice = "example";
-
+        const avatar = "default";
+        const voice = 'en-US-JennyNeural';
+        const session_id = this.getSessionId();
+        if (session_id) {
+            try {
+                this.deleteSessionId();
+                await this.stopSession(session_id);
+            } catch (e){}
+        }
         // call the new interface to get the server's offer SDP and ICE server to create a new RTCPeerConnection
         this.sessionInfo = await this.newSession("high", avatar, voice);
         const { sdp: serverSdp, ice_servers: iceServers } = this.sessionInfo;
@@ -523,9 +544,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
         // When ICE candidate is available, send to the server
         this.peerConnection.onicecandidate = ({ candidate }: any) => {
-            console.log("Received ICE candidate:", candidate);
+            // console.log("Received ICE candidate:", candidate);
             if (candidate) {
-                this.handleICE(this.sessionInfo.session_id, candidate.toJSON());
+                // this.handleICE(this.sessionInfo.session_id, candidate.toJSON());
             }
         };
 
@@ -537,8 +558,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         // When audio and video streams are received, display them in the video element
         const mediaElement: any = document.querySelector("#mediaElement");
         this.peerConnection.ontrack = (event: any) => {
-            console.log("Received the track");
-            if (event.track.kind === "audio" || event.track.kind === "video") {
+            console.log("ontrack Received the track", event);
+            if (event.track.kind === "audio" || event.track.kind === "video") {}
+            if (event.track.kind === "video") {
                 mediaElement.srcObject = event.streams[0];
             }
         };
@@ -546,6 +568,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         // Set server's SDP as remote description
         const remoteDescription = new RTCSessionDescription(serverSdp);
         await this.peerConnection.setRemoteDescription(remoteDescription);
+
+        this.startAndDisplaySession();
     }
 
     async newSession(quality: string, avatar_name: string, voice_name: string) {
@@ -555,7 +579,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 "Content-Type": "application/json",
                 "X-Api-Key": apiKey,
             },
-            body: JSON.stringify({ quality, avatar_name, voice_name }),
+            body: JSON.stringify({
+                quality,
+                avatar_name,
+                voice_name
+            }),
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -585,6 +613,56 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         }
     }
 
+    async stopSession(session_id: any) {
+        if (!session_id) {
+            return;
+        }
+        const response = await fetch(`${SERVER_URL}/v1/realtime.stop`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ session_id }),
+        });
+        if (response.status === 200) {
+            const data = await response.json();
+            return data.data;
+        } else {
+            console.error("Server Error. Please ask the staff if the service has been turned on");
+            throw new Error("Server error");
+        }
+    }
+    async startSessionTask(session_id: any, text: string) {
+        const response = await fetch(`${SERVER_URL}/v1/realtime.task`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": apiKey,
+            },
+            body: JSON.stringify({ session_id, text, task_type: 'test' }),
+        });
+        if (response.status === 200) {
+            const data = await response.json();
+            this.taskDurationCounter(data.data.duration_ms)
+            return data.data;
+        } else {
+            console.error("Server Error. Please ask the staff if the service has been turned on");
+            throw new Error("Server error");
+        }
+    }
+
+    async taskDurationCounter(duration_ms: number) {
+        let d_seconds = duration_ms / 1000;
+        this.taskInterval = setInterval(() => {
+            if (d_seconds <= 0) {
+                clearInterval(this.taskInterval)
+                this.lessonService.Broadcast('startListenToAsr')
+            }
+            d_seconds--;
+        }, 1000)
+    }
+
     async startAndDisplaySession() {
         if (!this.sessionInfo) {
             console.log("Please create a connection first")
@@ -600,6 +678,13 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         // Start session
         await this.startSession(this.sessionInfo.session_id, localDescription);
         console.log("Session started successfully")
+        const data = await this.makeSureSessionIsConnected();
+        if (data.state === 'connected') {
+            this.startSessionTask(this.sessionInfo.session_id, "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
+        }
+        // setTimeout(() => {
+        //     this.startSessionTask(this.sessionInfo.session_id, "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
+        // }, 10000)
     }
 
     async startSession(session_id: any, sdp: any) {
@@ -613,6 +698,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         });
         if (response.status === 200) {
             const data = await response.json();
+            this.setSessionId();
             return data.data;
         } else {
             console.error("Server Error. Please ask the staff if the service has been turned on");
@@ -620,121 +706,83 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         }
     }
 
-    async createHeyGenNewSession(apiKey: string) {
-        const response: any = await fetch(`${'https://api.heygen.com'}/v1/realtime.new`, {
+    async checkSessionState(session_id: any) {
+        const response = await fetch(`${SERVER_URL}/v1/realtime.state`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-Api-Key": apiKey,
             },
-            body: JSON.stringify({ quality: "high" }),
+            body: JSON.stringify({ session_id }),
         });
-
-        const message = response.message;
-        const data = response.data;
-        console.log('message', message)
-        console.log('data', data)
-        this.heyGenStartNewSession(apiKey, data)
-
-    }
-    async heyGenStartNewSession(apiKey: string, data: any) {
-        const response: any = await fetch(`${'https://api.heygen.com'}/v1/realtime.start`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
-            },
-            body: JSON.stringify({
-                session_id: data.session_id,
-                sdp: data.sdp
-            }),
-        });
-        //
-        // const message = response.message;
-        // const data = response.data;
-        // console.log('message', message)
-        // console.log('data', data)
-
+        if (response.status === 200) {
+            const data = await response.json();
+            return data.data;
+        } else {
+            console.error("Server Error. Please ask the staff if the service has been turned on");
+            throw new Error("Server error");
+        }
     }
 
-    getOrcreateConversation() {
-        let localStream: any = null;
-        //==============================
-        // 1/ CREATE USER AGENT
-        //==============================
-        const api_key = "ODU1NDg1MThlOGEwNDMxMGI1OGIzOTc1NjUwNzUzNGUtMTcwMTM2NDI2NQ=="
-        var ua = new apiRTC.UserAgent({
-            uri: `apzkey:${api_key}`
-        });
-        //==============================
-        // 2/ REGISTER
-        //==============================
-        ua.register().then((session: any) => {
-            //==============================
-            // 3/ CREATE CONVERSATION
-            //==============================
-            const conversation = session.getConversation('');
-            //==========================================================
-            // 4/ ADD EVENT LISTENER : WHEN NEW STREAM IS AVAILABLE IN CONVERSATION
-            //==========================================================
-            conversation.on('streamListChanged', (streamInfo: any) => {
-                console.log("streamListChanged :", streamInfo);
-                if (streamInfo.listEventType === 'added') {
-                    if (streamInfo.isRemote === true) {
-                        conversation.subscribeToMedia(streamInfo.streamId)
-                            .then((stream: any) => {
-                                console.log('subscribeToMedia success');
-                            }).catch((err: any) => {
-                            console.error('subscribeToMedia error', err);
-                        });
-                    }
+    async makeSureSessionIsConnected(): Promise<any> {
+        const targetValue = 'connected';
+        let responseValue: any = {};
+        let count = 0;
+        const limitLoop = 5;
+        while (responseValue.state !== targetValue) {
+            try {
+                // Make the HTTP request and wait for the response
+                responseValue = await this.checkSessionState(this.sessionInfo.session_id);
+
+
+                // Add any additional conditions if needed
+                if (responseValue.state === targetValue || count > limitLoop) {
+                    return responseValue; // Return the response value
                 }
-            });
-            //=====================================================
-            // 4 BIS/ ADD EVENT LISTENER : WHEN STREAM IS ADDED/REMOVED TO/FROM THE CONVERSATION
-            //=====================================================
-            conversation.on('streamAdded', (stream: any) => {
-                stream.addInDiv('remote-container', 'remote-media-' + stream.streamId, {}, false);
-            }).on('streamRemoved', (stream: any) => {
-                stream.removeFromDiv('remote-container', 'remote-media-' + stream.streamId);
-            });
-            //==============================
-            // 5/ CREATE LOCAL STREAM
-            //==============================
-            ua.createStream({
-                constraints: {
-                    audio: true,
-                    video: true
-                }
-            })
-                .then((stream: any) => {
-                    console.log('createStream :', stream);
-                    // Save local stream
-                    localStream = stream;
-                    stream.removeFromDiv('local-container', 'local-media');
-                    stream.addInDiv('local-container', 'local-media', {}, true);
-                    //==============================
-                    // 6/ JOIN CONVERSATION
-                    //==============================
-                    conversation.join()
-                        .then((response: any) => {
-                            //==============================
-                            // 7/ PUBLISH LOCAL STREAM
-                            //==============================
-                            conversation.publish(localStream);
-                        }).catch((err: any) => {
-                        console.error('Conversation join error', err);
-                    });
-                }).catch((err: any) => {
-                console.error('create stream error', err);
-            });
-        });
+
+                // Simulate a delay before making the next request
+                count++;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } catch (error) {
+                // Handle errors if needed
+                console.error('Error makeSureSessionIsConnected HTTP request:', error);
+                throw error; // Throw the error to signal failure
+            }
+        }
+    }
+
+    setSessionId() {
+        console.log('setSessionId', this.sessionInfo.session_id)
+        localStorage.setItem('h_s_id', this.sessionInfo.session_id);
+    }
+
+    getSessionId() {
+        const session_id = localStorage.getItem('h_s_id');
+        return session_id;
+    }
+
+    deleteSessionId() {
+        localStorage.removeItem('h_s_id');
     }
 
     override ngOnDestroy(): void {
         this.lessonService.Broadcast('stopListenToAsr', true);
+        if (this.sessionInfo) {
+            this.deleteSessionId();
+            this.stopSession(this.sessionInfo.session_id);
+        }
+        if (this.taskInterval) {
+            clearInterval(this.taskInterval)
+        }
         super.ngOnDestroy();
     }
+
+    // @HostListener("window:beforeunload", ["$event"])
+    // async unloadHandler(event: Event) {
+    //     await this.stopSession(this.sessionInfo.session_id);
+    //     return false;
+    // }
+
 }
 
 
