@@ -22,7 +22,7 @@ declare var $: any;
 declare var apiRTC: any;
 
 // TODO remove key
-const apiKey = "M2Y5ZTgzM2JhZDJlNDEwNGE1MDlkM2MxM2U1ZjQwNmYtMTcwMDkyOTMyMQ=="
+const apiKey = ""
 const SERVER_URL = "https://api.heygen.com";
 // https://github.com/HeyGen-Official/RealtimeAvatarDemo/blob/main/index.js
 
