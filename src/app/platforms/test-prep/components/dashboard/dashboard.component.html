@@ -52,7 +52,7 @@
                                                         ><div class="status-complete-fill"></div></div>
                                                         <div class="status-circle" (click)="startNewUserLessonByName(l.key, $event)">
                                                             <i class="bi bi-play"></i>
-                                                            <div class="status-circle-fill"></div>
+                                                            <div class="status-circle-fill" [ngStyle]="{'height': (courses[getString(l.key)].finished * 100 / $any(l.value)) + '%'}"></div>
                                                         </div>
                                                     </div>
                                                 </li>
