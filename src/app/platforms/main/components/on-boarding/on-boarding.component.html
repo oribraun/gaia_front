@@ -22,6 +22,7 @@
                                         <div class="options">
                                             <div class="form-check form-check-inline" *ngFor="let o of q.options">
                                                 <input class="form-check-input" type="radio"
+                                                       [name]="o"
                                                        [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
                                                        [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
                                                        (ngModelChange)="onQuestionsChange()"
