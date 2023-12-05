@@ -266,7 +266,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     startVideoLesson(id: number, lesson_group_type_id: number) {
         console.log('id', id)
         console.log('lesson_group_type_id', lesson_group_type_id)
-        this.generalService.generateNewLesson(lesson_group_type_id, this.coursePlan.id, id).then((id) => {
+        this.generalService.getOrGenerateLesson(lesson_group_type_id, this.coursePlan.id, id).then((id) => {
             this.router.navigate(['test_prep/practice/' + id])
         }).catch((error: any) => {
             this.alertService.error(error)

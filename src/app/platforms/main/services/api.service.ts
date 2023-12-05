@@ -508,6 +508,11 @@ export class ApiService {
             this.httpOptions
         )
     }
+    getOrGenerateLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-or-generate-user-lesson', obj,
+            this.httpOptions
+        )
+    }
     getVocabulary(obj: any) {
         return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-vocabulary', obj,
             this.httpOptions

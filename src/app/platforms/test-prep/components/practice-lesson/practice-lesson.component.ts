@@ -26,20 +26,22 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     private user!: User;
     mock = environment.is_mock;
-    lesson_id!: number;
+    user_lesson_id!: number;
+    current_base_lesson_id!: number;
     question_id!: number;
     modalActive:boolean=false;
     enable_end_lesson_button:boolean=false;
     vocabulary_was_added:boolean=true;
     slide_uid!: string;
     test_mode: boolean = false;
-    
+
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
 
     presentation: Presentation = new Presentation();
 
     gettingPresentation = false;
+    gotFirstPresentation = false;
     currentSectionIndex: number = -1;
     currentSlideIndex: number = -1;
     currentObjectiveIndex: number = -1;
@@ -131,10 +133,16 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.getUser();
         this.route.paramMap.subscribe((params: ParamMap) => {
-            const lesson_id = params.get('id')
-            if (lesson_id) {
-                this.lesson_id = parseInt(lesson_id);
+            const user_lesson_id = params.get('id')
+            if (user_lesson_id) {
+                this.user_lesson_id = parseInt(user_lesson_id);
+                if (this.socketRecorderEnabled) {
+                    this.startRecordingScreen();
+                } else {
+                    this.initApplication();
+                }
             }
         })
         this.route.queryParams.subscribe((params) => {
@@ -147,17 +155,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.slide_uid = s_uid;
             }
         })
-
-        this.getUser();
-        if (this.socketRecorderEnabled) {
-            this.startRecordingScreen();
-        } else {
-            this.initApplication();
-        }
     }
 
     ngAfterViewInit(): void {
-         
+
     }
 
     setTestModeTimer(){
@@ -174,13 +175,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     startRecordingScreen() {
         this.setupSocketRecorder().then(() => {
-            const lesson_id = `lesson_id_${new Date().getTime()}`;
+            const user_lesson_id = `user_lesson_id_${new Date().getTime()}`;
             this.socketRecorderService.startCapturingVideo();
-            this.socketRecorderService.startCapturingInterval(this.user.id, lesson_id);
+            this.socketRecorderService.startCapturingInterval(this.user.id, user_lesson_id);
             this.socketRecorderService.capturingMediaStream.getVideoTracks()[0].onended = () => {
                 // stoped sharing
                 console.log('socketRecorderService stopped sharing');
-                this.socketRecorderService.stopCapturingInterval(this.user.id, lesson_id);
+                this.socketRecorderService.stopCapturingInterval(this.user.id, user_lesson_id);
                 this.socketRecorderService.capturingMediaStream = null
             };
             this.initApplication();
@@ -239,7 +240,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     async getPresentation() {
         this.gettingPresentation = true;
         this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
@@ -254,8 +255,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     if(this.test_mode !=test_mode && test_mode){
                         this.setTestModeTimer()
                     }
-                    this.recommendedVideos = response.recommended_videos
-                    this.course_plan_id = response.course_plan_id
+                    this.recommendedVideos = response.recommended_videos;
+                    this.course_plan_id = response.course_plan_id;
+                    this.current_base_lesson_id = response.current_base_lesson_id;
+                    this.gotFirstPresentation = true;
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         let get_slide_from_presentation = true;
@@ -266,7 +269,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                         this.gettingPresentation = false;
                         return;
                     } else {
-                        this.user.last_lesson_id = this.lesson_id;
+                        this.user.last_lesson_id = this.user_lesson_id;
                         this.config.user = this.user;
                         this.currentSectionIndex = this.presentation.current_section_index;
                         this.currentSlideIndex = this.presentation.current_slide_index;
@@ -298,7 +301,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         }
         this.eventHandlingInProgress = true;
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
             app_data: {
                 type:'event',
                 help_mode: this.lessonService.helpMode,
@@ -337,7 +340,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message)
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
             app_data: {
                 type:'student_reply',
                 student_text: message,
@@ -373,7 +376,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
         this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
             app_data: {
                 type: 'new_slide',
                 last_sr: '',
@@ -421,7 +424,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         }
         this.presentationNewSlideInProgress = true;
         this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
             app_data: {
                 type: 'change_slide',
                 current_slide_info: this.forceChangeSlideInfo ? this.forcedChangeSlideInfo : {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex}
@@ -757,7 +760,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         await this.resetApplication()
         this.presentationResetIsInProgress = true;
         this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
-            practice_lesson_id: this.lesson_id,
+            practice_lesson_id: this.user_lesson_id,
             app_data: {
                 type: reason,
             }
@@ -907,7 +910,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
             const data = {
                 word: obj.word,
                 translate: obj.translate,
-                lesson_id: this.lesson_id,
+                lesson_id: this.user_lesson_id,
                 slide_uuid: this.currentSlide.slide_uid,
                 slide_index: this.currentSlideIndex
             }
@@ -1111,10 +1114,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     onNextLesson(e: any) {
         const map = this.recommendedVideos.map((o: any) => o.id)
-        const index = map.indexOf(this.lesson_id);
+        const index = map.indexOf(this.current_base_lesson_id);
         if (index > -1 && index < this.recommendedVideos.length - 1) {
             const next_lesson = this.recommendedVideos[index + 1];
-            this.generalService.generateNewLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
+            this.generalService.getOrGenerateLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
                 this.router.navigate(['test_prep/practice/' + id])
             }).catch((error: any) => {
                 this.alertService.error(error)
@@ -1124,10 +1127,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     onPrevLesson(e: any) {
         const map = this.recommendedVideos.map((o: any) => o.id)
-        const index = map.indexOf(this.lesson_id);
+        const index = map.indexOf(this.current_base_lesson_id);
         if (index > -1 && index > 0) {
             const prev_lesson = this.recommendedVideos[index - 1];
-            this.generalService.generateNewLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
+            this.generalService.getOrGenerateLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
                 this.router.navigate(['test_prep/practice/' + id])
             }).catch((error: any) => {
                 this.alertService.error(error)
@@ -1269,7 +1272,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     // check Current Video Exist In RecommendedVideos
     checkRecommendedVideos() {
         const map = this.recommendedVideos.map((o: any) => {o.id})
-        const index = map.indexOf(this.lesson_id);
+        const index = map.indexOf(this.current_base_lesson_id);
         return index > -1;
     }
 
