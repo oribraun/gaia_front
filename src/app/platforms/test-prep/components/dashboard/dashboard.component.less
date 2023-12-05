@@ -307,6 +307,7 @@
                     //    height: 0;
                     //}
                     .video {
+                        position: relative;
                         display: inline-block;
                         width: 100px;
                         height: 50px;
@@ -323,15 +324,26 @@
                             height: 100%;
                             object-fit: cover;
                         }
+                        img {
+                            object-fit: contain;
+                        }
                         &:hover {
                             transform: translateY(-10px);
                         }
-                    }
-                    .desc {
-                        text-align: left;
-                        overflow: hidden;
-                        font-size: .75em;
-                        text-align: center;
+
+                        .status {
+                            position: absolute;
+                            top:0;
+                            right:0;
+                            color: var(--gaia-success-color);
+                            line-height: 1;
+                        }
+                        .desc {
+                            text-align: left;
+                            overflow: hidden;
+                            font-size: .75em;
+                            text-align: center;
+                        }
                     }
                 }
             }

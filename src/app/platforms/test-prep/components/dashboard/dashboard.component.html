@@ -77,6 +77,9 @@
                                             <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"/>
                                             <!-- ORI - use this to mark video as completed: item.presentation_data.presentation_lesson_data.all_presentation_tasks_completed -->
                                             <div class="desc">{{item.presentation_data.presentation_lesson_data.presentation_title}}</div>
+                                            <div class="status" *ngIf="item.status === 'Finished'">
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
