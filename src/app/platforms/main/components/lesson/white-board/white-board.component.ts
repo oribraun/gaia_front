@@ -12,6 +12,7 @@ import {PresentationSection, PresentationSlide} from "../../../../shared-slides/
 import {ApiService} from "../../../services/api.service";
 import {Config} from "../../../config";
 import {LessonService} from "../../../services/lesson/lesson.service";
+import {User} from "../../../../shared-slides/entities/user";
 
 
 @Component({
@@ -31,6 +32,8 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
 
     slideWidth: number = -1;
     slideHeight: number = -1;
+
+    private user!: User;
 
     public sectionTitles = {
         bundle:'bundle',
@@ -72,8 +75,16 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
+        this.getUser();
         setTimeout(() => {
             this.setSlidesRelativeWidth();
+        })
+    }
+
+    getUser() {
+        this.user = this.config.user
+        this.config.user_subject.subscribe(() => {
+            this.user = this.config.user
         })
     }
 
@@ -125,14 +136,13 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
         } else {
             this.data = [this.currentSlide]
         }
-
     }
     async resetPresentation(reason: string = '') {
         if (this.presentationResetIsInProgress) {
             return;
         }
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
             app_data: {
                 type: reason
             }

@@ -225,7 +225,7 @@ export class PracticeLessonComponent implements OnInit {
 
     async getPresentation() {
         this.gettingPresentation = true;
-        this.apiSubscriptions.get_presentation = this.apiService.getPresentation({
+        this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
         }).subscribe({
             next: (response: any) => {
@@ -237,6 +237,7 @@ export class PracticeLessonComponent implements OnInit {
                 } else {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type
+                    this.recommendedVideos = response.recommended_videos
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         let get_slide_from_presentation = true;
@@ -278,7 +279,7 @@ export class PracticeLessonComponent implements OnInit {
             }
         }
         this.eventHandlingInProgress = true;
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type:'event',
@@ -317,7 +318,7 @@ export class PracticeLessonComponent implements OnInit {
 
         this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message)
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type:'student_reply',
@@ -353,7 +354,7 @@ export class PracticeLessonComponent implements OnInit {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: 'new_slide',
@@ -401,7 +402,7 @@ export class PracticeLessonComponent implements OnInit {
             return;
         }
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply({
+        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: 'change_slide',
@@ -737,7 +738,7 @@ export class PracticeLessonComponent implements OnInit {
         }
         await this.resetApplication()
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: reason,
