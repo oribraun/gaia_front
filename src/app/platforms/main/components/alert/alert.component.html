@@ -1,5 +1,6 @@
+
 <div class="my-alert fade show" [ngClass]="{
-'alert': message,
+'alert': message.type,
 'alert-success': message.type === 'success',
 'alert-danger': message.type === 'error',
 'alert-info': message.type === 'info'

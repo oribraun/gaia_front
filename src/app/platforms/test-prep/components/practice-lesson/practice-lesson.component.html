@@ -81,14 +81,32 @@
         <div class="disabled-board" *ngIf="isPause"></div>
     </div>
 
-    <div class="floating-buttons" *ngIf="currentSection.slides && currentSection.slides.length > 1">
-        <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
-            <i class="bi bi-chevron-left"></i>
-        </button>
-        <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
-            <i class="bi bi-chevron-right"></i>
-        </button>
+    <div class="bottom-panel" *ngIf="!gettingPresentation">
+        <div class="title">
+            {{currentSlide.slide_title}}
+        </div>
+        <div class="slide-buttons" *ngIf="currentSlide.slide_type !== 'video'">
+            <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
+                <i class="bi bi-caret-left-fill"></i>
+            </button>
+            <div>Slide {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
+            <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
+                <i class="bi bi-caret-right-fill"></i>
+            </button>
+        </div>
+        <div class="timer-status" *ngIf="currentSlide.slide_type !== 'video'">
+            Time lapse: <span>05:43</span>  | status: <span>done</span>
+        </div>
     </div>
+
+<!--    <div class="floating-buttons" *ngIf="currentSection.slides && currentSection.slides.length > 1">-->
+<!--        <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">-->
+<!--            <i class="bi bi-chevron-left"></i>-->
+<!--        </button>-->
+<!--        <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">-->
+<!--            <i class="bi bi-chevron-right"></i>-->
+<!--        </button>-->
+<!--    </div>-->
 
     <div *ngIf="enable_end_lesson_button" class="floating-buttons fadein-wrapper" style="width:400px; height:80px; border:1px solid red">
         <h5>Good Job, You have completed this lesson</h5>
