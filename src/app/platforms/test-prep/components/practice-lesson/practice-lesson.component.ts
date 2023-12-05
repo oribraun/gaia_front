@@ -1,7 +1,7 @@
 import {AfterViewInit,Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {ApiService} from "../../../main/services/api.service";
-import {HelperService} from "../../../main/services/helper.service";
+import {TimersHelper} from "../../../shared-slides/helpers/timers";
 import {Config} from "../../../main/config";
 import {AnimationsService} from "../../../main/services/animations/animations.service";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
@@ -34,7 +34,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     vocabulary_was_added:boolean=true;
     slide_uid!: string;
     test_mode: boolean = false;
-
+    test_timer_counter_id:number = 1001101;
+ 
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
 
@@ -110,6 +111,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     slideHeight: number = -1;
 
     imageSrc = ''
+    timersHelper = new TimersHelper()
     lesson_group_type: any = {};
 
     recognitionSubscribe: any;
@@ -122,7 +124,6 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
         public lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
-        private helperService:HelperService,
         private socketRecorderService: SocketRecorderService,
         private route: ActivatedRoute,
         private router: Router,
@@ -163,7 +164,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     setTestModeTimer(){
         console.log('DANIEL YOU ARE IN TEST MODE')
-        this.helperService.handleTimer(1,60*60)
+        this.timersHelper.handleTimer(this.test_timer_counter_id,60*60)
+        this.timersHelper.handleCounter(this.test_timer_counter_id,0)
     }
 
     getUser() {
@@ -1276,6 +1278,14 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         return index > -1;
     }
 
+    mark_video_as_complete_botton() {
+        if (!this.currentSlide.video_completed) {
+            const data = {
+                "source": "video_ielts_mark_as_complete_button"
+            }
+            this.lessonService.Broadcast("slideEventRequest", data)
+        }
+    }
 
     ngOnDestroy() {
         this.stopAudio();
