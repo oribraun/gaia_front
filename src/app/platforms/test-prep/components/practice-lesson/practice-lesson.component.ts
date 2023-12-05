@@ -102,6 +102,7 @@ export class PracticeLessonComponent implements OnInit {
     slideHeight: number = -1;
 
     imageSrc = ''
+    lesson_group_type: any = {};
 
     recognitionSubscribe: any;
 
@@ -230,6 +231,7 @@ export class PracticeLessonComponent implements OnInit {
                     console.log('getPresentation err', response)
                 } else {
                     this.presentation = new Presentation(response.presentation);
+                    this.lesson_group_type = response.lesson_group_type
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         let get_slide_from_presentation = true;

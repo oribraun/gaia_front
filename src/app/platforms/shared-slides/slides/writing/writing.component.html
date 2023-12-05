@@ -36,7 +36,7 @@
                         <!--                        </div>-->
                         <div class="bottom-panel">
                             <div class="question-buttons">
-                                <button class="btn btn-primary" (click)="boostEssay()">
+                                <button *ngIf="!test_mode" class="btn btn-primary" (click)="boostEssay()">
                                     AI boost
                                 </button>
                                 <button class="btn btn-primary" (click)="checkEssay()">
