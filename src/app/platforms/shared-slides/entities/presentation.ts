@@ -127,6 +127,7 @@ export class PresentationSlide {
     correct_answer!: string
     text!: string
     sentence_start!:string
+    video_completed!: boolean
     writing!: string
     texts!: string[]
     loaded_text!: string
