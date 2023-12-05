@@ -13,6 +13,7 @@ import {environment} from "../../../../../environments/environment";
 import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
 import {BlobItem} from "../../../shared-slides/entities/blob_item";
 import {ChatMessage} from "../../../shared-slides/entities/chat_message";
+import {AlertService} from "../../../main/services/alert.service";
 
 @Component({
     selector: 'app-practice-lesson',
@@ -44,6 +45,7 @@ export class PracticeLessonComponent implements OnInit {
     currentSlide: PresentationSlide = new PresentationSlide();
     currentObjective: any = null;
     currentData: any = null;
+    recommendedVideos: any = [{id: 29, lesson_group_type_id: 1, course_plan_id: 1, title: 'lesson title'}]
 
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
@@ -116,7 +118,8 @@ export class PracticeLessonComponent implements OnInit {
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
         private socketRecorderService: SocketRecorderService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private alertService: AlertService
     ) {
         this.imageSrc = this.config.staticImagePath
     }
@@ -1083,6 +1086,59 @@ export class PracticeLessonComponent implements OnInit {
             this.stopAudio()
             this.changeSlideReply()
         }
+    }
+
+    onNextLesson(e: any) {
+        const map = this.recommendedVideos.map((o: any) => o.id)
+        const index = map.indexOf(this.lesson_id);
+        if (index > -1 && index < this.recommendedVideos.length - 1) {
+            const next_lesson = this.recommendedVideos[index + 1];
+            // this.generateNewLesson(next_lesson.lesson_group_type_id, next_lesson.course_plan_id, next_lesson.id).then((id) => {
+            //     this.router.navigate(['test_prep/practice/' + id])
+            // })
+        }
+    }
+
+    onPrevLesson(e: any) {
+        const map = this.recommendedVideos.map((o: any) => o.id)
+        const index = map.indexOf(this.lesson_id);
+        if (index > -1 && index > 0) {
+            const prev_lesson = this.recommendedVideos[index - 1];
+            // this.generateNewLesson(prev_lesson.lesson_group_type_id, prev_lesson.course_plan_id, prev_lesson.id).then((id) => {
+            //     this.router.navigate(['test_prep/practice/' + id])
+            // })
+        }
+    }
+
+    generateNewLesson(courseTypeId: any, course_plan_id: number, specific_lesson_id: number = -1) {
+        return new Promise((resolve, reject) => {
+            // this.gettingNewLesson = true;
+            const obj: any = {
+                current_course_id: courseTypeId,
+                plan_id: course_plan_id,
+            }
+            if (specific_lesson_id > -1) {
+                obj['specific_lesson_id'] = specific_lesson_id
+            }
+            this.apiService.getUserNewLesson(obj).subscribe({
+                next: (response: any) => {
+                    // this.gettingNewLesson = false;
+                    if (response.err) {
+                        console.log('generateNewLesson err', response)
+                        this.alertService.error(response.errMessage)
+                        reject(response.errMessage)
+                    } else {
+                        const id = response.id
+                        resolve(id)
+                    }
+                },
+                error: (error) => {
+                    console.log('generateNewLesson error', error)
+                    // this.gettingNewLesson = false;
+                    reject(error)
+                },
+            })
+        })
     }
 
     resetSpeechRecognition() {

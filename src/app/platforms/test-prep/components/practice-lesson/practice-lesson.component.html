@@ -97,6 +97,20 @@
         <div class="timer-status" *ngIf="currentSlide.slide_type !== 'video'">
             Time lapse: <span>05:43</span>  | status: <span>done</span>
         </div>
+        <button class="mark-as-finished">
+            Mark this Lesson as finished
+        </button>
+
+        <div class="slide-buttons" *ngIf="currentSlide.slide_type === 'video' && recommendedVideos.length">
+            <div>Previous Video</div>
+            <button class="prev" [disabled]="recommendedVideos[0].id === lesson_id" (click)="onPrevLesson($event)">
+                <i class="bi bi-caret-left-fill"></i>
+            </button>
+            <button class="next" [disabled]="recommendedVideos[recommendedVideos.length - 1].id === lesson_id" (click)="onNextLesson($event)">
+                <i class="bi bi-caret-right-fill"></i>
+            </button>
+            <div>Next Video</div>
+        </div>
     </div>
 
 <!--    <div class="floating-buttons" *ngIf="currentSection.slides && currentSection.slides.length > 1">-->
