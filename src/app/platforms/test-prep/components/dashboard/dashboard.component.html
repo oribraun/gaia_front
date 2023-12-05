@@ -74,8 +74,8 @@
                                     <h5 class="practice_headline">Theory Lessons</h5>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of recommendedVideos">
-                                            <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail" />
-<!--                                            <video [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"></video>-->
+                                            <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"/>
+                                            <!-- ORI - use this to mark video as completed: item.presentation_data.presentation_lesson_data.all_presentation_tasks_completed -->
                                             <div class="desc">{{item.presentation_data.presentation_lesson_data.presentation_title}}</div>
                                         </div>
                                     </div>

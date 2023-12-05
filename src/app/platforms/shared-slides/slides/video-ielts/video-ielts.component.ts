@@ -140,6 +140,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                     this.startSessionTask(this.sessionInfo.session_id, teacher_text);
                 }
             }
+            if (resp.data.source == "video_ielts_mark_as_complete_button") {
+                this.currentSlide.video_completed = true;
+            }
         })
         this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
             try {
@@ -775,6 +778,16 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             clearInterval(this.taskInterval)
         }
         super.ngOnDestroy();
+    }
+
+    // ori - this is for you for the bottun on the panel
+    mark_as_complete_botton() {
+        if (!this.currentSlide.video_completed) {
+            const data = {
+                "source": "video_ielts_mark_as_complete_button"
+            }
+            this.lessonService.Broadcast("slideEventRequest", data)
+        }
     }
 
     // @HostListener("window:beforeunload", ["$event"])
