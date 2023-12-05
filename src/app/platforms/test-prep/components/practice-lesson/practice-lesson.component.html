@@ -97,7 +97,7 @@
         <div class="timer-status" *ngIf="currentSlide.slide_type !== 'video'">
             Time lapse: <span>05:43</span>  | status: <span>done</span>
         </div>
-        <button class="mark-as-finished">
+        <button class="mark-as-finished" *ngIf="currentSlide.slide_type === 'video' && recommendedVideos.length">
             Mark this Lesson as finished
         </button>
 
