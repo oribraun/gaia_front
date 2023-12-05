@@ -12,6 +12,7 @@ import {User} from "../../../shared-slides/entities/user";
 import {environment} from "../../../../../environments/environment";
 import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
 import {BlobItem} from "../../../shared-slides/entities/blob_item";
+import {ChatMessage} from "../../../shared-slides/entities/chat_message";
 
 @Component({
     selector: 'app-practice-lesson',
@@ -101,6 +102,8 @@ export class PracticeLessonComponent implements OnInit {
     slideHeight: number = -1;
 
     imageSrc = ''
+
+    recognitionSubscribe: any;
 
     constructor(
         private apiService: ApiService,
@@ -477,6 +480,11 @@ export class PracticeLessonComponent implements OnInit {
             // this.resetIntervalNoReplay();
             // this.stopIntervalNoReplay();
             // this.startIntervalNoReplay()
+            if (this.recognitionSubscribe) {
+                setTimeout(() => {
+                    this.startListenToAsr();
+                }, 300);
+            }
         }
     }
 
@@ -486,9 +494,8 @@ export class PracticeLessonComponent implements OnInit {
             return;
         }
         const data = this.currentData
-        console.log('DANIEL', data)
         let currentObjectiveIndexChanged = false
-        const additional_instructions =data.additional_instructions;
+        const additional_instructions = data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
@@ -522,13 +529,16 @@ export class PracticeLessonComponent implements OnInit {
             const data = {
                 type: 'additional_instructions',
                 data: additional_instructions,
-                withAudio: (help_sound_buffer || blob)
             }
             this.lessonService.Broadcast("slideEventReply", data)
         }
 
+        const doNotPlaySound = this.currentSlide.slide_type === 'video';
+
         if (help_sound_buffer || blob) {
-            this.lessonService.Broadcast("init-audio-playing", data)
+            if (this.recognitionSubscribe) {
+                this.stopListenToAsr();
+            }
             if(this.handleCoreFunctionalityOfSlide('speak')){
                 if (blob && this.currentSlide.index_in_bundle == 0) {
                     console.log('speakNative before');
@@ -695,7 +705,9 @@ export class PracticeLessonComponent implements OnInit {
                             if (!blobItem || blobItem.action!='doNotListenAfter') {
                                 console.log('change gif - listening')
                                 // this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
-                                this.lessonService.Broadcast('audio_finished', {});
+                                if (this.recognitionSubscribe) {
+                                    this.startListenToAsr();
+                                }
                             }
                             this.speakInProgress = false;
                             // this.resetSpeechRecognition();
@@ -725,6 +737,7 @@ export class PracticeLessonComponent implements OnInit {
             }
         }).subscribe({
             next: (response: any) => {
+                this.presentationResetIsInProgress = false;
                 if (response.err) {
                     console.log('response err', response)
                     this.handleOnReplayError();
@@ -732,7 +745,6 @@ export class PracticeLessonComponent implements OnInit {
                     console.log('response', response)
                     this.initApplication()
                 }
-                this.presentationResetIsInProgress = false;
             },
             error: (error) => {
                 this.presentationResetIsInProgress = false;
@@ -821,6 +833,12 @@ export class PracticeLessonComponent implements OnInit {
     }
 
     listenForSlideEventRequests(){
+        this.lessonService.ListenFor("startListenToAsr").subscribe((obj: any) => {
+            this.startListenToAsr();
+        })
+        this.lessonService.ListenFor("stopListenToAsr").subscribe((removeSubscribe: boolean = false) => {
+            this.stopListenToAsr(removeSubscribe);
+        })
         this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
             if (obj.stopAudio) {
                 this.stopAudio();
@@ -1164,6 +1182,36 @@ export class PracticeLessonComponent implements OnInit {
 
     closeModel(){
         this.modalActive = false
+    }
+
+    startListenToAsr() {
+        if (!this.recognitionSubscribe) {
+            this.recognitionSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
+        }
+        if (!this.speechRecognitionService.ASR_recognizing) {
+            this.speechRecognitionService.startListening();
+        }
+    }
+
+    onRecognitionResults = (results: any) => {
+        console.log("onRecognitionResults results", results)
+        const recognitionText = results.text;
+        if (results.isFinal) {
+            console.log('onRecognitionResults final', recognitionText)
+            this.lessonService.Broadcast('recognitionText', recognitionText)
+        }
+    }
+
+    stopListenToAsr(removeSubscribe = false) {
+        if (this.recognitionSubscribe) {
+            if (this.speechRecognitionService.ASR_recognizing) {
+                this.speechRecognitionService.stopListening();
+            }
+            if (removeSubscribe) {
+                this.recognitionSubscribe.unsubscribe(this.onRecognitionResults);
+                this.recognitionSubscribe = null;
+            }
+        }
     }
 
 
