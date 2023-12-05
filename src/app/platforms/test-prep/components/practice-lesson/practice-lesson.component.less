@@ -502,29 +502,31 @@
 
     .finish-board {
         position: absolute;
-        bottom: -150px;
-        left: 50%;
-        width: auto;
+        bottom: -200px;
+        left: 1px;
+        right: 1px;
         background: #fff;
-        padding: 9px;
+        padding: 25px 10px 60px 10px;
         border-top-right-radius: 10px;
         border-top-left-radius: 10px;
         box-shadow: 0 0 10px 3px #e5e5e5;
-        transform: translateX(-50%);
-        transition: all .3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        border: 3px solid var(--gaia-header-color);
+        .text {
+            display: inline-block;
+            text-align: left;
+        }
         .buttons {
             text-align: center;
             margin: 0 5px;
             button {
-                border: none;
-                background: none;
                 font-size: 1em;
                 cursor: pointer;
-                color: var(--bs-link-color);
-                text-decoration: underline;
-                i {
-                    vertical-align: text-top;
-                }
+                color: #fff;
+                background: var(--gaia-header-color);
+                border: none;
+                outline: none;
             }
         }
     }
