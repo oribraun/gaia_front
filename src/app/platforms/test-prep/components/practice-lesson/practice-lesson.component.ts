@@ -1,6 +1,7 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit,Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {ApiService} from "../../../main/services/api.service";
+import {HelperService} from "../../../main/services/helper.service";
 import {Config} from "../../../main/config";
 import {AnimationsService} from "../../../main/services/animations/animations.service";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
@@ -21,7 +22,7 @@ import {GeneralService} from "../../services/general/general.service";
     templateUrl: './practice-lesson.component.html',
     styleUrls: ['./practice-lesson.component.less']
 })
-export class PracticeLessonComponent implements OnInit {
+export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     private user!: User;
     mock = environment.is_mock;
@@ -31,7 +32,8 @@ export class PracticeLessonComponent implements OnInit {
     enable_end_lesson_button:boolean=false;
     vocabulary_was_added:boolean=true;
     slide_uid!: string;
-
+    test_mode: boolean = false;
+    
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
 
@@ -118,6 +120,7 @@ export class PracticeLessonComponent implements OnInit {
         private socketSpeechRecognitionService: SocketSpeechRecognitionService,
         public lessonService: LessonService,
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
+        private helperService:HelperService,
         private socketRecorderService: SocketRecorderService,
         private route: ActivatedRoute,
         private router: Router,
@@ -151,6 +154,15 @@ export class PracticeLessonComponent implements OnInit {
         } else {
             this.initApplication();
         }
+    }
+
+    ngAfterViewInit(): void {
+         
+    }
+
+    setTestModeTimer(){
+        console.log('DANIEL YOU ARE IN TEST MODE')
+        this.helperService.handleTimer(1,60*60)
     }
 
     getUser() {
@@ -238,6 +250,10 @@ export class PracticeLessonComponent implements OnInit {
                 } else {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type
+                    let test_mode = this.lesson_group_type['name'] == 'test' || false
+                    if(this.test_mode !=test_mode && test_mode){
+                        this.setTestModeTimer()
+                    }
                     this.recommendedVideos = response.recommended_videos
                     this.course_plan_id = response.course_plan_id
                     console.log('this.presentation ', this.presentation)
