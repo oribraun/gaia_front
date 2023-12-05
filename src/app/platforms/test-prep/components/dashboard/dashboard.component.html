@@ -1,6 +1,6 @@
 <div class="dashboard" *ngIf="coursePlan">
-    <div class="row">
-        <div class="col-12">
+    <div class="my-row">
+        <div class="my-col">
             <div class="panel-box panel-box-no-margin">
                 <h4 class="header">
                     My Plan
@@ -131,7 +131,7 @@
                             </div>
                             <div class="text-body text-center">
                                 <div class="take-test">
-                                    <div class="icon">
+                                    <div class="icon" (click)="startNewUserLessonByName('test', $event)">
                                         <i class="bi bi-play-fill"></i>
                                     </div>
                                     <p>Take a test</p>

@@ -251,38 +251,8 @@ export class ApiService {
             this.httpOptions
         )
     }
-    getPresentation(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation', obj,
-            this.httpOptions
-        )
-    }
     sendAnswer(obj: any) {
         return this.http.post(this.serverBase + this.baseApiUser + 'save_class_page_answer', obj,
-            this.httpOptions
-        )
-    }
-    getPresentationReplay(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-presentation-reply', obj,
-            this.httpOptions
-        )
-    }
-    getHeartBeatReply(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-heartbeat-reply', obj,
-            this.httpOptions
-        )
-    }
-    getNewSlideReply(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'get-new-slide-reply', obj,
-            this.httpOptions
-        )
-    }
-    changeSlideReply(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'change-slide-reply', obj,
-            this.httpOptions
-        )
-    }
-    resetPresentation(obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + 'reset-presentation', obj,
             this.httpOptions
         )
     }
@@ -444,6 +414,36 @@ export class ApiService {
     }
      getUserActivity(platform: string, obj: any) {
         return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-user-activity', obj,
+            this.httpOptions
+        )
+    }
+    getPresentation(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-presentation', obj,
+            this.httpOptions
+        )
+    }
+    getPresentationReplay(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-presentation-reply', obj,
+            this.httpOptions
+        )
+    }
+    getHeartBeatReply(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-heartbeat-reply', obj,
+            this.httpOptions
+        )
+    }
+    getNewSlideReply(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/get-new-slide-reply', obj,
+            this.httpOptions
+        )
+    }
+    changeSlideReply(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/change-slide-reply', obj,
+            this.httpOptions
+        )
+    }
+    resetPresentation(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApiUser + platform + '/us/reset-presentation', obj,
             this.httpOptions
         )
     }

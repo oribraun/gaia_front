@@ -13,6 +13,8 @@ import {environment} from "../../../../../environments/environment";
 import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
 import {BlobItem} from "../../../shared-slides/entities/blob_item";
 import {ChatMessage} from "../../../shared-slides/entities/chat_message";
+import {AlertService} from "../../../main/services/alert.service";
+import {GeneralService} from "../../services/general/general.service";
 
 @Component({
     selector: 'app-practice-lesson',
@@ -44,6 +46,7 @@ export class PracticeLessonComponent implements OnInit {
     currentSlide: PresentationSlide = new PresentationSlide();
     currentObjective: any = null;
     currentData: any = null;
+    recommendedVideos: any = [{id: 29, lesson_group_type_id: 1, course_plan_id: 1, title: 'lesson title'}]
 
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
@@ -102,6 +105,7 @@ export class PracticeLessonComponent implements OnInit {
     slideHeight: number = -1;
 
     imageSrc = ''
+    lesson_group_type: any = {};
 
     recognitionSubscribe: any;
 
@@ -115,7 +119,9 @@ export class PracticeLessonComponent implements OnInit {
         private speechRecognitionEnhancerService: SpeechRecognitionEnhancerService,
         private socketRecorderService: SocketRecorderService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private alertService: AlertService,
+        private generalService: GeneralService
     ) {
         this.imageSrc = this.config.staticImagePath
     }
@@ -219,7 +225,7 @@ export class PracticeLessonComponent implements OnInit {
 
     async getPresentation() {
         this.gettingPresentation = true;
-        this.apiSubscriptions.get_presentation = this.apiService.getPresentation({
+        this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
         }).subscribe({
             next: (response: any) => {
@@ -230,6 +236,8 @@ export class PracticeLessonComponent implements OnInit {
                     console.log('getPresentation err', response)
                 } else {
                     this.presentation = new Presentation(response.presentation);
+                    this.lesson_group_type = response.lesson_group_type
+                    this.recommendedVideos = response.recommended_videos
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         let get_slide_from_presentation = true;
@@ -271,7 +279,7 @@ export class PracticeLessonComponent implements OnInit {
             }
         }
         this.eventHandlingInProgress = true;
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type:'event',
@@ -310,7 +318,7 @@ export class PracticeLessonComponent implements OnInit {
 
         this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message)
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type:'student_reply',
@@ -346,7 +354,7 @@ export class PracticeLessonComponent implements OnInit {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: 'new_slide',
@@ -394,7 +402,7 @@ export class PracticeLessonComponent implements OnInit {
             return;
         }
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply({
+        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: 'change_slide',
@@ -730,7 +738,7 @@ export class PracticeLessonComponent implements OnInit {
         }
         await this.resetApplication()
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
             practice_lesson_id: this.lesson_id,
             app_data: {
                 type: reason,
@@ -1080,6 +1088,32 @@ export class PracticeLessonComponent implements OnInit {
         if(this.forceChangeSlideInfo){
             this.stopAudio()
             this.changeSlideReply()
+        }
+    }
+
+    onNextLesson(e: any) {
+        const map = this.recommendedVideos.map((o: any) => o.id)
+        const index = map.indexOf(this.lesson_id);
+        if (index > -1 && index < this.recommendedVideos.length - 1) {
+            const next_lesson = this.recommendedVideos[index + 1];
+            // this.generalService.generateNewLesson(next_lesson.lesson_group_type_id, next_lesson.course_plan_id, next_lesson.id).then((id) => {
+            //     this.router.navigate(['test_prep/practice/' + id])
+            // }).catch((error: any) => {
+            //     this.alertService.error(error)
+            // })
+        }
+    }
+
+    onPrevLesson(e: any) {
+        const map = this.recommendedVideos.map((o: any) => o.id)
+        const index = map.indexOf(this.lesson_id);
+        if (index > -1 && index > 0) {
+            const prev_lesson = this.recommendedVideos[index - 1];
+            // this.generalService.generateNewLesson(prev_lesson.lesson_group_type_id, prev_lesson.course_plan_id, prev_lesson.id).then((id) => {
+            //     this.router.navigate(['test_prep/practice/' + id])
+            // }).catch((error: any) => {
+            //     this.alertService.error(error)
+            // })
         }
     }
 

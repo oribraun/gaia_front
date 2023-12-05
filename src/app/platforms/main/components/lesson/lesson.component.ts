@@ -535,7 +535,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentation() {
         this.gettingPresentation = true;
-        this.apiSubscriptions.get_presentation = this.apiService.getPresentation({
+        this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
             "type": "messi",
             purchased_lesson_id: this.current_lessons_id,
         }).subscribe({
@@ -636,7 +636,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         this.stopSpeechRecognition();
         this.eventHandlingInProgress = true;
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type:'event',
@@ -683,7 +683,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopSpeechRecognition();
         this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message)
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay({
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type:'student_reply',
@@ -720,7 +720,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNoReplayIsInProgress = true;
-        this.apiSubscriptions.no_replay = this.apiService.getHeartBeatReply({
+        this.apiSubscriptions.no_replay = this.apiService.getHeartBeatReply(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'heartbeat',
@@ -758,7 +758,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply({
+        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'change_slide',
@@ -812,7 +812,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply({
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'new_slide',
@@ -856,7 +856,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         await this.resetApplication()
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation({
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: reason,
