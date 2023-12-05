@@ -130,14 +130,16 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.type == "additional_instructions") {
                 const teacher_text = resp.data.teacher_text;
-                this.messages.push(
-                    new ChatMessage({type: 'computer', message: teacher_text})
-                );
-                this.scrollToBottom2();
-                if (this.unsDemo) {
-                    this.setUpHeyGenVideoByText(teacher_text);
-                } else {
-                    this.startSessionTask(this.sessionInfo.session_id, teacher_text);
+                if (teacher_text) {
+                    this.messages.push(
+                        new ChatMessage({type: 'computer', message: teacher_text})
+                    );
+                    this.scrollToBottom2();
+                    if (this.unsDemo) {
+                        this.setUpHeyGenVideoByText(teacher_text);
+                    } else {
+                        this.startSessionTask(this.sessionInfo.session_id, teacher_text);
+                    }
                 }
             }
             if (resp.data.source == "video_ielts_mark_as_complete_button") {

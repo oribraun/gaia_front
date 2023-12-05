@@ -3,6 +3,7 @@
 .practice-lesson {
     position: relative;
     height: 100%;
+    overflow: hidden;
     //padding: 1em;
 
     @bottomPanelHeight: 30px;
@@ -497,6 +498,38 @@
                 text-shadow: 0 0 5px #979797;
             }
         }
+    }
+
+    .finish-board {
+        position: absolute;
+        bottom: -150px;
+        left: 50%;
+        width: auto;
+        background: #fff;
+        padding: 9px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        box-shadow: 0 0 10px 3px #e5e5e5;
+        transform: translateX(-50%);
+        transition: all .3s ease-in-out;
+        .buttons {
+            text-align: center;
+            margin: 0 5px;
+            button {
+                border: none;
+                background: none;
+                font-size: 1em;
+                cursor: pointer;
+                color: var(--bs-link-color);
+                text-decoration: underline;
+                i {
+                    vertical-align: text-top;
+                }
+            }
+        }
+    }
+    .finish-board-show {
+        bottom: 0;
     }
 
 }

@@ -35,7 +35,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     slide_uid!: string;
     test_mode: boolean = false;
     test_timer_counter_id:number = 1001101;
- 
+
     socketRecorderEvents: any = {};
     socketRecorderEnabled = false;
 
@@ -1278,7 +1278,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         return index > -1;
     }
 
-    mark_video_as_complete_botton() {
+    mark_video_as_complete_button() {
         if (!this.currentSlide.video_completed) {
             const data = {
                 "source": "video_ielts_mark_as_complete_button"
