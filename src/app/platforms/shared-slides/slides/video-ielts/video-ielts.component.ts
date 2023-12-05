@@ -780,16 +780,6 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         super.ngOnDestroy();
     }
 
-    // ori - this is for you for the bottun on the panel
-    mark_as_complete_botton() {
-        if (!this.currentSlide.video_completed) {
-            const data = {
-                "source": "video_ielts_mark_as_complete_button"
-            }
-            this.lessonService.Broadcast("slideEventRequest", data)
-        }
-    }
-
     // @HostListener("window:beforeunload", ["$event"])
     // async unloadHandler(event: Event) {
     //     await this.stopSession(this.sessionInfo.session_id);

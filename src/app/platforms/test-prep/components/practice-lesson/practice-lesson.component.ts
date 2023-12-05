@@ -1276,6 +1276,14 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         return index > -1;
     }
 
+    mark_video_as_complete_botton() {
+        if (!this.currentSlide.video_completed) {
+            const data = {
+                "source": "video_ielts_mark_as_complete_button"
+            }
+            this.lessonService.Broadcast("slideEventRequest", data)
+        }
+    }
 
     ngOnDestroy() {
         this.stopAudio();
