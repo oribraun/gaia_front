@@ -47,6 +47,7 @@ export class PracticeLessonComponent implements OnInit {
     currentObjective: any = null;
     currentData: any = null;
     recommendedVideos: any = [{id: 29, lesson_group_type_id: 1, course_plan_id: 1, title: 'lesson title'}]
+    course_plan_id!: number;
 
     presentationReplayIsInProgress = false;
     presentationResetIsInProgress = false;
@@ -238,6 +239,7 @@ export class PracticeLessonComponent implements OnInit {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type
                     this.recommendedVideos = response.recommended_videos
+                    this.course_plan_id = response.course_plan_id
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
                         let get_slide_from_presentation = true;
@@ -1096,11 +1098,11 @@ export class PracticeLessonComponent implements OnInit {
         const index = map.indexOf(this.lesson_id);
         if (index > -1 && index < this.recommendedVideos.length - 1) {
             const next_lesson = this.recommendedVideos[index + 1];
-            // this.generalService.generateNewLesson(next_lesson.lesson_group_type_id, next_lesson.course_plan_id, next_lesson.id).then((id) => {
-            //     this.router.navigate(['test_prep/practice/' + id])
-            // }).catch((error: any) => {
-            //     this.alertService.error(error)
-            // })
+            this.generalService.generateNewLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
+                this.router.navigate(['test_prep/practice/' + id])
+            }).catch((error: any) => {
+                this.alertService.error(error)
+            })
         }
     }
 
@@ -1109,11 +1111,11 @@ export class PracticeLessonComponent implements OnInit {
         const index = map.indexOf(this.lesson_id);
         if (index > -1 && index > 0) {
             const prev_lesson = this.recommendedVideos[index - 1];
-            // this.generalService.generateNewLesson(prev_lesson.lesson_group_type_id, prev_lesson.course_plan_id, prev_lesson.id).then((id) => {
-            //     this.router.navigate(['test_prep/practice/' + id])
-            // }).catch((error: any) => {
-            //     this.alertService.error(error)
-            // })
+            this.generalService.generateNewLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
+                this.router.navigate(['test_prep/practice/' + id])
+            }).catch((error: any) => {
+                this.alertService.error(error)
+            })
         }
     }
 
@@ -1246,6 +1248,13 @@ export class PracticeLessonComponent implements OnInit {
                 this.recognitionSubscribe = null;
             }
         }
+    }
+
+    // check Current Video Exist In RecommendedVideos
+    checkRecommendedVideos() {
+        const map = this.recommendedVideos.map((o: any) => {o.id})
+        const index = map.indexOf(this.lesson_id);
+        return index > -1;
     }
 
 
