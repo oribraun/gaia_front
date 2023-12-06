@@ -43,7 +43,7 @@ export class BarChartComponent {
             xAxis: {
                 show: true,
                 type: 'category',
-                data: this.labels.slice().reverse(),
+                data: this.labels.slice(),
                 axisLabel: {
                     show: true,
                     interval: 0,
@@ -61,8 +61,8 @@ export class BarChartComponent {
                     backgroundStyle: {
                         color: 'rgba(220, 220, 220, 0.8)'
                     },
-                    data: this.data.slice().reverse(),
-                    color: this.colors.slice().reverse(),
+                    data: this.data.slice(),
+                    color: this.colors.slice(),
                     barWidth: '50%',
                     barGap: '50%',
                     // barCategoryGap: '20%',
