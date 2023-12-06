@@ -30,6 +30,7 @@ import {SafePipe} from "./pipes/safe.pipe";
 import { HearingComponent } from './slides/hearing/hearing.component';
 import { SpeakingComponent } from './slides/speaking/speaking.component';
 import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
+import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-font-size.directive";
 // import { LottieModule } from 'ngx-lottie';
 //
 //
@@ -66,6 +67,8 @@ import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
         RangePipe,
         SafeHtmlPipe,
         SafePipe,
+
+        DynamicFontSizeDirective,
     ],
     imports: [
         CommonModule,
@@ -99,7 +102,9 @@ import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
         DatetimeFormatPipe,
         RangePipe,
         SafeHtmlPipe,
-        SafePipe
+        SafePipe,
+
+        DynamicFontSizeDirective,
     ],
 })
 export class SharedSlidesModule { }
