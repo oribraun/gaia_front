@@ -338,6 +338,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.router.navigate(['test_prep/practice/' + id])
     }
 
+    showStrikeToolTip() {
+        $('#strike').find('.shield').tooltip('show');
+    }
+
+    hideStrikeToolTip() {
+        $('#strike').find('.shield').tooltip('hide');
+    }
+
     demoPlanPartsAnimation() {
         try {
             const orig = JSON.parse(JSON.stringify(this.courses))
