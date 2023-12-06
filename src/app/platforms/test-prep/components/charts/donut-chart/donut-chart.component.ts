@@ -9,7 +9,6 @@ import {ECharts, EChartsOption, init} from "echarts";
 export class DonutChartComponent {
     @ViewChild('chart') chart!: ElementRef;
 
-    @Input('labels') labels: string[] = [];
     @Input('data') data: any[] = [];
     @Input('colors') colors: string[] = [];
     @Input('name') name: string = '';
@@ -35,12 +34,23 @@ export class DonutChartComponent {
     setUpOptions() {
         this.options = {
             tooltip: {
-                trigger: 'item'
+                trigger: 'item',
+                formatter: function(params: any){
+                    return `<div>${params.seriesName}</div>
+                            <div>
+                                ${params.marker}
+                                <span style="margin-left:2px">${params.name}</span>
+                                <span style="float:right;margin-left:20px;font-weight:bold">${params.value}</span>
+                            </div>
+                            <div style="text-align:center;font-weight:bold">${params.percent}%</div>
+                            `;
+                }
+                // valueFormatter: value => value + ' ml'
             },
             series: [
                 {
                     type: 'pie',
-                    radius: ['40%', '70%'],
+                    radius: ['20%', '40%'],
                     width: '100%',
                     height: '100%',
                     left: 'center',
