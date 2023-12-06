@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Config} from "../../../main/config";
 import {BaseSlideComponent} from "../base-slide.component";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
@@ -8,7 +8,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
     templateUrl: './reading.component.html',
     styleUrls: ['./reading.component.less']
 })
-export class ReadingComponent extends BaseSlideComponent implements OnInit{
+export class ReadingComponent extends BaseSlideComponent implements OnInit, OnDestroy {
 
     text_to_present = ''
     correct_words:string[] = []
@@ -33,6 +33,10 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit{
             }
         }
         this.target_words = this.remove_punct(this.text_to_present).toLowerCase().split(' ')
+        this.listenToSlideEvents();
+    }
+
+    listenToSlideEvents() {
         this.lessonService.ListenFor("student_reply_request").subscribe((message:any) => {
             this.mark_correct_words(message)
         })
@@ -49,6 +53,11 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit{
         })
     }
 
+    clearSlideEvents() {
+        this.lessonService.ClearEvent("student_reply_request")
+        this.lessonService.ClearEvent("student_reply_response")
+    }
+
     remove_punct(text:string){
         let punctuationless = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
         let finalString = punctuationless.replace(/\s{2,}/g," ");
@@ -62,5 +71,10 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit{
                 this.correct_words.push(word)
             }
         }
+    }
+
+    override ngOnDestroy(): void {
+        this.clearSlideEvents();
+        super.ngOnDestroy();
     }
 }

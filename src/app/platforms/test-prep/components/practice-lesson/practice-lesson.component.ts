@@ -318,7 +318,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.eventHandlingInProgress = false;
                 if (response.err) {
                     console.log('response err', response)
-                    this.handleOnReplayError()
+                    this.alertService.error(response.errMessage);
+                    this.handleOnReplayError('eventReplay')
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay();
@@ -359,6 +360,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
                 if (response.err) {
                     console.log('response err', response)
+                    this.alertService.error(response.errMessage);
+                    this.lessonService.Broadcast('student_reply_error', response);
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
@@ -398,6 +401,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 // this.stopAudio()
                 if (response.err) {
                     console.log('new slide response err', response)
+                    this.alertService.error(response.errMessage);
                     this.handleOnReplayError()
                 } else {
                     this.currentData = response.data;
@@ -440,6 +444,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
                 if (response.err) {
                     console.log('change slide response err', response)
+                    this.alertService.error(response.errMessage);
                     this.handleOnReplayError()
                 } else {
                     const data = response.data;
@@ -503,7 +508,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         })
     }
 
-    handleOnReplayError() {
+    handleOnReplayError(type = '') {
         if (!this.presentationReplayIsInProgress
             && !this.presentationNoReplayIsInProgress
             && !this.presentationResetIsInProgress
@@ -518,6 +523,9 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.startListenToAsr();
                 }, 300);
             }
+        }
+        if (type === 'eventReplay') {
+            this.lessonService.Broadcast('slideEventReplyError');
         }
     }
 
@@ -773,6 +781,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.presentationResetIsInProgress = false;
                 if (response.err) {
                     console.log('response err', response)
+                    this.alertService.error(response.errMessage);
                     this.handleOnReplayError();
                 } else {
                     console.log('response', response)

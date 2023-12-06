@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {Config} from "../../../main/config";
@@ -10,7 +10,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
     templateUrl: './writing.component.html',
     styleUrls: ['./writing.component.less']
 })
-export class WritingComponent extends BaseSlideComponent implements OnInit {
+export class WritingComponent extends BaseSlideComponent implements OnInit, OnDestroy {
 
     checkEssayInProgress:boolean = false;
     spinnerEnabled:boolean = false
@@ -49,7 +49,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit {
     override ngOnInit(): void {
         super.ngOnInit();
         this.initWriting();
-        this.setUpListeners();
+        this.listenToSlideEvents();
     }
 
     initWriting() {
@@ -79,7 +79,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit {
         }
     }
 
-    setUpListeners() {
+    listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -119,6 +119,16 @@ export class WritingComponent extends BaseSlideComponent implements OnInit {
                 console.error(e)
             }
         })
+        this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
+            if (this.spinnerEnabled) {
+                this.spinnerEnabled = false;
+            }
+        })
+    }
+
+    clearSlideEvents() {
+        this.lessonService.ClearEvent("slideEventReply");
+        this.lessonService.ClearEvent("slideEventReplyError");
     }
 
     openModal(){
@@ -215,9 +225,9 @@ export class WritingComponent extends BaseSlideComponent implements OnInit {
         }
     }
 
-    override ngOnDestroy() {
+    override ngOnDestroy(): void {
+        this.clearSlideEvents();
         super.ngOnDestroy();
-        this.lessonService.ClearEvent("slideEventReply");
     }
 
 
