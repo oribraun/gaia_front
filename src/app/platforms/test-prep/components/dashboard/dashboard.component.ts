@@ -37,6 +37,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         //             { presentation_thumbnail: "https://unseen-audio-files.s3.amazonaws.com/videos/reading+overview+thumb.png", presentation_title: ' example desc'}
         //     }},
     ];
+    userTests : any = [
+        // {"id": 31,"score": 0,"created": "06.12.2023"},
+    ]
     currentCoursePlanPartIndex: any = null;
 
     currentCourseType: any;
@@ -113,6 +116,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 } else {
                     this.groupTypes = response.group_types;
                     this.recommendedVideos = response.recommended_videos;
+                    this.userTests = response.user_tests;
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;
                     this.coursePlan = response.current_course_plan;
@@ -223,9 +227,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             courseType = this.groupTypes[index]
         }
         if (courseType) {
-            this.generalService.generateNewLesson(courseType.id, this.coursePlan.id).then((id) => {
+            this.generalService.generateNewLesson(courseType.id, this.coursePlan.id).then((id: any) => {
                 this.hideUserLessonsModal();
-                this.router.navigate(['test_prep/practice/' + id])
+                this.goToLesson(id);
             }).catch((error: any) => {
                 this.alertService.error(error)
             })
@@ -235,9 +239,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     startNewUserLesson(event: Event) {
         event.preventDefault();
         console.log('startNewUserLesson')
-        this.generalService.generateNewLesson(this.currentCourseType.id, this.coursePlan.id).then((id) => {
+        this.generalService.generateNewLesson(this.currentCourseType.id, this.coursePlan.id).then((id: any) => {
             this.hideUserLessonsModal();
-            this.router.navigate(['test_prep/practice/' + id])
+            this.goToLesson(id);
         }).catch((error: any) => {
             this.alertService.error(error)
         })
@@ -248,26 +252,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         event.preventDefault();
         console.log('startUserLesson', id)
         this.hideUserLessonsModal();
-        this.router.navigate(['test_prep/practice/' + id])
+        this.goToLesson(id);
     }
     continueUserLesson(event: Event, id: number) {
         event.preventDefault();
         console.log('continueUserLesson', id)
         this.hideUserLessonsModal();
-        this.router.navigate(['test_prep/practice/' + id])
+        this.goToLesson(id);
     }
     tryAgainUserLesson(event: Event, id: number) {
         event.preventDefault();
         console.log('tryAgainUserLesson', id)
         this.hideUserLessonsModal();
-        this.router.navigate(['test_prep/practice/' + id])
+        this.goToLesson(id);
     }
 
     startVideoLesson(id: number, lesson_group_type_id: number) {
         console.log('id', id)
         console.log('lesson_group_type_id', lesson_group_type_id)
-        this.generalService.getOrGenerateLesson(lesson_group_type_id, this.coursePlan.id, id).then((id) => {
-            this.router.navigate(['test_prep/practice/' + id])
+        this.generalService.getOrGenerateLesson(lesson_group_type_id, this.coursePlan.id, id).then((id: any) => {
+            this.goToLesson(id);
         }).catch((error: any) => {
             this.alertService.error(error)
         })
@@ -325,6 +329,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     gotTo(route: string) {
         this.router.navigate([route])
+    }
+
+    goToLesson(id: number) {
+        this.router.navigate(['test_prep/practice/' + id])
     }
 
     demoPlanPartsAnimation() {

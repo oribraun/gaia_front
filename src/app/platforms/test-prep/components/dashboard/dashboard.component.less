@@ -42,6 +42,18 @@
                     display: inline-block;
                     cursor: pointer;
                     color: var(--gaia-header-color);
+                    .table {
+                        display: block;
+                        max-height: 355px;
+                        overflow: hidden;
+                        overflow-y: auto;
+                        -ms-overflow-style: none; /* IE and Edge */
+                        scrollbar-width: none; /* Firefox */
+                        &::-webkit-scrollbar { /* WebKit */
+                            width: 0;
+                            height: 0;
+                        }
+                    }
                     i {
                         font-size: 1.2em;
                     }

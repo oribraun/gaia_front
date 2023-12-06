@@ -138,7 +138,7 @@
                                         <i class="bi bi-play-fill"></i>
                                     </div>
                                     <p>Take a test</p>
-                                    <table class="table">
+                                    <table class="table" *ngIf="userTests && userTests.length">
                                         <thead>
                                         <tr>
                                             <th scope="col">Date</th>
@@ -147,20 +147,10 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>16.6.2023</td>
-                                            <td>5</td>
-                                            <td><a href="#">Test 01</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>23.6.2023</td>
-                                            <td>6</td>
-                                            <td><a href="#">Test 02</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>1.7.2023</td>
-                                            <td>7.6</td>
-                                            <td><a href="#">Test 03</a></td>
+                                        <tr *ngFor="let test of userTests">
+                                            <td>{{test.created}}</td>
+                                            <td>{{test.score}}</td>
+                                            <td><a href="#" (click)="goToLesson(test.id)">Test {{test.id}}</a></td>
                                         </tr>
                                         </tbody>
                                     </table>
