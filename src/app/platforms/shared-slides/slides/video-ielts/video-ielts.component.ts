@@ -127,6 +127,24 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         });
         // this.createVideo();
 
+        this.listenToSlideEvents();
+    }
+
+    ngAfterViewInit(): void {
+        this.setUpPlayerListeners();
+        this.setUpHeygenListeners();
+        this.setUpTeacherSize();
+        this.messages.push(
+            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."}),
+        );
+        if (this.unsDemo) {
+            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
+        } else {
+            this.startHeyGen();
+        }
+    }
+
+    listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.type == "additional_instructions") {
                 const teacher_text = resp.data.teacher_text;
@@ -171,20 +189,22 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.sendUserReplay(recognitionText);
             this.scrollToBottom2();
         })
+        this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
+            if (this.showSpinner) {
+                this.showSpinner = false;
+            }
+        })
+        this.lessonService.ListenFor("student_reply_error").subscribe((resp:any) => {
+
+        })
     }
 
-    ngAfterViewInit(): void {
-        this.setUpPlayerListeners();
-        this.setUpHeygenListeners();
-        this.setUpTeacherSize();
-        this.messages.push(
-            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."}),
-        );
-        if (this.unsDemo) {
-            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
-        } else {
-            this.startHeyGen();
-        }
+    clearSlideEvents() {
+        this.lessonService.ClearEvent("slideEventReply");
+        this.lessonService.ClearEvent("student_reply_response");
+        this.lessonService.ClearEvent("recognitionText");
+        this.lessonService.ClearEvent("slideEventReplyError");
+        this.lessonService.ClearEvent("student_reply_error");
     }
 
     sendUserReplay(student_response: string) {
@@ -779,6 +799,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         if (this.taskInterval) {
             clearInterval(this.taskInterval)
         }
+        this.clearSlideEvents();
         super.ngOnDestroy();
     }
 

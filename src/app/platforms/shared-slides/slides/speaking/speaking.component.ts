@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {BaseSlideComponent} from "../base-slide.component";
 import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
@@ -16,7 +16,7 @@ declare var $: any;
     styleUrls: ['./speaking.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class SpeakingComponent extends BaseSlideComponent implements OnInit {
+export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnDestroy {
 
     @ViewChild('scroller') scroller!: ElementRef;
 
@@ -66,7 +66,12 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
         this.hint_used = this.currentSlide.hint_used
         this.initQnaReview(this.currentSlide.qna_review)
         this.handleCounter(1, this.pace)
-        this.pauseAllCounters()
+        this.pauseAllCounters();
+        this.listenToSlideEvents();
+
+    }
+
+    listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
                 let resp_data = resp.data
@@ -129,7 +134,16 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
             }
 
         })
+        this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
+            if (this.spinnerEnabled) {
+                this.spinnerEnabled = false;
+            }
+        })
+    }
 
+    clearSlideEvents() {
+        this.lessonService.ClearEvent("slideEventReply");
+        this.lessonService.ClearEvent("slideEventReplyError");
     }
 
     updateDetailedQuestionReview(obj:any){
@@ -436,5 +450,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit {
                 element.scrollTop = element.scrollHeight
             }, timeout)
         }
+    }
+
+    override ngOnDestroy(): void {
+        this.clearSlideEvents();
+        super.ngOnDestroy();
     }
 }

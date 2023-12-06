@@ -2,7 +2,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
-    ElementRef,
+    ElementRef, OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation
@@ -23,7 +23,7 @@ declare var $: any;
     styleUrls: ['./hearing.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class HearingComponent extends BaseSlideComponent implements OnInit {
+export class HearingComponent extends BaseSlideComponent implements OnInit, OnDestroy {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
     @ViewChild('questions') questions!: ElementRef;
 
@@ -147,6 +147,16 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
                 console.error(e)
             }
         })
+        this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
+            if (this.submitInProgress) {
+                this.submitInProgress = false;
+            }
+        })
+    }
+
+    clearSlideEvents() {
+        this.lessonService.ClearEvent("slideEventReply");
+        this.lessonService.ClearEvent("slideEventReplyError");
     }
 
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {
@@ -482,5 +492,10 @@ export class HearingComponent extends BaseSlideComponent implements OnInit {
         if (this.zoom > this.zoomLimits.out) {
             this.zoom -= this.zoomStep;
         }
+    }
+
+    override ngOnDestroy(): void {
+        this.clearSlideEvents();
+        super.ngOnDestroy();
     }
 }
