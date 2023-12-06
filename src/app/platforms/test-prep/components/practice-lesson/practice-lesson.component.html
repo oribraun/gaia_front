@@ -107,7 +107,7 @@
                 </button>
             </div>
             <div class="timer-status">
-                Time Left <span>{{timersHelper.timers[test_timer_counter_id].getTime()}}</span>  Time Passed <span>{{timersHelper.counters[test_timer_counter_id].getTime()}}</span> | status: <span>done</span>
+                <span *ngIf="timersHelper.timers[test_timer_counter_id]">Time Left <span>{{timersHelper.timers[test_timer_counter_id].getTime()}}</span>  Time Passed <span>{{timersHelper.counters[test_timer_counter_id].getTime()}}</span> |</span> status: <span>{{user_lesson_status}}</span>
             </div>
         </ng-container>
         <ng-container  *ngIf="currentSlide.slide_type === 'video'">

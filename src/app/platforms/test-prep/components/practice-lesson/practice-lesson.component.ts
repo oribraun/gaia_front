@@ -28,6 +28,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     mock = environment.is_mock;
     user_lesson_id!: number;
     current_base_lesson_id!: number;
+    user_lesson_status!: string;
     question_id!: number;
     modalActive:boolean=false;
     enable_end_lesson_button:boolean=false;
@@ -254,12 +255,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type
                     let test_mode = this.lesson_group_type['name'] == 'test' || false
-                    if(this.test_mode !=test_mode && test_mode){
+                    if(this.test_mode != test_mode && test_mode){
                         this.setTestModeTimer()
                     }
                     this.recommendedVideos = response.recommended_videos;
                     this.course_plan_id = response.course_plan_id;
                     this.current_base_lesson_id = response.current_base_lesson_id;
+                    this.user_lesson_status = response.user_lesson_status;
                     this.gotFirstPresentation = true;
                     console.log('this.presentation ', this.presentation)
                     if (this.question_id) {
