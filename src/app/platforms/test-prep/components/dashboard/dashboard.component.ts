@@ -331,7 +331,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.router.navigate([route])
     }
 
-    goToLesson(id: number) {
+    goToLesson(id: number, event: any = null) {
+        if (event) {
+            event.preventDefault();
+        }
         this.router.navigate(['test_prep/practice/' + id])
     }
 

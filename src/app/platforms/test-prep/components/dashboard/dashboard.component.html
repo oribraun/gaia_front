@@ -150,7 +150,7 @@
                                         <tr *ngFor="let test of userTests">
                                             <td>{{test.created}}</td>
                                             <td>{{test.score}}</td>
-                                            <td><a href="#" (click)="goToLesson(test.id)">Test {{test.id}}</a></td>
+                                            <td><a href="#" (click)="goToLesson(test.id, $event)">Test {{test.id}}</a></td>
                                         </tr>
                                         </tbody>
                                     </table>
