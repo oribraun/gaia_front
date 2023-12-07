@@ -28,7 +28,7 @@ export class AuthTestPrepPlatformGuard  {
         // return true
         const user = this.config.user;
         console.log('user.last_logged_platform test-prep', user.last_logged_platform)
-        if (user && user.last_logged_platform === 'test_prep') {
+        if (user && user.last_logged_platform === 'ielts') {
             return true;
         } else {
             const queryParams: any = {}

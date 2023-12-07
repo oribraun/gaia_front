@@ -40,7 +40,7 @@
                         <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'test_prep' && user.last_lesson_id">
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">
                     <a class="nav-link rounded-0"
                        [routerLink]="['/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
@@ -48,21 +48,21 @@
                         <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'test_prep'">
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
                     <a class="nav-link rounded-0"
                        [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <div class="title">My Vocabulary</div>
                         <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'test_prep'">
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
                     <a class="nav-link rounded-0"
                        [routerLink]="['/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <div class="title">My Work</div>
                         <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'test_prep'">
+                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
                     <a class="nav-link rounded-0"
                        [routerLink]="['/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
                         <div class="title">Materials</div>

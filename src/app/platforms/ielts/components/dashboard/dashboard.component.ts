@@ -335,7 +335,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.router.navigate(['test_prep/practice/' + id])
+        this.router.navigate(['ielts/practice/' + id])
     }
 
     showStrikeToolTip() {

@@ -34,12 +34,12 @@ const routes: Routes = [
     },
     // for children app only
 
-    // for test_prep app only
+    // for ielts app only
     {
-        path: 'test_prep',
-        loadChildren: () => import('../test-prep/test-prep.module').then(m => m.TestPrepModule),
+        path: 'ielts',
+        loadChildren: () => import('../ielts/ielts.module').then(m => m.IeltsModule),
     },
-    // for test_prep app only
+    // for ielts app only
 
     // admin only for testing
     { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },

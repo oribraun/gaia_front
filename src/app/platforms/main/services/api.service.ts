@@ -487,52 +487,52 @@ export class ApiService {
     }
     // children platform api
 
-    // test_prep platform api
+    // ielts platform api
     getPlatformDashboard(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-dashboard', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-dashboard', obj,
             this.httpOptions
         )
     }
     getUserLessons(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-user-lessons', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-lessons', obj,
             this.httpOptions
         )
     }
     getUserLessonAchievements(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-user-lesson-achievements', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-lesson-achievements', obj,
             this.httpOptions
         )
     }
     getUserNewLesson(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-user-new-lesson', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-new-lesson', obj,
             this.httpOptions
         )
     }
     getOrGenerateLesson(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-or-generate-user-lesson', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-or-generate-user-lesson', obj,
             this.httpOptions
         )
     }
     getVocabulary(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-vocabulary', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-vocabulary', obj,
             this.httpOptions
         )
     }
     getQuestions(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/get-questions', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-questions', obj,
             this.httpOptions
         )
     }
     getPlans(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/pb/get-plans', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/pb/get-plans', obj,
             this.httpOptions
         )
     }
     saveVocab(obj: any) {
-        return this.http.post(this.serverBase + this.baseApi + 'test_prep/us/save-vocabulary', obj,
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/save-vocabulary', obj,
             this.httpOptions
         )
     }
-    // test_prep platform api
+    // ielts platform api
 
 }

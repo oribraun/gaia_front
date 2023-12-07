@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         if (this.user.id && this.user.last_logged_platform) {
             this.selectedPlatform = this.user.last_logged_platform;
             this.getUserOnBoarding();
-            if (this.user.last_logged_platform === 'test_prep') {
+            if (this.user.last_logged_platform === 'ielts') {
                 this.getUserActivity();
             }
         }

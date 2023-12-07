@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 
 import { NgxEchartsModule } from 'ngx-echarts';
 
-import { TestPrepRoutingModule } from './test-prep-routing.module';
+import { IeltsRoutingModule } from './ielts-routing.module';
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
@@ -32,7 +32,7 @@ import { DonutChartComponent } from './components/charts/donut-chart/donut-chart
         CommonModule,
         FormsModule,
         SharedSlidesModule,
-        TestPrepRoutingModule,
+        IeltsRoutingModule,
 
         NgxEchartsModule.forRoot({
             /**
@@ -44,4 +44,4 @@ import { DonutChartComponent } from './components/charts/donut-chart/donut-chart
         }),
     ]
 })
-export class TestPrepModule { }
+export class IeltsModule { }
