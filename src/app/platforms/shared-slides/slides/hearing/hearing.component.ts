@@ -237,6 +237,9 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         if (this.submitInProgress) {
             return;
         }
+        if (this.is_test_mode && this.unseenAnswers[this.currentSlide.all_questions[this.question_index].question_id].is_correct_answer !== null) {
+            return;
+        }
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].pace = this.current_counter.counter;
         const data = {

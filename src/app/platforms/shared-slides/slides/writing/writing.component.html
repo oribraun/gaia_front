@@ -36,10 +36,13 @@
                         <!--                        </div>-->
                         <div class="bottom-panel">
                             <div class="question-buttons">
-                                <button *ngIf="!is_test_mode" class="btn btn-primary" (click)="boostEssay()">
+                                <button *ngIf="!is_test_mode" class="btn btn-primary"
+                                        (click)="boostEssay()">
                                     AI boost
                                 </button>
-                                <button class="btn btn-primary" (click)="checkEssay()">
+                                <button class="btn btn-primary"
+                                        [disabled]="is_test_mode && currentSlide.writing"
+                                        (click)="checkEssay()">
                                     Check Essay
                                 </button>
                                 <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">

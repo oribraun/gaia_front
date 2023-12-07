@@ -112,9 +112,6 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
                     this.endEssayInProgress = false;
                 }
                 this.spinnerEnabled  = false;
-
-
-
             } catch (e){
                 console.error(e)
             }
@@ -122,6 +119,9 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
             if (this.spinnerEnabled) {
                 this.spinnerEnabled = false;
+            }
+            if (this.checkEssayInProgress) {
+                this.checkEssayInProgress = false;
             }
         })
     }
@@ -173,6 +173,9 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
 
     checkEssay() {
         if (this.checkEssayInProgress){
+            return;
+        }
+        if (this.is_test_mode && this.currentSlide.writing) {
             return;
         }
         const data = {
