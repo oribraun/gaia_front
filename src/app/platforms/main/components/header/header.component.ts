@@ -430,7 +430,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.redirectUser();
+                this.user.last_logged_platform = this.selectedPlatform
+                this.getUserOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
