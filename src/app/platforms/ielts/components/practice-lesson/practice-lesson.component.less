@@ -8,6 +8,7 @@
 
     @bottomPanelHeight: 30px;
 
+
     .white-board {
         position: relative;
         height: calc(100%);
@@ -19,6 +20,12 @@
         //border-radius: @border-radius;
         overflow: hidden;
         padding-bottom: @bottomPanelHeight;
+        @media(max-width: 690px) {
+            padding-bottom: 70px;
+        }
+        @media (max-width: 769px) {
+            overflow-y: auto;
+        }
         .slides {
             height: calc(100%);
             max-width: 100%;
@@ -412,6 +419,9 @@
         right: 0;
         left: 0;
         height: @bottomPanelHeight;
+        @media(max-width: 690px) {
+            height: 70px;
+        }
         border-top-right-radius: 10px;
         border-top-left-radius: 10px;
         padding: 2px 10px;
@@ -421,6 +431,7 @@
         font-size: .9em;
         align-items: center;
         justify-content: space-between;
+        overflow: hidden;
         .title {
 
         }
@@ -460,6 +471,19 @@
             color: #000;
             font-size: .8em;
             border-radius: 1px;
+        }
+    }
+
+    .bottom-panel-center {
+        .title {
+            width: 33.333%;
+        }
+        .slide-buttons {
+            width: 33.333%;
+            justify-content: center;
+        }
+        .timer-status {
+            width: 33.333%;
         }
     }
 
