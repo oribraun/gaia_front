@@ -103,7 +103,7 @@
                                 </div>
                             </button>
                             <!--                            <button class="btn btn-primary" (click)="nextSlide()">Continue</button>-->
-                            <button *ngIf="!test_mode" class="btn btn-primary hint" (click)="getHints()">
+                            <button *ngIf="!is_test_mode" class="btn btn-primary hint" (click)="getHints()">
                                 Hint
                                 <div class="spinner-border" *ngIf="currentHintAudio">
                                     <span class="sr-only"></span>

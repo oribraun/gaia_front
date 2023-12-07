@@ -34,7 +34,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     enable_end_lesson_button:boolean=false;
     vocabulary_was_added:boolean=true;
     slide_uid!: string;
-    test_mode: boolean = false;
+    is_test_mode: boolean = false;
     test_timer_counter_id:number = 1001101;
 
     socketRecorderEvents: any = {};
@@ -163,6 +163,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     }
 
+    setTestModelLimitations() {
+        this.setTestModeTimer();
+    }
+
     setTestModeTimer(){
         console.log('DANIEL YOU ARE IN TEST MODE')
         this.timersHelper.handleTimer(this.test_timer_counter_id,60*60)
@@ -254,9 +258,9 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 } else {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type
-                    let test_mode = this.lesson_group_type['name'] == 'test' || false
-                    if(this.test_mode != test_mode && test_mode){
-                        this.setTestModeTimer()
+                    this.is_test_mode = this.lesson_group_type['name'] == 'test' || false
+                    if(this.is_test_mode){
+                        this.setTestModelLimitations()
                     }
                     this.recommendedVideos = response.recommended_videos;
                     this.course_plan_id = response.course_plan_id;

@@ -15,7 +15,7 @@ export class BaseSlideComponent implements OnInit, OnDestroy {
 
     imageSrc = ''
     currentHost = ''
-    test_mode: boolean = false;
+    is_test_mode: boolean = false;
 
     constructor(
         protected config: Config,
@@ -27,7 +27,7 @@ export class BaseSlideComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.fixImagesUrls();
-        this.test_mode = this.slideData.lesson_group_type['name'] == 'test' || false
+        this.is_test_mode = this.slideData.is_test_mode || false;
     }
 
 
