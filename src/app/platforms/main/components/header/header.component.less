@@ -153,16 +153,6 @@
                 white-space: nowrap;
             }
 
-            .dropdown {
-                a {
-                    text-decoration: none;
-                }
-                .dropdown-menu {
-                    padding: 0;
-                    overflow: hidden;
-                }
-            }
-
             .form-select {
                 outline: none;
                 box-shadow: none;
@@ -182,11 +172,32 @@
                     margin-top: 0.2em;
                 }
             }
+            .platforms {
+                position: relative;
+                .dropdown-toggle {
+                    text-decoration: none;
+                    color:#fff;
+                }
+                .dropdown-menu {
+                    padding: 0;
+                    overflow: hidden;
+                    .dropdown-item {
+                        &:active, &focus {
+                            background: initial;
+                            color: initial;
+                        }
+                    }
+                }
+            }
             .profile {
                 position: relative;
                 color:#fff;
                 .icon {
                     filter: brightness(999);
+                }
+                .dropdown-menu {
+                    padding: 0;
+                    overflow: hidden;
                 }
             }
             .login, .join {

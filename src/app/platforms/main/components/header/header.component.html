@@ -78,14 +78,14 @@
                 <!--                </li>-->
             </ul>
             <div class="right-items d-flex">
-                <div class="dropdown" *ngIf="platforms.length > 1 && !isPlansPage">
-                    <a class="form-select form-select-sm" data-bs-toggle="dropdown"
+                <div class="platforms dropdown" *ngIf="platforms.length > 1 && !isPlansPage">
+                    <a class="dropdown-toggle pointer" data-bs-toggle="dropdown"
                     [innerHTML]="selectedPlatform.display_name">
                     </a>
 
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
-                            <a class="dropdown-item"
+                            <a class="dropdown-item pointer"
                                [ngClass]="{'active': selectedPlatform.name === p.name}"
                             [innerHTML]="p.display_name"></a>
                         </li>
@@ -104,21 +104,21 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="user.id">
-                    <div class="dropdown">
-                        <div class="profile align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
+                    <div class="profile dropdown">
+                        <div class="align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
                             <!--                        Hello {{user.username}}-->
                             <img class="icon"
                                  [src]="imageSrc + '/assets/images/app_icons/Account_icon-cropped.svg'"
                                  [title]="'Hello ' + user.username"
                                  alt="">
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#" (click)="logout($event)">Sign out</a></li>
-                                <li><a class="dropdown-item" href="#" (click)="goTo('onBoarding')">Onboarding setting</a></li>
-                                <li><a class="dropdown-item" href="#" (click)="resetPassword()">Reset password</a></li>
-                                <li><a class="dropdown-item" href="#" (click)="goTo('billing')">Billing</a></li>
-                                <li><a class="dropdown-item" href="#" (click)="goTo('contactUs')">Contact us</a></li>
-                            </ul>
                         </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item pointer" (click)="logout($event)">Sign out</a></li>
+                            <li><a class="dropdown-item pointer" (click)="goTo('onBoarding')">Onboarding setting</a></li>
+                            <li><a class="dropdown-item pointer" (click)="resetPassword()">Reset password</a></li>
+                            <li><a class="dropdown-item pointer" (click)="goTo('billing')">Billing</a></li>
+                            <li><a class="dropdown-item pointer" (click)="goTo('contactUs')">Contact us</a></li>
+                        </ul>
                     </div>
                     <!--                    <div class="logout align-self-center">-->
                     <!--                        <a class="link" href="#"-->
