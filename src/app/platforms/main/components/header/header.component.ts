@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     platforms: any[] = [];
-    selectedPlatform = '';
+    selectedPlatform: any = {name: '', display_name: ''};
 
     user!: User;
     user_on_boarding_finished = false;
@@ -101,7 +101,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (planId) {
                 this.planId = planId;
             }
-            this.initOnBoarding();
         })
         this.setUpGoogle();
 
@@ -113,7 +112,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     initOnBoarding() {
         if (this.user.id && this.user.last_logged_platform) {
-            this.selectedPlatform = this.user.last_logged_platform;
+            const currentPlatform = this.user.last_logged_platform;
+            const map = this.platforms.map((o: any) => o.name)
+            const index = map.indexOf(currentPlatform);
+            if (index > -1) {
+                this.selectedPlatform = this.platforms[index]
+            }
             this.getUserOnBoarding();
             if (this.user.last_logged_platform === 'ielts') {
                 this.getUserActivity();
@@ -171,8 +175,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 if (!response.err) {
                     this.platforms = response.platforms;
                     if (this.platforms && this.platforms.length && !this.user.id) {
-                        this.selectedPlatform = this.platforms[0].value;
+                        this.selectedPlatform = this.platforms[0];
                     }
+                    this.initOnBoarding();
                 } else {
                     console.log('getPlatforms errMessage', response.errMessage)
                 }
@@ -183,20 +188,35 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         })
     }
 
+    changePlatformValue(platform: any, $event: any) {
+        $event.preventDefault();
+        this.selectedPlatform = platform;
+        if (this.user.id) {
+            this.changeUserPlatform();
+        }
+    }
+
     changePlatform(event: any) {
-        this.selectedPlatform = event.target.value;
-        this.changeUserPlatform();
+        const currentPlatform = event.target.value;
+        const map = this.platforms.map((o: any) => o.name)
+        const index = map.indexOf(currentPlatform);
+        if (index > -1) {
+            this.selectedPlatform = this.platforms[index]
+        }
+        if (this.user.id) {
+            this.changeUserPlatform();
+        }
     }
 
     async changeUserPlatform() {
         if (this.user.id) {
             try {
                 this.errMessage = '';
-                const response: any = await lastValueFrom(this.apiService.changeUserPlatform(this.selectedPlatform));
+                const response: any = await lastValueFrom(this.apiService.changeUserPlatform(this.selectedPlatform.name));
                 if (!response.err) {
-                    this.user.last_logged_platform = this.selectedPlatform;
+                    this.user.last_logged_platform = this.selectedPlatform.name;
                     this.config.user = this.user;
-                    // this.setUpUserLoggedPlatformCookies(this.selectedPlatform);
+                    // this.setUpUserLoggedPlatformCookies(this.selectedPlatform.value);
                     // setTimeout(() => {
                     //     const returnUrl = this.helperService.getUserReturnUrl(this.user)
                     //     this.router.navigate([returnUrl])
@@ -393,12 +413,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform, this.planId));
+            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform.name, this.planId));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.user.last_logged_platform = this.selectedPlatform
+                this.user.last_logged_platform = this.selectedPlatform.name
                 this.getUserOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
@@ -423,14 +443,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.errMessage = '';
             const response: any = await lastValueFrom(this.apiService.loginSocial({
                 user_details: user_details,
-                platform: this.selectedPlatform,
+                platform: this.selectedPlatform.name,
                 planId: this.planId
             }));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.user.last_logged_platform = this.selectedPlatform
+                this.user.last_logged_platform = this.selectedPlatform.name;
                 this.getUserOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
