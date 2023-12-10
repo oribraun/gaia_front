@@ -603,6 +603,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     }
 
     handleCounter(question_idx:number){
+        if (this.slideData.is_test_mode) {
+            return;
+        }
         this.pauseAllCounters()
         if(!this.timers.hasOwnProperty(question_idx)) {
             this.timers[question_idx] = this.createTimer()

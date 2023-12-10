@@ -45,7 +45,7 @@
             <div class="box box-questions">
                 <!--                <div class="question_number"><span>{{question_index+1}}</span>/<span>{{currentSlide.all_questions.length}}</span></div>-->
                 <section class="questions" #questions>
-                    <div class="timers">
+                    <div class="timers" *ngIf="!slideData.is_test_mode">
                         <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
                         <!--                        <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>-->
                     </div>
