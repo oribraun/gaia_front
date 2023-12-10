@@ -5,11 +5,14 @@
                 <img [src]="imageSrc + '/assets/images/Generative_Ai_Logo.png'" alt="">
             </a>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor03">
-            <ul class="navbar-nav me-auto">
+        <div class="right-items d-flex d-md-none align-self-center">
+            <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
+        </div>
+        <!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">-->
+        <!--            <span class="navbar-toggler-icon"></span>-->
+        <!--        </button>-->
+        <div class="collapse navbar-collapse show" id="navbarColor03">
+            <ul class="navbar-nav me-auto flex-row justify-content-between">
                 <!--                <li class="nav-item">-->
                 <!--                    <a class="nav-link rounded-0"-->
                 <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"-->
@@ -77,57 +80,8 @@
                 <!--                    </a>-->
                 <!--                </li>-->
             </ul>
-            <div class="right-items d-flex">
-                <div class="platforms dropdown" *ngIf="platforms.length > 1 && !isPlansPage">
-                    <a class="dropdown-toggle pointer" data-bs-toggle="dropdown"
-                    [innerHTML]="selectedPlatform.display_name">
-                    </a>
-
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
-                            <a class="dropdown-item pointer"
-                               [ngClass]="{'active': selectedPlatform.name === p.name}"
-                            [innerHTML]="p.display_name"></a>
-                        </li>
-                    </ul>
-                </div>
-                <ng-container *ngIf="!user.id">
-                    <div class="login align-self-center">
-                        <a class="link pointer"
-                           (click)="setFormType('login')">Log In</a>
-                    </div>
-                    <div class="join align-self-center">
-                        <!--                        <button class="btn btn-primary"-->
-                        <!--                                (click)="setFormType('signup')">Join For Free</button>-->
-                        <a class="link pointer"
-                           (click)="setFormType('signup')">Join For Free</a>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="user.id">
-                    <div class="profile dropdown">
-                        <div class="align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
-                            <!--                        Hello {{user.username}}-->
-                            <img class="icon"
-                                 [src]="imageSrc + '/assets/images/app_icons/Account_icon-cropped.svg'"
-                                 [title]="'Hello ' + user.username"
-                                 alt="">
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item pointer" (click)="logout($event)">Sign out</a></li>
-                            <li><a class="dropdown-item pointer" (click)="goTo('onBoarding')">Onboarding setting</a></li>
-                            <li><a class="dropdown-item pointer" (click)="resetPassword()">Reset password</a></li>
-                            <li><a class="dropdown-item pointer" (click)="goTo('billing')">Billing</a></li>
-                            <li><a class="dropdown-item pointer" (click)="goTo('contactUs')">Contact us</a></li>
-                        </ul>
-                    </div>
-                    <!--                    <div class="logout align-self-center">-->
-                    <!--                        <a class="link" href="#"-->
-                    <!--                           (click)="logout($event)">-->
-                    <!--                            &lt;!&ndash;                        <i class="bi bi-box-arrow-right"></i>&ndash;&gt;-->
-                    <!--                            <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">-->
-                    <!--                        </a>-->
-                    <!--                    </div>-->
-                </ng-container>
+            <div class="right-items d-none d-md-flex">
+                <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
             </div>
         </div>
     </div>
@@ -245,6 +199,59 @@
         </div>
     </div>
 </div>
+
+<ng-template #rightItems>
+    <div class="platforms dropdown" *ngIf="platforms.length > 1 && !isPlansPage">
+        <a class="dropdown-toggle pointer" data-bs-toggle="dropdown"
+           [innerHTML]="selectedPlatform.display_name">
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
+                <a class="dropdown-item pointer"
+                   [ngClass]="{'active': selectedPlatform.name === p.name}"
+                   [innerHTML]="p.display_name"></a>
+            </li>
+        </ul>
+    </div>
+    <ng-container *ngIf="!user.id">
+        <div class="login align-self-center">
+            <a class="link pointer"
+               (click)="setFormType('login')">Log In</a>
+        </div>
+        <div class="join align-self-center">
+            <!--                        <button class="btn btn-primary"-->
+            <!--                                (click)="setFormType('signup')">Join For Free</button>-->
+            <a class="link pointer"
+               (click)="setFormType('signup')">Join For Free</a>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="user.id">
+        <div class="profile dropdown">
+            <div class="align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
+                <!--                        Hello {{user.username}}-->
+                <img class="icon"
+                     [src]="imageSrc + '/assets/images/app_icons/Account_icon-cropped.svg'"
+                     [title]="'Hello ' + user.username"
+                     alt="">
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item pointer" (click)="logout($event)">Sign out</a></li>
+                <li><a class="dropdown-item pointer" (click)="goTo('onBoarding')">Onboarding setting</a></li>
+                <li><a class="dropdown-item pointer" (click)="resetPassword()">Reset password</a></li>
+                <li><a class="dropdown-item pointer" (click)="goTo('billing')">Billing</a></li>
+                <li><a class="dropdown-item pointer" (click)="goTo('contactUs')">Contact us</a></li>
+            </ul>
+        </div>
+        <!--                    <div class="logout align-self-center">-->
+        <!--                        <a class="link" href="#"-->
+        <!--                           (click)="logout($event)">-->
+        <!--                            &lt;!&ndash;                        <i class="bi bi-box-arrow-right"></i>&ndash;&gt;-->
+        <!--                            <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">-->
+        <!--                        </a>-->
+        <!--                    </div>-->
+    </ng-container>
+</ng-template>
 
 <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

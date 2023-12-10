@@ -36,8 +36,9 @@
         .navbar-collapse {
             background-color: var(--gaia-header-color);
             padding-right: calc(var(--bs-gutter-x) * .5);
-            border-bottom-left-radius: 15px;
-            border-bottom-left-radius: 15px;
+            @media (min-width: 768px) {
+                border-bottom-left-radius: 15px;
+            }
             //border: solid 1px var(--gaia-main-border-color);
             border-top: none;
             border-right: none;
@@ -46,38 +47,13 @@
                     margin-left: @header-height;
                 }
             }
-            @media(max-width: 768px) {
-                &.show, &.collapsing {
-                    display: flex;
-                    flex-flow: column-reverse;
-                }
-                padding: 0;
-                border-radius: 0;
-                .navbar-nav {
-                    flex-direction: row;
-                    width: 100%;
-                    justify-content: start;
-                    .nav-item {
-                        display: inline-block;
-                    }
-                }
-                .right-items {
-                    justify-content: flex-end;
-                    flex-direction: row;
-                    width: 100%;
-                    padding-bottom: 10px;
-                    .form-select {
-                        width: auto;
-                    }
-                }
-            }
         }
         .navbar-collapse.collapsing {
             background-color: var(--gaia-header-color);
         }
 
         .nav-item {
-            a {
+            .nav-link {
                 white-space: nowrap;
                 text-align: center;
                 font-size: 0.44em;
@@ -174,9 +150,10 @@
             }
             .platforms {
                 position: relative;
+                color: var(--gaia-main-border-color);
                 .dropdown-toggle {
                     text-decoration: none;
-                    color:#fff;
+                    color:inherit;
                 }
                 .dropdown-menu {
                     padding: 0;
@@ -188,16 +165,25 @@
                         }
                     }
                 }
+                @media (min-width: 768px) {
+                    color:#fff;
+                }
             }
             .profile {
                 position: relative;
-                color:#fff;
+                color:var(--gaia-main-border-color);
                 .icon {
-                    filter: brightness(999);
+                    filter: brightness(.8);
                 }
                 .dropdown-menu {
                     padding: 0;
                     overflow: hidden;
+                }
+                @media (min-width: 768px) {
+                    color:#fff;
+                    .icon {
+                        filter: brightness(999);
+                    }
                 }
             }
             .login, .join {

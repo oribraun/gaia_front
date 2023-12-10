@@ -94,7 +94,7 @@
                                         </span>
                                 </h4>
                                 <div class="text-body">
-                                    <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-sm-row">
                                         <div class="lst">
                                             <ul>
                                                 <li *ngFor="let l of achievements.labels; let i = index;" [ngStyle]="{'color':  achievements.colors[i]}">
@@ -138,22 +138,24 @@
                                         <i class="bi bi-play-fill"></i>
                                     </div>
                                     <p>Take a test</p>
-                                    <table class="table" *ngIf="userTests && userTests.length">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Grade</th>
-                                            <th scope="col">Review</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr *ngFor="let test of userTests">
-                                            <td>{{test.created}}</td>
-                                            <td>{{test.score}}</td>
-                                            <td><a href="#" (click)="goToLesson(test.id, $event)">Test {{test.id}}</a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table" *ngIf="userTests && userTests.length">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Grade</th>
+                                                <th scope="col">Review</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let test of userTests">
+                                                <td>{{test.created}}</td>
+                                                <td>{{test.score}}</td>
+                                                <td><a href="#" (click)="goToLesson(test.id, $event)">Test {{test.id}}</a></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +343,8 @@
                     <!--                    <div class="start-new">-->
                     <!--                        <a (click)="startNewUserLesson($event)" href="">Start New</a>-->
                     <!--                    </div>-->
-                    <table class="table" *ngIf="currentCourseLessons && currentCourseLessons.length">
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="currentCourseLessons && currentCourseLessons.length">
                         <thead>
                         <tr>
                             <th scope="col">&nbsp;</th>
@@ -360,13 +363,14 @@
                             <td>{{statusMapping[item.status]}}</td>
                             <td>0</td>
                             <td>
-                                <a (click)="startUserLesson($event, item.id)" href="" *ngIf="item.status === 1">Start</a>
-                                <a (click)="continueUserLesson($event, item.id)" href="" *ngIf="item.status === 2">Continue</a>
-                                <a (click)="tryAgainUserLesson($event, item.id)" href="" *ngIf="item.status === 3">Try Again</a>
+                                <a (click)="onClickUserLesson($event, item.id)" href="" >
+                                    <i class="bi bi-arrow-up-right-square"></i>
+                                </a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                     <div class="generic-loader-wrapper" *ngIf="false">
                         <div class="loader">
                             <div class="spinner-border">

@@ -248,21 +248,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     }
 
-    startUserLesson(event: Event, id: number) {
+    onClickUserLesson(event: Event, id: number) {
         event.preventDefault();
-        console.log('startUserLesson', id)
-        this.hideUserLessonsModal();
-        this.goToLesson(id);
-    }
-    continueUserLesson(event: Event, id: number) {
-        event.preventDefault();
-        console.log('continueUserLesson', id)
-        this.hideUserLessonsModal();
-        this.goToLesson(id);
-    }
-    tryAgainUserLesson(event: Event, id: number) {
-        event.preventDefault();
-        console.log('tryAgainUserLesson', id)
+        // console.log('onClickUserLesson', id)
         this.hideUserLessonsModal();
         this.goToLesson(id);
     }

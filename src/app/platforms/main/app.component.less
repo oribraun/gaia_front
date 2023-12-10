@@ -20,15 +20,20 @@
 }
 .main-window-header-fixed {
     position: relative;
-    height: calc(100% - @header-height);
+    height: calc(100% - @header-height-mobile);
     max-width: @max-width;
     margin: 0 auto;
     overflow: auto;
-    margin-top: @header-height;
+    margin-top: @header-height-mobile;
     @media(min-width: @max-width) {
         max-width: none;
         padding-left: calc((100% - @max-width)/2);
         padding-right: calc((100% - @max-width)/2);
+    }
+
+    @media (min-width: 768px) {
+        margin-top: @header-height;
+        height: calc(100% - @header-height);
     }
 }
 .lesson {

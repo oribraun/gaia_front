@@ -465,7 +465,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 const circleMarginLeft = parseFloat(circleComputed.getPropertyValue('margin-left'));
 
                 const totalWidth = circleWidth + circleMarginRight + circleMarginLeft;
-                const maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 4; // right and left arrows
+                let maxItemsForWidth = Math.floor(questionsBoxWidth / totalWidth) - 4; // right and left arrows
+                if (maxItemsForWidth <= 0) {
+                    // set minimum of one item
+                    maxItemsForWidth = 1;
+                }
                 this.paginationMaxItems = maxItemsForWidth;
                 this.pagination.end = this.paginationMaxItems;
                 this.pagination.start = 0;
