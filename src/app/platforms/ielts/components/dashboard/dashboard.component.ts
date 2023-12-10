@@ -8,7 +8,7 @@ import {AlertService} from "../../../main/services/alert.service";
 import {HelperService} from "../../../main/services/helper.service";
 import {GeneralService} from "../../services/general/general.service";
 
-declare var $: any;
+declare let $: any;
 
 @Component({
     selector: 'app-dashboard',
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
     userTests : any = [
         // {"id": 31,"score": 0,"created": "06.12.2023"},
-    ]
+    ];
     currentCoursePlanPartIndex: any = null;
 
     currentCourseType: any;
@@ -54,26 +54,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     currentCourseClicked: any = {};
     currentLessonClicked: any = {};
 
-    imageSrc: string = ''
+    imageSrc: string = '';
 
     achievements: any = {
 
         labels: [{name:'Progress', tip: 'This reflects your progress through the entire course material'}, {name:'Score', tip: 'This indicates your score achieved across the entirety of the course'}, {name:'Pace', tip: 'This measures your pace compared to the average pace of other students throughout the entire course'}],
         colors: ['rgb(13,110,253)', 'rgb(220,53,69)', 'rgb(255,193,7)'],
         data: {'hearing': [50, 40, 80], 'reading': [80, 30, 50], 'speaking': [70, 20, 100],'writing': [20, 70, 1]}
-    }
-    achievementsLabels = ['Progress', 'Score', 'Pace']
+    };
+    achievementsLabels = ['Progress', 'Score', 'Pace'];
 
-    difficulty: any = []
+    difficulty: any = [];
     words_learned: any = {
         labels: [],
-        data: [],
-    }
+        data: []
+    };
     activity: any = {
         labels: [],
         data: [],
         strike_num: 0
-    }
+    };
 
     constructor(
         private config: Config,
@@ -91,19 +91,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.getUser();
         this.route.queryParams.subscribe((params) => {
             const available = ['in_progress', 'my_courses', 'suggested_courses'];
-            const type = params['type']
+            const type = params['type'];
             if (type && available.indexOf(type) > -1) {
-                this.coursesType = type
+                this.coursesType = type;
             }
-        })
+        });
         this.getPlatformDashboard();
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     getPlatformDashboard() {
@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.apiService.getPlatformDashboard({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getGroupTypes err', response)
+                    console.log('getGroupTypes err', response);
                 } else {
                     this.groupTypes = response.group_types;
                     this.recommendedVideos = response.recommended_videos;
@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     if (response.achievements) {
                         if (response.achievements.labels) {
                             this.achievements.labels = response.achievements.labels;
-                            this.achievementsLabels = this.achievements.labels.map((o: any) => o.name)
+                            this.achievementsLabels = this.achievements.labels.map((o: any) => o.name);
                         }
                         if (response.achievements.data) {
                             this.achievements.data = response.achievements.data;
@@ -142,10 +142,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.gettingGroupTypes = false;
             },
             error: (error) => {
-                console.log('getGroupTypes error', error)
+                console.log('getGroupTypes error', error);
                 this.gettingGroupTypes = false;
-            },
-        })
+            }
+        });
     }
 
     resetCurrentCourse() {
@@ -156,25 +156,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     selectCourse(courseType: any) {
         if (this.currentCourseType !== courseType) {
             this.resetCurrentCourse();
-            this.currentCourseType = courseType
-            this.getCourseInfo(this.currentCourseType)
+            this.currentCourseType = courseType;
+            this.getCourseInfo(this.currentCourseType);
         } else {
             this.alertOrShowUserLessonModel();
         }
     }
 
     selectCourseByName(courseTypeName: any) {
-        const map = this.groupTypes.map((o: any) => o.name)
-        const index = map.indexOf(courseTypeName)
+        const map = this.groupTypes.map((o: any) => o.name);
+        const index = map.indexOf(courseTypeName);
         let courseType: any = null;
         if (index > -1) {
-            courseType = this.groupTypes[index]
+            courseType = this.groupTypes[index];
         }
         if (courseType) {
             if (this.currentCourseType !== courseType) {
                 this.resetCurrentCourse();
-                this.currentCourseType = courseType
-                this.getCourseInfo(this.currentCourseType)
+                this.currentCourseType = courseType;
+                this.getCourseInfo(this.currentCourseType);
             } else {
                 this.alertOrShowUserLessonModel();
             }
@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.apiService.getUserLessons({course_type_id: courseType.id, plan_id: this.coursePlan.id}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getCourseInfo err', response)
+                    console.log('getCourseInfo err', response);
                 } else {
                     this.currentCourseLessons = response.lessons;
                     this.alertOrShowUserLessonModel();
@@ -194,10 +194,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.gettingCourseInfo = false;
             },
             error: (error) => {
-                console.log('getCourseInfo error', error)
+                console.log('getCourseInfo error', error);
                 this.gettingCourseInfo = false;
-            },
-        })
+            }
+        });
     }
 
     getUserLessonAchievements() {
@@ -205,46 +205,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.apiService.getUserLessonAchievements({plan_id: this.coursePlan.id}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getUserLessonAchievements err', response)
+                    console.log('getUserLessonAchievements err', response);
                 } else {
                     this.achievements = response.achievements;
                 }
                 this.gettingUserAchievements = false;
             },
             error: (error) => {
-                console.log('getUserLessonAchievements error', error)
+                console.log('getUserLessonAchievements error', error);
                 this.gettingUserAchievements = false;
-            },
-        })
+            }
+        });
     }
 
     startNewUserLessonByName(courseTypeName: any, event: Event) {
         event.preventDefault();
-        const map = this.groupTypes.map((o: any) => o.name)
-        const index = map.indexOf(courseTypeName)
+        const map = this.groupTypes.map((o: any) => o.name);
+        const index = map.indexOf(courseTypeName);
         let courseType: any = null;
         if (index > -1) {
-            courseType = this.groupTypes[index]
+            courseType = this.groupTypes[index];
         }
         if (courseType) {
             this.generalService.generateNewLesson(courseType.id, this.coursePlan.id).then((id: any) => {
                 this.hideUserLessonsModal();
                 this.goToLesson(id);
             }).catch((error: any) => {
-                this.alertService.error(error)
-            })
+                this.alertService.error(error);
+            });
         }
     }
 
     startNewUserLesson(event: Event) {
         event.preventDefault();
-        console.log('startNewUserLesson')
+        console.log('startNewUserLesson');
         this.generalService.generateNewLesson(this.currentCourseType.id, this.coursePlan.id).then((id: any) => {
             this.hideUserLessonsModal();
             this.goToLesson(id);
         }).catch((error: any) => {
-            this.alertService.error(error)
-        })
+            this.alertService.error(error);
+        });
 
     }
 
@@ -256,20 +256,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     startVideoLesson(id: number, lesson_group_type_id: number) {
-        console.log('id', id)
-        console.log('lesson_group_type_id', lesson_group_type_id)
+        console.log('id', id);
+        console.log('lesson_group_type_id', lesson_group_type_id);
         this.generalService.getOrGenerateLesson(lesson_group_type_id, this.coursePlan.id, id).then((id: any) => {
             this.goToLesson(id);
         }).catch((error: any) => {
-            this.alertService.error(error)
-        })
+            this.alertService.error(error);
+        });
     }
 
     alertOrShowUserLessonModel() {
         if (this.currentCourseLessons.length) {
             this.showUserLessonsModal();
         } else {
-            this.alertService.info('your should start a new lesson by pressing the play button', false, 5000)
+            this.alertService.info('your should start a new lesson by pressing the play button', false, 5000);
         }
     }
 
@@ -285,20 +285,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onStart() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id])
+        this.router.navigate(['/lesson/' + lesson_id]);
 
     }
     onContinue() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id])
+        this.router.navigate(['/lesson/' + lesson_id]);
     }
     onBuy() {
         const course_id = this.currentCourseClicked.id;
-        this.router.navigate(['/buy/' + course_id])
+        this.router.navigate(['/buy/' + course_id]);
     }
 
     reset() {
-        this.groupTypes = []
+        this.groupTypes = [];
     }
 
     selectCoursePart(index: number) {
@@ -316,14 +316,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     gotTo(route: string) {
-        this.router.navigate([route])
+        this.router.navigate([route]);
     }
 
     goToLesson(id: number, event: any = null) {
         if (event) {
             event.preventDefault();
         }
-        this.router.navigate(['ielts/practice/' + id])
+        this.router.navigate(['ielts/practice/' + id]);
     }
 
     showStrikeToolTip() {
@@ -336,7 +336,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     demoPlanPartsAnimation() {
         try {
-            const orig = JSON.parse(JSON.stringify(this.courses))
+            const orig = JSON.parse(JSON.stringify(this.courses));
             const timeout = 1000;
             setTimeout(() => {
                 this.courses.hearing.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.hearing;
@@ -348,12 +348,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
                             this.courses.writing.finished = this.coursePlan.parts[this.currentCoursePlanPartIndex].lessons.writing;
                             setTimeout(() => {
                                 this.courses = JSON.parse(JSON.stringify(orig));
-                            }, timeout)
-                        }, timeout)
-                    }, timeout)
-                }, timeout)
-            }, timeout)
-        } catch (e: any) {}
+                            }, timeout);
+                        }, timeout);
+                    }, timeout);
+                }, timeout);
+            }, timeout);
+        } catch (e: any) {
+            // console.log('e', e);
+        }
     }
 
     getString(str: any) {
