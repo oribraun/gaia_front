@@ -68,7 +68,7 @@ import { AlertComponent } from './components/alert/alert.component';
         BuyComponent,
         HeaderComponent,
         OnBoardingComponent,
-        AlertComponent,
+        AlertComponent
     ],
     imports: [
         BrowserModule,

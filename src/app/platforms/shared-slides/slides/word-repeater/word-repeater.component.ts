@@ -10,18 +10,18 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
 })
 export class WordRepeaterComponent  extends BaseSlideComponent {
 
-    @Input('recognitionText') recognitionText: string = '';
+    @Input() recognitionText: string = '';
 
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
     example_how_to_use_is_active() {
         if (this.slideData?.is_active) {
-            console.log('asdf')
+            console.log('asdf');
         }
     }
 

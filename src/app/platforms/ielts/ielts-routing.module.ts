@@ -13,7 +13,7 @@ const routes: Routes = [
     { path: 'plans', component: PlanComponent, pathMatch : 'full'},
     { path: 'practice/:id', component: PracticeLessonComponent, pathMatch : 'full', canActivate: [AuthTestPrepPlatformGuard, UserOnboardingGuard] },
     { path: 'vocabulary', component: VocabularyComponent, pathMatch : 'full', canActivate: [AuthTestPrepPlatformGuard, UserOnboardingGuard] },
-    { path: 'review', component: ReviewComponent, pathMatch : 'full', canActivate: [AuthTestPrepPlatformGuard, UserOnboardingGuard] },
+    { path: 'review', component: ReviewComponent, pathMatch : 'full', canActivate: [AuthTestPrepPlatformGuard, UserOnboardingGuard] }
 ];
 
 @NgModule({

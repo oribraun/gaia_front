@@ -68,13 +68,13 @@ import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-f
         SafeHtmlPipe,
         SafePipe,
 
-        DynamicFontSizeDirective,
+        DynamicFontSizeDirective
     ],
     imports: [
         CommonModule,
         FormsModule,
         YouTubePlayerModule,
-        AngularEditorModule,
+        AngularEditorModule
         // LottieModule.forRoot({ player: playerFactory })
     ],
     exports: [
@@ -104,7 +104,7 @@ import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-f
         SafeHtmlPipe,
         SafePipe,
 
-        DynamicFontSizeDirective,
-    ],
+        DynamicFontSizeDirective
+    ]
 })
 export class SharedSlidesModule { }

@@ -8,7 +8,7 @@ import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
 
 @NgModule({
   declarations: [
-      ChildrensDashboardComponent,
+      ChildrensDashboardComponent
   ],
     imports: [
         CommonModule,

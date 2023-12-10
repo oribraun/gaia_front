@@ -12,7 +12,7 @@ export class CapitalizePipe implements PipeTransform {
         if (type == 'word') {
             return this.capitalizeWords(value);
         } else {
-            return value
+            return value;
         }
     }
 

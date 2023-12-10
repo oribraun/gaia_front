@@ -30,12 +30,12 @@ export class AuthChildrenPlatformGuard  {
         if (user && user.last_logged_platform === 'childrens') {
             return true;
         } else {
-            const queryParams: any = {}
+            const queryParams: any = {};
             if (!user.id) {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams})
+            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
             return false;
         }
     }

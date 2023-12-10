@@ -9,9 +9,9 @@ import {ECharts, EChartsOption, init} from "echarts";
 export class BarChartComponent {
     @ViewChild('chart') chart!: ElementRef;
 
-    @Input('labels') labels: string[] = [];
-    @Input('data') data: number[] = [];
-    @Input('colors') colors: string[] = [];
+    @Input() labels: string[] = [];
+    @Input() data: number[] = [];
+    @Input() colors: string[] = [];
 
     chartEl!: ECharts;
 
@@ -38,7 +38,7 @@ export class BarChartComponent {
                 // width: '50%'
             },
             tooltip: {
-                trigger: 'item',
+                trigger: 'item'
             },
             xAxis: {
                 show: true,
@@ -47,8 +47,8 @@ export class BarChartComponent {
                 axisLabel: {
                     show: true,
                     interval: 0,
-                    rotate: 45,
-                },
+                    rotate: 45
+                }
                 // max: 100,
             },
             yAxis: {
@@ -67,7 +67,7 @@ export class BarChartComponent {
                     barGap: '50%',
                     // barCategoryGap: '20%',
                     colorBy: 'data',
-                    roundCap: true,
+                    roundCap: true
                     // label: {
                     //     show: true,
                     //     // Try changing it to 'insideStart'
@@ -76,15 +76,15 @@ export class BarChartComponent {
                     // },
                 }
             ]
-        }
+        };
     }
 
     setLegendWidth() {
         if (this.chart) {
             const container = this.chart.nativeElement;
-            var width = container.offsetWidth;
-            var fontSize = width / 30 + 'px';
-            var legendWidth = width / 4 + 'px';
+            const width = container.offsetWidth;
+            const fontSize = width / 30 + 'px';
+            const legendWidth = width / 4 + 'px';
             // this.chartEl.setOption({
             //     textStyle: {
             //         fontSize: fontSize

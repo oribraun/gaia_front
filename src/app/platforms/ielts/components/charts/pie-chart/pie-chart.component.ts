@@ -13,9 +13,9 @@ export class PieChartComponent implements AfterViewInit {
 
     @ViewChild('chart') chart!: ElementRef;
 
-    @Input('labels') labels: string[] = [];
-    @Input('data') data: number[] = [];
-    @Input('colors') colors: string[] = [];
+    @Input() labels: string[] = [];
+    @Input() data: number[] = [];
+    @Input() colors: string[] = [];
 
     chartEl!: ECharts;
 
@@ -38,12 +38,12 @@ export class PieChartComponent implements AfterViewInit {
     setUpOptions() {
         this.options = {
             tooltip: {
-                trigger: 'item',
+                trigger: 'item'
                 // axisPointer: { type: 'cross' }
             },
             angleAxis: {
                 show: false,
-                max: 100,
+                max: 100
             },
             radiusAxis: {
                 show: false,
@@ -75,15 +75,15 @@ export class PieChartComponent implements AfterViewInit {
                     coordinateSystem: 'polar'
                 }
             ]
-        }
+        };
     }
 
     setLegendWidth() {
         if (this.chart) {
             const container = this.chart.nativeElement;
-            var width = container.offsetWidth;
-            var fontSize = width / 15 + 'px';
-            var legendWidth = width / 4 + 'px';
+            const width = container.offsetWidth;
+            const fontSize = width / 15 + 'px';
+            const legendWidth = width / 4 + 'px';
             this.chartEl.setOption({
                 textStyle: {
                     fontSize: fontSize

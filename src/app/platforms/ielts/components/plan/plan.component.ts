@@ -12,9 +12,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class PlanComponent implements OnInit {
 
-    user!: User
+    user!: User;
 
-    plans: any[] = []
+    plans: any[] = [];
     gettingPlans = false;
 
     constructor(
@@ -31,29 +31,29 @@ export class PlanComponent implements OnInit {
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     getPlans() {
-        this.plans = []
+        this.plans = [];
         this.gettingPlans = true;
         this.apiService.getPlans({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getPlans err', response)
+                    console.log('getPlans err', response);
                 } else {
                     this.plans = response.plans;
                 }
                 this.gettingPlans = false;
             },
             error: (error) => {
-                console.log('getPlans error', error)
+                console.log('getPlans error', error);
                 this.gettingPlans = false;
-            },
-        })
+            }
+        });
     }
 
     selectedItem(e: any, plan_id: number) {
@@ -61,7 +61,7 @@ export class PlanComponent implements OnInit {
         this.router.navigate(['.'], { relativeTo: this.route, queryParams: { }});
         setTimeout(() => {
             this.router.navigate(['.'], { relativeTo: this.route, queryParams: { authType: 'signup', plan: plan_id}});
-        })
+        });
     }
 
 }

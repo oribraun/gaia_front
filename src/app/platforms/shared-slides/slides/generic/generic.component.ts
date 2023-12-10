@@ -7,7 +7,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {DynamicScriptLoaderService} from "../../../main/services/dynamic-js-loader/dynamic-js-loader.service";
 
 declare function rx_doorbell(data:any): any;
-declare var txData:any;
+declare let txData:any;
 
 @Component({
   selector: 'app-generic',
@@ -17,7 +17,7 @@ declare var txData:any;
 
 
 export class GenericComponent extends BaseSlideComponent implements OnInit, OnDestroy{
-  displayHTML:any = ''
+  displayHTML:any = '';
 
   constructor(
       protected override config: Config,
@@ -27,50 +27,50 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
       private _renderer2: Renderer2,
       @Inject(DOCUMENT) private _document: Document
   ) {
-      super(config, lessonService)
+      super(config, lessonService);
   }
 
   override ngOnInit(): void {
     super.ngOnInit();
     this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
       try {
-        const data = resp.data
+        const data = resp.data;
         switch(data.source){
           case 'core_function_1':
             break;
           default:
-            rx_doorbell(data)
+            rx_doorbell(data);
         }
 
 
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
 
-    })
-    this.loadSlideResources()
+    });
+    this.loadSlideResources();
 
   }
 
   loadSlideResources(){
     this.loadScripts();
-    let html = this.currentSlide.html
-    this.displayHTML = this.sanitizeHtmlContent(html)
+    const html = this.currentSlide.html;
+    this.displayHTML = this.sanitizeHtmlContent(html);
   }
 
   loadScripts() {
 
-    let scriptSrc = this.currentSlide.js
+    const scriptSrc = this.currentSlide.js;
     if (scriptSrc.endsWith('.js') || scriptSrc.startsWith('http')){
-      let scriptName = 'customScript'
-      this.jsLoaderService.addScript(scriptName, scriptSrc)
+      const scriptName = 'customScript';
+      this.jsLoaderService.addScript(scriptName, scriptSrc);
       // You can load multiple scripts by just providing the key as argument into load method of the service
       this.jsLoaderService.load(scriptName).then(data => {
         // Script Loaded Successfully
 
       }).catch(error => console.log(error));
     } else {
-      this.loadExternalJavaScriptFromStr(scriptSrc)
+      this.loadExternalJavaScriptFromStr(scriptSrc);
     }
 
   }
@@ -83,11 +83,11 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
   }
 
   sanitizeHtmlContent(htmlContnet:string){
-    return this.sanitizer.bypassSecurityTrustHtml(htmlContnet)
+    return this.sanitizer.bypassSecurityTrustHtml(htmlContnet);
   }
 
   tx(){
-    const txdata = txData
+    const txdata = txData;
     switch(txdata.event){
       case 'disable_asr':
         break;
@@ -97,10 +97,10 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
             "source": txdata.event,
             "data":txdata.data,
             'stopAudio': true
-        }
-        this.lessonService.Broadcast("slideEventRequest", data)
+        };
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
-    console.log('daniel',txData)
+    console.log('daniel',txData);
   }
 
   override ngOnDestroy(): void {

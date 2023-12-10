@@ -11,7 +11,7 @@
     "build-stg-server": "ng build --configuration staging --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint --configuration .eslintrc.json"
   },
   "private": true,
   "dependencies": {

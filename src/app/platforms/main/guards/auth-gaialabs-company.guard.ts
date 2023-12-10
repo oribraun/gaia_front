@@ -21,12 +21,12 @@ export class AuthGaialabsCompanyGuard  {
         if (user && user.gaia_admin) {
             return true;
         } else {
-            const queryParams: any = {}
+            const queryParams: any = {};
             if (!user.id) {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams})
+            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
             return false;
         }
     }

@@ -57,8 +57,8 @@ export class VideoComponent extends BaseSlideComponent implements OnInit, AfterV
         private sanitizer: DomSanitizer,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
-        this.embeddedVideo =""
+        super(config, lessonService);
+        this.embeddedVideo = "";
     }
     override ngOnInit(): void {
         super.ngOnInit();
@@ -73,44 +73,44 @@ export class VideoComponent extends BaseSlideComponent implements OnInit, AfterV
         setTimeout(() => {
             this.videoHeight = this.youtube_player.nativeElement.offsetHeight;
             this.videoWidth = this.youtube_player.nativeElement.clientWidth;
-        })
+        });
     }
 
     onPlayerReady(e: any) {
         this.loading_player = false;
-        console.log('onPlayerReady e', e)
+        console.log('onPlayerReady e', e);
     }
 
     onPlayerStateChange(e: OnStateChangeEvent) {
-        console.log('YouTube event: ', e)
-        console.log('YouTube event target - current time : ', e.target.getCurrentTime())
+        console.log('YouTube event: ', e);
+        console.log('YouTube event target - current time : ', e.target.getCurrentTime());
         this.currentState = e.data;
         clearTimeout(this.currentStateTimeout);
         this.currentStateTimeout = setTimeout(() => {
-            const data: any = {"source": "video_player"}
+            const data: any = {"source": "video_player"};
             if (e.data == PlayerState.ENDED) {
                 this.currentState = PlayerState.ENDED;
-                console.log('video ended')
+                console.log('video ended');
                 data['video_event'] = "ended";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
             }
             if (e.data == PlayerState.PAUSED) {
                 this.currentState = PlayerState.PAUSED;
-                console.log('video paused')
+                console.log('video paused');
                 data['video_event'] = "paused";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
             }
             if (e.data == PlayerState.PLAYING) {
                 this.currentState = PlayerState.PLAYING;
-                console.log('video playing')
+                console.log('video playing');
                 data['video_event'] = "playing";
-                this.lessonService.Broadcast("DoNotDisturb", data)
+                this.lessonService.Broadcast("DoNotDisturb", data);
             }
-        }, this.stateTimeout)
+        }, this.stateTimeout);
     }
 
     @HostListener('window:resize')

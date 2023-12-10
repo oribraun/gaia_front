@@ -1,7 +1,7 @@
 <section class="on-boarding" *ngIf="gotUserOnBoarding">
     <div id="onBoardingCarousel" class="carousel slide" data-bs-ride="false" data-target="#onBoardingCarousel">
         <div class="carousel-inner">
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'questions'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'questions'}">
                 <div class="page">
                     <div class="questions">
                         <div class="question-group" *ngFor="let item of questions | keyvalue: originalOrder">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'area_of_interest'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'area_of_interest'}">
                 <div class="page">
                     <div class="header">
                         <div class="eng">Select your area of interest: (up to 5 topics)</div>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'be_more_specific'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'be_more_specific'}">
                 <div class="page">
                     <div class="header">
                         <div class="eng">Be more specific please</div>
@@ -152,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'familiar_words'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'familiar_words'}">
                 <div class="page">
                     <div class="header">
                         <div class="eng">Please select words you are familiar with</div>
@@ -175,7 +175,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'video_answer'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'video_answer'}">
                 <div class="page">
                     <div class="header">
                         <div class="eng">Watch the video and answer the questions</div>
@@ -212,7 +212,7 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item" [ngClass]="{'active': current_page == 'picture_sentence'}">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'picture_sentence'}">
                 <div class="page">
                     <div class="header">
                         <div class="eng">Write a sentence about the following picture</div>

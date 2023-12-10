@@ -18,7 +18,7 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
 
     wordsSelected: string[] = [];
 
-    imagePathGenerated = ''
+    imagePathGenerated = '';
     generatingImageInProgress = false;
 
     generatingImage = false;
@@ -28,32 +28,32 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
         private apiService: ApiService,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
     override ngOnInit(): void {
         super.ngOnInit();
-        this.imagePathGenerated = this.imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'
+        this.imagePathGenerated = this.imageSrc + 'assets/images/lesson/lesson_placeholder.jpg';
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "image_generator_button_click") {
-                this.handleGenerateImageOutput(resp.data)
+                this.handleGenerateImageOutput(resp.data);
             }
             if (resp.data.source == "image_generator_button_click_error") {
                 this.generatingImageInProgress = false;
                 // TODO deal with error's
             }
-        })
+        });
     }
 
     handleGenerateImageOutput(data: any) {
-        console.log('handleGenerateImageOutput', data.image_path)
-        const image = new Image()
+        console.log('handleGenerateImageOutput', data.image_path);
+        const image = new Image();
         image.src = data.image_path;
         image.onload = () => {
             this.imagePathGenerated = data.image_path;
             setTimeout(() => {
                 this.generatingImageInProgress = false;
             }, 500);
-        }
+        };
     }
 
 
@@ -61,7 +61,7 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
         if(event.target.checked) {
             this.wordsSelected.push(word);
         } else {
-            let index = this.wordsSelected.indexOf(word);
+            const index = this.wordsSelected.indexOf(word);
             this.wordsSelected.splice(index,1);
         }
     }
@@ -74,9 +74,9 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
             "source": "image_generator_button_click",
             'selected_words': this.wordsSelected,
             'stopAudio': true
-        }
+        };
         this.generatingImageInProgress = true;
-        this.lessonService.Broadcast("slideEventRequest", data)
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
 
     override ngOnDestroy(): void {

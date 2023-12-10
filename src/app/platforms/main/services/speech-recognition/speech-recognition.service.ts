@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from "../../../../../environments/environment";
 
-declare var webkitSpeechRecognition:any;
-declare var SpeechRecognition:any;
+declare let webkitSpeechRecognition:any;
+declare let SpeechRecognition:any;
 
 @Injectable({
     providedIn: 'root'
@@ -25,9 +25,9 @@ export class SpeechRecognitionService {
 
     constructor() {}
 
-    setupSpeechRecognition(lang:string='en-US', nativeLang='he-IL') {
+    setupSpeechRecognition(lang:string = 'en-US', nativeLang = 'he-IL') {
         this.originalLang = lang;
-        console.log('this.originalLan', this.originalLang)
+        console.log('this.originalLan', this.originalLang);
         this.nativeLang = nativeLang;
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
@@ -40,22 +40,22 @@ export class SpeechRecognitionService {
             this.mainRecognition.lang = this.originalLang; //'en-US';
             // this.englishRecognition.lang = 'he-IL';
             this.mainRecognition.continuous = true;
-            this.mainRecognition.interimResults = true
+            this.mainRecognition.interimResults = true;
             this.mainRecognition.maxAlternatives = 5;
 
             this.mainRecognition.addEventListener('result', this.onResultRecognition);
 
             this.mainRecognition.onnomatch = (event: any) => {
-                console.log('ASR ON NO MATCH', event)
+                console.log('ASR ON NO MATCH', event);
             };
             this.mainRecognition.onerror = (event: any) => {
-                console.log('ASR ON ERROR', event)
+                console.log('ASR ON ERROR', event);
             };
             this.mainRecognition.onend = () => {
                 if (this.ASR_recognizing && !this.startingRecognition){
                     this.startListening();
                 }
-                console.log('ASR ON END TIMEOUT', this.ASR_recognizing)
+                console.log('ASR ON END TIMEOUT', this.ASR_recognizing);
             };
         } else {
             console.error('Speech recognition not supported in this browser.');
@@ -65,33 +65,33 @@ export class SpeechRecognitionService {
 
     onResultRecognition = (event: any) => {
         const results = event.results[event.results.length - 1];
-        const allResults = []
+        const allResults = [];
         for (let i = 0; i < results.length; i++) {
             allResults.push(results[i]);
         }
-        allResults.sort((o1: any, o2: any) => o2.confidence - o1.confidence)
-        console.log('allResults', allResults)
+        allResults.sort((o1: any, o2: any) => o2.confidence - o1.confidence);
+        console.log('allResults', allResults);
         const allTranscripts = allResults.map((o: any) => o.transcript);
         const mainSentence = allTranscripts.shift();
         const alternativeWords = allResults.map((o: any) => o.transcript);
         if (environment.is_mock) {
-            console.log('result mainSentence mock', mainSentence)
+            console.log('result mainSentence mock', mainSentence);
             console.log('result alternativeWords mock', alternativeWords);
         }
         if (!this.PTTInProgress) {
             this.onResults.emit(
                 new OnResults(mainSentence, alternativeWords, this.mainRecognition.lang, results.isFinal)
-            )
+            );
         } else {
             this.onPTTResults.emit(
                 new OnResults(mainSentence, alternativeWords, this.mainRecognition.lang, results.isFinal)
-            )
+            );
         }
-    }
+    };
 
     onEndRecognition = (event: any) => {
-        console.log('onEndRecognitionEn event', event)
-    }
+        console.log('onEndRecognitionEn event', event);
+    };
 
 
     toggleListening(): void {
@@ -110,17 +110,17 @@ export class SpeechRecognitionService {
                     this.mainRecognition.start();
                     this.mainRecognition.onstart = () => {
                         this.ASR_recognizing = true;
-                        console.log('EN ASR ON START', this.mainRecognition.lang)
+                        console.log('EN ASR ON START', this.mainRecognition.lang);
                         this.startingRecognition = false;
-                        resolve(true)
+                        resolve(true);
                     };
                 } else {
-                    console.log('englishRecognition not setup')
-                    resolve(false)
+                    console.log('englishRecognition not setup');
+                    resolve(false);
                 }
             } catch (e) {
-                console.log('startListening Error', e)
-                resolve(false)
+                console.log('startListening Error', e);
+                resolve(false);
             }
         });
     }
@@ -134,22 +134,22 @@ export class SpeechRecognitionService {
                     const origEndEvent = this.mainRecognition.onend;
                     this.mainRecognition.onend = () => {
                         this.ASR_recognizing = false;
-                        console.log('stopListening EN ASR ON END', this.ASR_recognizing)
+                        console.log('stopListening EN ASR ON END', this.ASR_recognizing);
                         this.stoppingRecognition = false;
                         if(this.startingRecognition) {
                             this.startingRecognition = false;
                         }
                         this.mainRecognition.onend = origEndEvent;
-                        resolve(true)
+                        resolve(true);
                     };
                     this.ASR_recognizing = false;
                 } else {
-                    console.log('englishRecognition not setup')
-                    resolve(false)
+                    console.log('englishRecognition not setup');
+                    resolve(false);
                 }
             } catch (e) {
-                console.log('stopListening Error', e)
-                resolve(false)
+                console.log('stopListening Error', e);
+                resolve(false);
             }
         });
     }
@@ -161,29 +161,29 @@ export class SpeechRecognitionService {
                     this.mainRecognition.abort();
                     this.mainRecognition.onend = () => {
                         this.ASR_recognizing = false;
-                        console.log('abortListening EN ASR ON END', this.ASR_recognizing)
+                        console.log('abortListening EN ASR ON END', this.ASR_recognizing);
                         this.abortingRecognition = false;
                         if(this.startingRecognition) {
                             this.startingRecognition = false;
                         }
-                        resolve(true)
+                        resolve(true);
                     };
                 } else {
-                    console.log('englishRecognition not setup')
-                    resolve(false)
+                    console.log('englishRecognition not setup');
+                    resolve(false);
                 }
             } catch (e) {
-                console.log('stopListening Error', e)
-                resolve(false)
+                console.log('stopListening Error', e);
+                resolve(false);
             }
-        })
+        });
     }
 
     changeLang(lang: string) {
         if (lang) {
             // TODO verify lang supported
             this.currentLang = lang;
-            this.mainRecognition.lang = this.currentLang
+            this.mainRecognition.lang = this.currentLang;
         }
     }
 
@@ -191,16 +191,16 @@ export class SpeechRecognitionService {
         if (this.nativeLang) {
             // TODO verify lang supported
             this.currentLang = this.nativeLang;
-            this.mainRecognition.lang = this.currentLang
+            this.mainRecognition.lang = this.currentLang;
         }
     }
 
     resetLang() {
         this.currentLang = this.originalLang;
-        this.mainRecognition.lang = this.currentLang
+        this.mainRecognition.lang = this.currentLang;
     }
 
-    activateNativeLang(isPTT=false) {
+    activateNativeLang(isPTT = false) {
         if (this.mainRecognition.lang === this.nativeLang) {
             return;
         }
@@ -212,7 +212,7 @@ export class SpeechRecognitionService {
                 this.stopListening().then(() => {
                     this.changeToNativeLang();
                     this.startListening();
-                })
+                });
             } else {
                 this.changeToNativeLang();
                 this.startListening();
@@ -227,7 +227,7 @@ export class SpeechRecognitionService {
             if (this.ASR_recognizing) {
                 this.stopListening().then(() => {
                     this.onEndChangeLang();
-                })
+                });
             } else {
                 this.onEndChangeLang();
             }

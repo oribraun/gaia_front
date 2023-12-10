@@ -5,7 +5,7 @@ import {ApiService} from "../api.service";
 import {Config} from "../../config";
 import {EventsHashTable} from "../../interfaces/eventHashTable";
 
-declare var html2canvas: any;
+declare let html2canvas: any;
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +14,7 @@ export class SocketRecorderService {
     private socket!: WebSocket;
     private serverBase = environment.serverUrl;
     private socketUrl = '';
-    protected socket_path = "ws/recorder_stream"
+    protected socket_path = "ws/recorder_stream";
     private events: EventsHashTable<Subject<any>> = {};
 
     private mediaRecorder!: MediaRecorder;
@@ -27,7 +27,7 @@ export class SocketRecorderService {
         audioChunks: null,
         videoChunks: null,
         screenShot: null
-    }
+    };
 
     public onConnect: EventEmitter<any> = new EventEmitter<any>();
     public onMessage: EventEmitter<any> = new EventEmitter<any>();
@@ -43,7 +43,7 @@ export class SocketRecorderService {
         this.config.server_host_subject.subscribe((host) => {
             this.serverBase = this.config.server_host;
             this.setUpSocket();
-        })
+        });
         if (this.config.server_host) {
             this.serverBase = this.config.server_host;
         }
@@ -53,9 +53,9 @@ export class SocketRecorderService {
     setUpSocket() {
         let socketBase = "ws://";
         if (this.serverBase.indexOf('http://') > -1) {
-            this.serverBase = this.serverBase.replace('http://', '')
+            this.serverBase = this.serverBase.replace('http://', '');
         } else if (this.serverBase.indexOf('https://') > -1) {
-            this.serverBase = this.serverBase.replace('https://', '')
+            this.serverBase = this.serverBase.replace('https://', '');
             socketBase = "wss://";
         }
         // this.serverBase = this.serverBase.replace('https://', '')
@@ -67,32 +67,32 @@ export class SocketRecorderService {
         this.socket = new WebSocket(socketUrl);
 
         this.socket.onopen = () => {
-            const message = socketUrl + ' WebSocket connection established.'
-            this.onConnect.emit(message)
+            const message = socketUrl + ' WebSocket connection established.';
+            this.onConnect.emit(message);
         };
 
         this.socket.onmessage = (event) => {
-            const o = JSON.parse(event.data)
-            const message = o.message
-            const data = o.data
+            const o = JSON.parse(event.data);
+            const message = o.message;
+            const data = o.data;
             if (message === 'got-recorder-data') {
-                console.log('SocketRecorderService got-recorder-data', o)
+                console.log('SocketRecorderService got-recorder-data', o);
             }
             if (this.events[message]) {
-                this.Broadcast(message, data)
+                this.Broadcast(message, data);
             }
             // Handle received data
         };
 
         this.socket.onclose = () => {
-            const message = socketUrl + ' WebSocket connection closed.'
-            this.onDisconnect.emit(message)
+            const message = socketUrl + ' WebSocket connection closed.';
+            this.onDisconnect.emit(message);
         };
 
         this.socket.onerror = (err) => {
-            const message = socketUrl + err
-            this.onError.emit(message)
-        }
+            const message = socketUrl + err;
+            this.onError.emit(message);
+        };
     }
 
     disconnect() {
@@ -113,8 +113,8 @@ export class SocketRecorderService {
                     videoChunks: videoBase64,
                     screenShot: screenShot
                 }
-            }
-            console.log('SocketRecorderService sendChunksMessage json')
+            };
+            console.log('SocketRecorderService sendChunksMessage json');
             this.socket.send(JSON.stringify(json));
         }
     }
@@ -123,8 +123,8 @@ export class SocketRecorderService {
         if (this.socket.readyState === WebSocket.OPEN) {
             const json = {
                 message: message, data: data
-            }
-            console.log('SocketRecorderService sending json', json)
+            };
+            console.log('SocketRecorderService sending json', json);
             this.socket.send(JSON.stringify(json));
         }
     }
@@ -151,23 +151,23 @@ export class SocketRecorderService {
             type: 'start',
             user_id: user_id,
             lesson_id: lesson_id
-        }
+        };
         this.capturingInterval = setInterval(async () => {
             this.getVideoChunk();
             if (this.screenShotEnabled) {
                 this.lastData.screenShot = await this.takeScreenShot();
-                console.log('SocketRecorderService screenShot', this.lastData.screenShot)
+                console.log('SocketRecorderService screenShot', this.lastData.screenShot);
             }
             setTimeout(() => {
-                const message = 'recorder-data'
+                const message = 'recorder-data';
                 // const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
                 // const json = {message: message, data: jsonData}
                 // this.startTime = Date.now()
                 this.sendChunksMessage(message, {...details}, this.lastData.audioChunks, this.lastData.videoChunks, this.lastData.screenShot);
-                details.type = ''
+                details.type = '';
                 this.resetLastChunks();
-            })
-        },2000)
+            });
+        },2000);
     }
 
     startCapturingMediaTest(count = 1, user_id: number, lesson_id: string) {
@@ -175,15 +175,15 @@ export class SocketRecorderService {
             type: 'start',
             user_id: user_id,
             lesson_id: lesson_id
-        }
+        };
         this.capturingInterval = setInterval(async () => {
             this.getVideoChunk();
             if (this.screenShotEnabled) {
                 this.lastData.screenShot = await this.takeScreenShot();
-                console.log('SocketRecorderService screenShot', this.lastData.screenShot)
+                console.log('SocketRecorderService screenShot', this.lastData.screenShot);
             }
             setTimeout(() => {
-                const message = 'recorder-data'
+                const message = 'recorder-data';
                 // const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
                 // const json = {message: message, data: jsonData}
                 // this.startTime = Date.now()
@@ -197,10 +197,10 @@ export class SocketRecorderService {
                     setTimeout(() => {
                         details.type = 'end';
                         this.sendChunksMessage(message, {...details}, this.lastData.audioChunks, this.lastData.videoChunks, this.lastData.screenShot);
-                    })
+                    });
                 }
-            })
-        },2000)
+            });
+        },2000);
     }
     stopCapturingMediaTest(user_id: number, lesson_id: string) {
         clearInterval(this.capturingInterval);
@@ -208,26 +208,26 @@ export class SocketRecorderService {
             type: 'end',
             user_id: user_id,
             lesson_id: lesson_id
-        }
-        const message = 'recorder-data'
+        };
+        const message = 'recorder-data';
         setTimeout(() => {
             this.sendChunksMessage(message, details, this.lastData.audioChunks, this.lastData.videoChunks, this.lastData.screenShot);
-        })
+        });
     }
     startCapturingTest(count = 1, user_id: number, lesson_id: string) {
         const details = {
             type: 'start',
             user_id: user_id,
             lesson_id: lesson_id
-        }
+        };
         this.capturingInterval = setInterval(async () => {
             this.getVideoChunk();
             if (this.screenShotEnabled) {
                 this.lastData.screenShot = await this.takeScreenShot();
-                console.log('SocketRecorderService screenShot', this.lastData.screenShot)
+                console.log('SocketRecorderService screenShot', this.lastData.screenShot);
             }
             setTimeout(() => {
-                const message = 'recorder-data'
+                const message = 'recorder-data';
                 // const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
                 // const json = {message: message, data: jsonData}
                 // this.startTime = Date.now()
@@ -241,10 +241,10 @@ export class SocketRecorderService {
                     setTimeout(() => {
                         details.type = 'end';
                         this.sendChunksMessage(message, {...details}, this.lastData.audioChunks, this.lastData.videoChunks, this.lastData.screenShot);
-                    })
+                    });
                 }
-            })
-        },2000)
+            });
+        },2000);
     }
 
     stopCapturingInterval(user_id: number, lesson_id: string) {
@@ -253,12 +253,12 @@ export class SocketRecorderService {
             type: 'end',
             user_id: user_id,
             lesson_id: lesson_id
-        }
-        const message = 'recorder-data'
+        };
+        const message = 'recorder-data';
         setTimeout(() => {
-            console.log('this.lastData', this.lastData)
+            console.log('this.lastData', this.lastData);
             this.sendChunksMessage(message, details, this.lastData.audioChunks, this.lastData.videoChunks, this.lastData.screenShot);
-        })
+        });
     }
 
     setUpScreenRecorder(mediaStream: MediaStream) {
@@ -275,14 +275,14 @@ export class SocketRecorderService {
         this.mediaRecorder.ondataavailable = (event) => {
             console.log('SocketRecorderService event', event);
             if (event.data.size > 0) {
-                console.log('SocketRecorderService event.data', event.data)
+                console.log('SocketRecorderService event.data', event.data);
                 this.lastData.videoChunks = event.data;
                 // recordedChunks.push(event.data);
             }
         };
         this.mediaRecorder.onerror = function(error) {
             console.log("SocketRecorderService recorder error", error);
-        }
+        };
         this.mediaRecorder.onstop = () => {
             //     // Send the recorded video data to the server
             //     sendVideoDataToServer(new Blob(recordedChunks, { type: 'video/webm' }));
@@ -312,14 +312,14 @@ export class SocketRecorderService {
         this.mediaRecorder.ondataavailable = (event) => {
             console.log('SocketRecorderService event', event);
             if (event.data.size > 0) {
-                console.log('SocketRecorderService event.data', event.data)
+                console.log('SocketRecorderService event.data', event.data);
                 this.lastData.videoChunks = event.data;
                 // recordedChunks.push(event.data);
             }
         };
         this.mediaRecorder.onerror = function(error) {
             console.log("SocketRecorderService recorder error", error);
-        }
+        };
         this.mediaRecorder.onstop = () => {
             //     // Send the recorded video data to the server
             //     sendVideoDataToServer(new Blob(recordedChunks, { type: 'video/webm' }));
@@ -349,14 +349,14 @@ export class SocketRecorderService {
         this.mediaRecorder.ondataavailable = (event) => {
             console.log('SocketRecorderService event', event);
             if (event.data.size > 0) {
-                console.log('SocketRecorderService event.data', event.data)
+                console.log('SocketRecorderService event.data', event.data);
                 this.lastData.videoChunks = event.data;
                 // recordedChunks.push(event.data);
             }
         };
         this.mediaRecorder.onerror = function(error) {
             console.log("SocketRecorderService recorder error", error);
-        }
+        };
         this.mediaRecorder.onstop = () => {
             //     // Send the recorded video data to the server
             //     sendVideoDataToServer(new Blob(recordedChunks, { type: 'video/webm' }));
@@ -381,9 +381,9 @@ export class SocketRecorderService {
         try {
             const displayMediaOptions = {
                 video: true
-            }
+            };
             const captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-            console.log('SocketRecorderService captureStream', captureStream)
+            console.log('SocketRecorderService captureStream', captureStream);
         } catch (err) {
             console.error(`SocketRecorderService Error: ${err}`);
         }
@@ -400,12 +400,12 @@ export class SocketRecorderService {
                 const white_board = document.body.getElementsByClassName('white-board');
                 if (white_board && white_board.length) {
                     const container = white_board[0];
-                    console.log('SocketRecorderService html2canvas', html2canvas)
+                    console.log('SocketRecorderService html2canvas', html2canvas);
                     html2canvas(container, {
                         allowTaint: true,
                         useCORS: true,
                         // foreignObjectRendering: true,
-                        logging: false,
+                        logging: false
                     }).then(function (canvas: any) {
                         // canvas.width = container.clientWidth;
                         // canvas.height = container.clientHeight;
@@ -428,9 +428,9 @@ export class SocketRecorderService {
 
 
             } else {
-                reject('screenShot is not active')
+                reject('screenShot is not active');
             }
-        })
+        });
     }
 
     startCapturingVideo() {
@@ -444,10 +444,10 @@ export class SocketRecorderService {
             try {
                 // this.capturingInterval = setInterval(() => {
                 // mediaRecorder.stop();
-                this.mediaRecorder.requestData()
+                this.mediaRecorder.requestData();
                 // }, 2000)
             } catch (e) {
-                console.log('SocketRecorderService startCapturing', e)
+                console.log('SocketRecorderService startCapturing', e);
             }
         }
     }
@@ -458,7 +458,7 @@ export class SocketRecorderService {
                 clearInterval(this.capturingInterval);
                 this.mediaRecorder.stop();
             } catch (e) {
-                console.log('SocketRecorderService startCapturing', e)
+                console.log('SocketRecorderService startCapturing', e);
             }
         }
     }
@@ -472,7 +472,7 @@ export class SocketRecorderService {
             audioChunks: null,
             videoChunks: null,
             screenShot: null
-        }
+        };
     }
 
     setupContinuesRecording(mediaStream: MediaStream) {
@@ -481,8 +481,8 @@ export class SocketRecorderService {
         const CHUNK_SIZE = 8192;
         const SILENCE_TIMEOUT = 500;
         let totalSamples = 0;
-        let lastSpeak: any = null
-        let endedSpeak: any = null
+        let lastSpeak: any = null;
+        const endedSpeak: any = null;
         const audioContext = new AudioContext();
         const source = audioContext.createMediaStreamSource(mediaStream);
 
@@ -502,16 +502,16 @@ export class SocketRecorderService {
                 const chunk = new Float32Array(inputData);
                 recordedChunks.push(chunk);
                 totalSamples += chunk.length;
-                console.log('SocketRecorderService totalSamples', totalSamples)
+                console.log('SocketRecorderService totalSamples', totalSamples);
                 if (totalSamples >= CHUNK_SIZE) {
                     // this.emitRecorderChunks(recordedChunks);
                     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
                         // console.log('sending audio_data')
-                        const message = 'recorder-data'
+                        const message = 'recorder-data';
                         const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
                         // const json = {message: message, data: jsonData}
-                        this.startTime = Date.now()
-                        this.sendMessage(message, jsonData)
+                        this.startTime = Date.now();
+                        this.sendMessage(message, jsonData);
                     }
                     recordedChunks = [];
                     totalSamples = 0;
@@ -566,11 +566,11 @@ export class SocketRecorderService {
     }
 
     async setupContinuesRecordAudio3(mediaStream: MediaStream) {
-        let recordedChunks: any[] = [];
+        const recordedChunks: any[] = [];
         const THREASHOLD = 0.1;
         const SILENCE_TIMEOUT = 1000;
-        let lastSpeak: any = null
-        let endedSpeak: any = null
+        const lastSpeak: any = null;
+        const endedSpeak: any = null;
         const audioContext = new AudioContext();
         const mediaStreamNode = audioContext.createMediaStreamSource(mediaStream);
 
@@ -584,7 +584,7 @@ export class SocketRecorderService {
             if (e.data.eventType === 'data') {
                 const audioData = e.data.audioBuffer;
                 const buffer = audioData.buffer;
-                console.log('SocketRecorderService buffer', buffer)
+                console.log('SocketRecorderService buffer', buffer);
 
                 const numberOfChannels = 1; // Assuming a single channel
                 const length = audioData.length;
@@ -605,9 +605,9 @@ export class SocketRecorderService {
                 const base64Data = btoa(String.fromCharCode(...new Uint8Array(buffer)));
                 if (!once) {
                     // this.onResults.emit({audio_chunks: base64Data})
-                    once = true
+                    once = true;
                 }
-                console.log('SocketRecorderService audioData', audioData)
+                console.log('SocketRecorderService audioData', audioData);
                 // process pcm data
             }
             if (e.data.eventType === 'stop') {
@@ -633,11 +633,11 @@ export class SocketRecorderService {
     }
 
     async setupContinuesRecordAudio2(mediaStream: MediaStream) {
-        let recordedChunks: any[] = [];
+        const recordedChunks: any[] = [];
         const THREASHOLD = 0.1;
         const CHUNK_SIZE = 8192;
         const SILENCE_TIMEOUT = 500;
-        let totalSamples = 0;
+        const totalSamples = 0;
         const audioContext = new AudioContext();
         const mediaStreamNode = audioContext.createMediaStreamSource(mediaStream);
 
@@ -807,8 +807,8 @@ export class SocketRecorderService {
             endIndex - startIndex + 1,
             audioBuffer.sampleRate
         );
-        console.log('SocketRecorderService startIndex', startIndex)
-        console.log('SocketRecorderService endIndex', endIndex)
+        console.log('SocketRecorderService startIndex', startIndex);
+        console.log('SocketRecorderService endIndex', endIndex);
 
         for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
             const trimmedChannelData = audioData.subarray(startIndex, endIndex + 1);

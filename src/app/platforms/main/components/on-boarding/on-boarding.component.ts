@@ -6,7 +6,7 @@ import {ApiService} from "../../services/api.service";
 import {Router} from "@angular/router";
 import {KeyValue} from "@angular/common";
 
-declare var $: any;
+declare let $: any;
 @Component({
     selector: 'app-on-boarding',
     templateUrl: './on-boarding.component.html',
@@ -28,14 +28,14 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     imageSrc: string;
 
-    current_page = 'questions'
+    current_page = 'questions';
 
     onBoardingObject: any = {
         questions: {
-            "Language Proficiency": ["","","","",],
-            "IELTS Specifics": ["","","",],
+            "Language Proficiency": ["","","",""],
+            "IELTS Specifics": ["","",""],
             "Learning Goals and Preferences": ["","","",[]],
-            "Consent and Agreements": ["","",],
+            "Consent and Agreements": ["",""]
         },
         area_of_interest: [
 
@@ -53,14 +53,14 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         picture_sentence: '',
         last_page: this.current_page,
         finished: false
-    }
+    };
 
     onBoardingObjectChanged = false;
 
     maxItems: any = {
         area_of_interest: 5,
         familiar_words: 99
-    }
+    };
 
     countries = [ "Afghanistan", "Åland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, The Democratic Republic of The", "Cook Islands", "Costa Rica", "Cote D'ivoire", "Croatia", "Cuba", "Curaçao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-bissau", "Guyana", "Haiti", "Heard Island and Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic of", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and The Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and The South Sandwich Islands", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Eswatini", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan (ROC)", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Timor-leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands, British", "Virgin Islands, U.S.", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe" ];
     languages = [ "Brazilian Portuguese", "Canadian French", "English", "French Creole", "Haitian Creole", "Navajo", "Quechua", "Spanish", "Catalan", "Danish", "Dutch", "Faroese", "Finnish", "Flemish", "French", "German", "Greek", "Icelandic", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish", "UK English / British English", "Belarusian", "Bosnian", "Bulgarian", "Croatian", "Czech", "Estonian", "Hungarian", "Latvian", "Lithuanian", "Macedonian", "Polish", "Romanian", "Russian", "Serbian", "Slovak", "Slovenian", "Turkish", "Ukrainian", "Amharic (Ethiopia)", "Dinka (Sudan)", "Ibo (Nigeria)", "Kirundi", "Mandinka", "Nuer (Nilo-Saharan)", "Oromo (Ethiopia)", "Kinyarwanda", "Shona (Zimbabwe)", "Somali", "Swahili", "Tigrigna (Ethiopia)", "Wolof", "Xhosa", "Yoruba", "Zulu", "Arabic", "Dari", "Farsi", "Hebrew", "Kurdish", "Pashtu", "Punjabi", "Urdu (Pakistan)", "Armenian", "Azerbaijani", "Georgian", "Kazakh", "Mongolian", "Turkmen", "Uzbek", "Bengali", "Cham", "Chamorro (Guam)", "Gujarati (India)", "Hindi", "Indonesian", "Khmer (Cambodia)", "Kmhmu (Laos)", "Korean", "Laotian", "Malayalam", "Malay", "Marathi (India", "Marshallese", "Nepali", "Sherpa", "Tamil", "Thai", "Tibetan", "Trukese (Micronesia)", "Vietnamese", "Amoy", "Burmese", "Cantonese", "Chinese", "Chinese–Simplified", "Chinese–Traditional", "Chiu Chow", "Chow Jo", "Fukienese", "Hakka (China)", "Hmong", "Hainanese", "Japanese", "Mandarin", "Mien", "Shanghainese", "Taiwanese", "Taishanese", "Fijian", "Palauan", "Samoan", "Tongan", "Bikol", "Cebuano", "Ilocano", "Ilongo", "Pampangan", "Pangasinan", "Tagalog", "Visayan" ];
@@ -70,30 +70,30 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             {text: "Country of Residence: Which country are you currently residing in?", type: 'select-box', options: this.countries, required: true},
             {text: "First Language: What is your first language?", type: 'select-box', options: this.languages, required: true},
             {text: "English Proficiency Level: How would you rate your current level of English?", type: 'radio', options: ['Beginner', 'Intermediate', 'Advanced'], required: true},
-            {text: "Previous English Learning: Have you taken any English language courses or tests before? If yes, please specify.", type: 'input'},
+            {text: "Previous English Learning: Have you taken any English language courses or tests before? If yes, please specify.", type: 'input'}
         ],
         "IELTS Specifics": [
             {text: "IELTS Test Type: Are you preparing for IELTS Academic or IELTS General Training?", type: 'radio', options: ['IELTS Academic', 'IELTS General']},
             {text: "IELTS Experience: Have you taken the IELTS test before? If yes, what was your score?", type: 'input'},
-            {text: "Target IELTS Score: What is your target IELTS score?", type: 'input'},
+            {text: "Target IELTS Score: What is your target IELTS score?", type: 'input'}
         ],
         "Learning Goals and Preferences": [
             {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
             {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'radio', options: ['daily', 'once a week', 'twice a week', '3-4 times a week']},
             {text: "What is The Exact Date Of your exam?", type: 'date'},
-            {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]},
+            {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]}
         ],
         "Consent and Agreements": [
             {text: "Privacy Policy Consent: Do you agree to the website's <a id='privacy-policy' class='pointer'>privacy policy</a> and terms of use?", type: 'radio-switch', options: ['Yes'], required: true, accepted_val: true},
-            {text: "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?", type: 'radio-switch', options: ['Yes']},
-        ],
-    }
+            {text: "Newsletter and Updates Subscription: Would you like to subscribe to our newsletter for updates and tips on IELTS preparation?", type: 'radio-switch', options: ['Yes']}
+        ]
+    };
     questions_required_errors: any = {
         "Language Proficiency": [false,false,false,false],
         "IELTS Specifics": [false,false,false],
         "Learning Goals and Preferences": [false,false,false,false],
-        "Consent and Agreements": [false,false,false],
-    }
+        "Consent and Agreements": [false,false,false]
+    };
 
     areaOfInterestItems: any = {
         "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli'], custom: ['','']},
@@ -116,7 +116,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras'], custom: ['','']},
         "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing'], custom: ['','']},
         "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot'], custom: ['','']}
-    }
+    };
 
     beMoreSpecificSelected = 0;
     beMoreSpecificCustomSelected: any = {};
@@ -141,19 +141,19 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         'Meticulous',
         'pernicious',
         'Concentration',
-        'Surreptitious',
-    ]
+        'Surreptitious'
+    ];
 
-    videoAnswers = ['To take them to the party', 'To stop their argument', 'To Play with them', 'To join their dicussion']
+    videoAnswers = ['To take them to the party', 'To stop their argument', 'To Play with them', 'To join their dicussion'];
     videoDetails: any = {
         id: 'RjpvuPAzJUw',
         start_time: 43,
         end_time: 60,
         height: '',
-        width: '',
-    }
+        width: ''
+    };
 
-    image = "https://unseen-audio-files.s3.amazonaws.com/onboarding/noa_kirel.jpg"
+    image = "https://unseen-audio-files.s3.amazonaws.com/onboarding/noa_kirel.jpg";
 
     subscribe: any;
 
@@ -186,26 +186,26 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.user = user;
         });
         this.subscribe = this.config.user_on_boarding_subject.subscribe((userOnBoarding: any) => {
-            this.setupOnBoarding(userOnBoarding)
+            this.setupOnBoarding(userOnBoarding);
             if (this.subscribe) {
                 this.subscribe.unsubscribe();
             }
         });
         if (this.config.user_on_boarding) {
-            this.setupOnBoarding(this.config.user_on_boarding)
+            this.setupOnBoarding(this.config.user_on_boarding);
         }
     }
 
     setupOnBoarding(userOnBoarding: any) {
         if (userOnBoarding) {
-            this.validateUserOnboarding(userOnBoarding)
-            console.log('this.gotUserOnBoarding', userOnBoarding)
+            this.validateUserOnboarding(userOnBoarding);
+            console.log('this.gotUserOnBoarding', userOnBoarding);
         }
         this.gotUserOnBoarding = true;
         this.initCurrentPage(false);
         setTimeout(() => {
             this.setUpYoutubeVideo();
-        })
+        });
     }
 
     validateUserOnboarding(userOnBoarding: any) {
@@ -230,7 +230,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             needReset = true;
         }
         // checking area of interest
-        const keys = Object.keys(this.areaOfInterestItems)
+        const keys = Object.keys(this.areaOfInterestItems);
         if (!userOnBoarding.area_of_interest.every((item: string) => keys.includes(item))) {
             needReset = true;
         }
@@ -296,7 +296,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
             this.videoDetails.height = this.video.nativeElement.offsetHeight;
             this.videoDetails.width = this.video.nativeElement.clientWidth;
-        })
+        });
     }
 
     listenToPrivacyPolicyClick() {
@@ -305,9 +305,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             if (ele) {
                 ele.on('click', (e: any) => {
                     this.privacyPolicyClick(e);
-                })
+                });
             }
-        })
+        });
     }
 
     setUpDateMin() {
@@ -319,12 +319,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 const minDate = now.toISOString().substring(0,10);
                 ele.setAttribute('min', minDate);
             }
-        })
+        });
     }
 
 
 
-    initCurrentPage(demo= false) {
+    initCurrentPage(demo = false) {
         if (demo) {
             const obj: any = {
                 "area_of_interest": [
@@ -349,7 +349,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 // "video_answer": "To Play",
                 // "picture_sentence": "To Play",
                 "finished": false
-            }
+            };
             this.setUpObject(obj);
         } else {
             this.setUpObject(this.userOnBoarding);
@@ -358,16 +358,16 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     setUpObject(obj: any) {
-        for (let item in obj) {
+        for (const item in obj) {
             if (this.onBoardingObject.hasOwnProperty(item)) {
                 if (Array.isArray(obj[item]) && obj[item].length > 0) {
-                    this.onBoardingObject[item] = obj[item]
+                    this.onBoardingObject[item] = obj[item];
                 } else if (typeof obj[item] === 'object' && Object.keys(obj[item]).length > 0) {
-                    this.onBoardingObject[item] = obj[item]
+                    this.onBoardingObject[item] = obj[item];
                 } else if (typeof obj[item] === 'string' && obj[item].length > 0) {
-                    this.onBoardingObject[item] = obj[item]
+                    this.onBoardingObject[item] = obj[item];
                 } else if (typeof obj[item] === 'boolean') {
-                    this.onBoardingObject[item] = obj[item]
+                    this.onBoardingObject[item] = obj[item];
                 }
             }
         }
@@ -375,33 +375,33 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.listenToPrivacyPolicyClick();
             this.setUpDateMin();
         }
-        console.log('this.onBoardingObject', this.onBoardingObject)
+        console.log('this.onBoardingObject', this.onBoardingObject);
     }
 
     initExtraDetails() {
         this.current_page = this.onBoardingObject.last_page;
 
-        for (let i in this.onBoardingObject.be_more_specific) {
+        for (const i in this.onBoardingObject.be_more_specific) {
             this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific[i].length;
         }
-        for (let i in this.onBoardingObject.be_more_specific_custom) {
+        for (const i in this.onBoardingObject.be_more_specific_custom) {
             this.beMoreSpecificSelected += this.onBoardingObject.be_more_specific_custom[i].filter((o:string) => o).length;
         }
-        console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected)
+        console.log('this.beMoreSpecificSelected', this.beMoreSpecificSelected);
     }
 
     selectInterest(itemText: any) {
         this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = false;
-        const index = this.onBoardingObject.area_of_interest.indexOf(itemText)
+        const index = this.onBoardingObject.area_of_interest.indexOf(itemText);
         if (index > -1) {
             this.onBoardingObject.area_of_interest.splice(index, 1);
         } else {
             if (this.onBoardingObject.area_of_interest.length < this.maxItems.area_of_interest) {
-                this.onBoardingObject.area_of_interest.push(itemText)
+                this.onBoardingObject.area_of_interest.push(itemText);
             } else {
                 this.onBoardingObject.area_of_interest.splice(0, 1);
-                this.onBoardingObject.area_of_interest.push(itemText)
+                this.onBoardingObject.area_of_interest.push(itemText);
             }
             if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
             }
@@ -413,12 +413,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = false;
         const specificForItem = this.onBoardingObject.be_more_specific[item.key];
-        const index = specificForItem.indexOf(specificItem)
+        const index = specificForItem.indexOf(specificItem);
         if (index > -1) {
             this.onBoardingObject.be_more_specific[item.key].splice(index, 1);
             this.beMoreSpecificSelected--;
         } else {
-            this.onBoardingObject.be_more_specific[item.key].push(specificItem)
+            this.onBoardingObject.be_more_specific[item.key].push(specificItem);
             this.beMoreSpecificSelected++;
             // if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
             // }
@@ -427,22 +427,22 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     inputBeMoreSpecific(item: any, e: any) {
         const value = e.target.value;
-        console.log('value', value)
+        console.log('value', value);
         return;
     }
 
     selectFamiliarWords(itemText: any) {
         this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = false;
-        const index = this.onBoardingObject.familiar_words.indexOf(itemText)
+        const index = this.onBoardingObject.familiar_words.indexOf(itemText);
         if (index > -1) {
             this.onBoardingObject.familiar_words.splice(index, 1);
         } else {
             if (this.onBoardingObject.familiar_words.length < this.maxItems.familiar_words) {
-                this.onBoardingObject.familiar_words.push(itemText)
+                this.onBoardingObject.familiar_words.push(itemText);
             } else {
                 this.onBoardingObject.familiar_words.splice(0, 1);
-                this.onBoardingObject.familiar_words.push(itemText)
+                this.onBoardingObject.familiar_words.push(itemText);
             }
             if (this.onBoardingObject.familiar_words.length == this.maxItems.familiar_words) {
             }
@@ -457,12 +457,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
         return 0;
-    }
+    };
 
     showQuestionsNextButton() {
         let show = true;
-        for (let key in this.onBoardingObject.questions) {
-            for (let i in this.onBoardingObject.questions[key]) {
+        for (const key in this.onBoardingObject.questions) {
+            for (const i in this.onBoardingObject.questions[key]) {
                 if (!this.onBoardingObject.questions[key][i]) {
                     show = false;
                     break;
@@ -474,8 +474,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onQuestionsNextButton(next_page: string) {
         let proceed = true;
-        for (let key in this.onBoardingObject.questions) {
-            for (let i in this.onBoardingObject.questions[key]) {
+        for (const key in this.onBoardingObject.questions) {
+            for (const i in this.onBoardingObject.questions[key]) {
                 if (this.questions[key][i].required) {
                     if (Array.isArray(this.onBoardingObject.questions[key][i]) && !this.onBoardingObject.questions[key][i].length) {
                         proceed = false;
@@ -491,9 +491,9 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         }
-        console.log('this.questions_required_errors', this.questions_required_errors)
+        console.log('this.questions_required_errors', this.questions_required_errors);
         if (proceed) {
-            this.goToNextPage(next_page)
+            this.goToNextPage(next_page);
         }
     }
 
@@ -506,7 +506,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.onQuestionsChange();
         if(this.onBoardingObject.be_more_specific_custom[key][i]) {
             if (!this.beMoreSpecificCustomSelected[key]) {
-                this.beMoreSpecificCustomSelected[key] = {}
+                this.beMoreSpecificCustomSelected[key] = {};
             }
             if(!this.beMoreSpecificCustomSelected[key][i]) {
                 this.beMoreSpecificCustomSelected[key][i] = true;
@@ -521,7 +521,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     onQuestionCheckboxChanged(key: string, index: number, value: string) {
         const valIndex = this.onBoardingObject.questions[key][index].indexOf(value);
         if (valIndex > -1) {
-            this.onBoardingObject.questions[key][index].splice(valIndex, 1)
+            this.onBoardingObject.questions[key][index].splice(valIndex, 1);
         } else {
             this.onBoardingObject.questions[key][index].push(value);
         }
@@ -539,15 +539,15 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onSwipeLeft() {
-        const ele = $('#onBoardingCarousel')
+        const ele = $('#onBoardingCarousel');
         if (ele && ele.carousel) {
-            ele.carousel('next')
+            ele.carousel('next');
         }
     }
     onSwipeRight() {
-        const ele = $('#onBoardingCarousel')
+        const ele = $('#onBoardingCarousel');
         if (ele && ele.carousel) {
-            ele.carousel('prev')
+            ele.carousel('prev');
         }
     }
 
@@ -586,13 +586,13 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         ele.stop().animate({ scrollTop: 0 }, 50);
     }
 
-    saveUserDetails(redirect=false) {
+    saveUserDetails(redirect = false) {
         if (this.onBoardingObjectChanged) {
             this.onBoardingObjectChanged = false;
             // this.user.on_boarding_details = {...this.onBoardingObject}
             this.apiService.saveUserOnBoarding(this.user.last_logged_platform, {'on_boarding_object': this.onBoardingObject}).subscribe({
                 next: async (response: any) => {
-                    console.log('response', response)
+                    console.log('response', response);
                     // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
                     // if (!clientRunningOnServerHost) {
                     //     // only when running localhost 4200
@@ -608,17 +608,17 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                     // }
                     this.config.user_on_boarding = {...this.onBoardingObject};
                     if (redirect) {
-                        console.log('redirect', redirect)
-                        this.router.navigate(['/' + this.user.last_logged_platform + '/dashboard'])
+                        console.log('redirect', redirect);
+                        this.router.navigate(['/' + this.user.last_logged_platform + '/dashboard']);
                     }
                 },
                 error: (error) => {
-                    console.log('saveUserDetails error', error)
-                },
-            })
+                    console.log('saveUserDetails error', error);
+                }
+            });
         } else {
             if (redirect) {
-                this.router.navigate(['/dashboard'])
+                this.router.navigate(['/dashboard']);
             }
         }
     }
@@ -626,15 +626,15 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     onFinish() {
         this.onBoardingObjectChanged = true;
         this.onBoardingObject.finished = true;
-        console.log('finish this.onBoardingObject', this.onBoardingObject)
+        console.log('finish this.onBoardingObject', this.onBoardingObject);
         this.saveUserDetails(true);
     }
 
     setUpBeMoreSpecific() {
         // if (this.current_page === 'be_more_specific') {
         this.resetBeMoreSpecific();
-        for (let item of this.onBoardingObject.area_of_interest) {
-            this.onBoardingObject.be_more_specific[item] = []
+        for (const item of this.onBoardingObject.area_of_interest) {
+            this.onBoardingObject.be_more_specific[item] = [];
             if (!this.onBoardingObject.be_more_specific_custom[item]) {
                 this.onBoardingObject.be_more_specific_custom[item] = this.areaOfInterestItems[item].custom.slice(0);
             }
@@ -650,12 +650,12 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getString(text: any) {
-        return String(text)
+        return String(text);
     }
 
     onPlayerReady(e: any) {
         // this.loading_player = false;
-        console.log('onPlayerReady e', e)
+        console.log('onPlayerReady e', e);
     }
 
     onPlayerStateChange(e: OnStateChangeEvent) {

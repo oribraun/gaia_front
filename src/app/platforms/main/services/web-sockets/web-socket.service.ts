@@ -13,7 +13,7 @@ export class WebSocketService {
     private socket!: WebSocket;
     private serverBase = environment.serverUrl;
     private socketUrl = '';
-    protected socket_path = "ws/main_socket"
+    protected socket_path = "ws/main_socket";
     private events: EventsHashTable<Subject<any>> = {};
 
     public onConnect: EventEmitter<any> = new EventEmitter<any>();
@@ -28,7 +28,7 @@ export class WebSocketService {
         this.config.server_host_subject.subscribe((host) => {
             this.serverBase = this.config.server_host;
             this.setUpSocket();
-        })
+        });
         if (this.config.server_host) {
             this.serverBase = this.config.server_host;
         }
@@ -38,9 +38,9 @@ export class WebSocketService {
     setUpSocket() {
         let socketBase = "ws://";
         if (this.serverBase.indexOf('http://') > -1) {
-            this.serverBase = this.serverBase.replace('http://', '')
+            this.serverBase = this.serverBase.replace('http://', '');
         } else if (this.serverBase.indexOf('https://') > -1) {
-            this.serverBase = this.serverBase.replace('https://', '')
+            this.serverBase = this.serverBase.replace('https://', '');
             socketBase = "wss://";
         }
         // this.serverBase = this.serverBase.replace('https://', '')
@@ -52,29 +52,29 @@ export class WebSocketService {
         this.socket = new WebSocket(socketUrl);
 
         this.socket.onopen = () => {
-            const message = socketUrl + ' WebSocket connection established.'
-            this.onConnect.emit(message)
+            const message = socketUrl + ' WebSocket connection established.';
+            this.onConnect.emit(message);
         };
 
         this.socket.onmessage = (event) => {
-            const o = JSON.parse(event.data)
-            const message = o.message
-            const data = o.data
+            const o = JSON.parse(event.data);
+            const message = o.message;
+            const data = o.data;
             if (this.events[message]) {
-                this.Broadcast(message, data)
+                this.Broadcast(message, data);
             }
             // Handle received data
         };
 
         this.socket.onclose = () => {
-            const message = socketUrl + ' WebSocket connection closed.'
-            this.onDisconnect.emit(message)
+            const message = socketUrl + ' WebSocket connection closed.';
+            this.onDisconnect.emit(message);
         };
 
         this.socket.onerror = (err) => {
-            const message = socketUrl + err
-            this.onError.emit(message)
-        }
+            const message = socketUrl + err;
+            this.onError.emit(message);
+        };
     }
 
     disconnect() {
@@ -83,7 +83,7 @@ export class WebSocketService {
 
     sendMessage(message: string, data: object = {}) {
         if (this.socket.readyState === WebSocket.OPEN) {
-            const json = {message: message, data: data}
+            const json = {message: message, data: data};
             this.socket.send(JSON.stringify(json));
         }
     }

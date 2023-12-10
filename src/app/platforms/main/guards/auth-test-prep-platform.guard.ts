@@ -27,16 +27,16 @@ export class AuthTestPrepPlatformGuard  {
         // })
         // return true
         const user = this.config.user;
-        console.log('user.last_logged_platform test-prep', user.last_logged_platform)
+        console.log('user.last_logged_platform test-prep', user.last_logged_platform);
         if (user && user.last_logged_platform === 'ielts') {
             return true;
         } else {
-            const queryParams: any = {}
+            const queryParams: any = {};
             if (!user.id) {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams})
+            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
             return false;
         }
     }

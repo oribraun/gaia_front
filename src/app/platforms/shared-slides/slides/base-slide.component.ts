@@ -10,16 +10,16 @@ import {environment} from "../../../../environments/environment";
 })
 export class BaseSlideComponent implements OnInit, OnDestroy {
 
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('slideData') slideData: any = {};
+    @Input() currentSlide: PresentationSlide = new PresentationSlide();
+    @Input() slideData: any = {};
 
-    imageSrc = ''
-    currentHost = ''
+    imageSrc = '';
+    currentHost = '';
     is_test_mode: boolean = false;
 
     constructor(
         protected config: Config,
-        protected lessonService: LessonService,
+        protected lessonService: LessonService
     ) {
         this.imageSrc = this.config.staticImagePath;
         this.currentHost = this.config.server_host || environment.serverUrl;
@@ -51,7 +51,7 @@ export class BaseSlideComponent implements OnInit, OnDestroy {
         return url.indexOf('http://') > -1 || url.indexOf('https://') > -1;
     }
 
-    ngOnDestroy(fireSlideDestroyEvent=true): void {
+    ngOnDestroy(fireSlideDestroyEvent = true): void {
         if (fireSlideDestroyEvent) {
             this.lessonService.Broadcast('slideDestroy', {});
         }

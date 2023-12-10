@@ -6,15 +6,15 @@
     <p class="neutral-icon">
     </p>
     <p class="wrong"></p>
-    <input type="radio" name="event" class="yes" id="radio-yes" [checked]="helpMode=='en'" (click)="setHelpMode('en')" />
+    <input type="radio" name="event" class="yes" id="radio-yes" [checked]="helpMode==='en'" (click)="setHelpMode('en')" />
 
     <label for="radio-yes">En</label>
 
-    <input type="radio" name="event" class="neutral" [checked]="helpMode=='disabled'" id="radio-neutral" (click)="setHelpMode('disabled')"/>
+    <input type="radio" name="event" class="neutral" [checked]="helpMode==='disabled'" id="radio-neutral" (click)="setHelpMode('disabled')"/>
     <label for="radio-neutral" >Return</label>
 
 
-    <input type="radio" name="event" class="no" id="radio-no" [checked]="helpMode=='native'" (click)="setHelpMode('native')"/>
+    <input type="radio" name="event" class="no" id="radio-no" [checked]="helpMode==='native'" (click)="setHelpMode('native')"/>
     <label for="radio-no">He</label>
   </div>
 </div>

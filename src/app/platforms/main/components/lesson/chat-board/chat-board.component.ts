@@ -6,7 +6,7 @@ import {fromEvent, interval, Subscription} from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import {environment} from "../../../../../../environments/environment";
 
-declare var $: any;
+declare let $: any;
 
 @Component({
     selector: 'app-chat-board',
@@ -22,7 +22,7 @@ export class ChatBoardComponent implements OnInit {
     messages: ChatMessage[] = [];
     started = false;
 
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
+    @Input() currentSlide: PresentationSlide = new PresentationSlide();
 
     constructor(
         private lessonService: LessonService
@@ -32,15 +32,15 @@ export class ChatBoardComponent implements OnInit {
                 new ChatMessage({type: 'computer', message: 'Hi! Can you please fill in the blanks to complete the sentence? ____ is Danny, he is here'}),
                 new ChatMessage({type: 'user', message: 'im good how are you?'}),
                 new ChatMessage({type: 'computer', message: 'fine'}),
-                new ChatMessage({type: 'user', message: 'hi'}),
-            ]
+                new ChatMessage({type: 'user', message: 'hi'})
+            ];
         }
     }
 
     ngOnInit(): void {
         this.lessonService.ListenFor('newChatMessage').subscribe((obj: ChatMessage) =>{
             if (obj.message) {
-                obj.message = this.cleanMessage(obj.message)
+                obj.message = this.cleanMessage(obj.message);
                 if (obj.isFinal) {
                     if (!this.started) {
                         this.messages.push(obj);
@@ -56,27 +56,27 @@ export class ChatBoardComponent implements OnInit {
                     }
                     this.messages[this.messages.length - 1].message = obj.message;
                 }
-                this.scrollToBottom2()
+                this.scrollToBottom2();
             }
-        })
+        });
         this.lessonService.ListenFor('resetChatMessages').subscribe(() =>{
-            this.messages = []
-        })
+            this.messages = [];
+        });
         setTimeout(() => {
-            this.scrollToBottom2()
-        })
+            this.scrollToBottom2();
+        });
     }
     cleanMessage(message: string): string {
-        let msg = message.replace(/PAUSE(.*?)SEC/g, '')
-        return msg
+        const msg = message.replace(/PAUSE(.*?)SEC/g, '');
+        return msg;
     }
 
-    scrollToBottom2(animate=false, timeout=0){
+    scrollToBottom2(animate = false, timeout = 0){
         if (this.scroller) {
             setTimeout(() => {
                 const element = this.scroller.nativeElement;
-                element.scrollTop = element.scrollHeight
-            }, timeout)
+                element.scrollTop = element.scrollHeight;
+            }, timeout);
         }
     }
 
@@ -87,7 +87,7 @@ export class ChatBoardComponent implements OnInit {
 
         if (this.scroller) {
             if (animate) {
-                this.animateScroll()
+                this.animateScroll();
             } else {
                 setTimeout(() => {
                     const element = this.scroller.nativeElement;
@@ -97,14 +97,14 @@ export class ChatBoardComponent implements OnInit {
         }
     }
 
-    animateScroll(animationDuration=200) {
+    animateScroll(animationDuration = 200) {
         if (this.scrollSubscription) {
             this.scrollSubscription.unsubscribe();
         }
         const element = this.scroller.nativeElement;
 
         const scrollObservable = interval(10).pipe(
-            takeUntil(fromEvent(element, 'scroll')),
+            takeUntil(fromEvent(element, 'scroll'))
         );
 
         this.scrollSubscription = scrollObservable.subscribe((_) => {
@@ -129,8 +129,8 @@ export class ChatBoardComponent implements OnInit {
                 this.messages[index].translatedMessage = translated_text;
                 this.messages[index].showTranslated = true;
             }).catch((e) => {
-                console.log('translateGoogle e', e)
-            })
+                console.log('translateGoogle e', e);
+            });
         } else {
             this.messages[index].showTranslated = !this.messages[index].showTranslated;
         }
@@ -138,21 +138,21 @@ export class ChatBoardComponent implements OnInit {
 
     translateGoogle(currentMessage: ChatMessage): Promise<string> {
         return new Promise((resolve, reject) => {
-            var sourceLang = 'en';
-            var targetLang = 'he';
+            const sourceLang = 'en';
+            const targetLang = 'he';
 
-            var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
+            const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
 
             $.getJSON(url, (data: any) => {
                 let translated_text = '';
                 try {
-                    translated_text = data[0].map((o: any) => o[0]).join('')
+                    translated_text = data[0].map((o: any) => o[0]).join('');
                     resolve(translated_text);
                 } catch (e) {
-                    reject(e)
+                    reject(e);
                 }
             });
-        })
+        });
 
     }
 }

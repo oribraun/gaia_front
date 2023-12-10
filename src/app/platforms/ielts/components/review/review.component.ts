@@ -14,20 +14,20 @@ import {ActivatedRoute, Router} from "@angular/router";
             state('open', style({
                 height: '*',
                 padding: '0.75rem',
-                opacity: 1,
+                opacity: 1
             })),
             state('closed', style({
                 height: '0',
                 padding: '0',
-                opacity: 0,
+                opacity: 0
             })),
             transition('* => closed', [
                 animate('.3s')
             ]),
             transition('* => open', [
                 animate('.3s')
-            ]),
-        ]),
+            ])
+        ])
     ]
 })
 export class ReviewComponent implements OnInit {
@@ -44,8 +44,8 @@ export class ReviewComponent implements OnInit {
         'All Time',
         'Today',
         'Last 7 days',
-        'Last 30 days',
-    ]
+        'Last 30 days'
+    ];
     groupTypeOptions: any[] = [];
     difficultyOptions: any[] = [
         {key: 1, value: 'Easy'},
@@ -58,9 +58,9 @@ export class ReviewComponent implements OnInit {
         group_type: {},
         // lessons: [],
         // types: [],
-        difficulty: [],
+        difficulty: []
         // slower_then_average: false
-    }
+    };
 
     constructor(
         private config: Config,
@@ -75,19 +75,19 @@ export class ReviewComponent implements OnInit {
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     getQuestions() {
-        this.questions = []
+        this.questions = [];
         this.gettingQuestions = true;
         this.apiService.getQuestions({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getVocabulary err', response)
+                    console.log('getVocabulary err', response);
                 } else {
                     this.questions = response.questions;
                     this.groupTypeOptions = response.group_types;
@@ -95,13 +95,13 @@ export class ReviewComponent implements OnInit {
                 this.gettingQuestions = false;
                 setTimeout(() => {
                     this.gotFirstQuestions = true;
-                })
+                });
             },
             error: (error) => {
-                console.log('getVocabulary error', error)
+                console.log('getVocabulary error', error);
                 this.gettingQuestions = false;
-            },
-        })
+            }
+        });
     }
 
     toggleFilters() {
@@ -110,11 +110,11 @@ export class ReviewComponent implements OnInit {
 
     filter(obj_key: string, key: any) {
         if (this.filters[obj_key]) {
-            const index = this.filters[obj_key].indexOf(key)
+            const index = this.filters[obj_key].indexOf(key);
             if (index > -1) {
-                this.filters[obj_key].splice(index, 1)
+                this.filters[obj_key].splice(index, 1);
             } else {
-                this.filters[obj_key].push(key)
+                this.filters[obj_key].push(key);
             }
         }
     }
@@ -153,13 +153,13 @@ export class ReviewComponent implements OnInit {
             if (this.filters.date && this.filters.date !== 'All Time') {
                 const d = new Date();
                 d.setHours(0,0,0,0);
-                let dateOffset = (24*60*60*1000) * 7;
+                let dateOffset = (24 * 60 * 60 * 1000) * 7;
                 const created = new Date(o.created);
                 created.setHours(0,0,0,0);
                 if (this.filters.date == 'Last 7 days') {
                     d.setTime(d.getTime() - dateOffset);
                 } else if (this.filters.date == 'Last 30 days') {
-                    dateOffset = (24*60*60*1000) * 30;
+                    dateOffset = (24 * 60 * 60 * 1000) * 30;
                     d.setTime(d.getTime() - dateOffset);
                 }
                 if (d.getTime() > created.getTime()) {

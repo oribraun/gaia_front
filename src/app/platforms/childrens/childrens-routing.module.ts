@@ -8,7 +8,7 @@ import {AuthChildrenPlatformGuard} from "../main/guards/auth-children-platform.g
 const routes: Routes = [
     { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] },
     { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] },
-    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] },
+    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] }
 ];
 
 @NgModule({

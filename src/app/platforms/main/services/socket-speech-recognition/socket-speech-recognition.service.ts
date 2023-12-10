@@ -12,7 +12,7 @@ export class SocketSpeechRecognitionService {
     private socket!: WebSocket;
     private serverBase = environment.serverUrl;
     private socketUrl = '';
-    protected socket_path = "ws/audio_stream"
+    protected socket_path = "ws/audio_stream";
     private events: EventsHashTable<Subject<any>> = {};
 
     public onConnect: EventEmitter<any> = new EventEmitter<any>();
@@ -29,7 +29,7 @@ export class SocketSpeechRecognitionService {
         this.config.server_host_subject.subscribe((host) => {
             this.serverBase = this.config.server_host;
             this.setUpSocket();
-        })
+        });
         if (this.config.server_host) {
             this.serverBase = this.config.server_host;
         }
@@ -39,9 +39,9 @@ export class SocketSpeechRecognitionService {
     setUpSocket() {
         let socketBase = "ws://";
         if (this.serverBase.indexOf('http://') > -1) {
-            this.serverBase = this.serverBase.replace('http://', '')
+            this.serverBase = this.serverBase.replace('http://', '');
         } else if (this.serverBase.indexOf('https://') > -1) {
-            this.serverBase = this.serverBase.replace('https://', '')
+            this.serverBase = this.serverBase.replace('https://', '');
             socketBase = "wss://";
         }
         // this.serverBase = this.serverBase.replace('https://', '')
@@ -53,42 +53,42 @@ export class SocketSpeechRecognitionService {
         this.socket = new WebSocket(socketUrl);
 
         this.socket.onopen = () => {
-            const message = socketUrl + ' WebSocket connection established.'
-            this.onConnect.emit(message)
+            const message = socketUrl + ' WebSocket connection established.';
+            this.onConnect.emit(message);
         };
 
         this.socket.onmessage = (event) => {
-            const o = JSON.parse(event.data)
-            const message = o.message
-            const data = o.data
+            const o = JSON.parse(event.data);
+            const message = o.message;
+            const data = o.data;
             if (message === 'got-audio-data') {
                 const transcript = data.transcript;
                 const is_final = data.is_final;
                 // console.log('transcript',transcript)
                 // console.log('is_final',is_final)
                 if (is_final) {
-                    const endTime = Date.now()
+                    const endTime = Date.now();
                     const timeTakenMs = endTime - this.startTime;
                     const timeTakenSec = timeTakenMs / 1000;
-                    console.log('Took from last sent chunk (seconds)', timeTakenSec.toFixed(3))
+                    console.log('Took from last sent chunk (seconds)', timeTakenSec.toFixed(3));
                     this.startTime = null;
                 }
             }
             if (this.events[message]) {
-                this.Broadcast(message, data)
+                this.Broadcast(message, data);
             }
             // Handle received data
         };
 
         this.socket.onclose = () => {
-            const message = socketUrl + ' WebSocket connection closed.'
-            this.onDisconnect.emit(message)
+            const message = socketUrl + ' WebSocket connection closed.';
+            this.onDisconnect.emit(message);
         };
 
         this.socket.onerror = (err) => {
-            const message = socketUrl + err
-            this.onError.emit(message)
-        }
+            const message = socketUrl + err;
+            this.onError.emit(message);
+        };
     }
 
     disconnect() {
@@ -97,7 +97,7 @@ export class SocketSpeechRecognitionService {
 
     sendMessage(message: string, data: any = {}) {
         if (this.socket.readyState === WebSocket.OPEN) {
-            const json = {message: message, data: data}
+            const json = {message: message, data: data};
             this.socket.send(JSON.stringify(json));
         }
     }
@@ -108,8 +108,8 @@ export class SocketSpeechRecognitionService {
         const CHUNK_SIZE = 8192;
         const SILENCE_TIMEOUT = 500;
         let totalSamples = 0;
-        let lastSpeak: any = null
-        let endedSpeak: any = null
+        let lastSpeak: any = null;
+        const endedSpeak: any = null;
         const audioContext = new AudioContext();
         const source = audioContext.createMediaStreamSource(mediaStream);
 
@@ -134,11 +134,11 @@ export class SocketSpeechRecognitionService {
                     // this.emitRecorderChunks(recordedChunks);
                     if (this.socket.readyState === WebSocket.OPEN) {
                         // console.log('sending audio_data')
-                        const message = 'audio-data'
+                        const message = 'audio-data';
                         const jsonData = JSON.stringify(recordedChunks.map(chunk => Array.from(chunk)));
-                        const json = {message: message, data: jsonData}
-                        this.startTime = Date.now()
-                        this.sendMessage(message, jsonData)
+                        const json = {message: message, data: jsonData};
+                        this.startTime = Date.now();
+                        this.sendMessage(message, jsonData);
                     }
                     recordedChunks = [];
                     totalSamples = 0;
@@ -147,8 +147,8 @@ export class SocketSpeechRecognitionService {
             } else {
                 const ended = new Date().getTime();
                 if (ended - lastSpeak > SILENCE_TIMEOUT) {
-                    const message = 'audio-data'
-                    this.sendMessage(message, null)
+                    const message = 'audio-data';
+                    this.sendMessage(message, null);
                     if (recordedChunks.length) {
                         // console.log('recordedChunks', recordedChunks)
                         // const audioBuffer: AudioBuffer = this.convertToAudioBuffer(recordedChunks);
@@ -193,11 +193,11 @@ export class SocketSpeechRecognitionService {
     }
 
     async setupContinuesRecordAudio3(mediaStream: MediaStream) {
-        let recordedChunks: any[] = [];
+        const recordedChunks: any[] = [];
         const THREASHOLD = 0.1;
         const SILENCE_TIMEOUT = 1000;
-        let lastSpeak: any = null
-        let endedSpeak: any = null
+        const lastSpeak: any = null;
+        const endedSpeak: any = null;
         const audioContext = new AudioContext();
         const mediaStreamNode = audioContext.createMediaStreamSource(mediaStream);
 
@@ -211,7 +211,7 @@ export class SocketSpeechRecognitionService {
             if (e.data.eventType === 'data') {
                 const audioData = e.data.audioBuffer;
                 const buffer = audioData.buffer;
-                console.log('buffer', buffer)
+                console.log('buffer', buffer);
 
                 const numberOfChannels = 1; // Assuming a single channel
                 const length = audioData.length;
@@ -232,9 +232,9 @@ export class SocketSpeechRecognitionService {
                 const base64Data = btoa(String.fromCharCode(...new Uint8Array(buffer)));
                 if (!once) {
                     // this.onResults.emit({audio_chunks: base64Data})
-                    once = true
+                    once = true;
                 }
-                console.log('audioData', audioData)
+                console.log('audioData', audioData);
                 // process pcm data
             }
             if (e.data.eventType === 'stop') {
@@ -260,11 +260,11 @@ export class SocketSpeechRecognitionService {
     }
 
     async setupContinuesRecordAudio2(mediaStream: MediaStream) {
-        let recordedChunks: any[] = [];
+        const recordedChunks: any[] = [];
         const THREASHOLD = 0.1;
         const CHUNK_SIZE = 8192;
         const SILENCE_TIMEOUT = 500;
-        let totalSamples = 0;
+        const totalSamples = 0;
         const audioContext = new AudioContext();
         const mediaStreamNode = audioContext.createMediaStreamSource(mediaStream);
 
@@ -434,8 +434,8 @@ export class SocketSpeechRecognitionService {
             endIndex - startIndex + 1,
             audioBuffer.sampleRate
         );
-        console.log('startIndex', startIndex)
-        console.log('endIndex', endIndex)
+        console.log('startIndex', startIndex);
+        console.log('endIndex', endIndex);
 
         for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
             const trimmedChannelData = audioData.subarray(startIndex, endIndex + 1);

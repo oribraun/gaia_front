@@ -22,26 +22,26 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
     endGameTimer: number | undefined;
     alertBeforeEndGameTimer: number | undefined;
     gameTimerInterval: number | undefined;
-    isActiveGame:boolean = false
-    gameTimer:number = 0
-    minutes:number = 0
-    seconds:number = 0
-    blurIframe:boolean = false
-    game_duration:number = 2
+    isActiveGame:boolean = false;
+    gameTimer:number = 0;
+    minutes:number = 0;
+    seconds:number = 0;
+    blurIframe:boolean = false;
+    game_duration:number = 2;
 
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
     ngAfterViewInit() {
 
         function checkFocus(self:any) {
             if(document.activeElement == document.getElementsByTagName("iframe")[0]) {
-                self.startGame()
+                self.startGame();
             }
         }
 
@@ -53,35 +53,35 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.updateSrc(this.currentSlide['iframe_path'])
-        this.game_duration = this.currentSlide['game_duration']
+        this.updateSrc(this.currentSlide['iframe_path']);
+        this.game_duration = this.currentSlide['game_duration'];
     }
 
     startGame(){
         function endGameTrigger(self:any) {
-            self.stopGame()
+            self.stopGame();
         }
         function alertBeforeEndGameTrigger(self:any) {
-            self.alertBeforeEndGame()
+            self.alertBeforeEndGame();
         }
         function progressTimer(self:any) {
-            self.gameTimer= self.gameTimer+1
-            self.minutes = Math.floor(self.gameTimer/60)
-            self.seconds = self.gameTimer%60
+            self.gameTimer = self.gameTimer + 1;
+            self.minutes = Math.floor(self.gameTimer / 60);
+            self.seconds = self.gameTimer % 60;
         }
         if (!this.isActiveGame){
-            this.isActiveGame = true
-            const endGameTimeLimit = this.game_duration
-            const alertBeforeEndGameTimeLimit = endGameTimeLimit-1
-            console.log('Game started by the user')
+            this.isActiveGame = true;
+            const endGameTimeLimit = this.game_duration;
+            const alertBeforeEndGameTimeLimit = endGameTimeLimit - 1;
+            console.log('Game started by the user');
             // Trigger do not disturbe
-            this.lessonService.Broadcast('DoNotDisturb',{})
+            this.lessonService.Broadcast('DoNotDisturb',{});
             // Counter for one minute before end of time
-            this.endGameTimer = window.setTimeout(endGameTrigger, 60*1000*endGameTimeLimit, this);
+            this.endGameTimer = window.setTimeout(endGameTrigger, 60 * 1000 * endGameTimeLimit, this);
             // Counter for end of game
-            this.alertBeforeEndGameTimer = window.setTimeout(alertBeforeEndGameTrigger, 60*1000*alertBeforeEndGameTimeLimit+1, this);
+            this.alertBeforeEndGameTimer = window.setTimeout(alertBeforeEndGameTrigger, 60 * 1000 * alertBeforeEndGameTimeLimit + 1, this);
             // Interval for counting game time
-            this.gameTimer = 0
+            this.gameTimer = 0;
             this.gameTimerInterval = window.setInterval(progressTimer, 1000, this);
         }
 
@@ -89,36 +89,36 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
 
     stopGame(){
         if (this.isActiveGame){
-            this.isActiveGame = false
-            this.blurIframe = true
-            this.minutes = this.game_duration
-            this.seconds = 0
-            window.clearInterval(this.checkFocusInterval)
-            window.clearInterval(this.gameTimerInterval)
-            this.lessonService.Broadcast('endDoNotDisturb',{})
-            console.log('game ended')
+            this.isActiveGame = false;
+            this.blurIframe = true;
+            this.minutes = this.game_duration;
+            this.seconds = 0;
+            window.clearInterval(this.checkFocusInterval);
+            window.clearInterval(this.gameTimerInterval);
+            this.lessonService.Broadcast('endDoNotDisturb',{});
+            console.log('game ended');
             // Make Jenny say something and move on to the next slide
             setTimeout(() => {
-                const data = {"event_type": "embed_game_stopped"}
-                this.lessonService.Broadcast('endGameAndMoveSlide',data)
-            }, 1000)
+                const data = {"event_type": "embed_game_stopped"};
+                this.lessonService.Broadcast('endGameAndMoveSlide',data);
+            }, 1000);
         }
     }
 
     alertBeforeEndGame(){
-        console.log('one minute before end game')
-        let text = 'שים לב נותרה דקה לסיום המשחק'
-        this.lessonService.Broadcast('speakNative',{'text':text, 'onlyAudio': true})
+        console.log('one minute before end game');
+        const text = 'שים לב נותרה דקה לסיום המשחק';
+        this.lessonService.Broadcast('speakNative',{'text':text, 'onlyAudio': true});
     }
 
-    updateSrc(url:string='') {
-        this.iframe_url=this.sanitizer.bypassSecurityTrustResourceUrl(url)
+    updateSrc(url:string = '') {
+        this.iframe_url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 
     override ngOnDestroy(){
-        super.ngOnDestroy()
-        clearTimeout(this.alertBeforeEndGameTimer)
-        clearInterval(this.checkFocusInterval)
-        clearInterval(this.gameTimerInterval)
+        super.ngOnDestroy();
+        clearTimeout(this.alertBeforeEndGameTimer);
+        clearInterval(this.checkFocusInterval);
+        clearInterval(this.gameTimerInterval);
     }
 }

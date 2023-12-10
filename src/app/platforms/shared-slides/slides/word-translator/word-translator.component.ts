@@ -10,40 +10,40 @@ import {SpeechRecognitionService} from "../../../main/services/speech-recognitio
     styleUrls: ['./word-translator.component.less']
 })
 export class WordTranslatorComponent  extends BaseSlideComponent {
-    submitAnswerPending:boolean =false;
+    submitAnswerPending:boolean = false;
 
     selectedImage = '';
     selectedText = '';
 
     disableButton = false;
 
-    recognitionPPTSubscribe: any
+    recognitionPPTSubscribe: any;
 
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
-        private speechRecognitionService: SpeechRecognitionService,
+        private speechRecognitionService: SpeechRecognitionService
 
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
     override ngOnInit(): void {
         super.ngOnInit();
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             if (resp.data.source == "word_translator_button_reply") {
-                this.submitAnswerPending = false
+                this.submitAnswerPending = false;
             }
-        })
+        });
     }
     onButtonClick(ans: string) {
         // mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio"
-        const data = {"source": "word_translator_ans", "answer": ans}
-        this.submitAnswerPending = true
-        this.lessonService.Broadcast("slideEventRequest", data)
+        const data = {"source": "word_translator_ans", "answer": ans};
+        this.submitAnswerPending = true;
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
     example_how_to_use_is_active() {
         if (this.slideData?.is_active) {
-            console.log('asdf')
+            console.log('asdf');
         }
     }
 
@@ -51,9 +51,9 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
         this.selectedImage = this.currentSlide.answer_options[index];
         this.onButtonClick(this.selectedImage);
         if (this.selectedImage === this.currentSlide.correct_answer) {
-            console.log('current')
+            console.log('current');
         } else {
-            console.log('incorrect')
+            console.log('incorrect');
         }
     }
 
@@ -63,20 +63,20 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
         this.selectedText = this.currentSlide.answer_options[index];
         this.onButtonClick(this.selectedText);
         if (this.selectedText === this.currentSlide.correct_answer) {
-            console.log('current')
+            console.log('current');
         } else {
-            console.log('incorrect')
+            console.log('incorrect');
         }
     }
 
     onRecognitionPTTResults = (results: any) => {
-        console.log("results",results)
+        console.log("results",results);
         const recognitionText = results.text;
         if (results.isFinal) {
-            console.log('final', recognitionText)
+            console.log('final', recognitionText);
             this.onButtonClick(recognitionText);
         }
-    }
+    };
 
     onPTTPressDown() {
         if (!this.disableButton) {

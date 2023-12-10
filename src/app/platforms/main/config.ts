@@ -6,7 +6,7 @@ const key = "My Secret Passphrase";
 
 export class Config {
     private _user: User = new User();
-    private _user_on_boarding: any = null
+    private _user_on_boarding: any = null;
     private _server_host: string = '';
     private _token: string = '';
     private _csrf_token: string = '';
@@ -49,7 +49,7 @@ export class Config {
 
     set server_host(value: string) {
         this._server_host = value;
-        this.server_host_subject.next(this.server_host)
+        this.server_host_subject.next(this.server_host);
     }
     get token(): string {
         return this._token;
@@ -66,7 +66,7 @@ export class Config {
 
     set csrf_token(value: string) {
         this._csrf_token = value;
-        this._csrf_token_subject.next(this.csrf_token)
+        this._csrf_token_subject.next(this.csrf_token);
     }
 
 
@@ -125,7 +125,7 @@ export class Config {
         const found = parts.find((v: any) => (v.startsWith(str_search)));
         // console.log(name, found)
         if (found) {
-            let val = found.replace(str_search, '')
+            let val = found.replace(str_search, '');
             if (decrypt) {
                 try {
                     val = this.Decrypt(val, key);
@@ -139,34 +139,34 @@ export class Config {
         }
     }
 
-    setCookie(name: string, val: string, exp: Date, encrypt=false) {
+    setCookie(name: string, val: string, exp: Date, encrypt = false) {
         let final_val = val;
         if (encrypt && val) {
             try {
-                final_val = this.Encrypt(val, key).toString()
+                final_val = this.Encrypt(val, key).toString();
             } catch (err) {
                 final_val = val;
             }
         }
-        var c_value = final_val + "; expires=" + exp.toUTCString() + '; path=/;';
+        const c_value = final_val + "; expires=" + exp.toUTCString() + '; path=/;';
         document.cookie = name + "=" + c_value;
     }
 
     Encrypt(word: string, key = 'share') {
-        let encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString()
-        let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson))
-        return encData
+        const encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString();
+        const encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
+        return encData;
     }
 
     Decrypt(word: string, key = 'share') {
-        let decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8)
-        let bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8)
-        return JSON.parse(bytes)
+        const decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8);
+        const bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8);
+        return JSON.parse(bytes);
     }
 
-    resetCookies(clean_csrftoken=true) {
-        const exp = new Date()
-        exp.setDate(exp.getDate()-5);
+    resetCookies(clean_csrftoken = true) {
+        const exp = new Date();
+        exp.setDate(exp.getDate() - 5);
         this.setCookie('user', '', exp);
         this.setCookie('user-exp', '', exp);
         this.setCookie('token', '', exp);
@@ -175,8 +175,8 @@ export class Config {
         }
     }
     removeUserCookies() {
-        const exp = new Date()
-        exp.setDate(exp.getDate()-5);
+        const exp = new Date();
+        exp.setDate(exp.getDate() - 5);
         this.setCookie('user', '', exp);
     }
 }

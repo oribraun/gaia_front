@@ -9,9 +9,9 @@ import {ECharts, EChartsOption, init} from "echarts";
 export class DonutChartComponent {
     @ViewChild('chart') chart!: ElementRef;
 
-    @Input('data') data: any[] = [];
-    @Input('colors') colors: string[] = [];
-    @Input('name') name: string = '';
+    @Input() data: any[] = [];
+    @Input() colors: string[] = [];
+    @Input() name: string = '';
 
     chartEl!: ECharts;
 
@@ -99,9 +99,9 @@ export class DonutChartComponent {
     setLegendWidth() {
         if (this.chart) {
             const container = this.chart.nativeElement;
-            var width = container.offsetWidth;
-            var fontSize = width / 15 + 'px';
-            var legendWidth = width / 4 + 'px';
+            const width = container.offsetWidth;
+            const fontSize = width / 15 + 'px';
+            const legendWidth = width / 4 + 'px';
             // this.chartEl.setOption({
             //     textStyle: {
             //         fontSize: fontSize

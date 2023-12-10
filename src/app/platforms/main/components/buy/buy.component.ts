@@ -24,11 +24,11 @@ export class BuyComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            const lesson_id = params.get('course_id')
+            const lesson_id = params.get('course_id');
             if (lesson_id) {
                 this.course_id = parseInt(lesson_id);
             }
-        })
+        });
         if (this.course_id) {
             this.getCourse();
         }
@@ -37,12 +37,12 @@ export class BuyComponent implements OnInit {
     getCourse() {
         this.reset();
         this.gettingCourse = true;
-        const obj: any = {}
+        const obj: any = {};
         obj['course_id'] = this.course_id;
         this.apiService.getCourse(obj).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getCourse err', response)
+                    console.log('getCourse err', response);
                 } else {
                     this.course = response.course;
                     // this.purchasedCourses = response.purchased_courses;
@@ -50,10 +50,10 @@ export class BuyComponent implements OnInit {
                 this.gettingCourse = false;
             },
             error: (error) => {
-                console.log('getCourse error', error)
+                console.log('getCourse error', error);
                 this.gettingCourse = false;
-            },
-        })
+            }
+        });
     }
 
     reset() {

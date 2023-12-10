@@ -38,11 +38,11 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((paramMap) => {
-            const type = paramMap.get('type')
+            const type = paramMap.get('type');
             if (type && this.formTypeOptions.indexOf(type) > -1) {
                 this.formType = type;
             }
-        })
+        });
     }
 
     async login() {
@@ -136,23 +136,23 @@ export class LoginComponent implements OnInit {
         //     const d = new Date(csrftoken_exp)
         //     this.config.setCookie('csrftoken', csrftoken, d);
         // }
-        const token = this.config.getCookie('token', true)
+        const token = this.config.getCookie('token', true);
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
-            const csrftoken_exp = response.csrftoken_exp
-            const token = response.token
-            const d = new Date(csrftoken_exp)
+            const csrftoken_exp = response.csrftoken_exp;
+            const token = response.token;
+            const d = new Date(csrftoken_exp);
             this.config.setCookie('token', token, d, true);
             this.config.token = this.config.getCookie('token', true);
         }
 
-        const user = this.config.getCookie('user', true)
+        const user = this.config.getCookie('user', true);
         if (!user || !clientRunningOnServerHost) { // meaning it's not served by django server
-            const csrftoken_exp = response.csrftoken_exp
-            const user = response.user
-            const d = new Date(csrftoken_exp)
+            const csrftoken_exp = response.csrftoken_exp;
+            const user = response.user;
+            const d = new Date(csrftoken_exp);
             this.config.setCookie('user', JSON.stringify(user), d, true);
             this.config.setCookie('user-exp', csrftoken_exp, d, true);
-            const new_user = this.config.getCookie('user', true)
+            const new_user = this.config.getCookie('user', true);
             this.config.user = JSON.parse(new_user);
         } else {
             this.config.user = JSON.parse(user);
@@ -161,7 +161,7 @@ export class LoginComponent implements OnInit {
 
     resetMessages() {
         this.errMessage = '';
-        this.successMessage = ''
+        this.successMessage = '';
         this.showVerify = false;
     }
 

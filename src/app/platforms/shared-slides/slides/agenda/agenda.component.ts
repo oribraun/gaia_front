@@ -12,10 +12,10 @@ export class AgendaComponent extends BaseSlideComponent {
 
     constructor(
         protected override config: Config,
-        protected override lessonService: LessonService,
+        protected override lessonService: LessonService
 
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
 }

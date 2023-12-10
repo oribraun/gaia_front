@@ -10,12 +10,12 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
 })
 export class RandomSelectorComponent extends BaseSlideComponent implements OnInit{
 
-    imgSrc = ''
+    imgSrc = '';
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
     override ngOnInit(): void {

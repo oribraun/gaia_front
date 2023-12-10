@@ -18,11 +18,11 @@ import {environment} from "../../../../../environments/environment";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
 import {HelperService} from "../../../main/services/helper.service";
 
-declare var $: any;
-declare var apiRTC: any;
+declare let $: any;
+declare let apiRTC: any;
 
 // TODO remove key
-const apiKey = ""
+const apiKey = "";
 const SERVER_URL = "https://api.heygen.com";
 // https://github.com/HeyGen-Official/RealtimeAvatarDemo/blob/main/index.js
 
@@ -76,7 +76,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     showPanel = false;
 
-    recognitionSubscribe: any
+    recognitionSubscribe: any;
 
     replayInProgress = false;
     videoIsPlaying = false;
@@ -89,7 +89,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         width: 300,
         maxWidth: 500,
         minWidth: 200
-    }
+    };
 
     dragStarted = false;
 
@@ -109,14 +109,14 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         private helperService: HelperService,
         @Inject(DOCUMENT) document?: any
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
         this.document = document;
-        this.embeddedVideo =""
+        this.embeddedVideo = "";
         if (environment.is_mock) {
             this.messages = [
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'user', message: 'Hello'}),
-            ]
+                new ChatMessage({type: 'user', message: 'Hello'})
+            ];
         }
     }
     override ngOnInit(): void {
@@ -135,10 +135,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.setUpHeygenListeners();
         this.setUpTeacherSize();
         this.messages.push(
-            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."}),
+            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."})
         );
         if (this.unsDemo) {
-            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.")
+            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
         } else {
             this.startHeyGen();
         }
@@ -163,11 +163,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             if (resp.data.source == "video_ielts_mark_as_complete_button") {
                 this.currentSlide.video_completed = true;
             }
-        })
+        });
         this.lessonService.ListenFor("student_reply_response").subscribe((resp:any) => {
             try {
-                console.log('student_reply_response resp', resp)
-                let resp_data = resp.data
+                console.log('student_reply_response resp', resp);
+                const resp_data = resp.data;
                 if (resp_data && resp_data.text) {
                     this.messages.push(
                         new ChatMessage({type: 'computer', message: resp_data.text})
@@ -181,22 +181,22 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 }
                 this.showSpinner = false;
             } catch (e) {}
-        })
+        });
         this.lessonService.ListenFor("recognitionText").subscribe((recognitionText:string) => {
             this.messages.push(
-                new ChatMessage({type: 'user', message: recognitionText}),
-            )
+                new ChatMessage({type: 'user', message: recognitionText})
+            );
             this.sendUserReplay(recognitionText);
             this.scrollToBottom2();
-        })
+        });
         this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
             if (this.showSpinner) {
                 this.showSpinner = false;
             }
-        })
+        });
         this.lessonService.ListenFor("student_reply_error").subscribe((resp:any) => {
 
-        })
+        });
     }
 
     clearSlideEvents() {
@@ -216,45 +216,45 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             'stopAudio': true,
             'background':true,
             "student_response":student_response
-        }
-        this.lessonService.Broadcast("PresentationReplayRequest", data)
+        };
+        this.lessonService.Broadcast("PresentationReplayRequest", data);
     }
 
     playVideo() {
         if (this.video) {
-            const data: any = {"source": "video_player"}
+            const data: any = {"source": "video_player"};
             this.video.nativeElement.play();
             this.videoState = PlayerState.PLAYING;
             this.lessonService.Broadcast('stopListenToAsr');
             data['video_event'] = "playing";
-            this.heygenMediaElement.nativeElement.pause()
+            this.heygenMediaElement.nativeElement.pause();
             // this.heygenMediaElement.nativeElement.trigger('ended');
-            this.lessonService.Broadcast("DoNotDisturb", data)
+            this.lessonService.Broadcast("DoNotDisturb", data);
         }
     }
 
     setUpPlayerListeners() {
         if (this.video) {
-            const data: any = {"source": "video_player"}
-            let lastTime = 0;
-            let lastState = PlayerState.UNSTARTED;
+            const data: any = {"source": "video_player"};
+            const lastTime = 0;
+            const lastState = PlayerState.UNSTARTED;
             this.video.nativeElement.onclick = (e: any) => {
                 this.video.nativeElement.pause();
                 this.videoState = PlayerState.PAUSED;
-                this.lessonService.Broadcast('startListenToAsr')
+                this.lessonService.Broadcast('startListenToAsr');
                 data['video_event'] = "paused";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
-            }
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
+            };
             this.video.nativeElement.onended = (e: any) => {
                 this.videoState = PlayerState.PAUSED;
-                this.lessonService.Broadcast('startListenToAsr')
+                this.lessonService.Broadcast('startListenToAsr');
                 data['video_event'] = "ended";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
-            }
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
+            };
             // this.video.nativeElement.onseeked = (e: any) => {
             //     console.log('onseeked')
             // }
@@ -338,9 +338,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.videoIsPlaying = false;
                 this.setUpHeyGenDefaultAvatar();
                 console.log(
-                    event, "Video stopped either because it has finished playing or no further data is available.",
+                    event, "Video stopped either because it has finished playing or no further data is available."
                 );
-            }
+            };
         }
     }
 
@@ -350,10 +350,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         const parentWidth = parent.clientWidth;
         if (parentHeight > parentWidth) {
             this.teacher.nativeElement.style.height = parentWidth + 'px';
-            this.teacher.nativeElement.style.width = parentWidth + 'px'
+            this.teacher.nativeElement.style.width = parentWidth + 'px';
         } else {
             this.teacher.nativeElement.style.height = parentHeight + 'px';
-            this.teacher.nativeElement.style.width = parentHeight + 'px'
+            this.teacher.nativeElement.style.width = parentHeight + 'px';
         }
         // if (this.teacher.nativeElement.clientHeight > this.teacher.nativeElement.clientWidth) {
         //     this.teacher.nativeElement.style.height = this.teacher.nativeElement.clientWidth + 'px';
@@ -366,47 +366,47 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     onPlayerReady(e: any) {
         this.loading_player = false;
-        console.log('onPlayerReady e', e)
+        console.log('onPlayerReady e', e);
     }
 
     onPlayerStateChange(e: OnStateChangeEvent) {
-        console.log('YouTube event: ', e)
-        console.log('YouTube event target - current time : ', e.target.getCurrentTime())
+        console.log('YouTube event: ', e);
+        console.log('YouTube event target - current time : ', e.target.getCurrentTime());
         this.currentState = e.data;
         clearTimeout(this.currentStateTimeout);
         this.currentStateTimeout = setTimeout(() => {
-            const data: any = {"source": "video_player"}
+            const data: any = {"source": "video_player"};
             if (e.data == PlayerState.ENDED) {
                 this.currentState = PlayerState.ENDED;
-                console.log('video ended')
+                console.log('video ended');
                 data['video_event'] = "ended";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
             }
             if (e.data == PlayerState.PAUSED) {
                 this.currentState = PlayerState.PAUSED;
-                console.log('video paused')
+                console.log('video paused');
                 data['video_event'] = "paused";
                 data['noToggle'] = true;
-                this.lessonService.Broadcast("endDoNotDisturb", data)
-                this.lessonService.Broadcast("slideEventRequest", data)
+                this.lessonService.Broadcast("endDoNotDisturb", data);
+                this.lessonService.Broadcast("slideEventRequest", data);
             }
             if (e.data == PlayerState.PLAYING) {
                 this.currentState = PlayerState.PLAYING;
-                console.log('video playing')
+                console.log('video playing');
                 data['video_event'] = "playing";
-                this.lessonService.Broadcast("DoNotDisturb", data)
+                this.lessonService.Broadcast("DoNotDisturb", data);
             }
-        }, this.stateTimeout)
+        }, this.stateTimeout);
     }
 
-    scrollToBottom2(animate=false, timeout=0){
+    scrollToBottom2(animate = false, timeout = 0){
         if (this.scroller) {
             setTimeout(() => {
                 const element = this.scroller.nativeElement;
-                element.scrollTop = element.scrollHeight
-            }, timeout)
+                element.scrollTop = element.scrollHeight;
+            }, timeout);
         }
     }
 
@@ -415,8 +415,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             return;
         }
         this.messages.push(
-            new ChatMessage({type: 'user', message: this.message}),
-        )
+            new ChatMessage({type: 'user', message: this.message})
+        );
         this.sendUserReplay(this.message);
         this.message = "";
         this.scrollToBottom2();
@@ -428,8 +428,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.messages[index].translatedMessage = translated_text;
                 this.messages[index].showTranslated = true;
             }).catch((e) => {
-                console.log('translateGoogle e', e)
-            })
+                console.log('translateGoogle e', e);
+            });
         } else {
             this.messages[index].showTranslated = !this.messages[index].showTranslated;
         }
@@ -437,21 +437,21 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     translateGoogle(currentMessage: ChatMessage): Promise<string> {
         return new Promise((resolve, reject) => {
-            var sourceLang = 'en';
-            var targetLang = 'he';
+            const sourceLang = 'en';
+            const targetLang = 'he';
 
-            var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
+            const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(currentMessage.message);
 
             $.getJSON(url, (data: any) => {
                 let translated_text = '';
                 try {
-                    translated_text = data[0].map((o: any) => o[0]).join('')
+                    translated_text = data[0].map((o: any) => o[0]).join('');
                     resolve(translated_text);
                 } catch (e) {
-                    reject(e)
+                    reject(e);
                 }
             });
-        })
+        });
     }
 
     @HostListener('window:resize')
@@ -477,15 +477,15 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             e.preventDefault();
             e.stopPropagation();
             const pos = this.helperService.getPointerPos(e, false);
-            console.log('pos', pos)
+            console.log('pos', pos);
             const moveX = pos.x - this.drag.startPos.x;
-            console.log('moveX', moveX)
-            console.log('this.drag.width', this.drag.width)
+            console.log('moveX', moveX);
+            console.log('this.drag.width', this.drag.width);
             this.drag.width -= moveX;
             if(this.drag.width > this.drag.maxWidth) {
-                this.drag.width = this.drag.maxWidth
+                this.drag.width = this.drag.maxWidth;
             } else if(this.drag.width < this.drag.minWidth) {
-                this.drag.width = this.drag.minWidth
+                this.drag.width = this.drag.minWidth;
             } else {
                 this.onWindowResize();
             }
@@ -515,9 +515,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     setUpHeyGenVideoByText(text:string){
-        console.log('setUpHeyGenVideoByText text', text)
+        console.log('setUpHeyGenVideoByText text', text);
         if (this.heygenMediaElement) {
-            console.log('setUpHeyGenVideoByText text', text)
+            console.log('setUpHeyGenVideoByText text', text);
             this.heygenMediaElement.nativeElement.srcObject = undefined;
             // "Gaia, what are the subjects of those articles?": "The reading articles encompasses a wide range of topics, reflecting the diversity found in college materials. This prepares you for various academic and professional scenarios. However, for practice, we'll concentrate on areas of your interest to maintain engagement and interest.",
             // "Thanks. Can I skip this video and start practicing": "We don't really recommend skipping the video lessons, but if you really want to, just head over to the dashboard and hit the 'start practice reading' button."
@@ -544,7 +544,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.videoIsPlaying = true;
             }
             else {
-                this.lessonService.Broadcast('startListenToAsr')
+                this.lessonService.Broadcast('startListenToAsr');
                 this.setUpHeyGenDefaultAvatar();
             }
         }
@@ -564,7 +564,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.sessionInfo = await this.newSession("high", avatar, voice);
         const { sdp: serverSdp, ice_servers: iceServers } = this.sessionInfo;
         this.peerConnection = new RTCPeerConnection({ iceServers: [] });
-        let formattedIceServers = iceServers.map((server: any) => ({ urls: server }));
+        const formattedIceServers = iceServers.map((server: any) => ({ urls: server }));
         this.peerConnection.setConfiguration({ iceServers: formattedIceServers });
 
         // When ICE candidate is available, send to the server
@@ -602,13 +602,13 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
             body: JSON.stringify({
                 quality,
                 avatar_name,
                 voice_name
-            }),
+            })
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -625,9 +625,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
-            body: JSON.stringify({ session_id, candidate }),
+            body: JSON.stringify({ session_id, candidate })
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -646,9 +646,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
-            body: JSON.stringify({ session_id }),
+            body: JSON.stringify({ session_id })
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -663,13 +663,13 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
-            body: JSON.stringify({ session_id, text, task_type: 'test' }),
+            body: JSON.stringify({ session_id, text, task_type: 'test' })
         });
         if (response.status === 200) {
             const data = await response.json();
-            this.taskDurationCounter(data.data.duration_ms)
+            this.taskDurationCounter(data.data.duration_ms);
             return data.data;
         } else {
             console.error("Server Error. Please ask the staff if the service has been turned on");
@@ -681,20 +681,20 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         let d_seconds = duration_ms / 1000;
         this.taskInterval = setInterval(() => {
             if (d_seconds <= 0) {
-                clearInterval(this.taskInterval)
-                this.lessonService.Broadcast('startListenToAsr')
+                clearInterval(this.taskInterval);
+                this.lessonService.Broadcast('startListenToAsr');
             }
             d_seconds--;
-        }, 1000)
+        }, 1000);
     }
 
     async startAndDisplaySession() {
         if (!this.sessionInfo) {
-            console.log("Please create a connection first")
+            console.log("Please create a connection first");
             return;
         }
 
-        console.log("Starting session... please wait")
+        console.log("Starting session... please wait");
 
         // Create and set local SDP description
         const localDescription = await this.peerConnection.createAnswer();
@@ -702,7 +702,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
         // Start session
         await this.startSession(this.sessionInfo.session_id, localDescription);
-        console.log("Session started successfully")
+        console.log("Session started successfully");
         const data = await this.makeSureSessionIsConnected();
         if (data.state === 'connected') {
             this.startSessionTask(this.sessionInfo.session_id, "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
@@ -717,9 +717,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
-            body: JSON.stringify({ session_id, sdp }),
+            body: JSON.stringify({ session_id, sdp })
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -736,9 +736,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Api-Key": apiKey,
+                "X-Api-Key": apiKey
             },
-            body: JSON.stringify({ session_id }),
+            body: JSON.stringify({ session_id })
         });
         if (response.status === 200) {
             const data = await response.json();
@@ -777,7 +777,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
     }
 
     setSessionId() {
-        console.log('setSessionId', this.sessionInfo.session_id)
+        console.log('setSessionId', this.sessionInfo.session_id);
         localStorage.setItem('h_s_id', this.sessionInfo.session_id);
     }
 
@@ -797,7 +797,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             this.stopSession(this.sessionInfo.session_id);
         }
         if (this.taskInterval) {
-            clearInterval(this.taskInterval)
+            clearInterval(this.taskInterval);
         }
         this.clearSlideEvents();
         super.ngOnDestroy();

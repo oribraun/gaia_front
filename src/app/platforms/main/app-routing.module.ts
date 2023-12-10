@@ -30,14 +30,14 @@ const routes: Routes = [
     // },
     {
         path: 'childrens',
-        loadChildren: () => import('../childrens/childrens.module').then(m => m.ChildrensModule),
+        loadChildren: () => import('../childrens/childrens.module').then(m => m.ChildrensModule)
     },
     // for children app only
 
     // for ielts app only
     {
         path: 'ielts',
-        loadChildren: () => import('../ielts/ielts.module').then(m => m.IeltsModule),
+        loadChildren: () => import('../ielts/ielts.module').then(m => m.IeltsModule)
     },
     // for ielts app only
 

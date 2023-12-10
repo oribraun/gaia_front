@@ -9,8 +9,8 @@ import {lastValueFrom} from "rxjs";
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 
 
-declare var $: any;
-declare var google: any;
+declare let $: any;
+declare let google: any;
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -22,13 +22,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         paths: "exact",
         queryParams: 'subset',
         matrixParams: 'subset'
-    }
+    };
     routerLinkActiveOptionsWithChildrens: IsActiveMatchOptions = {
         fragment: "exact",
         paths: "subset",
         queryParams: 'subset',
         matrixParams: 'subset'
-    }
+    };
 
     platforms: any[] = [];
     selectedPlatform: any = {name: '', display_name: ''};
@@ -64,8 +64,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         new_password: '',
         confirm_password: '',
         successMessage: '',
-        errMessage: '',
-    }
+        errMessage: ''
+    };
 
     constructor(
         private config: Config,
@@ -89,34 +89,34 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.helperService.applyTooltip();
 
         this.route.queryParams.subscribe((params) => {
-            const type = params['authType']
+            const type = params['authType'];
             if (type && this.formTypeOptions.indexOf(type.toLowerCase()) > -1) {
                 this.formType = type.toLowerCase();
-                console.log('this.formType', this.formType)
+                console.log('this.formType', this.formType);
                 setTimeout(() => {
                     this.showLoginModel();
-                })
+                });
             }
-            const planId = params['planId']
+            const planId = params['planId'];
             if (planId) {
                 this.planId = planId;
             }
-        })
+        });
         this.setUpGoogle();
 
         this.config.user_on_boarding_subject.subscribe(() => {
             this.user_on_boarding_finished = this.config.user_on_boarding && this.config.user_on_boarding.finished;
-        })
+        });
         this.checkIfPlansPage();
     }
 
     initOnBoarding() {
         if (this.user.id && this.user.last_logged_platform) {
             const currentPlatform = this.user.last_logged_platform;
-            const map = this.platforms.map((o: any) => o.name)
+            const map = this.platforms.map((o: any) => o.name);
             const index = map.indexOf(currentPlatform);
             if (index > -1) {
-                this.selectedPlatform = this.platforms[index]
+                this.selectedPlatform = this.platforms[index];
             }
             this.getUserOnBoarding();
             if (this.user.last_logged_platform === 'ielts') {
@@ -125,7 +125,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         }
     }
 
-    getUserOnBoarding(redirectUser=false) {
+    getUserOnBoarding(redirectUser = false) {
         this.apiService.getUserOnBoarding(this.user.last_logged_platform, {}).subscribe({
             next: async (response: any) => {
                 if (!response.err) {
@@ -135,22 +135,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                         this.helperService.applyTooltip();
                     }
                     setTimeout(() => {
-                        this.config.user_on_boarding = on_boarding_object?.on_boarding_details
-                    })
+                        this.config.user_on_boarding = on_boarding_object?.on_boarding_details;
+                    });
                     if (redirectUser) {
                         this.redirectUser();
                     }
                 } else {
-                    console.log('getUserOnBoarding errMessage', response.errMessage)
+                    console.log('getUserOnBoarding errMessage', response.errMessage);
                 }
             },
             error: (error) => {
-                console.log('getUserOnBoarding error', error)
-            },
-        })
+                console.log('getUserOnBoarding error', error);
+            }
+        });
     }
 
-    getUserActivity(redirectUser=false) {
+    getUserActivity(redirectUser = false) {
         this.apiService.getUserActivity(this.user.last_logged_platform, {}).subscribe({
             next: async (response: any) => {
                 if (!response.err) {
@@ -158,15 +158,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                     if (user_activity) {
                         this.user.last_lesson_id = user_activity.last_user_lesson;
                     }
-                    console.log('user_activity', user_activity)
+                    console.log('user_activity', user_activity);
                 } else {
-                    console.log('getUserActivity errMessage', response.errMessage)
+                    console.log('getUserActivity errMessage', response.errMessage);
                 }
             },
             error: (error) => {
-                console.log('getUserActivity error', error)
-            },
-        })
+                console.log('getUserActivity error', error);
+            }
+        });
     }
 
     getPlatforms() {
@@ -179,13 +179,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                     }
                     this.initOnBoarding();
                 } else {
-                    console.log('getPlatforms errMessage', response.errMessage)
+                    console.log('getPlatforms errMessage', response.errMessage);
                 }
             },
             error: (error) => {
-                console.log('getPlatforms error', error)
-            },
-        })
+                console.log('getPlatforms error', error);
+            }
+        });
     }
 
     changePlatformValue(platform: any, $event: any) {
@@ -198,10 +198,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     changePlatform(event: any) {
         const currentPlatform = event.target.value;
-        const map = this.platforms.map((o: any) => o.name)
+        const map = this.platforms.map((o: any) => o.name);
         const index = map.indexOf(currentPlatform);
         if (index > -1) {
-            this.selectedPlatform = this.platforms[index]
+            this.selectedPlatform = this.platforms[index];
         }
         if (this.user.id) {
             this.changeUserPlatform();
@@ -223,7 +223,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                     // }, 300)
                     this.reloadSystemAndRedirect();
                 } else {
-                    console.log('changeUserPlatform errMessage', response.errMessage)
+                    console.log('changeUserPlatform errMessage', response.errMessage);
                 }
             } catch (error) {
                 console.error('changeUserPlatform', error);
@@ -246,9 +246,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 scope: 'profile email https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read',
                 callback: (tokenResponse: any) => this.getGoogleUser(tokenResponse),
                 error_callback: (err: any) => {
-                    console.log('google error', err)
+                    console.log('google error', err);
                 }
-            })
+            });
         };
     }
 
@@ -256,7 +256,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         google.accounts!.id.renderButton(
             document!.getElementById('googleButton')!,
             { theme: 'outline', size: 'large', width: 200 }
-        )
+        );
     }
 
     autoReSignIn() {
@@ -281,10 +281,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     async getGoogleUser(tokenResponse: any) {
-        console.log('tokenResponse', tokenResponse)
-        const user: any = await this.getUserProfileData(tokenResponse.access_token)
-        console.log('user', user)
-        let user_details = {
+        console.log('tokenResponse', tokenResponse);
+        const user: any = await this.getUserProfileData(tokenResponse.access_token);
+        console.log('user', user);
+        const user_details = {
             type: 'google',
             id: user.sub,
             name: user.name,
@@ -296,8 +296,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             access_token: tokenResponse.access_token,
             gender: null,
             birthday: null
-        }
-        const userPeople = await this.getUserPeopleInfo(user_details.id, tokenResponse.access_token)
+        };
+        const userPeople = await this.getUserPeopleInfo(user_details.id, tokenResponse.access_token);
         user_details.gender = userPeople.gender;
         user_details.birthday = userPeople.birthday;
         if (this.formType === 'login') {
@@ -309,7 +309,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     getUserProfileData(accessToken: string) {
         return new Promise(function (resolve, reject) {
-            let request = new XMLHttpRequest();
+            const request = new XMLHttpRequest();
             const url = `https://www.googleapis.com/oauth2/v3/userinfo`;
             request.addEventListener("loadend", function () {
                 const response = JSON.parse(this.responseText);
@@ -328,18 +328,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     async getUserPeopleInfo(user_id: string, accessToken: string) {
         const response = await fetch(
             `https://people.googleapis.com/v1/people/${user_id}?personFields=birthdays,genders&access_token=${accessToken}`
-        )
-        let {birthdays, genders} = await response.json();
+        );
+        const {birthdays, genders} = await response.json();
         // console.log('birthdays', birthdays)
         // console.log('genders', genders)
         let gender = null;
         let birthday: any = null;
         try {
-            gender = genders[genders.length - 1].value
+            gender = genders[genders.length - 1].value;
         } catch (e) {
         }
         try {
-            for (let b of birthdays) {
+            for (const b of birthdays) {
                 if (b.date.year && b.date.month && b.date.day) {
                     birthday = new Date(b.date.year, b.date.month, b.date.day).toLocaleDateString('en-GB');
                     break;
@@ -348,7 +348,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         } catch (e) {
         }
 
-        return {gender: gender, birthday: birthday}
+        return {gender: gender, birthday: birthday};
     }
 
     handleCredentialResponse(response: CredentialResponse) {
@@ -402,7 +402,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         const response = await this.apiService.logout().toPromise();
         this.config.resetCookies();
         this.config.resetUserCreds();
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
     }
 
     async login() {
@@ -418,7 +418,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.user.last_logged_platform = this.selectedPlatform.name
+                this.user.last_logged_platform = this.selectedPlatform.name;
                 this.getUserOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
@@ -504,7 +504,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             const response: any = await lastValueFrom(this.apiService.registerSocial({user_details: user_details, planId: this.planId}));
             if (!response.err) {
                 const data = response.data;
-                console.log('data', data)
+                console.log('data', data);
                 this.hideLoginModel();
                 this.setupUser(data);
                 this.redirectUser();
@@ -568,7 +568,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     resetMessages() {
         this.errMessage = '';
-        this.successMessage = ''
+        this.successMessage = '';
         this.showVerify = false;
     }
 
@@ -587,7 +587,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     redirectUser() {
-        let returnUrl = this.helperService.getUserReturnUrl(this.user)
+        const returnUrl = this.helperService.getUserReturnUrl(this.user);
         this.router.navigateByUrl(returnUrl);
     }
 
@@ -600,27 +600,27 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         //     const d = new Date(csrftoken_exp)
         //     this.config.setCookie('csrftoken', csrftoken, d);
         // }
-        const token = this.config.getCookie('token', true)
+        const token = this.config.getCookie('token', true);
         if (!token || !clientRunningOnServerHost) { // meaning it's not served by django server
             // const csrftoken_exp = response.csrftoken_exp
-            const cookie_age = response.cookie_age
-            const token = response.token
-            const d = new Date()
-            d.setSeconds(d.getSeconds() + cookie_age)
+            const cookie_age = response.cookie_age;
+            const token = response.token;
+            const d = new Date();
+            d.setSeconds(d.getSeconds() + cookie_age);
             this.config.setCookie('token', token, d, true);
             this.config.token = this.config.getCookie('token', true);
         }
 
-        const user = this.config.getCookie('user', true)
+        const user = this.config.getCookie('user', true);
         if (!user || !clientRunningOnServerHost) { // meaning it's not served by django server
             // const csrftoken_exp = response.csrftoken_exp
-            const cookie_age = response.cookie_age
-            const user = response.user
-            const d = new Date()
-            d.setSeconds(d.getSeconds() + cookie_age)
+            const cookie_age = response.cookie_age;
+            const user = response.user;
+            const d = new Date();
+            d.setSeconds(d.getSeconds() + cookie_age);
             this.config.setCookie('user', JSON.stringify(user), d, true);
             this.config.setCookie('user-exp', d.toISOString(), d, true);
-            const new_user = this.config.getCookie('user', true)
+            const new_user = this.config.getCookie('user', true);
             this.config.user = JSON.parse(new_user);
         } else {
             this.config.user = JSON.parse(user);
@@ -631,12 +631,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         // const clientRunningOnServerHost = this.config.server_host === window.location.origin + '/';
         // if (!clientRunningOnServerHost) {
         // only when running localhost 4200
-        let user = this.config.getCookie('user', true)
+        let user = this.config.getCookie('user', true);
         if(user) {
-            user = JSON.parse(user)
+            user = JSON.parse(user);
             user.last_logged_platform = logged_platform;
-            const user_exp = this.config.getCookie('user-exp', true)
-            const d = new Date(user_exp)
+            const user_exp = this.config.getCookie('user-exp', true);
+            const d = new Date(user_exp);
             this.config.setCookie('user', JSON.stringify(user), d, true);
             this.config.user = user;
         }
@@ -644,7 +644,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     reloadSystemAndRedirect() {
-        window.location.href = window.location.origin + '?redirectUser=true'
+        window.location.href = window.location.origin + '?redirectUser=true';
     }
 
     setFormType(type: string) {
@@ -665,7 +665,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     goTo(page: string) {
-        this.router.navigate(['/' + page])
+        this.router.navigate(['/' + page]);
     }
 
     resetPassword() {
@@ -689,19 +689,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             return;
         }
         if (!this.resetPassDetails.old_password) {
-            this.resetPassDetails.errMessage = 'Please fill old password'
+            this.resetPassDetails.errMessage = 'Please fill old password';
             return;
         }
         if (!this.resetPassDetails.new_password) {
-            this.resetPassDetails.errMessage = 'Please fill new password'
+            this.resetPassDetails.errMessage = 'Please fill new password';
             return;
         }
         if (!this.resetPassDetails.confirm_password) {
-            this.resetPassDetails.errMessage = 'Please confirm new password'
+            this.resetPassDetails.errMessage = 'Please confirm new password';
             return;
         }
         if (this.resetPassDetails.confirm_password !== this.resetPassDetails.new_password) {
-            this.resetPassDetails.errMessage = 'Passwords do not match'
+            this.resetPassDetails.errMessage = 'Passwords do not match';
             return;
         }
         try {
@@ -709,8 +709,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             const obj = {
                 old_password: this.resetPassDetails.old_password,
                 new_password: this.resetPassDetails.new_password,
-                confirm_password: this.resetPassDetails.confirm_password,
-            }
+                confirm_password: this.resetPassDetails.confirm_password
+            };
             const response: any = await lastValueFrom(this.apiService.changeUserPassword(obj));
             if (!response.err) {
                 // console.log('email sent successfully, please check your email')
@@ -718,7 +718,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 setTimeout(() => {
                     this.hideResetPasswordModel();
                     this.resetPassDetails.successMessage = '';
-                }, 3000)
+                }, 3000);
                 this.resetChangePassword();
             } else {
                 if (typeof response.errMessage === 'string') {
@@ -730,7 +730,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.callInProgress = false;
         } catch (error: any) {
             console.error(error);
-            this.resetPassDetails.errMessage = error
+            this.resetPassDetails.errMessage = error;
             this.callInProgress = false;
         }
     }
@@ -747,7 +747,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.router.events.subscribe((routerEvent) => {
             if(routerEvent instanceof NavigationEnd) {
                 // Get your url
-                const l = routerEvent.url.replace(/\?.*/,'').split('/')
+                const l = routerEvent.url.replace(/\?.*/,'').split('/');
                 if (l[l.length - 1] === 'plans') {
                     this.isPlansPage = true;
                 } else {

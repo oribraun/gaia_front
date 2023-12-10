@@ -9,10 +9,10 @@ import {Config} from "../config";
 })
 export class AuthBasicGuard  {
 
-    TRAIL = 1
-    BASIC = 2
-    ADVANCE =3
-    PRO =3
+    TRAIL = 1;
+    BASIC = 2;
+    ADVANCE = 3;
+    PRO = 3;
     constructor(
         private config: Config,
         private router: Router
@@ -26,11 +26,11 @@ export class AuthBasicGuard  {
             if (this.config.user && 'role' in this.config.user && this.config.user.role >= this.TRAIL) {
                 return true;
             } else {
-                this.router.navigate([''], { queryParams: { returnUrl: state.url }})
+                this.router.navigate([''], { queryParams: { returnUrl: state.url }});
                 return false;
             }
-        })
-        return true
+        });
+        return true;
     }
 
 }

@@ -27,7 +27,7 @@ export class AlertComponent {
             this.message = message;
             clearTimeout(this.messageTimeout);
             this.messageTimeout = setTimeout(() => {
-                this.clear()
+                this.clear();
             }, this.message.timeout);
         });
     }

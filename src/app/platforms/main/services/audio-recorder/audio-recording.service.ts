@@ -13,11 +13,11 @@ export class AudioRecordingService {
     constructor() {
         this.websocket = new WebSocket('ws://127.0.0.1:8000/ws/audio-upload/');
         this.websocket.onopen = () => {
-            console.log('WebSocket connection established.')
+            console.log('WebSocket connection established.');
         };
         this.websocket.onerror = (err: any) => {
-            console.log('WebSocket err', err)
-        }
+            console.log('WebSocket err', err);
+        };
     }
 
     async startRecording() {
@@ -49,11 +49,11 @@ export class AudioRecordingService {
                 console.error('Audio track ended unexpectedly.');
             };
             //true on Chrome and Opera
-            const mimeType = 'audio/webm'
-            MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+            const mimeType = 'audio/webm';
+            MediaRecorder.isTypeSupported('audio/webm;codecs=opus');
 
             //true on Firefox
-            MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')
+            MediaRecorder.isTypeSupported('audio/ogg;codecs=opus');
 
             console.log('MediaRecorder available:', typeof MediaRecorder !== 'undefined');
             // ... rest of the code
@@ -63,7 +63,7 @@ export class AudioRecordingService {
                 ondataavailable: (blob) => {
                     this.websocket.send(blob);
                 },
-                mimeType: mimeType, // Adjust the mimeType as needed
+                mimeType: mimeType // Adjust the mimeType as needed
                 // mimeType: 'audio/wav', // Adjust the mimeType as needed
             });
             this.recorder.record();
@@ -89,7 +89,7 @@ export class AudioRecordingService {
                     this.stream.getTracks().forEach(track => track.stop());
                     // this.websocket.send(blob);
                     this.websocket.send('done');
-                    resolve(blob)
+                    resolve(blob);
                     // Handle the final recorded audio blob as needed (e.g., send to the server)
                 });
             }

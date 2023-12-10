@@ -30,9 +30,9 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     current_base_lesson_id!: number;
     user_lesson_status!: string;
     question_id!: number;
-    modalActive:boolean=false;
-    enable_end_lesson_button:boolean=false;
-    vocabulary_was_added:boolean=true;
+    modalActive:boolean = false;
+    enable_end_lesson_button:boolean = false;
+    vocabulary_was_added:boolean = true;
     slide_uid!: string;
     is_test_mode: boolean = false;
     test_timer_counter_id:number = 1001101;
@@ -52,7 +52,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     currentSlide: PresentationSlide = new PresentationSlide();
     currentObjective: any = null;
     currentData: any = null;
-    recommendedVideos: any = [{id: 29, lesson_group_type_id: 1, course_plan_id: 1, title: 'lesson title'}]
+    recommendedVideos: any = [{id: 29, lesson_group_type_id: 1, course_plan_id: 1, title: 'lesson title'}];
     course_plan_id!: number;
 
     presentationReplayIsInProgress = false;
@@ -63,16 +63,16 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     prevSlideIsInProgress = false;
     eventHandlingInProgress = false;
 
-    apiSubscriptions: any = {}
+    apiSubscriptions: any = {};
 
-    audioQue: string[] = []
-    audioBlobQue: BlobItem[] = []
+    audioQue: string[] = [];
+    audioBlobQue: BlobItem[] = [];
     speakInProgress = false;
     currentAudio: any = null;
 
     doNotDisturb = false;
     isPause: boolean = false;
-    webcam_last_snapshot_url: string = ''
+    webcam_last_snapshot_url: string = '';
     webcam_last_snapshot_url_updated: boolean = false;
     needToCallNextSlideReplay: boolean = false;
     forceChangeSlideInfo: boolean = false;
@@ -104,15 +104,15 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         speaking:'speaking',
         generic_slide:'generic_slide',
         embed_game:'embed_game'
-    }
+    };
 
     @ViewChild('slides', { static: false }) slides!: ElementRef;
-    slidesData: any[] = []
+    slidesData: any[] = [];
     slideWidth: number = -1;
     slideHeight: number = -1;
 
-    imageSrc = ''
-    timersHelper = new TimersHelper()
+    imageSrc = '';
+    timersHelper = new TimersHelper();
     lesson_group_type: any = {};
 
     recognitionSubscribe: any;
@@ -131,13 +131,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         private alertService: AlertService,
         private generalService: GeneralService
     ) {
-        this.imageSrc = this.config.staticImagePath
+        this.imageSrc = this.config.staticImagePath;
     }
 
     ngOnInit(): void {
         this.getUser();
         this.route.paramMap.subscribe((params: ParamMap) => {
-            const user_lesson_id = params.get('id')
+            const user_lesson_id = params.get('id');
             if (user_lesson_id) {
                 this.user_lesson_id = parseInt(user_lesson_id);
                 if (this.socketRecorderEnabled) {
@@ -146,17 +146,17 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.initApplication();
                 }
             }
-        })
+        });
         this.route.queryParams.subscribe((params) => {
-            const q_id = params['q_id']
+            const q_id = params['q_id'];
             if (q_id) {
                 this.question_id = parseInt(q_id);
             }
-            const s_uid = params['s_uid']
+            const s_uid = params['s_uid'];
             if (s_uid) {
                 this.slide_uid = s_uid;
             }
-        })
+        });
     }
 
     ngAfterViewInit(): void {
@@ -168,16 +168,16 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     setTestModeTimer(){
-        console.log('DANIEL YOU ARE IN TEST MODE')
-        this.timersHelper.handleTimer(this.test_timer_counter_id,60*60)
-        this.timersHelper.handleCounter(this.test_timer_counter_id,0)
+        console.log('DANIEL YOU ARE IN TEST MODE');
+        this.timersHelper.handleTimer(this.test_timer_counter_id,60 * 60);
+        this.timersHelper.handleCounter(this.test_timer_counter_id,0);
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     startRecordingScreen() {
@@ -189,13 +189,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 // stoped sharing
                 console.log('socketRecorderService stopped sharing');
                 this.socketRecorderService.stopCapturingInterval(this.user.id, user_lesson_id);
-                this.socketRecorderService.capturingMediaStream = null
+                this.socketRecorderService.capturingMediaStream = null;
             };
             this.initApplication();
         }).catch((e) => {
             console.log('setupSocketRecorder e', e);
             this.initApplication();
-        })
+        });
     }
 
     async resetApplication(){
@@ -220,9 +220,9 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
             this.getPresentation();
             if (!this.initApplicationDone) {
                 // adding listeners only once
-                this.listenForSlideEventRequests()
-                this.listenForPauseEvnet()
-                this.listenForSnapshots()
+                this.listenForSlideEventRequests();
+                this.listenForPauseEvnet();
+                this.listenForSnapshots();
             }
             this.initApplicationDone = true;
 
@@ -231,11 +231,11 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.speechRecognitionService.setupSpeechRecognition();
                 // this.speechRecognitionService.startListening();
             }
-            this.lessonService.resetHelpMode()
+            this.lessonService.resetHelpMode();
             if (!this.initApplicationDone) {
                 // adding listeners only once
-                this.listenForPauseEvnet()
-                this.listenForSlideEventRequests()
+                this.listenForPauseEvnet();
+                this.listenForSlideEventRequests();
             }
             this.initApplicationDone = true;
             // this.setupPresentationMock();
@@ -247,27 +247,27 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     async getPresentation() {
         this.gettingPresentation = true;
         this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
-            practice_lesson_id: this.user_lesson_id,
+            practice_lesson_id: this.user_lesson_id
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     if (response.errMessage.indexOf('lesson does not exist') > -1) {
-                        this.router.navigate(['ielts/dashboard'])
+                        this.router.navigate(['ielts/dashboard']);
                     }
-                    console.log('getPresentation err', response)
+                    console.log('getPresentation err', response);
                 } else {
                     this.presentation = new Presentation(response.presentation);
-                    this.lesson_group_type = response.lesson_group_type
-                    this.is_test_mode = this.lesson_group_type['name'] == 'test' || false
+                    this.lesson_group_type = response.lesson_group_type;
+                    this.is_test_mode = this.lesson_group_type['name'] == 'test' || false;
                     if(this.is_test_mode){
-                        this.setTestModelLimitations()
+                        this.setTestModelLimitations();
                     }
                     this.recommendedVideos = response.recommended_videos;
                     this.course_plan_id = response.course_plan_id;
                     this.current_base_lesson_id = response.current_base_lesson_id;
                     this.user_lesson_status = response.user_lesson_status;
                     this.gotFirstPresentation = true;
-                    console.log('this.presentation ', this.presentation)
+                    console.log('this.presentation ', this.presentation);
                     if (this.question_id) {
                         let get_slide_from_presentation = true;
                         if (this.slide_uid) {
@@ -286,7 +286,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                         this.setCurrentSection();
                         this.setData();
                     }
-                    console.log('this.currentSlide', this.currentSlide)
+                    console.log('this.currentSlide', this.currentSlide);
                     if (!this.mock) {
                         // this.restartCurrentSlide()
                         this.getNewSlideReply();
@@ -295,13 +295,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.gettingPresentation = false;
             },
             error: (error) => {
-                console.log('getPresentation error', error)
+                console.log('getPresentation error', error);
                 this.gettingPresentation = false;
-            },
-        })
+            }
+        });
     }
 
-    async getPresentationEventReplay(data:any={}) {
+    async getPresentationEventReplay(data:any = {}) {
         if(!data.hasOwnProperty('background') || !data['background']){
             if (this.eventHandlingInProgress) {
                 return;
@@ -315,39 +315,39 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 help_mode: this.lessonService.helpMode,
                 data: data,
                 array_buffer: this.enableArrayBuffer,
-                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url : "same"
             }
         }).subscribe({
             next: (response: any) => {
                 this.eventHandlingInProgress = false;
                 if (response.err) {
-                    console.log('response err', response)
+                    console.log('response err', response);
                     this.alertService.error(response.errMessage);
-                    this.handleOnReplayError('eventReplay')
+                    this.handleOnReplayError('eventReplay');
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay();
                 }
             },
             error: (error) => {
-                console.log('getPresentationEventReplay error', error)
+                console.log('getPresentationEventReplay error', error);
                 this.eventHandlingInProgress = false;
                 if (data.source == "image_generator_button_click") {
-                    const data = {'type': 'additional_instructions', 'data': {source: 'image_generator_button_click_error'}}
-                    this.lessonService.Broadcast("slideEventReply", data)
+                    const data = {'type': 'additional_instructions', 'data': {source: 'image_generator_button_click_error'}};
+                    this.lessonService.Broadcast("slideEventReply", data);
                 }
-            },
-        })
+            }
+        });
     }
 
     async getPresentationReplay(text: string = '') {
         if (this.presentationNoReplayIsInProgress) {
             return;
         }
-        let message = text;
+        const message = text;
 
         this.presentationReplayIsInProgress = true;
-        this.lessonService.Broadcast('student_reply_request', message)
+        this.lessonService.Broadcast('student_reply_request', message);
         this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
             practice_lesson_id: this.user_lesson_id,
             app_data: {
@@ -355,7 +355,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 student_text: message,
                 help_mode: this.lessonService.helpMode,
                 array_buffer: this.enableArrayBuffer,
-                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url : "same"
             }
         }).subscribe({
             next: (response: any) => {
@@ -363,20 +363,20 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 this.lessonService.Broadcast('student_reply_response', response);
 
                 if (response.err) {
-                    console.log('response err', response)
+                    console.log('response err', response);
                     this.alertService.error(response.errMessage);
                     this.lessonService.Broadcast('student_reply_error', response);
-                    this.handleOnReplayError()
+                    this.handleOnReplayError();
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay();
                 }
             },
             error: (error) => {
-                console.log('getPresentationReplay error', error)
+                console.log('getPresentationReplay error', error);
                 this.presentationReplayIsInProgress = false;
-            },
-        })
+            }
+        });
     }
 
     async getNewSlideReply() {
@@ -397,16 +397,16 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 n_seconds_from_last_sr: 0,
                 n_seconds_from_last_speak: 0,
                 array_buffer: this.enableArrayBuffer,
-                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url: "same"
+                webcam_last_snapshot_url: this.webcam_last_snapshot_url_updated ? this.webcam_last_snapshot_url : "same"
             }
         }).subscribe({
             next: async (response: any) => {
                 this.presentationNewSlideInProgress = false;
                 // this.stopAudio()
                 if (response.err) {
-                    console.log('new slide response err', response)
+                    console.log('new slide response err', response);
                     this.alertService.error(response.errMessage);
-                    this.handleOnReplayError()
+                    this.handleOnReplayError();
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay('new_slide');
@@ -415,17 +415,17 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
             },
             error: (error) => {
                 this.presentationNewSlideInProgress = false;
-                console.log('new slide error', error)
-            },
-        })
+                console.log('new slide error', error);
+            }
+        });
     }
 
     async getSpeakNative() {
         let blob = null;
-        console.log('speakNative this.currentSlide', this.currentSlide)
+        console.log('speakNative this.currentSlide', this.currentSlide);
         if (this.currentSlide.should_read_native &&
             (this.currentSlide.index_in_bundle == 0 || this.currentSlide.index_in_bundle == -1)) {
-            blob = await this.speakNative({'text': this.currentSlide.native_language_text.he})
+            blob = await this.speakNative({'text': this.currentSlide.native_language_text.he});
         }
         return blob;
     }
@@ -444,12 +444,12 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         }).subscribe({
             next: (response: any) => {
                 this.presentationNewSlideInProgress = false;
-                this.clearForcedSlide()
+                this.clearForcedSlide();
 
                 if (response.err) {
-                    console.log('change slide response err', response)
+                    console.log('change slide response err', response);
                     this.alertService.error(response.errMessage);
-                    this.handleOnReplayError()
+                    this.handleOnReplayError();
                 } else {
                     const data = response.data;
                     // this.stopAudio();
@@ -460,7 +460,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                         this.setCurrentSection();
                         this.setData();
                         if (this.doNotDisturb) {
-                            this.lessonService.Broadcast('endDoNotDisturb',{})
+                            this.lessonService.Broadcast('endDoNotDisturb',{});
                         }
                         if (this.isPause) {
                             this.needToCallNextSlideReplay = true;
@@ -468,48 +468,48 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                             this.getNewSlideReply();
                         }
                     } else {
-                        console.log('change slide response err', response)
+                        console.log('change slide response err', response);
                     }
                 }
             },
             error: (error) => {
                 this.presentationNewSlideInProgress = false;
-                this.clearForcedSlide()
-                console.log('change slide error', error)
-            },
-        })
+                this.clearForcedSlide();
+                console.log('change slide error', error);
+            }
+        });
     }
 
-    async speakNative(obj:any={}): Promise<any> {
+    async speakNative(obj:any = {}): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {
-                this.lessonService.speakNativeOnWaiting=true;
+                this.lessonService.speakNativeOnWaiting = true;
                 if (obj.text) {
                     this.apiSubscriptions.text_to_speech = this.apiService.textToSpeech({
                         'app_data':{'text':obj.text, 'lang':'iw'}
                     }).subscribe({
                         next: async (response: any) => {
                             if (response.err) {
-                                console.log('textToSpeech err', response)
+                                console.log('textToSpeech err', response);
                             } else {
                                 const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
-                                console.log('textToSpeech - ', arrayBuffer)
+                                console.log('textToSpeech - ', arrayBuffer);
                                 let blob = null;
                                 if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
                                     blob = new BlobItem({arrayBuffer:arrayBuffer,
                                         action:'speakNative',
-                                        type:'audio'})
+                                        type:'audio'});
                                 }
                                 resolve(blob);
                             }
                         },
                         error: (error) => {
-                            console.log('getPresentation error', error)
-                        },
-                    })
+                            console.log('getPresentation error', error);
+                        }
+                    });
                 }
             }
-        })
+        });
     }
 
     handleOnReplayError(type = '') {
@@ -538,20 +538,20 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
             return;
         }
-        const data = this.currentData
-        let currentObjectiveIndexChanged = false
+        const data = this.currentData;
+        let currentObjectiveIndexChanged = false;
         const additional_instructions = data.additional_instructions;
         const presentation_index_updated = data.presentation_index_updated;
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const all_objectives_accomplished = data.all_objectives_accomplished;
         if(this.currentObjectiveIndex != data.current_objective_index){
-            this.currentObjectiveIndex = data.current_objective_index
-            currentObjectiveIndexChanged=true
+            this.currentObjectiveIndex = data.current_objective_index;
+            currentObjectiveIndexChanged = true;
         }
         const n_slide_objectives = data.n_slide_objectives;
         const presentation_done = data.presentation_done;
-        const all_presentation_tasks_completed= data.all_presentation_tasks_completed;
+        const all_presentation_tasks_completed = data.all_presentation_tasks_completed;
         const text = data.text;
         // this.broadCastMessage('computer', text, true);
         const help_sound_url = data.help_sound_url;
@@ -564,7 +564,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         // console.log('after+speak_native')
         // console.log('slideEventReply additional_instructions', additional_instructions)
 
-        this.handleCoreFunctionalityOfSlide()
+        this.handleCoreFunctionalityOfSlide();
 
         let blob = null;
         if (reason === 'new_slide') {
@@ -573,9 +573,9 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         if (additional_instructions) {
             const data = {
                 type: 'additional_instructions',
-                data: additional_instructions,
-            }
-            this.lessonService.Broadcast("slideEventReply", data)
+                data: additional_instructions
+            };
+            this.lessonService.Broadcast("slideEventReply", data);
         }
 
         const doNotPlaySound = this.currentSlide.slide_type === 'video';
@@ -590,10 +590,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.audioBlobQue.push(blob);
                 }
                 if (help_sound_buffer) {
-                    console.log('help_sound_buffer added to que')
+                    console.log('help_sound_buffer added to que');
                     const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
                     if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
-                        this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished?'doNotListenAfter':'', type:'audio'}));
+                        this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished ? 'doNotListenAfter' : '', type:'audio'}));
                     }
                 }
                 if (blob && this.currentSlide.index_in_bundle == -1) {
@@ -601,8 +601,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.audioBlobQue.push(blob);
                 }
                 if (!this.speakInProgress && this.audioBlobQue.length) {
-                    console.log('this.audioBlobQue', this.audioBlobQue.length)
-                    console.log('this.speakInProgress', this.speakInProgress)
+                    console.log('this.audioBlobQue', this.audioBlobQue.length);
+                    console.log('this.speakInProgress', this.speakInProgress);
                     const value = await this.playUsingBlob();
                 }
             }
@@ -614,7 +614,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
             this.stopAudio();
             return;
         }
-        console.log("all_presentation_tasks_completed",all_presentation_tasks_completed)
+        console.log("all_presentation_tasks_completed",all_presentation_tasks_completed);
         if (all_presentation_tasks_completed){
             this.enable_end_lesson_button = true;
             // this.modalActive=true;
@@ -626,32 +626,32 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
         if (all_objectives_accomplished) {
             // NIR - TODO - add wait for audio que to finish
-            this.changeSlideReply()
+            this.changeSlideReply();
         }
 
         if(currentObjectiveIndexChanged) {
-            this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex)
+            this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex);
         }
 
         // this.handleCoreFunctionalityOfSlide()
 
     }
 
-    handleCoreFunctionalityOfSlide(is_key_enabled:string='') {
-        const coreFuncs = this.currentSlide.core_instructions
+    handleCoreFunctionalityOfSlide(is_key_enabled:string = '') {
+        const coreFuncs = this.currentSlide.core_instructions;
         if(is_key_enabled){
             if(coreFuncs.hasOwnProperty(is_key_enabled)){
-                return coreFuncs[is_key_enabled]
+                return coreFuncs[is_key_enabled];
             } else {
-                return true
+                return true;
             }
         } else {
-            console.log('coreFuncs', coreFuncs)
+            console.log('coreFuncs', coreFuncs);
             if(coreFuncs.hasOwnProperty('asr') && !coreFuncs.asr){
-                console.log('coreFuncs', 'Stopping ASR')
+                console.log('coreFuncs', 'Stopping ASR');
             }
         }
-        return false
+        return false;
     }
 
     stopAudio() {
@@ -684,16 +684,16 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     playUsingBlob() {
         return new Promise(async (resolve, reject) => {
             if (this.audioBlobQue.length) {
-                console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length)
+                console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length);
 
                 const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
                 const loop = (blobItem: BlobItem) => {
-                    if (blobItem.action=='speakNative') {
+                    if (blobItem.action == 'speakNative') {
                         this.lessonService.speakNativeOnProgress = true;
                         this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_do_nothing'});
                     }
                     else {
-                        console.log('change gif - speaking')
+                        console.log('change gif - speaking');
                         this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_speaking'});
                     }
                     this.speakInProgress = true;
@@ -724,31 +724,31 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                         //     }
                         //     console.log('audio ended')
                         // }
-                    }
+                    };
                     this.currentAudio.onpause = () => {
-                        console.log('audio paused')
+                        console.log('audio paused');
                         this.speakInProgress = false;
-                        if (blobItem && blobItem.action=='speakNative') {
+                        if (blobItem && blobItem.action == 'speakNative') {
                             this.lessonService.speakNativeOnProgress = false;
                             this.lessonService.speakNativeOnWaiting = false;
                         }
-                    }
+                    };
                     this.currentAudio.onended = () => {
-                        if (blobItem && blobItem.action=='speakNative') {
+                        if (blobItem && blobItem.action == 'speakNative') {
                             this.lessonService.speakNativeOnProgress = false;
                             this.lessonService.speakNativeOnWaiting = false;
                         }
 
-                        console.log('audio ended')
+                        console.log('audio ended');
                         this.currentAudio.currentTime = 0;
                         const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
-                        console.log('playUsingBlob ended arrayBuffer')
+                        console.log('playUsingBlob ended arrayBuffer');
                         if (currentBlobItem) {
-                            loop(currentBlobItem)
+                            loop(currentBlobItem);
                         } else {
-                            console.log('end_blobItem', blobItem)
-                            if (!blobItem || blobItem.action!='doNotListenAfter') {
-                                console.log('change gif - listening')
+                            console.log('end_blobItem', blobItem);
+                            if (!blobItem || blobItem.action != 'doNotListenAfter') {
+                                console.log('change gif - listening');
                                 // this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
                                 if (this.recognitionSubscribe) {
                                     this.startListenToAsr();
@@ -759,7 +759,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                             resolve(true);
                         }
                     };
-                }
+                };
                 if (currentBlobItem) {
                     loop(currentBlobItem);
                 }
@@ -768,35 +768,35 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     async resetPresentation(reason: string = '') {
-        console.log('this.gettingPresentation',this.gettingPresentation)
-        console.log('this.presentationResetIsInProgress',this.presentationResetIsInProgress)
+        console.log('this.gettingPresentation',this.gettingPresentation);
+        console.log('this.presentationResetIsInProgress',this.presentationResetIsInProgress);
         if (this.presentationResetIsInProgress || this.gettingPresentation) {
             return;
         }
-        await this.resetApplication()
+        await this.resetApplication();
         this.presentationResetIsInProgress = true;
         this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
             practice_lesson_id: this.user_lesson_id,
             app_data: {
-                type: reason,
+                type: reason
             }
         }).subscribe({
             next: (response: any) => {
                 this.presentationResetIsInProgress = false;
                 if (response.err) {
-                    console.log('response err', response)
+                    console.log('response err', response);
                     this.alertService.error(response.errMessage);
                     this.handleOnReplayError();
                 } else {
-                    console.log('response', response)
-                    this.initApplication()
+                    console.log('response', response);
+                    this.initApplication();
                 }
             },
             error: (error) => {
                 this.presentationResetIsInProgress = false;
-                console.log('resetPresentation error', error)
-            },
-        })
+                console.log('resetPresentation error', error);
+            }
+        });
     }
 
     setCurrentSection(index: number = -1) {
@@ -815,7 +815,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         } else {
             this.currentSlide = new PresentationSlide(this.currentSection.slides[this.currentSlideIndex]);
         }
-        console.log('this.currentSlide', this.currentSlide)
+        console.log('this.currentSlide', this.currentSlide);
     }
 
     setCurrentObjective(index: number = -1) {
@@ -830,26 +830,26 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         if (this.currentSlide.bundle_id > -1) {
             this.slidesData = this.currentSlide.bundle;
         } else {
-            this.slidesData = [this.currentSlide]
+            this.slidesData = [this.currentSlide];
         }
         setTimeout(() => {
             this.setSlidesRelativeWidth();
-        })
+        });
     }
 
     setSlidesRelativeWidth() {
         const map = this.slidesData.map(o => o.slide_type).filter((str) => str !== undefined);
         const all_blanks = map.every( v => v === 'blanks' );
         const all_word_repeater = map.every( v => v === 'word_repeater' );
-        const desiredRatio = 9/16;
+        const desiredRatio = 9 / 16;
         if(this.slides && this.slidesData.length > 1 && all_word_repeater) {
             const e = this.slides.nativeElement;
             const slidesWidth = e.clientWidth;
             const slidesHeight = e.clientHeight;
-            const currentRatio = slidesHeight/slidesWidth;
+            const currentRatio = slidesHeight / slidesWidth;
             if (currentRatio < 1) {
                 // width is bigger
-                let newWidth = slidesHeight / desiredRatio;
+                const newWidth = slidesHeight / desiredRatio;
                 if (newWidth < slidesWidth) {
                     this.slideWidth = newWidth;
                     this.slideHeight = -1;
@@ -859,7 +859,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                 }
             } else {
                 // height is bigger
-                let newHeight = slidesWidth * desiredRatio;
+                const newHeight = slidesWidth * desiredRatio;
                 if (newHeight < slidesHeight) {
                     this.slideWidth = -1;
                     this.slideHeight = newHeight;
@@ -881,29 +881,29 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     listenForSlideEventRequests(){
         this.lessonService.ListenFor("startListenToAsr").subscribe((obj: any) => {
             this.startListenToAsr();
-        })
+        });
         this.lessonService.ListenFor("stopListenToAsr").subscribe((removeSubscribe: boolean = false) => {
             this.stopListenToAsr(removeSubscribe);
-        })
+        });
         this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
             if (obj.stopAudio) {
                 this.stopAudio();
             }
-            this.getPresentationEventReplay(obj)//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
-        })
+            this.getPresentationEventReplay(obj);//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        });
         this.lessonService.ListenFor("PresentationReplayRequest").subscribe((obj: any) => {
             if (obj.stopAudio) {
                 this.stopAudio();
             }
-            this.getPresentationReplay(obj.student_response)
-        })
+            this.getPresentationReplay(obj.student_response);
+        });
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
             if(!this.doNotDisturb){
                 this.doNotDisturb = true;
                 this.toggleStopAll(this.doNotDisturb);
                 this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_sleep'});
             }
-        })
+        });
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
             if(this.doNotDisturb){
                 this.doNotDisturb = false;
@@ -912,41 +912,41 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     this.toggleStopAll(this.doNotDisturb);
                 }
             }
-        })
+        });
         this.lessonService.ListenFor("restartCurrentSlide").subscribe((helpMode: string) => {
-            this.restartCurrentSlide()
-        })
+            this.restartCurrentSlide();
+        });
         this.lessonService.ListenFor("stopAudio").subscribe((obj: any) => {
-            this.stopAudio()
-        })
+            this.stopAudio();
+        });
         this.lessonService.ListenFor("slideDestroy").subscribe((obj: any) => {
-            console.log('slideDestroy Event')
-        })
+            console.log('slideDestroy Event');
+        });
         this.lessonService.ListenFor("slideAddToVocab").subscribe((obj: any) => {
-            console.log('slideAddToVocab Event')
+            console.log('slideAddToVocab Event');
             const data = {
                 word: obj.word,
                 translate: obj.translate,
                 lesson_id: this.user_lesson_id,
                 slide_uuid: this.currentSlide.slide_uid,
                 slide_index: this.currentSlideIndex
-            }
+            };
             this.apiService.saveVocab(data).subscribe({
                 next: (response: any) => {
                     if (response.err) {
-                        console.log('saveVocab err', response)
+                        console.log('saveVocab err', response);
                     } else {
-                        console.log('saveVocab success')
+                        console.log('saveVocab success');
                     }
                 },
                 error: (error) => {
-                    console.log('saveVocab error', error)
-                },
-            })
-        })
+                    console.log('saveVocab error', error);
+                }
+            });
+        });
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
-            this.getPresentationEventReplay(obj)
-        })
+            this.getPresentationEventReplay(obj);
+        });
 
     }
 
@@ -955,29 +955,29 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
             if (this.doNotDisturb) {
                 return;
             }
-            this.isPause = true
-            this.lessonService.Broadcast('panelIconChange', {'iconName':'teacher_sleep'})
-            this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
-        })
+            this.isPause = true;
+            this.lessonService.Broadcast('panelIconChange', {'iconName':'teacher_sleep'});
+            this.togglePauseLesson();//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        });
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
             if (this.doNotDisturb) {
                 return;
             }
             this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
-            this.isPause = false
-            this.togglePauseLesson()//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
-        })
+            this.isPause = false;
+            this.togglePauseLesson();//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
+        });
     }
 
     listenForSnapshots(){
         this.lessonService.ListenFor("snapshotTaken").subscribe((obj: any) => {
-            this.webcam_last_snapshot_url = obj["image_url"]
-            this.webcam_last_snapshot_url_updated = true
-        })
+            this.webcam_last_snapshot_url = obj["image_url"];
+            this.webcam_last_snapshot_url_updated = true;
+        });
     }
 
     togglePauseLesson(){
-        console.log('this.isPause', this.isPause)
+        console.log('this.isPause', this.isPause);
         this.toggleStopAll(this.isPause);
     }
 
@@ -1002,22 +1002,22 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true
-                    },
+                    }
                     // video: true
                 };
                 const videoStream = await navigator.mediaDevices.getUserMedia(userCameraConstraints).catch(e => {
-                    throw e
-                })
+                    throw e;
+                });
                 const userShareScreenConstraints = {
                     video: true,
                     audio: {
                         echoCancellation: true,
-                        noiseSuppression: true,
+                        noiseSuppression: true
                         //     restrictOwnAudio: false
                         //     // sampleRate: 44100,
                         //     // suppressLocalAudioPlayback: true,
                     },
-                    preferCurrentTab: true,
+                    preferCurrentTab: true
                     // systemAudio : 'include',
                     // selfBrowserSurface: 'include'
                     // video: {
@@ -1025,23 +1025,23 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
                     //     // cursor: 'always',
                     //     // resizeMode: 'crop-and-scale',
                     // },
-                }
+                };
 
-                this.socketRecorderService.connect()
+                this.socketRecorderService.connect();
                 // this.socketRecorderEvents.onConnect = this.socketRecorderService.onConnect.subscribe(this.onSocketRecorderConnect)
                 this.socketRecorderService.ListenFor('got-recorder-data').subscribe((data) => {
-                    console.log('SocketRecorderService got-recorder-data', data)
-                })
+                    console.log('SocketRecorderService got-recorder-data', data);
+                });
                 this.socketRecorderService.ListenFor('hello-back').subscribe((data) => {
-                    console.log('SocketRecorderService hello-back', data)
-                })
+                    console.log('SocketRecorderService hello-back', data);
+                });
 
                 let displayStream: any = null;
                 if (!this.socketRecorderService.capturingMediaStream) {
                     try {
                         displayStream = await navigator.mediaDevices.getDisplayMedia(userShareScreenConstraints).catch(e => {
-                            throw e
-                        })
+                            throw e;
+                        });
 
                         // combine two audio sources
                         const audioCtx = new AudioContext();
@@ -1053,21 +1053,21 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
                         const combineAudio = destination.stream.getAudioTracks();
                         const displayVideoTracks = displayStream.getVideoTracks();
-                        const mergeTracks = [...displayVideoTracks, ...combineAudio]
-                        this.socketRecorderService.capturingMediaStream = new MediaStream(mergeTracks)
+                        const mergeTracks = [...displayVideoTracks, ...combineAudio];
+                        this.socketRecorderService.capturingMediaStream = new MediaStream(mergeTracks);
                         this.socketRecorderService.setupContinuesRecording3(this.socketRecorderService.capturingMediaStream);
                         resolve('');
                     } catch (e) {
-                        reject('the use canceled streaming')
+                        reject('the use canceled streaming');
                         return;
                     }
                 } else {
-                    reject('already running')
+                    reject('already running');
                 }
             } else {
                 reject('Webcam access not supported');
             }
-        })
+        });
     }
 
     resetAllEventProgress() {
@@ -1082,85 +1082,85 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     unsubscribeAllHttpEvents() {
-        for (let key in this.apiSubscriptions) {
+        for (const key in this.apiSubscriptions) {
             if (this.apiSubscriptions[key]) {
                 this.apiSubscriptions[key].unsubscribe();
                 this.apiSubscriptions[key] = null;
             }
         }
-        this.clearForcedSlide()
+        this.clearForcedSlide();
     }
 
     restartCurrentSlide(){
-        this.setForcedSlide(-1)
-        this.changeSlideReply()
+        this.setForcedSlide(-1);
+        this.changeSlideReply();
     }
 
-    setForcedSlide(modifier:number=0){
-        let flat_index = this.presentation.sections[this.currentSectionIndex].slides[this.currentSlideIndex].flat_index
-        let new_flat_index = flat_index+modifier
-        console.log('flat index ',flat_index)
-        console.log('flat index info',this.presentation.slides_flat[flat_index])
-        console.log('new_flat_index ',new_flat_index)
-        console.log('new_flat_index info ',this.presentation.slides_flat[new_flat_index])
-        if(new_flat_index>=0 && new_flat_index<this.presentation.slides_flat.length){
-            let target_slide_info = this.presentation.slides_flat[new_flat_index]
-            this.forceChangeSlideInfo = true
-            this.forcedChangeSlideInfo = target_slide_info
-        } else if (new_flat_index<0){
-            this.resetPresentation()
+    setForcedSlide(modifier:number = 0){
+        const flat_index = this.presentation.sections[this.currentSectionIndex].slides[this.currentSlideIndex].flat_index;
+        const new_flat_index = flat_index + modifier;
+        console.log('flat index ',flat_index);
+        console.log('flat index info',this.presentation.slides_flat[flat_index]);
+        console.log('new_flat_index ',new_flat_index);
+        console.log('new_flat_index info ',this.presentation.slides_flat[new_flat_index]);
+        if(new_flat_index >= 0 && new_flat_index < this.presentation.slides_flat.length){
+            const target_slide_info = this.presentation.slides_flat[new_flat_index];
+            this.forceChangeSlideInfo = true;
+            this.forcedChangeSlideInfo = target_slide_info;
+        } else if (new_flat_index < 0){
+            this.resetPresentation();
 
         }
     }
 
     onNextSlide(e: any) {
-        this.setForcedSlide(0)
+        this.setForcedSlide(0);
         if(this.forceChangeSlideInfo){
-            this.stopAudio()
-            this.changeSlideReply()
+            this.stopAudio();
+            this.changeSlideReply();
         }
     }
 
     onPrevSlide(e: any) {
-        this.setForcedSlide(-2)
+        this.setForcedSlide(-2);
         if(this.forceChangeSlideInfo){
-            this.stopAudio()
-            this.changeSlideReply()
+            this.stopAudio();
+            this.changeSlideReply();
         }
     }
 
     onNextLesson(e: any) {
-        const map = this.recommendedVideos.map((o: any) => o.id)
+        const map = this.recommendedVideos.map((o: any) => o.id);
         const index = map.indexOf(this.current_base_lesson_id);
         if (index > -1 && index < this.recommendedVideos.length - 1) {
             const next_lesson = this.recommendedVideos[index + 1];
             this.generalService.getOrGenerateLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id])
+                this.router.navigate(['ielts/practice/' + id]);
             }).catch((error: any) => {
-                this.alertService.error(error)
-            })
+                this.alertService.error(error);
+            });
         }
     }
 
     onPrevLesson(e: any) {
-        const map = this.recommendedVideos.map((o: any) => o.id)
+        const map = this.recommendedVideos.map((o: any) => o.id);
         const index = map.indexOf(this.current_base_lesson_id);
         if (index > -1 && index > 0) {
             const prev_lesson = this.recommendedVideos[index - 1];
             this.generalService.getOrGenerateLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id])
+                this.router.navigate(['ielts/practice/' + id]);
             }).catch((error: any) => {
-                this.alertService.error(error)
-            })
+                this.alertService.error(error);
+            });
         }
     }
 
     resetSpeechRecognition() {
-        console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing)
+        console.log('resetting ASR', this.speechRecognitionService.ASR_recognizing);
         if (this.speechRecognitionService.ASR_recognizing) {
             this.speechRecognitionService.stopListening().then(() => {
-                this.startSpeechRecognition()
-            })
+                this.startSpeechRecognition();
+            });
         } else {
             if (!this.speechRecognitionService.stoppingRecognition) {
                 this.startSpeechRecognition();
@@ -1193,24 +1193,24 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     clearForcedSlide() {
-        this.forceChangeSlideInfo = false
-        this.forcedChangeSlideInfo = {}
+        this.forceChangeSlideInfo = false;
+        this.forcedChangeSlideInfo = {};
     }
 
     clearSocketRecorderServices() {
         if (this.socketRecorderEvents.onConnect) {
             // this.socketRecorderEvents.onConnect.unsubscribe(this.onSocketRecorderConnect)
             this.socketRecorderService.ClearEvent('got-recorder-data');
-            this.socketRecorderService.ClearEvent('hello-back')
+            this.socketRecorderService.ClearEvent('hello-back');
         }
     }
 
     setSlideBySlideUid() {
         let section_index = 0;
-        for (let section of this.presentation.sections) {
+        for (const section of this.presentation.sections) {
             let slide_index = 0;
-            for (let slide of section.slides) {
-                console.log("slide.slide_uid, this.slide_uid", slide.slide_uid, this.slide_uid)
+            for (const slide of section.slides) {
+                console.log("slide.slide_uid, this.slide_uid", slide.slide_uid, this.slide_uid);
                 if (slide.slide_uid == this.slide_uid) {
                     this.currentSectionIndex = section_index;
                     this.currentSlideIndex = slide_index;
@@ -1236,10 +1236,10 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         this.setCurrentSection();
         this.setData();
         if (this.currentSlide.all_questions) {
-            const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id)
+            const all_question_ids = this.currentSlide.all_questions.map(o => o.question_id);
             const index = all_question_ids.indexOf(this.question_id);
             if (index > -1) {
-                this.currentSlide.question_index = index
+                this.currentSlide.question_index = index;
             }
         }
     }
@@ -1248,12 +1248,12 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     openVocabularyModal(){
-        this.modalActive = true
+        this.modalActive = true;
     }
 
 
     closeModel(){
-        this.modalActive = false
+        this.modalActive = false;
     }
 
     startListenToAsr() {
@@ -1266,13 +1266,13 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
     }
 
     onRecognitionResults = (results: any) => {
-        console.log("onRecognitionResults results", results)
+        console.log("onRecognitionResults results", results);
         const recognitionText = results.text;
         if (results.isFinal) {
-            console.log('onRecognitionResults final', recognitionText)
-            this.lessonService.Broadcast('recognitionText', recognitionText)
+            console.log('onRecognitionResults final', recognitionText);
+            this.lessonService.Broadcast('recognitionText', recognitionText);
         }
-    }
+    };
 
     stopListenToAsr(removeSubscribe = false) {
         if (this.recognitionSubscribe) {
@@ -1288,7 +1288,7 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
 
     // check Current Video Exist In RecommendedVideos
     checkRecommendedVideos() {
-        const map = this.recommendedVideos.map((o: any) => {o.id})
+        const map = this.recommendedVideos.map((o: any) => {o.id;});
         const index = map.indexOf(this.current_base_lesson_id);
         return index > -1;
     }
@@ -1297,8 +1297,8 @@ export class PracticeLessonComponent implements OnInit,AfterViewInit {
         if (!this.currentSlide.video_completed) {
             const data = {
                 "source": "video_ielts_mark_as_complete_button"
-            }
-            this.lessonService.Broadcast("slideEventRequest", data)
+            };
+            this.lessonService.Broadcast("slideEventRequest", data);
         }
     }
 

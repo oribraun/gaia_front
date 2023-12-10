@@ -14,8 +14,8 @@ export class VocabularyComponent implements OnInit {
 
     vocabulary!: any[];
     gettingVocabulary = false;
-    lessonOptions: any[] = []
-    typeOptions: any[] = ['User', 'System']
+    lessonOptions: any[] = [];
+    typeOptions: any[] = ['User', 'System'];
     difficultyOptions: any[] = [
         {key: 1, value: 'Easy'},
         {key: 2, value: 'Medium'},
@@ -26,8 +26,8 @@ export class VocabularyComponent implements OnInit {
     filters: any = {
         lessons: [],
         types: [],
-        difficulty: [],
-    }
+        difficulty: []
+    };
 
     constructor(
         private config: Config,
@@ -43,11 +43,11 @@ export class VocabularyComponent implements OnInit {
 
     filter(obj_key: string, key: any) {
         if (this.filters[obj_key]) {
-            const index = this.filters[obj_key].indexOf(key)
+            const index = this.filters[obj_key].indexOf(key);
             if (index > -1) {
-                this.filters[obj_key].splice(index, 1)
+                this.filters[obj_key].splice(index, 1);
             } else {
-                this.filters[obj_key].push(key)
+                this.filters[obj_key].push(key);
             }
         }
     }
@@ -61,7 +61,7 @@ export class VocabularyComponent implements OnInit {
             if (this.filters.difficulty.length && this.filters.difficulty.indexOf(o.difficulty) === -1) {
                 show = false;
             }
-            if (this.filters.types.length && this.filters.types.indexOf((o.presentation_slide_uuid ? 'User': 'System')) === -1) {
+            if (this.filters.types.length && this.filters.types.indexOf((o.presentation_slide_uuid ? 'User' : 'System')) === -1) {
                 show = false;
             }
             return show;
@@ -69,32 +69,32 @@ export class VocabularyComponent implements OnInit {
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     getVocabulary() {
-        this.vocabulary = []
+        this.vocabulary = [];
         this.gettingVocabulary = true;
         this.apiService.getVocabulary({}).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getVocabulary err', response)
+                    console.log('getVocabulary err', response);
                 } else {
                     this.vocabulary = response.vocabulary;
-                    let lessonOptions = this.vocabulary.map((o) => {return {value: o.lesson_title, key: o.user_lesson_id}})
-                    let keysMap = lessonOptions.map((o) => o.key)
+                    const lessonOptions = this.vocabulary.map((o) => {return {value: o.lesson_title, key: o.user_lesson_id};});
+                    const keysMap = lessonOptions.map((o) => o.key);
                     this.lessonOptions = lessonOptions.filter((item, index) => keysMap.indexOf(item.key) === index);
                 }
                 this.gettingVocabulary = false;
             },
             error: (error) => {
-                console.log('getVocabulary error', error)
+                console.log('getVocabulary error', error);
                 this.gettingVocabulary = false;
-            },
-        })
+            }
+        });
     }
 
     print(e: any){

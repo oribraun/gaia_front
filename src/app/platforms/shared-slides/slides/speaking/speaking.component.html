@@ -15,7 +15,7 @@
                 <div class="inner-scroller" #scroller>
                     <div class="messages">
                         <ng-container *ngFor="let item of messages; let i = index">
-                            <div class="message" [ngClass]="{'message-personal': item.type == 'user'}">
+                            <div class="message" [ngClass]="{'message-personal': item.type === 'user'}">
                                 <!--                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
                                 <span class="translate-icon"(click)="translate(i)">
                                 <i class="bi bi-translate"></i>

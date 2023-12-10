@@ -40,8 +40,8 @@ import { DonutChartComponent } from './components/charts/donut-chart/donut-chart
              * If you only need custom modules,
              * please refer to [Custom Build] section.
              */
-            echarts: () => import('echarts'), // or import('./path-to-my-custom-echarts')
-        }),
+            echarts: () => import('echarts') // or import('./path-to-my-custom-echarts')
+        })
     ]
 })
 export class IeltsModule { }

@@ -13,11 +13,11 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     constructor(
         private router: Router,
-        private config: Config,
+        private config: Config
     ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('req', req)
+        console.log('req', req);
         return next.handle(req).pipe(
             tap({
                 next: (event: any) => {
@@ -32,7 +32,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
                         }
                         if (body && body.err && body.errMessage === 'Unauthorized') { // user not logged in
                             // user platfrom is wrong or user cookie expired
-                            const queryParams: any = {}
+                            const queryParams: any = {};
                             queryParams['authType'] = 'login';
                             // this.router.navigate(['/'], { queryParams: queryParams})
                         }
@@ -50,16 +50,16 @@ export class MyHttpInterceptor implements HttpInterceptor {
                 }
                 return throwError(error);
             })
-        )
+        );
     }
 
-    redirectToLogin(resetConf=false) {
-        const queryParams: any = {}
+    redirectToLogin(resetConf = false) {
+        const queryParams: any = {};
         queryParams['authType'] = 'login';
         if (resetConf) {
             this.config.resetCookies();
             this.config.resetUserCreds();
         }
-        this.router.navigate(['/'], { queryParams: queryParams})
+        this.router.navigate(['/'], { queryParams: queryParams});
     }
 }

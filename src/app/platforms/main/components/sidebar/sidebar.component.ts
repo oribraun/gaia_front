@@ -5,7 +5,7 @@ import {ApiService} from "../../services/api.service";
 import {User} from "../../../shared-slides/entities/user";
 import {HelperService} from "../../services/helper.service";
 
-declare var $: any;
+declare let $: any;
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -18,29 +18,29 @@ export class SidebarComponent implements OnInit {
         paths: "exact",
         queryParams: 'subset',
         matrixParams: 'subset'
-    }
+    };
     routerLinkActiveOptionsWithChildrens: IsActiveMatchOptions = {
         fragment: "exact",
         paths: "subset",
         queryParams: 'subset',
         matrixParams: 'subset'
-    }
+    };
     user!: User;
     tooltipTimeout: any = null;
     constructor(
         private config: Config,
         private apiService: ApiService,
         private router: Router,
-        private helperService: HelperService,
+        private helperService: HelperService
     ) { }
 
     ngOnInit(): void {
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            this.helperService.applyTooltip()
+            this.helperService.applyTooltip();
         });
-        this.helperService.applyTooltip()
+        this.helperService.applyTooltip();
     }
 
     async logout(e: Event) {
@@ -48,7 +48,7 @@ export class SidebarComponent implements OnInit {
         const response = await this.apiService.logout().toPromise();
         this.config.resetCookies();
         this.config.resetUserCreds();
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
     }
 
 }

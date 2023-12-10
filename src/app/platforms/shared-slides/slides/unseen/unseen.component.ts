@@ -15,13 +15,13 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {start} from "repl";
 import {HelperService} from "../../../main/services/helper.service";
 
-declare var $: any;
+declare let $: any;
 
 @Component({
     selector: 'app-unseen',
     templateUrl: './unseen.component.html',
     styleUrls: ['./unseen.component.less'],
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None
 })
 
 export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDestroy {
@@ -29,8 +29,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     @ViewChild('unseen_text') unseen_text!: ElementRef;
     @ViewChild('questions') questions!: ElementRef;
 
-    current_counter:any = {}
-    question_index:number=0
+    current_counter:any = {};
+    question_index:number = 0;
     currentHint = '';
     showHint = false;
     currentHintAudio: any;
@@ -40,27 +40,27 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     pagination = {
         start: 0,
         end: this.paginationMaxItems,
-        current: 0,
-    }
+        current: 0
+    };
 
     disableMultipleOptionWhenSubmitted = false;
     disableAllMultipleOptionsWhenSubmitted = false;
 
     // all_answers:any = {}
-    private timers:any = {}
+    private timers:any = {};
 
     // currentUnseenWords: any[] = [{id: 'children_20', value: 'children'}, {id: 'the_24', value: 'the'}, {id: 'One_68', value: 'One'}];
     private currentUnseenWords: any[] = [];
-    private excludeWords: string[] = []
+    private excludeWords: string[] = [];
     private wordLength = 3;
 
-    unseenAnswers: any = {}
+    unseenAnswers: any = {};
 
     submitInProgress = false;
 
     zoom: number = 1;
     zoomStep: number = .1;
-    zoomLimits = {in: 2, out: .8}
+    zoomLimits = {in: 2, out: .8};
 
     contextMenuPosition = { top: '0px', left: '0px' };
     isContextMenuOpen = false;
@@ -69,31 +69,31 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
 
     markups = [
         {startIndex: 0, endIndex: 15}
-    ]
+    ];
 
-    markedCharIds: number[] = []
+    markedCharIds: number[] = [];
 
     public questionTypes = {
         sentence_completion:'sentence_completion',
         multiple_choice: 'multiple_choice',
         open_question: 'open_question'
-    }
+    };
 
     constructor(
         protected override config: Config,
         protected override lessonService: LessonService,
-        protected helperService: HelperService,
+        protected helperService: HelperService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.question_index = this.currentSlide.question_index || 0
+        this.question_index = this.currentSlide.question_index || 0;
         this.markedCharIds = this.currentSlide.marked_chars;
 
         this.initUnseenAnswers();
-        this.handleCounter(this.question_index)
+        this.handleCounter(this.question_index);
         this.resetUnseenHtml();
 
         this.listenToSlideEvents();
@@ -101,7 +101,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         // console.log('this.currentSlide.all_questions', this.currentSlide.all_questions)
         setTimeout(() => {
             this.calcPaginationMaxItems();
-        })
+        });
     }
 
 
@@ -112,7 +112,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             event.preventDefault();
             this.removeMenuHighLight();
             this.contextMenuTarget = targetContainWord;
-            this.currentMenuWord.word = targetContainWord.innerText
+            this.currentMenuWord.word = targetContainWord.innerText;
             if (!this.contextMenuTarget.classList.contains('word-highlight')) {
                 this.contextMenuTarget.classList.add('word-highlight');
                 this.contextMenuTarget.classList.add('highlight-remove');
@@ -134,9 +134,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         const target = event.target as HTMLElement;
         const contextMenu = target.closest('#contextMenu');
         if (!contextMenu) {
-            this.closeContextMenu()
+            this.closeContextMenu();
         }
-    }
+    };
 
     removeMenuHighLight() {
         if (this.contextMenuTarget && this.contextMenuTarget.classList.contains('highlight-remove')) {
@@ -161,14 +161,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
             this.currentMenuWord.translate = translate_word;
             // this.closeContextMenu();
-        })
+        });
     }
     handleMenuAddVocabClick() {
         this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
             this.currentMenuWord.translate = translate_word;
             this.lessonService.Broadcast("slideAddToVocab", {word: this.currentMenuWord.word, translate: translate_word });
             this.closeContextMenu();
-        })
+        });
     }
 
     initUnseenAnswers() {
@@ -178,7 +178,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 this.unseenAnswers[q.question_id] = JSON.parse(JSON.stringify(this.currentSlide.all_answers[q.question_id]));
                 this.unseenAnswers[q.question_id].explanation = "";
                 if (!this.unseenAnswers[q.question_id].multiple_answers) {
-                    this.unseenAnswers[q.question_id].multiple_answers = {}
+                    this.unseenAnswers[q.question_id].multiple_answers = {};
                 }
             } else {
                 this.unseenAnswers[q.question_id] = {
@@ -191,7 +191,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                     "question_idx": i,
                     "question_type": q.question_type,
                     "is_correct_answer": null
-                }
+                };
                 if(q.question_type == 'sentence_completion'){
                     // this.unseenAnswers[q.question_id].answer_text = q.question
                 }
@@ -211,23 +211,23 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
-                let resp_data = resp.data
+                const resp_data = resp.data;
                 if (resp_data.source == "check_answer") {
                     this.setResponseAnswer(resp_data.answer);
                     this.submitInProgress = false;
                 } else  if (resp_data.source == "get_hints") {
-                    console.log('get_hints', resp_data)
+                    console.log('get_hints', resp_data);
                 }
 
             } catch (e) {
-                console.error(e)
+                console.error(e);
             }
-        })
+        });
         this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
             if (this.submitInProgress) {
                 this.submitInProgress = false;
             }
-        })
+        });
     }
 
     clearSlideEvents() {
@@ -248,7 +248,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             if (startIndex && endIndex) {
                 if (currentIndex >= startIndex && currentIndex <= endIndex) {
                     if (!startedHintHighlight) {
-                        startedHintHighlight = document.createElement('span')
+                        startedHintHighlight = document.createElement('span');
                         startedHintHighlight.classList.add('hint');
                         startedHintHighlight.classList.add('highlight');
                     }
@@ -264,9 +264,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 && this.excludeWords.indexOf(token.toLowerCase()) == -1) {
                 // Create a <span> element for words
 
-                const tokenSpan = []
+                const tokenSpan = [];
                 let letterCount = 0;
-                for (let t of token) {
+                for (const t of token) {
                     const span = document.createElement('span');
                     span.textContent = t;
                     span.id = 'char_' + (currentIndex + letterCount);
@@ -291,29 +291,29 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                     span.classList.add('word-highlight');
                 }
                 if (startedHintHighlight) {
-                    startedHintHighlight.appendChild(span)
+                    startedHintHighlight.appendChild(span);
                 } else {
                     spanList.push(span.outerHTML);
                 }
             } else {
                 // Append punctuation as it is (without wrapping in <span>)
                 let letterCount = 0;
-                const tokenSpan = []
+                const tokenSpan = [];
                 if (startedHintHighlight) {
-                    for (let t of token) {
+                    for (const t of token) {
                         const span = document.createElement('span');
                         span.textContent = t;
                         span.id = 'char_' + (currentIndex + letterCount);
                         if (this.markedCharIds.indexOf(currentIndex + letterCount) > -1) {
                             span.classList.add('char-highlight');
                         }
-                        startedHintHighlight.appendChild(span)
+                        startedHintHighlight.appendChild(span);
                         letterCount++;
                     }
                 } else {
                     // const span = document.createElement('span');
                     // span.textContent = token;
-                    for (let t of token) {
+                    for (const t of token) {
                         const span = document.createElement('span');
                         span.textContent = t;
                         span.id = 'char_' + (currentIndex + letterCount);
@@ -327,14 +327,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 }
             }
             wordCount++;
-            currentIndex += token.length
+            currentIndex += token.length;
         }
         // console.log('spanList', spanList)
-        this.unseenTextHtml = spanList.join('')
+        this.unseenTextHtml = spanList.join('');
         // console.log('this.unseenTextHtml', this.unseenTextHtml)
         setTimeout(() => {
             // this.listenToWordClick();
-        })
+        });
     }
 
     listenToWordClick() {
@@ -343,23 +343,23 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             const word = e.target.closest('.word');
             const id = word.id;
             const value = word.innerText;
-            console.log('value', value)
+            console.log('value', value);
             const ids = this.currentUnseenWords.map(o => o.id);
             const index = ids.indexOf(id);
             if (index > -1) {
                 this.currentUnseenWords.splice(index, 1);
             } else {
-                this.currentUnseenWords.push({id: id, value: value})
+                this.currentUnseenWords.push({id: id, value: value});
             }
             this.resetUnseenHtml();
-        })
+        });
     }
 
     getSelection(e: any) {
-        console.log('e', e)
+        console.log('e', e);
         let refreshHtml = false;
         const selection = window.getSelection();
-        console.log('selection', selection)
+        console.log('selection', selection);
         if (selection && selection.toString() !== '' && selection.focusNode?.parentElement?.closest('.unseen_text')) {
             console.log('Selected Text:', selection.toString());
             const range = selection.getRangeAt(0);
@@ -373,15 +373,15 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             if (start_id && end_id) {
                 for (let i = parseInt(start_id); i <= parseInt(end_id); i++) {
                     if (this.markedCharIds.indexOf(i) === -1) {
-                        this.markedCharIds.push(i)
+                        this.markedCharIds.push(i);
                         refreshHtml = true;
                     }
                 }
             }
-            console.log('refreshHtml', refreshHtml)
-            console.log('this.markedCharIds', this.markedCharIds)
+            console.log('refreshHtml', refreshHtml);
+            console.log('this.markedCharIds', this.markedCharIds);
             if (refreshHtml) {
-                this.resetUnseenHtml()
+                this.resetUnseenHtml();
             }
         }
     }
@@ -399,7 +399,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             "source": 'check_answer',
             "answer": this.unseenAnswers[current_question.question_id].answer_text,
             "multiple_answers": this.unseenAnswers[current_question.question_id].multiple_answers,
-            "question":current_question.question_type == 'multiple_choice' ? current_question.question.question: current_question.question,
+            "question":current_question.question_type == 'multiple_choice' ? current_question.question.question : current_question.question,
             "question_type":current_question.question_type,
             "question_idx":this.question_index,
             "question_id":current_question.question_id,
@@ -408,46 +408,46 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             'hint_used':this.unseenAnswers[current_question.question_id].hint_used,
             'marked_chars': this.markedCharIds,
             'stopAudio': true
-        }
+        };
         console.log('data', data);
         this.submitInProgress = true;
-        this.current_counter.submited=true;
+        this.current_counter.submited = true;
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
     nextQuestion(){
-        this.goToQuestionNumber(this.question_index+1)
+        this.goToQuestionNumber(this.question_index + 1);
     }
     prevQuestion(){
-        this.goToQuestionNumber(this.question_index-1)
+        this.goToQuestionNumber(this.question_index - 1);
     }
 
     goToQuestionNumber(number:number){
-        if(number>-1 && number<this.currentSlide.all_questions.length){
+        if(number > -1 && number < this.currentSlide.all_questions.length){
             this.closeHints();
             this.setUpPagination(number);
-            this.question_index=number;
-            this.handleCounter(this.question_index)
+            this.question_index = number;
+            this.handleCounter(this.question_index);
         }
     }
 
     setUpPagination(number: number) {
-        const avg = Math.floor((this.pagination.start + this.pagination.end) / 2)
-        const avgItems = this.paginationMaxItems / 2
-        const stepAvg = Math.floor(avgItems)
+        const avg = Math.floor((this.pagination.start + this.pagination.end) / 2);
+        const avgItems = this.paginationMaxItems / 2;
+        const stepAvg = Math.floor(avgItems);
         const extra = Math.ceil(avgItems) - stepAvg;
-        console.log('here', extra)
+        console.log('here', extra);
         this.pagination.start = number - stepAvg;
         this.pagination.end = number + stepAvg + extra;
         if (this.pagination.start < 0) {
-            this.pagination.start = 0
+            this.pagination.start = 0;
             this.pagination.end = this.paginationMaxItems;
         }
         if (this.pagination.end > this.currentSlide.all_questions.length) {
-            this.pagination.end = this.currentSlide.all_questions.length
+            this.pagination.end = this.currentSlide.all_questions.length;
             this.pagination.start = this.pagination.end - this.paginationMaxItems;
             if (this.pagination.start < 0) {
-                this.pagination.start = 0
+                this.pagination.start = 0;
             }
         }
     }
@@ -456,9 +456,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         if (this.questions) {
             const questionsElement = this.questions.nativeElement;
             const questionsBoxWidth = questionsElement.clientWidth;
-            const circle = questionsElement.querySelector('.pagination .circle')
+            const circle = questionsElement.querySelector('.pagination .circle');
             if (circle) {
-                var circleComputed = getComputedStyle(circle, null);
+                const circleComputed = getComputedStyle(circle, null);
                 const circleWidth = parseFloat(circleComputed.getPropertyValue('width'));
                 const circleHeight = parseFloat(circleComputed.getPropertyValue('height'));
                 const circleMarginRight = parseFloat(circleComputed.getPropertyValue('margin-right'));
@@ -473,10 +473,10 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 this.paginationMaxItems = maxItemsForWidth;
                 this.pagination.end = this.paginationMaxItems;
                 this.pagination.start = 0;
-                console.log('this.question_index', this.question_index)
+                console.log('this.question_index', this.question_index);
                 this.goToQuestionNumber(this.question_index);
 
-                console.log('questions maxItemsForWidth', maxItemsForWidth)
+                console.log('questions maxItemsForWidth', maxItemsForWidth);
             }
         }
     }
@@ -497,13 +497,13 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         const data = {
             "source": "continue_to_next_slide_click",
             'stopAudio': true
-        }
-        this.lessonService.Broadcast("slideEventRequest", data)
+        };
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
 
     getHints(){
         if (this.currentHint) {
-            return
+            return;
         }
         const current_question = this.currentSlide.all_questions[this.question_index];
         const correct_answer = current_question.hints['correct_answer'];
@@ -518,7 +518,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         } else {
             this.currentHint = current_question.hints['guidance'];
             this.showHint = true;
-            this.markHint()
+            this.markHint();
         }
     }
 
@@ -526,14 +526,14 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         if (this.currentHint) {
             let isPopup = false;
             if (e) {
-                isPopup = e.target.closest('.hint-popup-main')
+                isPopup = e.target.closest('.hint-popup-main');
             }
             if (!isPopup || !e) {
                 this.showHint = false;
                 this.resetUnseenHtml();
                 setTimeout(() => {
                     this.currentHint = '';
-                }, 300)
+                }, 300);
             }
         }
     }
@@ -542,7 +542,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         if (this.showHint) {
             this.markHint();
         } else {
-            this.setUpUnseenTextHtml(null, null, this.currentUnseenWords)
+            this.setUpUnseenTextHtml(null, null, this.currentUnseenWords);
         }
     }
 
@@ -551,7 +551,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         const quotes = current_question.hints['quotes'];
         const startIndex = this.currentSlide.unseen_text.indexOf(quotes);
         const endIndex = startIndex + quotes.length;
-        this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords)
+        this.setUpUnseenTextHtml(startIndex, endIndex, this.currentUnseenWords);
         this.scrollToHint();
     }
 
@@ -560,9 +560,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             this.currentHintAudio.pause();
             this.currentHintAudio = null;
         } else {
-            const audio = new Audio()
+            const audio = new Audio();
             this.currentHintAudio = audio;
-            audio.src = audio_path
+            audio.src = audio_path;
             audio.play();
         }
     }
@@ -572,9 +572,9 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             if (this.unseen_text_box) {
                 const boxElement = this.unseen_text_box.nativeElement;
                 const boxREct = boxElement.getBoundingClientRect();
-                const hints = document.getElementsByClassName('hint')
+                const hints = document.getElementsByClassName('hint');
                 if (hints && hints.length) {
-                    const hintElement: any = hints[0]
+                    const hintElement: any = hints[0];
                     const hintRect = hintElement.getBoundingClientRect();
                     const isFullyVisible =
                         hintRect.top >= boxREct.top &&
@@ -584,12 +584,12 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                         // Element is not fully visible within the container, so scroll to it.
                         boxElement.scrollTo({
                             top: hintElement.offsetTop - boxElement.offsetTop,
-                            behavior: 'smooth',
+                            behavior: 'smooth'
                         });
                     }
                 }
             }
-        })
+        });
     }
 
     isEmpty(obj:any) {
@@ -606,42 +606,42 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         if (this.slideData.is_test_mode) {
             return;
         }
-        this.pauseAllCounters()
+        this.pauseAllCounters();
         if(!this.timers.hasOwnProperty(question_idx)) {
-            this.timers[question_idx] = this.createTimer()
+            this.timers[question_idx] = this.createTimer();
         } else {
-            this.timers[question_idx].active = true
+            this.timers[question_idx].active = true;
         }
-        this.current_counter = this.timers[question_idx]
+        this.current_counter = this.timers[question_idx];
     }
 
     createTimer(){
-        let Timer = Object()
-        Timer.active = true
-        Timer.counter = 0
-        Timer.minutes = 0
-        Timer.minutesStr = '00'
-        Timer.seconds = 0
-        Timer.secondsStr = '00'
-        Timer.submited = false
+        const Timer = Object();
+        Timer.active = true;
+        Timer.counter = 0;
+        Timer.minutes = 0;
+        Timer.minutesStr = '00';
+        Timer.seconds = 0;
+        Timer.secondsStr = '00';
+        Timer.submited = false;
         Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
-        return Timer
+        return Timer;
 
     }
 
     pauseAllCounters(){
         for(const key in this.timers){
-            this.timers[key].active = false
+            this.timers[key].active = false;
         }
     }
 
     progressTimer(self:any) {
         if (self.active && !self.submited){
-            self.counter= self.counter+1
-            self.minutes = Math.floor(self.counter/60)
-            self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes: self.minutes
-            self.seconds = self.counter%60
-            self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds: self.seconds
+            self.counter = self.counter + 1;
+            self.minutes = Math.floor(self.counter / 60);
+            self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes : self.minutes;
+            self.seconds = self.counter % 60;
+            self.secondsStr = self.seconds.toString().length < 2 ? '0' + self.seconds : self.seconds;
         }
     }
 

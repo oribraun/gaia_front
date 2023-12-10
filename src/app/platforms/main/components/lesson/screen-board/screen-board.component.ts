@@ -10,29 +10,29 @@ import {ApiService} from "../../../services/api.service";
 })
 export class ScreenBoardComponent {
 
-    @Input('currentSection') currentSection: PresentationSection = new PresentationSection();
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('recognitionText') recognitionText: string = '';
-    @Input('isPause') isPause: boolean = false;
-    @Input('isMobile') isMobile: boolean = false;
-    @Output('onResetPresentation') onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
+    @Input() currentSection: PresentationSection = new PresentationSection();
+    @Input() currentSlide: PresentationSlide = new PresentationSlide();
+    @Input() recognitionText: string = '';
+    @Input() isPause: boolean = false;
+    @Input() isMobile: boolean = false;
+    @Output() onResetPresentation: EventEmitter<any> = new EventEmitter<any>();
 
     presentationResetIsInProgress = false;
 
     apiSubscriptions: any = {
-        reset: null,
-    }
+        reset: null
+    };
 
-    imageSrc = ''
+    imageSrc = '';
 
     constructor(
         private config: Config,
-        private apiService: ApiService,
+        private apiService: ApiService
     ) {
-        this.imageSrc = this.config.staticImagePath
+        this.imageSrc = this.config.staticImagePath;
     }
     async resetPresentation(reason: string = '') {
-        this.onResetPresentation.emit()
+        this.onResetPresentation.emit();
     }
 
     toggleFullScreen() {

@@ -25,27 +25,27 @@ import {
 })
 export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
-    @Input('presentation') presentation: Presentation = new Presentation();
-    @Input('currentSlide') currentSlide: PresentationSlide = new PresentationSlide();
-    @Input('currentSectionIndex') currentSectionIndex: number = -1;
-    @Input('isMobile') isMobile: boolean = false;
+    @Input() presentation: Presentation = new Presentation();
+    @Input() currentSlide: PresentationSlide = new PresentationSlide();
+    @Input() currentSectionIndex: number = -1;
+    @Input() isMobile: boolean = false;
 
     @ViewChild('videoElement', { static: false }) videoElement!: ElementRef;
     @ViewChild('canvasElement') canvasElement!: ElementRef;
     @ViewChild('user', { static: false }) userElement!: ElementRef;
 
-    @Output('onResults') onResults: EventEmitter<any> = new EventEmitter<any>();
-    @Output('onNextSlide') onNextSlide: EventEmitter<any> = new EventEmitter<any>();
-    @Output('onPrevSlide') onPrevSlide: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onResults: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onNextSlide: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onPrevSlide: EventEmitter<any> = new EventEmitter<any>();
 
     mediaStream: any;
 
     subscribe: any;
-    snapShotInterval: any = null
-    imageSrc = ''
-    pauseButtonText = "take a break"
+    snapShotInterval: any = null;
+    imageSrc = '';
+    pauseButtonText = "take a break";
     recorder: any;
-    currentChunks: any[] = []
+    currentChunks: any[] = [];
 
     currentIcon = 'assets/gifs/teacher_speaking.gif';
     icons: any = {
@@ -54,22 +54,22 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         'teacher_do_nothing': 'assets/gifs/teacher_do_nothing.gif',
         'slide_success': 'assets/gifs/slide_success.gif',
         'slide_failed': 'assets/gifs/slide_failed.gif',
-        'teacher_sleep': 'assets/gifs/teacher_sleep.gif',
-    }
+        'teacher_sleep': 'assets/gifs/teacher_sleep.gif'
+    };
     takeSnapshotEnabled = false;
 
     constructor(
         private config: Config,
         private animationsService: AnimationsService,
-        private lessonService: LessonService,
+        private lessonService: LessonService
     ) {
         this.listenToCircleAnimations();
 
         this.imageSrc = this.config.staticImagePath;
         if (this.takeSnapshotEnabled) {
             this.snapShotInterval = setInterval(() => {
-                this.takeSnapshot()
-            }, 15*1000)
+                this.takeSnapshot();
+            }, 15 * 1000);
         }
         this.startVideo().then((res) => {
             if (res) {
@@ -80,17 +80,17 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                 //     this.stopRecording()
                 // }, 5000)
             }
-        })
+        });
 
         this.setIcon('teacher_speaking');
     }
 
     ngOnInit(): void {
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
-            this.pauseButtonText = "take a break"
-        })
+            this.pauseButtonText = "take a break";
+        });
         this.lessonService.ListenFor("panelIconChange").subscribe((obj: any) => {
-            console.log('change gif - panelIconChange', obj)
+            console.log('change gif - panelIconChange', obj);
             if (obj && obj.iconName) {
                 this.setIcon(obj.iconName);
             }
@@ -105,23 +105,23 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                 this.listenToCircleAnimations();
             }
 
-        })
+        });
     }
 
     listenToCircleAnimations() {
         this.subscribe = this.animationsService.onAddCircle.subscribe((obj) => {
-            this.animationsService.addCircle(this.userElement.nativeElement, obj.unique_num)
-        })
+            this.animationsService.addCircle(this.userElement.nativeElement, obj.unique_num);
+        });
     }
 
     listenToSnapshotRequest() {
         this.lessonService.ListenFor("takeSnapshot").subscribe((obj: any) => {
-            this.takeSnapshot()
-        })
+            this.takeSnapshot();
+        });
     }
 
     removeAllCircles() {
-        this.animationsService.removeAllCircles(this.userElement.nativeElement)
+        this.animationsService.removeAllCircles(this.userElement.nativeElement);
     }
 
     startVideo() {
@@ -140,7 +140,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                         this.mediaStream = mediaStream;
                         this.videoElement.nativeElement.srcObject = mediaStream;
                         resolve(true);
-                    })
+                    });
                 } else {
                     console.error('Webcam access not supported');
                     resolve(false);
@@ -149,7 +149,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
                 console.error('Error accessing webcam:', error);
                 resolve(false);
             }
-        })
+        });
     }
 
     takeSnapshot() {
@@ -236,7 +236,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             requestAnimationFrame(processAudio);
-        }
+        };
 
         processAudio();
 
@@ -315,7 +315,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('changes', changes)
+        console.log('changes', changes);
         if (changes['isMobile'] && !changes['isMobile'].firstChange) {
             this.setMediaStream();
         }
@@ -333,19 +333,19 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     togglePauseLesson(): void {
         if (this.pauseButtonText == "take a break") {
-            this.pauseButtonText = "resume lesson"
-            this.lessonService.Broadcast("pauseLesson", {})
+            this.pauseButtonText = "resume lesson";
+            this.lessonService.Broadcast("pauseLesson", {});
         } else {
-            this.pauseButtonText = "take a break"
-            this.lessonService.Broadcast("resumeLesson", {})
+            this.pauseButtonText = "take a break";
+            this.lessonService.Broadcast("resumeLesson", {});
         }
 
     }
 
     setIcon(iconName: string) {
-        console.log('change gif - setIcon', iconName)
+        console.log('change gif - setIcon', iconName);
         if (this.icons[iconName]) {
-            console.log('change gif - setIcon inside if', iconName)
+            console.log('change gif - setIcon inside if', iconName);
             this.currentIcon = this.icons[iconName];
         }
     }

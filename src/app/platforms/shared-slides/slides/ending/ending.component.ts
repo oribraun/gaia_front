@@ -14,7 +14,7 @@ export class EndingComponent extends BaseSlideComponent {
         protected override config: Config,
         protected override lessonService: LessonService
     ) {
-        super(config, lessonService)
+        super(config, lessonService);
     }
 
 }

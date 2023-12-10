@@ -9,24 +9,24 @@ export class AnimationsService {
 
     onAddCircle: EventEmitter<any> = new EventEmitter<any>();
 
-    timeouts: any = {}
+    timeouts: any = {};
 
     constructor(
-        @Inject(DOCUMENT) private document: Document,
+        @Inject(DOCUMENT) private document: Document
     ) { }
 
     triggerAddingCircle(unique_num: number) {
-        this.onAddCircle.emit({unique_num})
+        this.onAddCircle.emit({unique_num});
     }
 
     addCircle(elm: any, unique_num: number) {
         if (elm) {
-            var randomColor = this.getRandomColor();
+            const randomColor = this.getRandomColor();
             const child = this.document.createElement('div');
             // const transformSpeed = this.randomIntFromInterval(1, 1.5)
             const transformSpeed = 1.5;
-            child.id = "circle-animation-" + unique_num
-            child.className = "circle-animations"
+            child.id = "circle-animation-" + unique_num;
+            child.className = "circle-animations";
             child.style.position = "absolute";
             child.style.top = "0";
             child.style.right = "0";
@@ -39,7 +39,7 @@ export class AnimationsService {
             child.style.transform = "scale(1)";
             child.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed}s ease-in-out`;
             elm.appendChild(child);
-            this.animateAndRemoveCircle(child.id, transformSpeed)
+            this.animateAndRemoveCircle(child.id, transformSpeed);
         }
     }
 
@@ -52,10 +52,10 @@ export class AnimationsService {
     }
 
     clearTimeouts() {
-        for (let timeout in this.timeouts) {
-            console.log('timeout', timeout)
+        for (const timeout in this.timeouts) {
+            console.log('timeout', timeout);
             if (timeout) {
-                clearTimeout(timeout)
+                clearTimeout(timeout);
             }
         }
     }
@@ -65,27 +65,27 @@ export class AnimationsService {
             delete this.timeouts['one_' + id];
             const e = document.getElementById(id);
             if (e) {
-                const scale = this.getRandomFloat(1.1, 1.8)
+                const scale = this.getRandomFloat(1.1, 1.8);
                 e.style.transform = `scale(${scale})`;
                 e.style.opacity = "1";
                 this.timeouts['two_' + id] = setTimeout(() => {
                     delete this.timeouts['two_' + id];
-                    e.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed/1.5}s ease-in-out`;
+                    e.style.transition = `transform ${transformSpeed}s ease-in-out, opacity ${transformSpeed / 1.5}s ease-in-out`;
                     e.style.opacity = "0";
-                }, transformSpeed/1.5 * 1000)
+                }, transformSpeed / 1.5 * 1000);
                 this.timeouts['three_' + id] = setTimeout(() => {
                     delete this.timeouts['three_' + id];
                     this.timeouts['four_' + id] = setTimeout(() => {
                         delete this.timeouts['four_' + id];
                         // e.remove();
                     }, 600);
-                }, transformSpeed * 1000)
+                }, transformSpeed * 1000);
             }
         },50);
     }
 
     randomIntFromInterval(min: number, max: number) { // min and max included
-        return Math.floor(Math.random() * (max - min + 1) + min)
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     getRandomFloat(min: number, max: number) {

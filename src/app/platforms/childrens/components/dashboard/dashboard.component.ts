@@ -25,7 +25,7 @@ export class ChildrensDashboardComponent implements OnInit {
     currentCourseClicked: any = {};
     currentLessonClicked: any = {};
 
-    imageSrc: string = ''
+    imageSrc: string = '';
 
     constructor(
         private config: Config,
@@ -40,31 +40,31 @@ export class ChildrensDashboardComponent implements OnInit {
         this.getUser();
         this.route.queryParams.subscribe((params) => {
             const available = ['in_progress', 'my_courses', 'suggested_courses'];
-            const type = params['type']
+            const type = params['type'];
             if (type && available.indexOf(type) > -1) {
-                this.coursesType = type
+                this.coursesType = type;
             }
-        })
+        });
         this.getUserCourses(this.coursesType);
     }
 
     getUser() {
-        this.user = this.config.user
+        this.user = this.config.user;
         this.config.user_subject.subscribe(() => {
-            this.user = this.config.user
-        })
+            this.user = this.config.user;
+        });
     }
 
     getUserCourses(coursesType: string) {
         this.reset();
         this.coursesType = coursesType;
         this.gettingUserCourses = true;
-        const obj: any = {}
+        const obj: any = {};
         obj[coursesType] = true;
         this.apiService.getUserCourses(obj).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('getUserCourses err', response)
+                    console.log('getUserCourses err', response);
                 } else {
                     this.courses = response.courses;
                     // this.purchasedCourses = response.purchased_courses;
@@ -72,34 +72,34 @@ export class ChildrensDashboardComponent implements OnInit {
                 this.gettingUserCourses = false;
             },
             error: (error) => {
-                console.log('getUserCourses error', error)
+                console.log('getUserCourses error', error);
                 this.gettingUserCourses = false;
-            },
-        })
+            }
+        });
     }
 
     onCourseClick(course: any) {
         this.currentCourseClicked = course;
         this.currentLessonClicked = {};
         this.gettingCourseLessons = true;
-        let service = this.apiService.getPurchasedLessons({purchased_course_id: course.id})
+        let service = this.apiService.getPurchasedLessons({purchased_course_id: course.id});
         if (this.coursesType == 'suggested_courses') {
-            service = this.apiService.getCourseLessons({course_id: course.id})
+            service = this.apiService.getCourseLessons({course_id: course.id});
         }
         service.subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    console.log('onCourseClick err', response)
+                    console.log('onCourseClick err', response);
                 } else {
                     this.lessons = response.lessons;
                 }
                 this.gettingCourseLessons = false;
             },
             error: (error) => {
-                console.log('onCourseClick error', error)
+                console.log('onCourseClick error', error);
                 this.gettingCourseLessons = false;
-            },
-        })
+            }
+        });
     }
 
     onLessonsClick(lesson: any) {
@@ -108,16 +108,16 @@ export class ChildrensDashboardComponent implements OnInit {
 
     onStart() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/childrens/lesson/' + lesson_id])
+        this.router.navigate(['/childrens/lesson/' + lesson_id]);
 
     }
     onContinue() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/childrens/lesson/' + lesson_id])
+        this.router.navigate(['/childrens/lesson/' + lesson_id]);
     }
     onBuy() {
         const course_id = this.currentCourseClicked.id;
-        this.router.navigate(['/childrens/buy/' + course_id])
+        this.router.navigate(['/childrens/buy/' + course_id]);
     }
 
     reset() {

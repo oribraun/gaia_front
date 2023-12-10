@@ -14,13 +14,13 @@ export class HearingSlide {
             this.unseen_text = obj.unseen_text;
             this.question_index = obj.question_index;
             if (obj.all_questions && obj.all_questions.length) {
-                for(let q of obj.all_questions) {
-                    this.all_questions.push(new UnseenQuestion(q))
+                for(const q of obj.all_questions) {
+                    this.all_questions.push(new UnseenQuestion(q));
                 }
             }
             if (obj.all_answers) {
-                for(let key in obj.all_answers) {
-                    this.all_answers[key] = new UnseenAnswer(obj.all_answers[key])
+                for(const key in obj.all_answers) {
+                    this.all_answers[key] = new UnseenAnswer(obj.all_answers[key]);
                 }
             }
         }
@@ -38,9 +38,9 @@ export class UnseenQuestion {
             for (const key in obj) {
                 if (obj[key] !== undefined && obj[key] !== null) {
                     if (key === 'question' && typeof obj[key] !== 'string') {
-                        this[key] = new UnseenMultipleOptionsQuestion(obj[key])
+                        this[key] = new UnseenMultipleOptionsQuestion(obj[key]);
                     } else if (key === 'hints') {
-                        this[key] = new UnseenHint(obj[key])
+                        this[key] = new UnseenHint(obj[key]);
                     } else {
                         // @ts-ignore
                         this[key] = obj[key];
@@ -60,8 +60,8 @@ export class UnseenMultipleOptionsQuestion {
                 if (obj[key] !== undefined && obj[key] !== null) {
                     if (key === 'answers') {
                         if (obj.answers && obj.answers.length) {
-                            for(let q of obj.answers) {
-                                this.answers.push(new UnseenMultipleOptionsAnswers(q))
+                            for(const q of obj.answers) {
+                                this.answers.push(new UnseenMultipleOptionsAnswers(q));
                             }
                         }
                     } else {
