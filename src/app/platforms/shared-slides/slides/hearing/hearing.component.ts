@@ -115,7 +115,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
                     "question_type": q.question_type,
                     "is_correct_answer": false
                 };
-                if(q.question_type == 'sentence_completion'){
+                if(q.question_type == 'sentence_completion') {
                     this.unseenAnswers[q.question_id].answer_text = q.question;
                 }
             }
@@ -127,7 +127,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].explanation = data.explanation;
         this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
-        if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)){
+        if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)) {
             this.currentSlide.all_answers[current_question.question_id] = JSON.parse(JSON.stringify(this.unseenAnswers[current_question.question_id]));
         }
     }
@@ -233,7 +233,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         });
     }
 
-    checkAnswer(){
+    checkAnswer() {
         if (this.submitInProgress) {
             return;
         }
@@ -262,15 +262,15 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    nextQuestion(){
+    nextQuestion() {
         this.goToQuestionNumber(this.question_index + 1);
     }
-    prevQuestion(){
+    prevQuestion() {
         this.goToQuestionNumber(this.question_index - 1);
     }
 
-    goToQuestionNumber(number:number){
-        if(number > -1 && number < this.currentSlide.all_questions.length){
+    goToQuestionNumber(number:number) {
+        if(number > -1 && number < this.currentSlide.all_questions.length) {
             this.closeHints();
             this.setUpPagination(number);
             this.question_index = number;
@@ -324,7 +324,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         }
     }
 
-    onMultipleChoiceQuestionChange(option:any, event: any){
+    onMultipleChoiceQuestionChange(option:any, event: any) {
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].multiple_answers[option.answer] = event.target.checked;
 
@@ -337,7 +337,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         }
     }
 
-    nextSlide(){
+    nextSlide() {
         const data = {
             "source": "continue_to_next_slide_click",
             'stopAudio': true
@@ -346,7 +346,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
     }
 
 
-    getHints(){
+    getHints() {
         if (this.currentHint) {
             return;
         }
@@ -450,7 +450,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         return true;
     }
 
-    handleCounter(question_idx:number){
+    handleCounter(question_idx:number) {
         if (this.slideData.is_test_mode) {
             return;
         }
@@ -463,26 +463,26 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.current_counter = this.timers[question_idx];
     }
 
-    createTimer(){
+    createTimer() {
         const Timer = Object();
         Timer.active = true;
         Timer.counter = 0;
         Timer.minutes = 0;
         Timer.seconds = 0;
         Timer.submited = false;
-        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        Timer.intervalId = setInterval(this.progressTimer, 1000, Timer);
         return Timer;
 
     }
 
-    pauseAllCounters(){
-        for(const key in this.timers){
+    pauseAllCounters() {
+        for(const key in this.timers) {
             this.timers[key].active = false;
         }
     }
 
     progressTimer(self:any) {
-        if (self.active && !self.submited){
+        if (self.active && !self.submited) {
             self.counter = self.counter + 1;
             self.minutes = Math.floor(self.counter / 60);
             self.seconds = self.counter % 60;

@@ -533,6 +533,11 @@ export class ApiService {
             this.httpOptions
         );
     }
+    saveTimers(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/save-timers', obj,
+            this.httpOptions
+        );
+    }
     // ielts platform api
 
 }

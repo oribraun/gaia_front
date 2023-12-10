@@ -62,12 +62,12 @@ export class ImageGeneratorComponent extends BaseSlideComponent implements OnIni
             this.wordsSelected.push(word);
         } else {
             const index = this.wordsSelected.indexOf(word);
-            this.wordsSelected.splice(index,1);
+            this.wordsSelected.splice(index, 1);
         }
     }
 
     generateImage() {
-        if (!this.wordsSelected.length || this.generatingImageInProgress){
+        if (!this.wordsSelected.length || this.generatingImageInProgress) {
             return;
         }
         const data = {

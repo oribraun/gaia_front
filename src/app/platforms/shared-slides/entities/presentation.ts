@@ -12,6 +12,7 @@ export class Presentation {
     sections!: PresentationSection[];
     slides_flat: object[] = [];
     teacher!: any;
+    total_timer: number = 60 * 60;
     timer_sec: number = 0;
     timer_timeout_msg: string = "test times up - please move on";
     timer_timeout_sec: number = -1;
@@ -37,12 +38,12 @@ export class Presentation {
         }
     }
 
-    buildSlidesFlat(){
+    buildSlidesFlat() {
         let section_index = 0;
         let slide_idx = 0;
         let flat_index = 0;
         for (const section of this.sections) {
-            for (const slide of section.slides){
+            for (const slide of section.slides) {
                 slide.prev = this.slides_flat.length > 0 ? this.slides_flat[this.slides_flat.length - 1] : null;
                 slide.flat_index = flat_index;
                 this.slides_flat.push({'section_idx':section_index, 'slide_idx': slide_idx});
@@ -86,7 +87,7 @@ export class PresentationSection {
             // @ts-ignore
             const slide = this[key][this[key].length - 1];
             slide.section = this;
-            if(slide.bundle_id != -1){
+            if(slide.bundle_id != -1) {
                 if(bundle_id_to_slides.hasOwnProperty(slide.bundle_id)) {
                     bundle_id_to_slides[slide.bundle_id].push(slide);
                 } else {
@@ -96,7 +97,7 @@ export class PresentationSection {
         }
         for (const bundle_id in bundle_id_to_slides) {
             const bundle_list = bundle_id_to_slides[bundle_id];
-            for (const slide of bundle_list){
+            for (const slide of bundle_list) {
                 slide.bundle = bundle_list;
                 slide.bundle_len = bundle_list.length;
                 const isThisMe = (element: any) => element === slide;

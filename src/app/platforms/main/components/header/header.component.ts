@@ -413,7 +413,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password, this.selectedPlatform.name, this.planId));
+            const response: any = await lastValueFrom(this.apiService.login(this.email, this.password, this.selectedPlatform.name, this.planId));
             const data = response.data;
             if (!response.err) {
                 this.hideLoginModel();
@@ -747,7 +747,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.router.events.subscribe((routerEvent) => {
             if(routerEvent instanceof NavigationEnd) {
                 // Get your url
-                const l = routerEvent.url.replace(/\?.*/,'').split('/');
+                const l = routerEvent.url.replace(/\?.*/, '').split('/');
                 if (l[l.length - 1] === 'plans') {
                     this.isPlansPage = true;
                 } else {

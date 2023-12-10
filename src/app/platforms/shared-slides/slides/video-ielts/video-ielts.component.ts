@@ -401,7 +401,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         }, this.stateTimeout);
     }
 
-    scrollToBottom2(animate = false, timeout = 0){
+    scrollToBottom2(animate = false, timeout = 0) {
         if (this.scroller) {
             setTimeout(() => {
                 const element = this.scroller.nativeElement;
@@ -514,7 +514,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         }
     }
 
-    setUpHeyGenVideoByText(text:string){
+    setUpHeyGenVideoByText(text:string) {
         console.log('setUpHeyGenVideoByText text', text);
         if (this.heygenMediaElement) {
             console.log('setUpHeyGenVideoByText text', text);
@@ -558,7 +558,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             try {
                 this.deleteSessionId();
                 await this.stopSession(session_id);
-            } catch (e){}
+            } catch (e) {}
         }
         // call the new interface to get the server's offer SDP and ICE server to create a new RTCPeerConnection
         this.sessionInfo = await this.newSession("high", avatar, voice);

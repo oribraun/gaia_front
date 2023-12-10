@@ -27,8 +27,8 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit, OnDe
         super.ngOnInit();
         this.text_to_present = this.currentSlide.text;
         this.sentences = [];
-        for (const sentence of this.text_to_present.split('\n')){
-            if (sentence.trim()){
+        for (const sentence of this.text_to_present.split('\n')) {
+            if (sentence.trim()) {
                 this.sentences.push(sentence.trim());
             }
         }
@@ -42,14 +42,14 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit, OnDe
         });
         this.lessonService.ListenFor("student_reply_response").subscribe((response:any) => {
             try{
-                if(response.data.text.toLowerCase().includes('try the next sentence') && response.data.text.toLowerCase().includes('good job, you read')){
+                if(response.data.text.toLowerCase().includes('try the next sentence') && response.data.text.toLowerCase().includes('good job, you read')) {
                     this.currentSentenceIndex += 1;
                 }
             } catch (error) {
                 console.error(error);
             }
 
-            console.log('in reading student_reply_response' ,response.data.text);
+            console.log('in reading student_reply_response', response.data.text);
         });
     }
 
@@ -58,16 +58,16 @@ export class ReadingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.lessonService.ClearEvent("student_reply_response");
     }
 
-    remove_punct(text:string){
-        const punctuationless = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-        const finalString = punctuationless.replace(/\s{2,}/g," ");
+    remove_punct(text:string) {
+        const punctuationless = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+        const finalString = punctuationless.replace(/\s{2,}/g, " ");
         return finalString;
     }
 
     mark_correct_words(message: string) {
         const message_words:string[] = this.remove_punct(message).toLowerCase().split(' ');
-        for(const word of message_words){
-            if(this.target_words.includes(word)){
+        for(const word of message_words) {
+            if(this.target_words.includes(word)) {
                 this.correct_words.push(word);
             }
         }

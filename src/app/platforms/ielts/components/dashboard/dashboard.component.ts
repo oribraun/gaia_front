@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         labels: [{name:'Progress', tip: 'This reflects your progress through the entire course material'}, {name:'Score', tip: 'This indicates your score achieved across the entirety of the course'}, {name:'Pace', tip: 'This measures your pace compared to the average pace of other students throughout the entire course'}],
         colors: ['rgb(13,110,253)', 'rgb(220,53,69)', 'rgb(255,193,7)'],
-        data: {'hearing': [50, 40, 80], 'reading': [80, 30, 50], 'speaking': [70, 20, 100],'writing': [20, 70, 1]}
+        data: {'hearing': [50, 40, 80], 'reading': [80, 30, 50], 'speaking': [70, 20, 100], 'writing': [20, 70, 1]}
     };
     achievementsLabels = ['Progress', 'Score', 'Pace'];
 

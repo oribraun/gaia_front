@@ -97,7 +97,7 @@ export class VocabularyComponent implements OnInit {
         });
     }
 
-    print(e: any){
+    print(e: any) {
         e.preventDefault();
         window.print();
     }

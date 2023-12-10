@@ -7,4 +7,14 @@
     max-width: @max-width;
     margin:0 auto;
     z-index: 999;
+
+    &-fixed {
+        position: fixed;
+        width: 96%;
+        margin-left: 2%;
+        top:@header-height-mobile;
+        @media (min-width: 768px) {
+            top:@header-height;
+        }
+    }
 }

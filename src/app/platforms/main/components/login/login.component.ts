@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
         this.resetMessages();
         try {
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.login(this.email,this.password));
+            const response: any = await lastValueFrom(this.apiService.login(this.email, this.password));
             const data = response.data;
             if (!response.err) {
                 this.setupUser(data);

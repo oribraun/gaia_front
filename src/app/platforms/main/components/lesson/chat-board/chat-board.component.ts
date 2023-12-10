@@ -71,7 +71,7 @@ export class ChatBoardComponent implements OnInit {
         return msg;
     }
 
-    scrollToBottom2(animate = false, timeout = 0){
+    scrollToBottom2(animate = false, timeout = 0) {
         if (this.scroller) {
             setTimeout(() => {
                 const element = this.scroller.nativeElement;

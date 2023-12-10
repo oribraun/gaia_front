@@ -109,14 +109,14 @@
             <div class="timer-status">
                 <span *ngIf="timersHelper.timers[test_timer_counter_id]">
                     Time Left <span [ngClass]="{
-                    'timer-status-warning': !timersHelper.timers[test_timer_counter_id].minutes && timersHelper.timers[test_timer_counter_id].seconds <= 60
+                    'timer-status-warning': timersHelper.timers[test_timer_counter_id].counter_sec <= 60
                     }">
                     {{timersHelper.timers[test_timer_counter_id].getTime()}}
                 </span>
                     Time Passed <span [ngClass]="{
-                    'timer-status-warning': !timersHelper.timers[test_timer_counter_id].minutes && timersHelper.timers[test_timer_counter_id].seconds <= 60
+                    'timer-status-warning': timersHelper.timers[test_timer_counter_id].counter_sec <= 60
                     }">
-                    {{timersHelper.counters[test_timer_counter_id].getTime()}}
+                    {{timersHelper.timers[test_timer_counter_id].getCounter()}}
                 </span> |
                 </span> status:
                 <span>{{user_lesson_status}}</span>

@@ -32,10 +32,10 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onBoardingObject: any = {
         questions: {
-            "Language Proficiency": ["","","",""],
-            "IELTS Specifics": ["","",""],
-            "Learning Goals and Preferences": ["","","",[]],
-            "Consent and Agreements": ["",""]
+            "Language Proficiency": ["", "", "", ""],
+            "IELTS Specifics": ["", "", ""],
+            "Learning Goals and Preferences": ["", "", "", []],
+            "Consent and Agreements": ["", ""]
         },
         area_of_interest: [
 
@@ -78,7 +78,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             {text: "Target IELTS Score: What is your target IELTS score?", type: 'input'}
         ],
         "Learning Goals and Preferences": [
-            {text: "Study Goals: What are your main goals for taking the IELTS exam?",type: 'radio', options: ['education', 'professional', 'certification']},
+            {text: "Study Goals: What are your main goals for taking the IELTS exam?", type: 'radio', options: ['education', 'professional', 'certification']},
             {text: "Time Commitment: How much time can you dedicate to IELTS preparation each week?", type: 'radio', options: ['daily', 'once a week', 'twice a week', '3-4 times a week']},
             {text: "What is The Exact Date Of your exam?", type: 'date'},
             {text: "Areas of Focus: Which areas do you feel you need the most improvement in?", type: 'checkbox', options: ["Listening", "Reading", "Writing", "Speaking"]}
@@ -89,33 +89,33 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         ]
     };
     questions_required_errors: any = {
-        "Language Proficiency": [false,false,false,false],
-        "IELTS Specifics": [false,false,false],
-        "Learning Goals and Preferences": [false,false,false,false],
-        "Consent and Agreements": [false,false,false]
+        "Language Proficiency": [false, false, false, false],
+        "IELTS Specifics": [false, false, false],
+        "Learning Goals and Preferences": [false, false, false, false],
+        "Consent and Agreements": [false, false, false]
     };
 
     areaOfInterestItems: any = {
-        "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli'], custom: ['','']},
-        "Sport": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/sport.jpg", specific: ['Basketball', 'Michael Jorden', 'Usain Bolt'], custom: ['','']},
-        "Games": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/games.jpg", specific: ['Minecraft', 'Call of Duty', 'Quests'], custom: ['','']},
-        "Israel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/israel.jpg", specific: ['Israel-Palastine Conflict', 'Israeli Calture', 'Famous People'], custom: ['','']},
-        "Cars": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/cars.jpg", specific: ['Formula I', 'MotoGP', 'Electric Cars'], custom: ['','']},
-        "News": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/news.jpg", specific: ['Politics', 'Financial News', 'Crypto'], custom: ['','']},
-        "Investments": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/shopping.jpg", specific: ['Trading', 'Venture Capital', 'Startups'], custom: ['','']},
-        "Science": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/science.jpg", specific: ['Physics', 'Astronomy', 'Zoology'], custom: ['','']},
-        "AI": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/ai.jpg", specific: ['LLMs', 'Supervised Learning', 'Reinforcment lerarning'], custom: ['','']},
-        "Soccer": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/soccer.jpg", specific: ['Ronaldo', 'VAR', 'Manchester City'], custom: ['','']},
-        "Politics": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/politics.jpg", specific: ['Benjamin Netany', 'Donald Trump', 'Valdimir Putin'], custom: ['','']},
-        "Social Media": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/social_media.jpg", specific: ['Facebook', 'Gen Z', 'Reels'], custom: ['','']},
-        "History": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/history.jpg", specific: ['World War 2', 'Holocaust', 'Israel Wars'], custom: ['','']},
-        "Art": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/art.jpg", specific: ['Painting Styles', 'Famous sculpture', 'Van Gogh'], custom: ['','']},
-        "Food and Cooking": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/food.jpg", specific: ['Special Food', 'Best Resurants', 'Chocolatiers'], custom: ['','']},
-        "Music": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/music.jpg", specific: ['Queen', 'Noa Kirel', 'Justin Biber'], custom: ['','']},
-        "Travel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/travel.jpg", specific: ['Highest mountains', 'Beaches', '3rd world countries'], custom: ['','']},
-        "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras'], custom: ['','']},
-        "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing'], custom: ['','']},
-        "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot'], custom: ['','']}
+        "Fashion": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/fashion.jpg", specific: ['Top Designers', 'Top Models', 'Bar Refaeli'], custom: ['', '']},
+        "Sport": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/sport.jpg", specific: ['Basketball', 'Michael Jorden', 'Usain Bolt'], custom: ['', '']},
+        "Games": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/games.jpg", specific: ['Minecraft', 'Call of Duty', 'Quests'], custom: ['', '']},
+        "Israel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/israel.jpg", specific: ['Israel-Palastine Conflict', 'Israeli Calture', 'Famous People'], custom: ['', '']},
+        "Cars": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/cars.jpg", specific: ['Formula I', 'MotoGP', 'Electric Cars'], custom: ['', '']},
+        "News": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/news.jpg", specific: ['Politics', 'Financial News', 'Crypto'], custom: ['', '']},
+        "Investments": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/shopping.jpg", specific: ['Trading', 'Venture Capital', 'Startups'], custom: ['', '']},
+        "Science": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/science.jpg", specific: ['Physics', 'Astronomy', 'Zoology'], custom: ['', '']},
+        "AI": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/ai.jpg", specific: ['LLMs', 'Supervised Learning', 'Reinforcment lerarning'], custom: ['', '']},
+        "Soccer": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/soccer.jpg", specific: ['Ronaldo', 'VAR', 'Manchester City'], custom: ['', '']},
+        "Politics": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/politics.jpg", specific: ['Benjamin Netany', 'Donald Trump', 'Valdimir Putin'], custom: ['', '']},
+        "Social Media": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/social_media.jpg", specific: ['Facebook', 'Gen Z', 'Reels'], custom: ['', '']},
+        "History": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/history.jpg", specific: ['World War 2', 'Holocaust', 'Israel Wars'], custom: ['', '']},
+        "Art": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/art.jpg", specific: ['Painting Styles', 'Famous sculpture', 'Van Gogh'], custom: ['', '']},
+        "Food and Cooking": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/food.jpg", specific: ['Special Food', 'Best Resurants', 'Chocolatiers'], custom: ['', '']},
+        "Music": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/music.jpg", specific: ['Queen', 'Noa Kirel', 'Justin Biber'], custom: ['', '']},
+        "Travel": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/travel.jpg", specific: ['Highest mountains', 'Beaches', '3rd world countries'], custom: ['', '']},
+        "Photography": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/photography.jpg", specific: ['Branded Cameras', 'Technology', 'Action cameras'], custom: ['', '']},
+        "Computers": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/computers.jpg", specific: ['How computer works?', 'History of computers', 'Quantom Computing'], custom: ['', '']},
+        "Movies and TV": {image: "https://unseen-audio-files.s3.amazonaws.com/onboarding/tv.jpg", specific: ['IMDB', 'Friends', 'Gal Gadot'], custom: ['', '']}
     };
 
     beMoreSpecificSelected = 0;
@@ -316,7 +316,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
             if (elements && elements.length) {
                 const ele = elements[0];
                 const now = new Date();
-                const minDate = now.toISOString().substring(0,10);
+                const minDate = now.toISOString().substring(0, 10);
                 ele.setAttribute('min', minDate);
             }
         });
@@ -455,7 +455,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
         return 0;
     };
 

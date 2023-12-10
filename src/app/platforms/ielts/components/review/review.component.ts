@@ -152,10 +152,10 @@ export class ReviewComponent implements OnInit {
             // }
             if (this.filters.date && this.filters.date !== 'All Time') {
                 const d = new Date();
-                d.setHours(0,0,0,0);
+                d.setHours(0, 0, 0, 0);
                 let dateOffset = (24 * 60 * 60 * 1000) * 7;
                 const created = new Date(o.created);
-                created.setHours(0,0,0,0);
+                created.setHours(0, 0, 0, 0);
                 if (this.filters.date == 'Last 7 days') {
                     d.setTime(d.getTime() - dateOffset);
                 } else if (this.filters.date == 'Last 30 days') {

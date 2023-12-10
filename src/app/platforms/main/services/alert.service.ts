@@ -39,6 +39,11 @@ export class AlertService {
         this._subject.next({ type: 'info', text: message, timeout: timeout });
     }
 
+    warning(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+        this._keepAfterNavigationChange = keepAfterNavigationChange;
+        this._subject.next({ type: 'warning', text: message, timeout: timeout });
+    }
+
     error(message: string, keepAfterNavigationChange = false, timeout = 3000) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
         this._subject.next({ type: 'error', text: message, timeout: timeout });

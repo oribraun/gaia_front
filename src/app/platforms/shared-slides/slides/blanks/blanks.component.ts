@@ -26,7 +26,7 @@ export class BlanksComponent extends BaseSlideComponent implements OnInit {
         super.ngOnInit();
         let j = 0;
         this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
-            if(word === '________'){
+            if(word === '________') {
                 this.optionIdx[index] = j;
                 this.answers[j] = this.currentSlide.blanks_options[j][0];
                 j += 1;
@@ -41,20 +41,20 @@ export class BlanksComponent extends BaseSlideComponent implements OnInit {
     }
 
     onSelectChange(event: any, idx:number) {
-        if (event.target){
+        if (event.target) {
             this.answers[idx] = event.target.value;
             console.log(event.target.value, idx);
         }
     }
 
-    submitAnswer(){
+    submitAnswer() {
         if (this.slideData.is_active !== undefined && !this.slideData?.is_active) {
             return;
         }
         const answer_arr:any = [];
         let j = 0;
         this.currentSlide.blanked_sentence.split(' ').forEach((word: string, index: number) => {
-            if(word === '________'){
+            if(word === '________') {
                 answer_arr.push(this.answers[j]);
                 j += 1;
             } else {

@@ -9,7 +9,7 @@ export class SpeechRecognitionEnhancerService {
 
     // enable_on_slide_types:string[] = ["word_repeater"]
     enable_on_slide_types:string[] = ["word_repeater", "reading"];
-    enable_on_min_delay_slide_types:string[] = ["video", "writing","template"];
+    enable_on_min_delay_slide_types:string[] = ["video", "writing", "template"];
     min_delay = 2000;
     lines:string[] = [];
     last_partial_timestamp:number = -1;
@@ -28,7 +28,7 @@ export class SpeechRecognitionEnhancerService {
     constructor() {
     }
 
-    countNumWordsInString(text:string){
+    countNumWordsInString(text:string) {
         return text.split(/(\s+)/).filter((x) => x.trim().length > 0).length;
     }
 
@@ -54,26 +54,26 @@ export class SpeechRecognitionEnhancerService {
         return track[str2.length][str1.length];
     }
 
-    removePunct(s:string){
-        const punctuationless = s.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-        const finalString = punctuationless.replace(/\s{2,}/g," ");
+    removePunct(s:string) {
+        const punctuationless = s.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+        const finalString = punctuationless.replace(/\s{2,}/g, " ");
         return finalString;
     }
 
 
-    async validate(srObject:any, slideObj:any, callback:any, slide_index:number = -1){
+    async validate(srObject:any, slideObj:any, callback:any, slide_index:number = -1) {
         const is_final = srObject.isFinal;
         this.last_final_timestamp = Date.now();
-        if(this.enable_on_min_delay_slide_types.includes(slideObj.slide_type)){
+        if(this.enable_on_min_delay_slide_types.includes(slideObj.slide_type)) {
             console.log('SR-Enhancer : validate was called');
             if (is_final) {
                 this.asr_queue.push(srObject.text.replace(/\s\s+/g, ' ').trim());
                 srObject.isFinal = false;
-                this.waitForSlienceToTransmit(srObject,callback);
+                this.waitForSlienceToTransmit(srObject, callback);
             }
         }
 
-        if(this.enable_on_slide_types.includes(slideObj.slide_type)){
+        if(this.enable_on_slide_types.includes(slideObj.slide_type)) {
             console.log('SR-Enhancer : validate was called');
             const alternativeTexts = srObject.alternativeTexts;
             const asr_text_raw = srObject.text.replace(/\s\s+/g, ' ').trim();
@@ -94,8 +94,8 @@ export class SpeechRecognitionEnhancerService {
 
             if (is_final) {
 
-                if(slideObj.slide_type == 'reading'){
-                    if(this.slide_index != slide_index){
+                if(slideObj.slide_type == 'reading') {
+                    if(this.slide_index != slide_index) {
                         this.slide_index = slide_index;
                         this.lines = slideObj.text.replace(/\s\s+/g, ' ').trim().split('\n');
                         this.resetLineIndex();
@@ -132,7 +132,7 @@ export class SpeechRecognitionEnhancerService {
                 }
 
                 // 2 - Levenshtein Distance between the target and incoming is less than thr, accpet the answer
-                if (this.levenshteinDistance(target_text_lower_no_punct, asr_text_lower_no_punct) < thr){
+                if (this.levenshteinDistance(target_text_lower_no_punct, asr_text_lower_no_punct) < thr) {
                     console.log('SR-Enhancer : Levenshtein Distance test passed | ASR RAW = ' + asr_text_raw_lower + ' | ASR = ' + asr_text_lower + ' | Target = ' + target_text_lower + ' LD = ' + this.levenshteinDistance(target_text_lower, asr_text_lower));
                     srObject.text = target_text;
                     this.aggregate = '';
@@ -141,7 +141,7 @@ export class SpeechRecognitionEnhancerService {
                 }
 
                 // 3 - Alternative values contains the target, if so replace to the text to the target
-                if(alternativeTexts.some( (item: string) => this.removePunct(item.toLowerCase()).includes(target_text_lower_no_punct) )){
+                if(alternativeTexts.some( (item: string) => this.removePunct(item.toLowerCase()).includes(target_text_lower_no_punct) )) {
                     console.log('SR-Enhancer : Alternative values test passed - ' + srObject.text + ' replaced by ' + target_text);
                     srObject.text = target_text;
                     this.aggregate = '';
@@ -162,7 +162,7 @@ export class SpeechRecognitionEnhancerService {
                 }
 
                 // 1 - One of the incoming ASR permutations is substring of the target text - in this case lets aggregate
-                for(let altText of alternativeTexts){
+                for(let altText of alternativeTexts) {
                     altText = this.aggregate + ' ' + altText.toLowerCase();
                     altText = altText.replace(/\s\s+/g, ' ').trim();
                     const altText_n_words = this.countNumWordsInString(altText);
@@ -173,7 +173,7 @@ export class SpeechRecognitionEnhancerService {
                         srObject.isFinal = false;
                         return;
                     }
-                    if (this.levenshteinDistance(target_string, altText) < thr){
+                    if (this.levenshteinDistance(target_string, altText) < thr) {
                         console.log('SR-Enhancer : Aggregate permutations levenshteinDistance substing values test passed - ' + target_string + ' was set as the aggregate value');
                         this.aggregate = target_string;
                         srObject.isFinal = false;
@@ -197,7 +197,7 @@ export class SpeechRecognitionEnhancerService {
         this.lastFinalTimeout = setTimeout(() => {
             // run  test after 1 sec to validate we are not stuck at partial
             const should_trigger_final = this.checkIfShouldTriggerFinal(final_timestamp);
-            if(should_trigger_final){
+            if(should_trigger_final) {
                 new_result.text = this.asr_queue.join(' ');
                 this.asr_queue = [];
                 console.log('SR-Enhancer : Final should be triggered - ' + new_result );
@@ -218,7 +218,7 @@ export class SpeechRecognitionEnhancerService {
         this.lastPartialTimeout = setTimeout(() => {
             // run  test after 1 sec to validate we are not stuck at partial
             const should_trigger_partial_as_final = this.checkIfShouldTriggerPartial(partial_timestamp);
-            if(should_trigger_partial_as_final){
+            if(should_trigger_partial_as_final) {
                 console.log('SR-Enhancer : Partial should be final - ' + new_result );
                 new_result.isFinal = true;
                 callback(new_result, false);
@@ -227,7 +227,7 @@ export class SpeechRecognitionEnhancerService {
     }
 
     GetNormalizedAsrText(text: string, is_final:boolean) {
-        if(is_final == true && this.aggregate.length > 0){
+        if(is_final == true && this.aggregate.length > 0) {
             let new_text:string =  this.aggregate + ' ' + text;
             new_text = new_text.replace(/\s\s+/g, ' ').trim();
             return new_text;
@@ -235,16 +235,16 @@ export class SpeechRecognitionEnhancerService {
         return text;
     }
 
-    checkIfShouldTriggerFinal(final_timestamp:number){
-        if(this.last_final_timestamp > final_timestamp || this.last_partial_timestamp > final_timestamp){
+    checkIfShouldTriggerFinal(final_timestamp:number) {
+        if(this.last_final_timestamp > final_timestamp || this.last_partial_timestamp > final_timestamp) {
             // the status has changed in past 1 sec so we will not trigger anything
             return false;
         }
         return true;
     }
 
-    checkIfShouldTriggerPartial(partial_timestamp:number){
-        if(this.last_partial_timestamp > partial_timestamp || this.last_final_timestamp > partial_timestamp){
+    checkIfShouldTriggerPartial(partial_timestamp:number) {
+        if(this.last_partial_timestamp > partial_timestamp || this.last_final_timestamp > partial_timestamp) {
             // the status has changed in past 1 sec so we will not trigger anything
             return false;
         }

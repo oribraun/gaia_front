@@ -70,7 +70,7 @@ export class WordTranslatorComponent  extends BaseSlideComponent {
     }
 
     onRecognitionPTTResults = (results: any) => {
-        console.log("results",results);
+        console.log("results", results);
         const recognitionText = results.text;
         if (results.isFinal) {
             console.log('final', recognitionText);

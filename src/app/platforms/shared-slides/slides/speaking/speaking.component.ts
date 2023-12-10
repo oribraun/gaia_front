@@ -91,7 +91,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         alert('Session Ended');
                         this.restartSession();
                     }
-                } else if (resp_data.source  == 'next_question'){
+                } else if (resp_data.source  == 'next_question') {
                     if(resp_data.need_to_generate_questions) {
                         const data = {
                             "source": "generate_questions",
@@ -109,9 +109,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         alert('Session Ended');
                         this.restartSession();
                     }
-                } else if (resp_data.source  == 'generate_questions'){
+                } else if (resp_data.source  == 'generate_questions') {
                     console.log(resp_data);
-                } else if (resp_data.source == 'restart_session'){
+                } else if (resp_data.source == 'restart_session') {
                     console.log(resp_data);
                     this.nextQuestion();
                 } else if(resp_data.source == 'student_response') {
@@ -122,7 +122,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                     response_review_obj['student_response_review'] = resp_data.llm_reply.student_response_review;
 
                     this.updateDetailedQuestionReview(response_review_obj);
-                } else if(resp_data.source == 'grade_conversation'){
+                } else if(resp_data.source == 'grade_conversation') {
                     this.gradeConversationInProgress = false;
                     this.grades = resp_data.llm_reply.conversation_review;
                     this.score = resp_data.llm_reply.score;
@@ -146,18 +146,18 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.lessonService.ClearEvent("slideEventReplyError");
     }
 
-    updateDetailedQuestionReview(obj:any){
+    updateDetailedQuestionReview(obj:any) {
         this.detailedQuestionsReviewList.push(obj);
     }
 
-    buildChat(){
+    buildChat() {
         this.messages = [];
         const slideChat = this.currentSlide.slide_chat;
         this.question = '';
-        for(const el of  slideChat){
+        for(const el of  slideChat) {
             if(el.speaker == 'student') {
                 this.messages.push(new ChatMessage({type: 'user', message: el.content}));
-            } else if(el.speaker == 'teacher'){
+            } else if(el.speaker == 'teacher') {
                 this.messages.push(new ChatMessage({type: 'computer', message: el.content}));
                 this.question = el.content;
             }
@@ -209,7 +209,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     }
 
     onRecognitionPTTResults = (results: any) => {
-        console.log("onRecognitionPTTResults results",results);
+        console.log("onRecognitionPTTResults results", results);
         const recognitionText = results.text;
         if (results.isFinal) {
             console.log('onRecognitionPTTResults final', recognitionText);
@@ -221,10 +221,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
     };
 
-    initQnaReview(qna_review_list:any[]){
+    initQnaReview(qna_review_list:any[]) {
         this.detailedQuestionsReviewList = [];
 
-        for(const qna of qna_review_list){
+        for(const qna of qna_review_list) {
             const response_review_obj:any = {};
             response_review_obj['student_response'] = qna.response;
             response_review_obj['teacher_question'] = qna.question;
@@ -236,8 +236,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     //===== ASR Daniel
     onRecognitionResults = (results: any) => {
-        if(results.isFinal){
-            if(!this.studentActiveASR.length){
+        if(results.isFinal) {
+            if(!this.studentActiveASR.length) {
                 this.messages.push(
                     new ChatMessage({type: 'user', message:''})
                 );
@@ -249,8 +249,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
     };
 
-    startAsr(){
-        if(!this.session_started){
+    startAsr() {
+        if(!this.session_started) {
             this.speakTheText();
             this.session_started = true;
             return;
@@ -262,11 +262,11 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.handleCounter(1);
     }
 
-    stopAsr(){
+    stopAsr() {
         this.speechRecognitionService.stopListening();
         this.recognitionResultsSubscribe.unsubscribe(this.onRecognitionResults);
         const srudent_resp = this.studentActiveASR.join('. ').trim();
-        if(srudent_resp.length){
+        if(srudent_resp.length) {
             const data = {
                 "source": "fix_asr",
                 'stopAudio': true,
@@ -282,7 +282,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     }
 
     // === End Asr Daniel
-    gradeConversation(){
+    gradeConversation() {
         this.gradeConversationInProgress = true;
         const data = {
             "source": "grade_conversation",
@@ -294,7 +294,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    nextQuestion(){
+    nextQuestion() {
         const data = {
             "source": "next_question",
             "question_index":this.question_idx,
@@ -304,7 +304,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    restartSession(){
+    restartSession() {
         const data = {
             "source": "restart_session",
             'stopAudio': true
@@ -313,7 +313,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.clearBlackBoard();
     }
 
-    handleStudentResponse(student_reply:string){
+    handleStudentResponse(student_reply:string) {
         const data = {
             "source": "student_response",
             "teacher_question": this.question,
@@ -324,7 +324,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    clearBlackBoard(){
+    clearBlackBoard() {
         this.messages = [];
         this.detailedQuestionsReviewList = [];
         this.score = 0;
@@ -333,24 +333,24 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.hint_used = false;
         this.session_started = true;
         this.timers = [];
-        this.handleCounter(1,this.pace);
+        this.handleCounter(1, this.pace);
         this.pauseAllCounters();
     }
 
-    toggleAsr(){
-        if(!this.recordingIsActive){
+    toggleAsr() {
+        if(!this.recordingIsActive) {
             this.startAsr();
         } else {
             this.stopAsr();
         }
     }
 
-    speakTheText(text:string = ''){
+    speakTheText(text:string = '') {
         text = text.trim();
-        if(!text.length){
+        if(!text.length) {
             text = this.question;
         }
-        if(text.length){
+        if(text.length) {
             const data = {
                 "source": "speak_the_text",
                 "text": text,
@@ -389,21 +389,21 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
             }
         }
     }
-    showDetailedQuestionReview(){
+    showDetailedQuestionReview() {
         this.showDetailedQuestionReviewActive = true;
     }
 
-    openModal(){
+    openModal() {
         this.modalActive = true;
     }
 
 
-    closeModel(){
+    closeModel() {
         this.modalActive = false;
         this.showDetailedQuestionReviewActive = false;
     }
 
-    handleCounter(question_idx:number, pace = 0){
+    handleCounter(question_idx:number, pace = 0) {
         this.pauseAllCounters();
         if(!this.timers.hasOwnProperty(question_idx)) {
             this.timers[question_idx] = this.createTimer(pace);
@@ -413,7 +413,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.current_counter = this.timers[question_idx];
     }
 
-    createTimer(initial_value = 0){
+    createTimer(initial_value = 0) {
         const Timer = Object();
         Timer.active = true;
         Timer.counter = initial_value;
@@ -422,19 +422,19 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         Timer.seconds = Timer.counter % 60;
         Timer.secondsStr = Timer.seconds.toString().length < 2 ? '0' + Timer.seconds : Timer.seconds;
         Timer.submited = false;
-        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        Timer.intervalId = setInterval(this.progressTimer, 1000, Timer);
         return Timer;
 
     }
 
-    pauseAllCounters(){
-        for(const key in this.timers){
+    pauseAllCounters() {
+        for(const key in this.timers) {
             this.timers[key].active = false;
         }
     }
 
     progressTimer(self:any) {
-        if (self.active && !self.submited){
+        if (self.active && !self.submited) {
             self.counter = self.counter + 1;
             self.minutes = Math.floor(self.counter / 60);
             self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes : self.minutes;
@@ -443,7 +443,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
     }
 
-    scrollToBottom2(animate = false, timeout = 0){
+    scrollToBottom2(animate = false, timeout = 0) {
         if (this.scroller) {
             setTimeout(() => {
                 const element = this.scroller.nativeElement;

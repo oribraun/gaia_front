@@ -166,7 +166,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
             // Get the image data URL from the canvas
-            const imageUrl = canvas.toDataURL('image/jpeg',0.5);
+            const imageUrl = canvas.toDataURL('image/jpeg', 0.5);
 
             // Now, you can use this imageUrl for display, storage, etc.
             this.lessonService.Broadcast("snapshotTaken", {image_url: imageUrl});
@@ -200,7 +200,7 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
             const energy = dataArray.reduce((acc, value) => acc + value, 0) / dataArray.length;
 
             if (energy > MIN_ENERGY_THRESHOLD) {
-                console.log('audioBuffer',audioBuffer);
+                console.log('audioBuffer', audioBuffer);
                 if (!isSpeaking) {
                     isSpeaking = true;
                     lastNonZeroTime = Date.now();
@@ -350,11 +350,11 @@ export class PanelBoardComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    nextSlide(){
+    nextSlide() {
         this.onNextSlide.emit({});
     }
 
-    prevSlide(){
+    prevSlide() {
         this.onPrevSlide.emit({});
     }
 

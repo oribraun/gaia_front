@@ -8,7 +8,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
     templateUrl: './random-selector.component.html',
     styleUrls: ['./random-selector.component.less']
 })
-export class RandomSelectorComponent extends BaseSlideComponent implements OnInit{
+export class RandomSelectorComponent extends BaseSlideComponent implements OnInit {
 
     imgSrc = '';
     constructor(

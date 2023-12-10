@@ -169,7 +169,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         });
     }
 
-    async resetApplication(){
+    async resetApplication() {
 
         if (!this.mock) {
             this.stopAudio();
@@ -186,7 +186,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
 
 
-    initApplication(){
+    initApplication() {
         this.triggerResize();
         if (!this.mock) {
             if(!this.speechRecognitionService.mainRecognition) {
@@ -240,7 +240,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.recognitionOnResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
     }
 
-    listenForPauseEvnet(){
+    listenForPauseEvnet() {
         this.lessonService.ListenFor("pauseLesson").subscribe((obj: any) => {
             if (this.doNotDisturb) {
                 return;
@@ -259,7 +259,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         });
     }
 
-    listenForSnapshots(){
+    listenForSnapshots() {
         this.lessonService.ListenFor("snapshotTaken").subscribe((obj: any) => {
             this.webcam_last_snapshot_url = obj["image_url"];
             this.webcam_last_snapshot_url_updated = true;
@@ -282,7 +282,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                             const arrayBuffer = this.base64ToArrayBuffer(response.data.help_sound_buffer);
                             console.log('textToSpeech - ', arrayBuffer);
                             let blob = null;
-                            if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                            if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)) {
                                 blob = new BlobItem({arrayBuffer:arrayBuffer,
                                     action:'speakNative',
                                     type:'audio'});
@@ -306,7 +306,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         });
     }
 
-    async listenForSpeakNative(){
+    async listenForSpeakNative() {
         this.lessonService.ListenFor("speakNative").subscribe(async (obj: any) => {
             this.stopAudio();
             this.lessonService.speakNativeOnProgress = false;
@@ -329,7 +329,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         });
     }
 
-    togglePauseLesson(){
+    togglePauseLesson() {
         console.log('this.isPause', this.isPause);
         this.toggleStopAll(this.isPause);
     }
@@ -354,7 +354,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    listenForSlideEventRequests(){
+    listenForSlideEventRequests() {
         this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
             if (obj.stopAudio) {
                 this.stopAudio();
@@ -362,14 +362,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             this.getPresentationEventReplay(obj);//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         });
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
-            if(!this.doNotDisturb){
+            if(!this.doNotDisturb) {
                 this.doNotDisturb = true;
                 this.toggleStopAll(this.doNotDisturb);
                 this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_sleep'});
             }
         });
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
-            if(this.doNotDisturb){
+            if(this.doNotDisturb) {
                 this.doNotDisturb = false;
                 this.lessonService.Broadcast('panelIconChange', {iconName: 'teacher_listening'});
                 if (!obj.noToggle) {
@@ -395,20 +395,20 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     }
 
-    restartCurrentSlide(){
+    restartCurrentSlide() {
         this.setForcedSlide(-1);
         this.changeSlideReply();
     }
 
     onRecognitionResults = (results: any, shouldValidate = true) => {
-        console.log("out",this.isPause);
+        console.log("out", this.isPause);
         if (shouldValidate) {
             this.speechRecognitionEnhancerService.validate(results, this.currentSlide, this.onRecognitionResults, this.currentSlideIndex);
         }
         // clear hearbeat
         this.resetHeartBeatCounter();
         if (!this.speakInProgress && !this.doNotDisturb && !this.isPause) {
-            console.log("in",this.isPause);
+            console.log("in", this.isPause);
 
             this.recognitionText = results.text;
             // this.animationsService.addCircle(this.user.nativeElement, this.recognitionCountWords)
@@ -445,14 +445,14 @@ export class LessonComponent implements OnInit, OnDestroy {
             console.log('updateSrList - SPEAK IN PROGRESS ABORTING Trigger');
             return;
         }
-        if(!this.doNotDisturb){
+        if(!this.doNotDisturb) {
             const recognitionTextTrimmed = recognitionText.trim();
             const prevRecognitionTextTrimmed = this.sr_list[this.sr_list.length - 1];
             const now = Date.now();
-            if(recognitionTextTrimmed){
+            if(recognitionTextTrimmed) {
                 // In case two exactrly the same answers and less than 1.5 sec between them dont insert to list
-                if(prevRecognitionTextTrimmed == recognitionTextTrimmed){
-                    if ((now - this.last_sr_ts) < 1500){
+                if(prevRecognitionTextTrimmed == recognitionTextTrimmed) {
+                    if ((now - this.last_sr_ts) < 1500) {
                         console.log('updateSrList: Abort inserting ', recognitionTextTrimmed);
                         return;
                     }
@@ -467,7 +467,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
     }
 
-    heartBeatTrigger(){
+    heartBeatTrigger() {
         // Triger a standard request to the server
         // provide the following information
         // app data : slide index, cam snapshot, sr_len, last_sr, timestamp
@@ -475,19 +475,19 @@ export class LessonComponent implements OnInit, OnDestroy {
         const n_seconds_from_last_speak =  Math.floor((Date.now() - this.last_speak_ts) / 1000);
         const n_seconds_from_user_action =  Math.floor((Date.now() - this.last_user_action_ts) / 1000);
 
-        if( (!this.speakInProgress) && (n_seconds_from_last_sr > 10)  && (n_seconds_from_last_speak > 10) && (n_seconds_from_user_action > 10)){
+        if( (!this.speakInProgress) && (n_seconds_from_last_sr > 10)  && (n_seconds_from_last_speak > 10) && (n_seconds_from_user_action > 10)) {
             this.getHeartBeatReply();
         }
     }
 
-    heartBeatSequence(x:number = 3){
+    heartBeatSequence(x:number = 3) {
         // increase the counter
         this.heartBeatCounter++;
         // make sure SR is active (if not actively playing sound)
         // this.activateSR()
         // trigger a request to the server every x seconds
-        if (this.heartBeatCounter % x == 0){
-            console.log('calling heartBeatTrigger',new Date().toTimeString());
+        if (this.heartBeatCounter % x == 0) {
+            console.log('calling heartBeatTrigger', new Date().toTimeString());
             this.heartBeatTrigger();
         }
     }
@@ -511,7 +511,7 @@ export class LessonComponent implements OnInit, OnDestroy {
     //     }
     // }
 
-    startHeartBeat(){
+    startHeartBeat() {
         if (!this.disableHearBeat) {
             console.log('startHeartBeat Called');
             this.stopHeartBeat();
@@ -525,7 +525,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.heartBeatCounter = 0;
     }
 
-    stopHeartBeat(){
+    stopHeartBeat() {
         console.log('stopHeartBeat Called');
         this.resetHeartBeatCounter();
         if (this.heartBeatInterval) {
@@ -535,7 +535,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentation() {
         this.gettingPresentation = true;
-        this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform,{
+        this.apiSubscriptions.get_presentation = this.apiService.getPresentation(this.user.last_logged_platform, {
             "type": "messi",
             purchased_lesson_id: this.current_lessons_id
         }).subscribe({
@@ -626,7 +626,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     async getPresentationEventReplay(data:any = {}) {
         this.last_user_action_ts = Date.now();
-        if(!data.hasOwnProperty('background') || !data['background']){
+        if(!data.hasOwnProperty('background') || !data['background']) {
             if (!this.allowApiCalls()) {
                 return;
             }
@@ -636,7 +636,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         this.stopSpeechRecognition();
         this.eventHandlingInProgress = true;
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type:'event',
@@ -683,7 +683,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.stopSpeechRecognition();
         this.presentationReplayIsInProgress = true;
         this.lessonService.Broadcast('student_reply_request', message);
-        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform,{
+        this.apiSubscriptions.replay = this.apiService.getPresentationReplay(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type:'student_reply',
@@ -720,7 +720,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNoReplayIsInProgress = true;
-        this.apiSubscriptions.no_replay = this.apiService.getHeartBeatReply(this.user.last_logged_platform,{
+        this.apiSubscriptions.no_replay = this.apiService.getHeartBeatReply(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'heartbeat',
@@ -758,11 +758,11 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform,{
+        this.apiSubscriptions.change_slide = this.apiService.changeSlideReply(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'change_slide',
-                current_slide_info: this.forceChangeSlideInfo ? this.forcedChangeSlideInfo : {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex , objective_idx:this.currentObjectiveIndex}
+                current_slide_info: this.forceChangeSlideInfo ? this.forcedChangeSlideInfo : {section_idx:this.currentSectionIndex, slide_idx:this.currentSlideIndex, objective_idx:this.currentObjectiveIndex}
             }
         }).subscribe({
             next: (response: any) => {
@@ -781,7 +781,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                         this.currentObjectiveIndex = data.current_objective_index;
                         this.setCurrentSection();
                         if (this.doNotDisturb) {
-                            this.lessonService.Broadcast('endDoNotDisturb',{});
+                            this.lessonService.Broadcast('endDoNotDisturb', {});
                         }
                         if (this.isPause) {
                             this.needToCallNextSlideReplay = true;
@@ -812,7 +812,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lessonService.speakNativeOnProgress = false;
         this.lessonService.speakNativeOnWaiting = false;
         this.presentationNewSlideInProgress = true;
-        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform,{
+        this.apiSubscriptions.next_slide = this.apiService.getNewSlideReply(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: 'new_slide',
@@ -849,14 +849,14 @@ export class LessonComponent implements OnInit, OnDestroy {
         if (!this.allowApiCalls()) {
             return;
         }
-        console.log('this.gettingPresentation',this.gettingPresentation);
-        console.log('this.presentationResetIsInProgress',this.presentationResetIsInProgress);
+        console.log('this.gettingPresentation', this.gettingPresentation);
+        console.log('this.presentationResetIsInProgress', this.presentationResetIsInProgress);
         if (this.presentationResetIsInProgress || this.gettingPresentation) {
             return;
         }
         await this.resetApplication();
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform, {
             purchased_lesson_id: this.current_lessons_id,
             app_data: {
                 type: reason
@@ -884,18 +884,18 @@ export class LessonComponent implements OnInit, OnDestroy {
     }
 
 
-    setForcedSlide(modifier:number = 0){
+    setForcedSlide(modifier:number = 0) {
         const flat_index = this.presentation.sections[this.currentSectionIndex].slides[this.currentSlideIndex].flat_index;
         const new_flat_index = flat_index + modifier;
-        console.log('flat index ',flat_index);
-        console.log('flat index info',this.presentation.slides_flat[flat_index]);
-        console.log('new_flat_index ',new_flat_index);
-        console.log('new_flat_index info ',this.presentation.slides_flat[new_flat_index]);
-        if(new_flat_index >= 0 && new_flat_index < this.presentation.slides_flat.length){
+        console.log('flat index ', flat_index);
+        console.log('flat index info', this.presentation.slides_flat[flat_index]);
+        console.log('new_flat_index ', new_flat_index);
+        console.log('new_flat_index info ', this.presentation.slides_flat[new_flat_index]);
+        if(new_flat_index >= 0 && new_flat_index < this.presentation.slides_flat.length) {
             const target_slide_info = this.presentation.slides_flat[new_flat_index];
             this.forceChangeSlideInfo = true;
             this.forcedChangeSlideInfo = target_slide_info;
-        } else if (new_flat_index < 0){
+        } else if (new_flat_index < 0) {
             this.resetPresentation();
 
         }
@@ -906,7 +906,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.setForcedSlide(0);
-        if(this.forceChangeSlideInfo){
+        if(this.forceChangeSlideInfo) {
             this.stopAudio();
             this.changeSlideReply();
         }
@@ -917,7 +917,7 @@ export class LessonComponent implements OnInit, OnDestroy {
             return;
         }
         this.setForcedSlide(-2);
-        if(this.forceChangeSlideInfo){
+        if(this.forceChangeSlideInfo) {
             this.stopAudio();
             this.changeSlideReply();
         }
@@ -1159,7 +1159,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         const presentation_slide_updated = data.presentation_slide_updated;
         const presentation_content_updated = data.presentation_content_updated;
         const all_objectives_accomplished = data.all_objectives_accomplished;
-        if(this.currentObjectiveIndex != data.current_objective_index){
+        if(this.currentObjectiveIndex != data.current_objective_index) {
             this.currentObjectiveIndex = data.current_objective_index;
             currentObjectiveIndexChanged = true;
         }
@@ -1188,14 +1188,14 @@ export class LessonComponent implements OnInit, OnDestroy {
 
 
         if (help_sound_url) {
-            if(this.handleCoreFunctionalityOfSlide('speak')){
+            if(this.handleCoreFunctionalityOfSlide('speak')) {
                 console.log('help_sound_url added to que', help_sound_url);
                 this.audioQue.push(help_sound_url);
                 if (!this.speakInProgress) {
                     await this.stopSpeechRecognition();
                     this.stopHeartBeat();
                     const value = await this.playUsingAudio();
-                    if(this.handleCoreFunctionalityOfSlide('asr')){
+                    if(this.handleCoreFunctionalityOfSlide('asr')) {
                         this.resetSpeechRecognition();
                     }
 
@@ -1209,7 +1209,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if (help_sound_buffer || blob) {
-            if(this.handleCoreFunctionalityOfSlide('speak')){
+            if(this.handleCoreFunctionalityOfSlide('speak')) {
                 if (blob && this.currentSlide.index_in_bundle == 0) {
                     console.log('speakNative before');
                     this.audioBlobQue.push(blob);
@@ -1217,7 +1217,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (help_sound_buffer) {
                     console.log('help_sound_buffer added to que');
                     const arrayBuffer = this.base64ToArrayBuffer(help_sound_buffer);
-                    if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)){
+                    if(!BlobItem.includes(this.audioBlobQue, arrayBuffer)) {
                         this.audioBlobQue.push(new BlobItem({arrayBuffer:arrayBuffer, action:all_objectives_accomplished ? 'doNotListenAfter' : '', type:'audio'}));
                     }
                 }
@@ -1231,7 +1231,7 @@ export class LessonComponent implements OnInit, OnDestroy {
                     await this.stopSpeechRecognition();
                     this.stopHeartBeat();
                     const value = await this.playUsingBlob();
-                    if(this.handleCoreFunctionalityOfSlide('asr')){
+                    if(this.handleCoreFunctionalityOfSlide('asr')) {
                         this.resetSpeechRecognition();
                     }
                     this.startHeartBeat();
@@ -1240,7 +1240,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
         if(!help_sound_buffer && !help_sound_url) {
             if (!this.speechRecognitionService.ASR_recognizing) {
-                if(this.handleCoreFunctionalityOfSlide('asr')){
+                if(this.handleCoreFunctionalityOfSlide('asr')) {
                     await this.startSpeechRecognition();
                 }
             }
@@ -1264,7 +1264,7 @@ export class LessonComponent implements OnInit, OnDestroy {
         }
 
         if(currentObjectiveIndexChanged) {
-            this.lessonService.Broadcast('currentObjectiveIndexChanged',this.currentObjectiveIndex);
+            this.lessonService.Broadcast('currentObjectiveIndexChanged', this.currentObjectiveIndex);
         }
 
         // this.handleCoreFunctionalityOfSlide()
@@ -1273,15 +1273,15 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     handleCoreFunctionalityOfSlide(is_key_enabled:string = '') {
         const coreFuncs = this.currentSlide.core_instructions;
-        if(is_key_enabled){
-            if(coreFuncs.hasOwnProperty(is_key_enabled)){
+        if(is_key_enabled) {
+            if(coreFuncs.hasOwnProperty(is_key_enabled)) {
                 return coreFuncs[is_key_enabled];
             } else {
                 return true;
             }
         } else {
             console.log('coreFuncs', coreFuncs);
-            if(coreFuncs.hasOwnProperty('asr') && !coreFuncs.asr){
+            if(coreFuncs.hasOwnProperty('asr') && !coreFuncs.asr) {
                 console.log('coreFuncs', 'Stopping ASR');
                 this.stopSpeechRecognition();
             }
@@ -1350,8 +1350,8 @@ export class LessonComponent implements OnInit, OnDestroy {
                 if (count > 10) {
                     count = 0;
                 }
-            },delay * 1000);
-        },800);
+            }, delay * 1000);
+        }, 800);
         this.animationsService.triggerAddingCircle(count);
         count++;
     }

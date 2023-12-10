@@ -35,7 +35,7 @@ export class DonutChartComponent {
         this.options = {
             tooltip: {
                 trigger: 'item',
-                formatter: function(params: any){
+                formatter: function(params: any) {
                     return `<div>${params.seriesName}</div>
                             <div>
                                 ${params.marker}

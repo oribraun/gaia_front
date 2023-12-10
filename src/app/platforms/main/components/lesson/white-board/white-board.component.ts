@@ -142,7 +142,7 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
             return;
         }
         this.presentationResetIsInProgress = true;
-        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform,{
+        this.apiSubscriptions.reset = this.apiService.resetPresentation(this.user.last_logged_platform, {
             app_data: {
                 type: reason
             }
@@ -157,16 +157,16 @@ export class WhiteBoardComponent implements OnInit, OnChanges {
             }
         });
     }
-    speakNative(text:string){
+    speakNative(text:string) {
         console.log('speakNative-emit', text);
         this.lessonService.Broadcast('speakNative', {'text':text});
     }
 
-    getSlideToRender(){
+    getSlideToRender() {
         return this.currentSlide.slide_type;
     }
 
-    isSlideToRender(slideType:string){
+    isSlideToRender(slideType:string) {
         const slideToRender = this.getSlideToRender();
         return slideToRender === slideType;
     }

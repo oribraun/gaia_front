@@ -8,7 +8,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.less']
 })
-export class TemplateComponent extends BaseSlideComponent implements OnInit{
+export class TemplateComponent extends BaseSlideComponent implements OnInit {
 
     texts:string[] = [];
     texts_valid:boolean[] = [];
@@ -29,7 +29,7 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       console.log(this.currentSlide);
       this.texts = this.currentSlide.texts;
       this.examples = this.currentSlide.examples;
-      for(let i = 0; i < this.texts.length; i = i + 1){
+      for(let i = 0; i < this.texts.length; i = i + 1) {
           this.texts_valid.push(false);
       }
       this.lessonService.ListenFor("currentObjectiveIndexChanged").subscribe((objective_index: any) => {
@@ -39,13 +39,13 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
 
   }
 
-  remove_punct(text:string){
-      const punctuationless = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      const finalString = punctuationless.replace(/\s{2,}/g," ");
+  remove_punct(text:string) {
+      const punctuationless = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+      const finalString = punctuationless.replace(/\s{2,}/g, " ");
       return finalString;
   }
 
-  handleObjectiveChanged(objective_index:number){
+  handleObjectiveChanged(objective_index:number) {
       const data = {
           "source": (objective_index <= this.texts_valid.length) ? "run_next_objective" : "run_final_objective",
           "objective_index": objective_index,
@@ -53,7 +53,7 @@ export class TemplateComponent extends BaseSlideComponent implements OnInit{
       };
     //   alert('objective_index: ' + String(objective_index) + ' total text len = ' + String(this.texts_valid.length))
       this.lessonService.Broadcast("slideEventRequest", data);
-      if(objective_index - 1 < this.texts_valid.length){
+      if(objective_index - 1 < this.texts_valid.length) {
         this.texts_valid[objective_index - 1] = true;
       }
   }

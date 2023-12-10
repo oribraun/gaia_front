@@ -81,7 +81,7 @@ export class AnimationsService {
                     }, 600);
                 }, transformSpeed * 1000);
             }
-        },50);
+        }, 50);
     }
 
     randomIntFromInterval(min: number, max: number) { // min and max included

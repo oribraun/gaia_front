@@ -38,7 +38,7 @@ export interface OnStateChangeEvent
     styleUrls: ['./video.component.less'],
     encapsulation: ViewEncapsulation.None
 })
-export class VideoComponent extends BaseSlideComponent implements OnInit, AfterViewInit{
+export class VideoComponent extends BaseSlideComponent implements OnInit, AfterViewInit {
     @ViewChild('youtube_player', { static: false }) youtube_player!: ElementRef;
 
     embeddedVideo: SafeHtml;

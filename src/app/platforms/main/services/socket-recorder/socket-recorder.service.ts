@@ -167,7 +167,7 @@ export class SocketRecorderService {
                 details.type = '';
                 this.resetLastChunks();
             });
-        },2000);
+        }, 2000);
     }
 
     startCapturingMediaTest(count = 1, user_id: number, lesson_id: string) {
@@ -200,7 +200,7 @@ export class SocketRecorderService {
                     });
                 }
             });
-        },2000);
+        }, 2000);
     }
     stopCapturingMediaTest(user_id: number, lesson_id: string) {
         clearInterval(this.capturingInterval);
@@ -244,7 +244,7 @@ export class SocketRecorderService {
                     });
                 }
             });
-        },2000);
+        }, 2000);
     }
 
     stopCapturingInterval(user_id: number, lesson_id: string) {

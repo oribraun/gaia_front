@@ -37,7 +37,9 @@
                 "@typescript-eslint/semi": "error",
                 "@typescript-eslint/space-infix-ops": "error",
                 "no-prototype-builtins": "off",
-                "comma-dangle": "error"
+                "comma-dangle": "error",
+                "@typescript-eslint/comma-spacing": "error",
+                "space-before-blocks": ["error", "always"]
             }
         },
         {

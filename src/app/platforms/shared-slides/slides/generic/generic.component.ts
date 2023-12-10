@@ -1,4 +1,4 @@
-import {Renderer2,Component, Inject,Input, OnInit, OnDestroy} from '@angular/core';
+import {Renderer2, Component, Inject, Input, OnInit, OnDestroy} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import {Config} from "../../../main/config";
@@ -16,7 +16,7 @@ declare let txData:any;
 })
 
 
-export class GenericComponent extends BaseSlideComponent implements OnInit, OnDestroy{
+export class GenericComponent extends BaseSlideComponent implements OnInit, OnDestroy {
   displayHTML:any = '';
 
   constructor(
@@ -35,7 +35,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
     this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
       try {
         const data = resp.data;
-        switch(data.source){
+        switch(data.source) {
           case 'core_function_1':
             break;
           default:
@@ -52,7 +52,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
 
   }
 
-  loadSlideResources(){
+  loadSlideResources() {
     this.loadScripts();
     const html = this.currentSlide.html;
     this.displayHTML = this.sanitizeHtmlContent(html);
@@ -61,7 +61,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
   loadScripts() {
 
     const scriptSrc = this.currentSlide.js;
-    if (scriptSrc.endsWith('.js') || scriptSrc.startsWith('http')){
+    if (scriptSrc.endsWith('.js') || scriptSrc.startsWith('http')) {
       const scriptName = 'customScript';
       this.jsLoaderService.addScript(scriptName, scriptSrc);
       // You can load multiple scripts by just providing the key as argument into load method of the service
@@ -82,13 +82,13 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
     this._renderer2.appendChild(this._document.body, scriptElement);
   }
 
-  sanitizeHtmlContent(htmlContnet:string){
+  sanitizeHtmlContent(htmlContnet:string) {
     return this.sanitizer.bypassSecurityTrustHtml(htmlContnet);
   }
 
-  tx(){
+  tx() {
     const txdata = txData;
-    switch(txdata.event){
+    switch(txdata.event) {
       case 'disable_asr':
         break;
       default:
@@ -100,7 +100,7 @@ export class GenericComponent extends BaseSlideComponent implements OnInit, OnDe
         };
         this.lessonService.Broadcast("slideEventRequest", data);
     }
-    console.log('daniel',txData);
+    console.log('daniel', txData);
   }
 
   override ngOnDestroy(): void {

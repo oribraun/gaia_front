@@ -60,7 +60,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.score = this.currentSlide.score;
         this.grades_html = this.sanitizer.bypassSecurityTrustHtml(this.grades.replace(/(?:\r\n|\r|\n)/g, '<br/>'));
         this.practice = this.currentSlide.practice;
-        if(this.currentSlide.essay_type){
+        if(this.currentSlide.essay_type) {
             this.essayType = this.currentSlide.essay_type;
         }
         this.timer = this.createTimer();
@@ -68,8 +68,8 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.add_loaded_text_to_dynamic_text = this.currentSlide.add_loaded_text_to_dynamic_text;
         this.loaded_text = '';
         this.section_variables = this.currentSlide.section.section_variables;
-        console.log('section_variables_init',this.currentSlide.section.section_variables);
-        console.log('section_variables_init2',this.currentSlide.section_variables);
+        console.log('section_variables_init', this.currentSlide.section.section_variables);
+        console.log('section_variables_init2', this.currentSlide.section_variables);
 
         for (let i = 0; i < this.load_fields.length; i++) {
             const field = this.load_fields[i];
@@ -90,7 +90,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
                     this.grades = resp_data.grades;
                     this.score = resp_data.score;
 
-                    if (resp_data.grades != ""){
+                    if (resp_data.grades != "") {
                         this.grades_html = this.sanitizer.bypassSecurityTrustHtml(this.grades.replace(/(?:\r\n|\r|\n)/g, '<br/>'));
                         console.log(this.grades);
                         console.log(this.score);
@@ -112,7 +112,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
                     this.endEssayInProgress = false;
                 }
                 this.spinnerEnabled  = false;
-            } catch (e){
+            } catch (e) {
                 console.error(e);
             }
         });
@@ -131,16 +131,16 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.lessonService.ClearEvent("slideEventReplyError");
     }
 
-    openModal(){
+    openModal() {
         this.modalActive = true;
     }
 
-    closeModel(){
+    closeModel() {
         this.modalActive = false;
     }
 
     improveEssay() {
-        if (this.improveEssayInProgress){
+        if (this.improveEssayInProgress) {
             return;
         }
         const data = {
@@ -156,7 +156,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
     }
 
     boostEssay() {
-        if (this.boostEssayInProgress){
+        if (this.boostEssayInProgress) {
             return;
         }
         const data = {
@@ -172,7 +172,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
     }
 
     checkEssay() {
-        if (this.checkEssayInProgress){
+        if (this.checkEssayInProgress) {
             return;
         }
         if (this.is_test_mode && this.currentSlide.writing) {
@@ -192,7 +192,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
     }
 
     endSlide() {
-        if (this.endEssayInProgress){
+        if (this.endEssayInProgress) {
             return;
         }
         const data = {
@@ -205,7 +205,7 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    createTimer(){
+    createTimer() {
         const Timer = Object();
         Timer.active = true;
         Timer.counter = 0;
@@ -214,12 +214,12 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
         Timer.seconds = 0;
         Timer.secondsStr = '00';
         Timer.submited = false;
-        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        Timer.intervalId = setInterval(this.progressTimer, 1000, Timer);
         return Timer;
     }
 
     progressTimer(self:any) {
-        if (self.active && !self.submited){
+        if (self.active && !self.submited) {
             self.counter = self.counter + 1;
             self.minutes = Math.floor(self.counter / 60);
             self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes : self.minutes;

@@ -57,7 +57,7 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
         this.game_duration = this.currentSlide['game_duration'];
     }
 
-    startGame(){
+    startGame() {
         function endGameTrigger(self:any) {
             self.stopGame();
         }
@@ -69,13 +69,13 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
             self.minutes = Math.floor(self.gameTimer / 60);
             self.seconds = self.gameTimer % 60;
         }
-        if (!this.isActiveGame){
+        if (!this.isActiveGame) {
             this.isActiveGame = true;
             const endGameTimeLimit = this.game_duration;
             const alertBeforeEndGameTimeLimit = endGameTimeLimit - 1;
             console.log('Game started by the user');
             // Trigger do not disturbe
-            this.lessonService.Broadcast('DoNotDisturb',{});
+            this.lessonService.Broadcast('DoNotDisturb', {});
             // Counter for one minute before end of time
             this.endGameTimer = window.setTimeout(endGameTrigger, 60 * 1000 * endGameTimeLimit, this);
             // Counter for end of game
@@ -87,35 +87,35 @@ export class EmbedGameComponent extends BaseSlideComponent implements OnInit, On
 
     }
 
-    stopGame(){
-        if (this.isActiveGame){
+    stopGame() {
+        if (this.isActiveGame) {
             this.isActiveGame = false;
             this.blurIframe = true;
             this.minutes = this.game_duration;
             this.seconds = 0;
             window.clearInterval(this.checkFocusInterval);
             window.clearInterval(this.gameTimerInterval);
-            this.lessonService.Broadcast('endDoNotDisturb',{});
+            this.lessonService.Broadcast('endDoNotDisturb', {});
             console.log('game ended');
             // Make Jenny say something and move on to the next slide
             setTimeout(() => {
                 const data = {"event_type": "embed_game_stopped"};
-                this.lessonService.Broadcast('endGameAndMoveSlide',data);
+                this.lessonService.Broadcast('endGameAndMoveSlide', data);
             }, 1000);
         }
     }
 
-    alertBeforeEndGame(){
+    alertBeforeEndGame() {
         console.log('one minute before end game');
         const text = 'שים לב נותרה דקה לסיום המשחק';
-        this.lessonService.Broadcast('speakNative',{'text':text, 'onlyAudio': true});
+        this.lessonService.Broadcast('speakNative', {'text':text, 'onlyAudio': true});
     }
 
     updateSrc(url:string = '') {
         this.iframe_url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 
-    override ngOnDestroy(){
+    override ngOnDestroy() {
         super.ngOnDestroy();
         clearTimeout(this.alertBeforeEndGameTimer);
         clearInterval(this.checkFocusInterval);

@@ -8,7 +8,7 @@ import {LessonService} from "../../../main/services/lesson/lesson.service";
     templateUrl: './title.component.html',
     styleUrls: ['./title.component.less']
 })
-export class TitleComponent extends BaseSlideComponent implements OnInit{
+export class TitleComponent extends BaseSlideComponent implements OnInit {
 
     imgSrc = '';
     constructor(

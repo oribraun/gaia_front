@@ -25,10 +25,14 @@ export class AlertComponent {
     ngOnInit() {
         this.alertService.getMessage().subscribe(message => {
             this.message = message;
-            clearTimeout(this.messageTimeout);
-            this.messageTimeout = setTimeout(() => {
-                this.clear();
-            }, this.message.timeout);
+            if (this.messageTimeout) {
+                clearTimeout(this.messageTimeout);
+            }
+            if (this.message.timeout > -1) {
+                this.messageTimeout = setTimeout(() => {
+                    this.clear();
+                }, this.message.timeout);
+            }
         });
     }
 

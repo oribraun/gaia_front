@@ -192,7 +192,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                     "question_type": q.question_type,
                     "is_correct_answer": null
                 };
-                if(q.question_type == 'sentence_completion'){
+                if(q.question_type == 'sentence_completion') {
                     // this.unseenAnswers[q.question_id].answer_text = q.question
                 }
             }
@@ -203,7 +203,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].explanation = data.explanation;
         this.unseenAnswers[current_question.question_id].is_correct_answer = data.is_correct_answer;
-        if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)){
+        if(current_question.question_type == "multiple_choice" && !this.isEmpty(current_question.question.answers)) {
             this.currentSlide.all_answers[current_question.question_id] = JSON.parse(JSON.stringify(this.unseenAnswers[current_question.question_id]));
         }
     }
@@ -386,7 +386,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         }
     }
 
-    checkAnswer(){
+    checkAnswer() {
         if (this.submitInProgress) {
             return;
         }
@@ -415,15 +415,15 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    nextQuestion(){
+    nextQuestion() {
         this.goToQuestionNumber(this.question_index + 1);
     }
-    prevQuestion(){
+    prevQuestion() {
         this.goToQuestionNumber(this.question_index - 1);
     }
 
-    goToQuestionNumber(number:number){
-        if(number > -1 && number < this.currentSlide.all_questions.length){
+    goToQuestionNumber(number:number) {
+        if(number > -1 && number < this.currentSlide.all_questions.length) {
             this.closeHints();
             this.setUpPagination(number);
             this.question_index = number;
@@ -480,7 +480,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
             }
         }
     }
-    onMultipleChoiceQuestionChange(option:any, event: any){
+    onMultipleChoiceQuestionChange(option:any, event: any) {
         const current_question = this.currentSlide.all_questions[this.question_index];
         this.unseenAnswers[current_question.question_id].multiple_answers[option.answer] = event.target.checked;
 
@@ -493,7 +493,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         }
     }
 
-    nextSlide(){
+    nextSlide() {
         const data = {
             "source": "continue_to_next_slide_click",
             'stopAudio': true
@@ -501,7 +501,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
-    getHints(){
+    getHints() {
         if (this.currentHint) {
             return;
         }
@@ -602,7 +602,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         return true;
     }
 
-    handleCounter(question_idx:number){
+    handleCounter(question_idx:number) {
         if (this.slideData.is_test_mode) {
             return;
         }
@@ -615,7 +615,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         this.current_counter = this.timers[question_idx];
     }
 
-    createTimer(){
+    createTimer() {
         const Timer = Object();
         Timer.active = true;
         Timer.counter = 0;
@@ -624,19 +624,19 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         Timer.seconds = 0;
         Timer.secondsStr = '00';
         Timer.submited = false;
-        Timer.intervalId = setInterval(this.progressTimer, 1000,Timer);
+        Timer.intervalId = setInterval(this.progressTimer, 1000, Timer);
         return Timer;
 
     }
 
-    pauseAllCounters(){
-        for(const key in this.timers){
+    pauseAllCounters() {
+        for(const key in this.timers) {
             this.timers[key].active = false;
         }
     }
 
     progressTimer(self:any) {
-        if (self.active && !self.submited){
+        if (self.active && !self.submited) {
             self.counter = self.counter + 1;
             self.minutes = Math.floor(self.counter / 60);
             self.minutesStr = self.minutes.toString().length < 2 ? '0' + self.minutes : self.minutes;

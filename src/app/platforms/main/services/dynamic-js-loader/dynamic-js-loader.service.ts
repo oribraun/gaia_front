@@ -28,7 +28,7 @@ export class DynamicScriptLoaderService {
     });
   }
 
-  addScript(name:string, src:string){
+  addScript(name:string, src:string) {
     this.scripts[name] = {
         loaded: false,
         src: src
