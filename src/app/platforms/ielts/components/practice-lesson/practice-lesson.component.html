@@ -90,6 +90,7 @@
             <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()">Review Vocabulary</button>
             <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()">Back to Dashboard</button>
         </div>
+        <button type="button" class="btn-close" (click)="enable_end_lesson_button = false;"></button>
     </div>
 
     <div class="bottom-panel" *ngIf="gotFirstPresentation">
