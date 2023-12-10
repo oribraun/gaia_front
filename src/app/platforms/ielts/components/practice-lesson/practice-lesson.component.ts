@@ -200,14 +200,23 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             if (timer.counter_sec <= this.currentSlide.timer_timeout_sec) {
                 // we should stop timer and force next slide
                 this.timersHelper.stopTimer(this.test_timer_counter_id);
-                if (this.currentSlide.timer_timeout_msg) {
-                    this.alertService.warning(this.currentSlide.timer_timeout_msg, false, -1);
-                }
+                this.showTimerWarning();
                 this.blockAllSlideEvents = true;
                 shouldContinue = false;
             }
         }
         return shouldContinue;
+    }
+
+    showTimerWarning() {
+        if (this.is_test_mode) {
+            const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
+            if (timer.counter_sec <= this.currentSlide.timer_timeout_sec) {
+                if (this.currentSlide.timer_timeout_msg) {
+                    this.alertService.warning(this.currentSlide.timer_timeout_msg);
+                }
+            }
+        }
     }
 
     sendTimersToDb() {
@@ -946,19 +955,25 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
 
     listenForSlideEventRequests() {
         this.lessonService.ListenFor("startListenToAsr").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             this.startListenToAsr();
         });
         this.lessonService.ListenFor("stopListenToAsr").subscribe((removeSubscribe: boolean = false) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             this.stopListenToAsr(removeSubscribe);
         });
         this.lessonService.ListenFor("slideEventRequest").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if (obj.stopAudio) {
@@ -967,7 +982,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             this.getPresentationEventReplay(obj);//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         });
         this.lessonService.ListenFor("PresentationReplayRequest").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if (obj.stopAudio) {
@@ -976,7 +993,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             this.getPresentationReplay(obj.student_response);
         });
         this.lessonService.ListenFor("DoNotDisturb").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if(!this.doNotDisturb) {
@@ -986,7 +1005,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             }
         });
         this.lessonService.ListenFor("endDoNotDisturb").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if(this.doNotDisturb) {
@@ -998,25 +1019,33 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             }
         });
         this.lessonService.ListenFor("restartCurrentSlide").subscribe((helpMode: string) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             this.restartCurrentSlide();
         });
         this.lessonService.ListenFor("stopAudio").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             this.stopAudio();
         });
         this.lessonService.ListenFor("slideDestroy").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             console.log('slideDestroy Event');
         });
         this.lessonService.ListenFor("slideAddToVocab").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             console.log('slideAddToVocab Event');
@@ -1041,7 +1070,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             });
         });
         this.lessonService.ListenFor("endGameAndMoveSlide").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             this.getPresentationEventReplay(obj);
@@ -1051,7 +1082,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
 
     listenForPauseEvnet() {
         this.lessonService.ListenFor("pauseLesson").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if (this.doNotDisturb) {
@@ -1062,7 +1095,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             this.togglePauseLesson();//#{"source": "image_generator_button_click", "selected_words": obj.selected_words})
         });
         this.lessonService.ListenFor("resumeLesson").subscribe((obj: any) => {
-            if (this.blockAllSlideEvents) {
+            if (this.is_test_mode && this.blockAllSlideEvents) {
+                this.showTimerWarning();
+                this.lessonService.Broadcast('blockAllSlideEvents');
                 return;
             }
             if (this.doNotDisturb) {

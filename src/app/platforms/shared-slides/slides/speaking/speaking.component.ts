@@ -139,6 +139,11 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                 this.spinnerEnabled = false;
             }
         });
+        this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
+            if (this.spinnerEnabled) {
+                this.spinnerEnabled = false;
+            }
+        });
     }
 
     clearSlideEvents() {

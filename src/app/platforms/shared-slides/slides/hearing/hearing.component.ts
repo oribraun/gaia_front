@@ -152,6 +152,11 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
                 this.submitInProgress = false;
             }
         });
+        this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
+            if (this.submitInProgress) {
+                this.submitInProgress = false;
+            }
+        });
     }
 
     clearSlideEvents() {

@@ -194,6 +194,11 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                 this.showSpinner = false;
             }
         });
+        this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
+            if (this.showSpinner) {
+                this.showSpinner = false;
+            }
+        });
         this.lessonService.ListenFor("student_reply_error").subscribe((resp:any) => {
 
         });

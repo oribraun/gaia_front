@@ -228,6 +228,11 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                 this.submitInProgress = false;
             }
         });
+        this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
+            if (this.submitInProgress) {
+                this.submitInProgress = false;
+            }
+        });
     }
 
     clearSlideEvents() {

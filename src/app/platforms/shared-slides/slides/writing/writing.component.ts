@@ -124,6 +124,14 @@ export class WritingComponent extends BaseSlideComponent implements OnInit, OnDe
                 this.checkEssayInProgress = false;
             }
         });
+        this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
+            if (this.spinnerEnabled) {
+                this.spinnerEnabled = false;
+            }
+            if (this.checkEssayInProgress) {
+                this.checkEssayInProgress = false;
+            }
+        });
     }
 
     clearSlideEvents() {
