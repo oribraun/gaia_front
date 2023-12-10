@@ -12,7 +12,7 @@ export class Presentation {
     sections!: PresentationSection[];
     slides_flat: object[] = [];
     teacher!: any;
-    total_timer: number = 60 * 60;
+    timer_total: number = 60 * 60;
     timer_sec: number = 0;
     timer_timeout_msg: string = "test times up - please move on";
     timer_timeout_sec: number = -1;

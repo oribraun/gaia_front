@@ -241,7 +241,7 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     setTestModeTimer(timer_sec: number = 0) {
-        const total_test_time = this.presentation.total_timer;
+        const total_test_time = this.presentation.timer_total;
         const current_test_time_sec = total_test_time - timer_sec;
         this.timersHelper.handleTimer(this.test_timer_counter_id, current_test_time_sec, total_test_time);
         // this.timersHelper.handleCounter(this.test_timer_counter_id, test_start_sec);
