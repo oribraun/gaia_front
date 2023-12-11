@@ -573,6 +573,59 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         });
     }
 
+    async goToSlide(section_idx: number, objective_idx: number, slide_idx: number) {
+        if (this.presentationNewSlideInProgress) {
+            return;
+        }
+        this.presentationNewSlideInProgress = true;
+        this.apiSubscriptions.change_slide = this.apiService.goToSlide(this.user.last_logged_platform, {
+            practice_lesson_id: this.user_lesson_id,
+            app_data: {
+                type: 'go_to_slide',
+                current_slide_info: {section_idx:section_idx, slide_idx:slide_idx, objective_idx:objective_idx}
+            }
+        }).subscribe({
+            next: (response: any) => {
+                this.blockAllSlideEvents = false;
+                this.presentationNewSlideInProgress = false;
+                // this.clearForcedSlide();
+
+                if (response.err) {
+                    console.log('goToSlide response err', response);
+                    this.alertService.error(response.errMessage);
+                    this.handleOnReplayError();
+                } else {
+                    const data = response.data;
+                    // this.stopAudio();
+                    if (data.success) {
+                        this.currentSectionIndex = data.current_section_index;
+                        this.currentSlideIndex = data.current_slide_index;
+                        this.currentObjectiveIndex = data.current_objective_index;
+                        this.setCurrentSection();
+                        this.setData();
+                        if (this.doNotDisturb) {
+                            this.lessonService.Broadcast('endDoNotDisturb', {});
+                        }
+                        if (this.isPause) {
+                            this.needToCallNextSlideReplay = true;
+                        } else {
+                            // this.getNewSlideReply();
+                            this.currentData = response.data;
+                            this.handleOnPresentationReplay('new_slide');
+                        }
+                    } else {
+                        console.log('change slide response err', response);
+                    }
+                }
+            },
+            error: (error) => {
+                this.presentationNewSlideInProgress = false;
+                this.clearForcedSlide();
+                console.log('change slide error', error);
+            }
+        });
+    }
+
     async speakNative(obj:any = {}): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.lessonService.speakNativeOnProgress && !this.lessonService.speakNativeOnWaiting) {

@@ -4,7 +4,7 @@ import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {VocabularyComponent} from "./components/vocabulary/vocabulary.component";
 import {ReviewComponent} from "./components/review/review.component";
-import {UserOnboardingGuard} from "./components/guards/on-boarding.guard";
+import {UserOnboardingGuard} from "./guards/on-boarding.guard";
 import {PlanComponent} from "./components/plan/plan.component";
 import {AuthTestPrepPlatformGuard} from "../main/guards/auth-test-prep-platform.guard";
 

@@ -61,6 +61,9 @@ export class PresentationSection {
     section_topic!: string;
     section_variables!: any;
     slides!: PresentationSlide[];
+    timer_sec: number = 0;
+    timer_timeout_msg: string = "test times up - please move on";
+    timer_timeout_sec: number = -1;
 
     constructor(obj?: any) {
         if (obj) {

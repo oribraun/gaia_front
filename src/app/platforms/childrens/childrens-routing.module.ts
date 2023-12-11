@@ -4,11 +4,12 @@ import {ChildrensDashboardComponent} from "./components/dashboard/dashboard.comp
 import {LessonComponent} from "../main/components/lesson/lesson.component";
 import {BuyComponent} from "../main/components/buy/buy.component";
 import {AuthChildrenPlatformGuard} from "../main/guards/auth-children-platform.guard";
+import {UserOnboardingGuard} from "./guards/on-boarding.guard";
 
 const routes: Routes = [
-    { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] },
-    { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] },
-    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard] }
+    { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] },
+    { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] },
+    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] }
 ];
 
 @NgModule({

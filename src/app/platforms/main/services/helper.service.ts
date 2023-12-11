@@ -9,7 +9,7 @@ declare let $: any;
 export class HelperService {
 
     tooltipTimeout: any = null;
-    
+
     constructor() { }
 
     applyTooltip() {
@@ -49,9 +49,9 @@ export class HelperService {
         return u;
     }
 
-    getUserReturnUrl(user: User) {
+    getUserReturnUrl(user: User, user_on_boarding_finished = false) {
         let returnUrl = '';
-        if (user.id && user.last_logged_platform) {
+        if (user.id && user.last_logged_platform && user_on_boarding_finished) {
             returnUrl = '/' + user.last_logged_platform + '/dashboard';
         } else {
             returnUrl = '/onBoarding';
@@ -109,5 +109,5 @@ export class HelperService {
         };
     }
 
-    
+
 }

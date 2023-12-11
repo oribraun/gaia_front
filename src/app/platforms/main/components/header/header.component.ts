@@ -138,7 +138,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                         this.config.user_on_boarding = on_boarding_object?.on_boarding_details;
                     });
                     if (redirectUser) {
-                        this.redirectUser();
+                        this.redirectUser(this.user_on_boarding_finished);
                     }
                 } else {
                     console.log('getUserOnBoarding errMessage', response.errMessage);
@@ -591,8 +591,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         }
     }
 
-    redirectUser() {
-        const returnUrl = this.helperService.getUserReturnUrl(this.user);
+    redirectUser(user_on_boarding_finished: boolean) {
+        const returnUrl = this.helperService.getUserReturnUrl(this.user, user_on_boarding_finished);
         this.router.navigateByUrl(returnUrl);
     }
 

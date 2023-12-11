@@ -442,6 +442,11 @@ export class ApiService {
             this.httpOptions
         );
     }
+    goToSlide(platform: string, obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/got-to-slide', obj,
+            this.httpOptions
+        );
+    }
     resetPresentation(platform: string, obj: any) {
         return this.http.post(this.serverBase + this.baseApi + platform + '/us/reset-presentation', obj,
             this.httpOptions
