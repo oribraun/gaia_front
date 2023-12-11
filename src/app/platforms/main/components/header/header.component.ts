@@ -110,7 +110,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.checkIfPlansPage();
     }
 
-    initOnBoarding() {
+    initOnBoarding(redirectUser = false) {
         if (this.user.id && this.user.last_logged_platform) {
             const currentPlatform = this.user.last_logged_platform;
             const map = this.platforms.map((o: any) => o.name);
@@ -118,7 +118,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (index > -1) {
                 this.selectedPlatform = this.platforms[index];
             }
-            this.getUserOnBoarding();
+            this.getUserOnBoarding(redirectUser);
             if (this.user.last_logged_platform === 'ielts') {
                 this.getUserActivity();
             }
@@ -419,7 +419,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 this.hideLoginModel();
                 this.setupUser(data);
                 this.user.last_logged_platform = this.selectedPlatform.name;
-                this.getUserOnBoarding(true);
+                this.initOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
@@ -451,7 +451,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 this.hideLoginModel();
                 this.setupUser(data);
                 this.user.last_logged_platform = this.selectedPlatform.name;
-                this.getUserOnBoarding(true);
+                this.initOnBoarding(true);
             } else {
                 this.errMessage = response.errMessage;
                 if (data.verify) {
@@ -507,7 +507,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 console.log('data', data);
                 this.hideLoginModel();
                 this.setupUser(data);
-                this.redirectUser();
+                this.user.last_logged_platform = this.selectedPlatform.name;
+                this.initOnBoarding(true);
             } else {
                 if (Array.isArray(response.errMessage)) {
                     this.errMessage = response.errMessage.join('</br>');

@@ -40,7 +40,10 @@ export class MyHttpInterceptor implements HttpInterceptor {
                 },
                 error: (error: any) => {
                     if (error instanceof HttpErrorResponse) {
-                        console.error('MyHttpInterceptor HTTP error:', error);
+                        console.error('MyHttpInterceptor HTTP error:', error.message, error.status);
+                    }
+                    if (error instanceof HttpErrorResponse && error.status === 403) {
+                        this.redirectToLogin(true);
                     }
                 }
             }),

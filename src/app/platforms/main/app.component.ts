@@ -99,10 +99,11 @@ export class AppComponent implements OnInit {
             this.config.token = token;
         }
         const user = this.config.getCookie('user', true);
+        const user_exp = this.config.getCookie('user_exp', true);
         if (user && !gotUserFromServer) {
             this.config.user = JSON.parse(user);
         }
-        if (!csrftoken || !token || !user) {
+        if (!csrftoken || !token || !user || !user_exp) {
             this.config.resetCookies(false);
             this.config.resetUserCreds();
         }
