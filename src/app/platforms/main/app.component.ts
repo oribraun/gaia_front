@@ -47,13 +47,17 @@ export class AppComponent implements OnInit {
         }
         this.config.user_subject.subscribe((user) => {
             this.user = user;
-            this.updateUserCookie();
+            if (!environment.production) {
+                this.updateUserCookie();
+            }
         });
         this.getCurrentRoute();
         // setTimeout is because we need to wait for all components subscriptions to config changes
-        setTimeout(() => {
+        if (!environment.production) {
+            this.setupCredsFromCookies();
+        } else {
             this.setupCredsFromServer();
-        });
+        }
 
         let redirectUser = false;
         this.route.queryParams.subscribe((params) => {
@@ -71,25 +75,8 @@ export class AppComponent implements OnInit {
         this.router.navigateByUrl(returnUrl);
     }
 
-    setupCredsFromServer() {
-        // if (typeof STATIC_URL !== 'undefined' && STATIC_URL !== "{% static 'client/' %}") {
-        //   this.config.staticServerPath = STATIC_URL;
-        // }
-        let gotUserFromServer = false;
-        if (typeof USER !== 'undefined' && USER !== 'AnonymousUser' && USER !== '{{ user | safe }}') {
-            gotUserFromServer = true;
-            this.config.user = JSON.parse(USER);
-        } else {
-            this.config.user_subject.next('');
-        }
-        // console.log('csrf_token', TOKEN)
-        // if (typeof TOKEN !== 'undefined' && TOKEN !== '{{ csrf_token }}') {
-        //     this.config.csrf_token = TOKEN;
-        // }
-        if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
-            this.config.server_host = SCHEME + '://' + HOST + '/';
-        }
-        // console.log('this.config.getCookie(\'csrftoken\')', this.config.getCookie('csrftoken'))
+    setupCredsFromCookies() {
+        console.log('setupCredsFromCookies')
         const csrftoken = this.config.getCookie('csrftoken');
         if (csrftoken) {
             this.config.csrf_token = csrftoken;
@@ -99,15 +86,24 @@ export class AppComponent implements OnInit {
             this.config.token = token;
         }
         const user = this.config.getCookie('user', true);
-        const user_exp = this.config.getCookie('user_exp', true);
-        if (user && !gotUserFromServer) {
+        const user_exp = this.config.getCookie('user-exp', true);
+        if (user) {
             this.config.user = JSON.parse(user);
         }
         if (!csrftoken || !token || !user || !user_exp) {
             this.config.resetCookies(false);
             this.config.resetUserCreds();
         }
-
+    }
+    setupCredsFromServer() {
+        if (typeof USER !== 'undefined' && USER !== 'AnonymousUser' && USER !== '{{ user | safe }}') {
+            this.config.user = JSON.parse(USER);
+        } else {
+            this.config.user_subject.next('');
+        }
+        if (typeof HOST !== 'undefined' && HOST !== '{{ request.get_host }}') {
+            this.config.server_host = SCHEME + '://' + HOST + '/';
+        }
     }
 
     updateUserCookie() {

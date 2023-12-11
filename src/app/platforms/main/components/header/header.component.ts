@@ -577,14 +577,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.user = new User(response.user);
         this.config.user = response.user;
         this.config.token = response.token;
-        this.setCookiesAfterLogin(response);
+        if (!environment.production) {
+            this.setCookiesAfterLogin(response);
+        }
         this.config.csrf_token = this.config.getCookie('csrftoken');
     }
 
     setUpUserOnly(user: any) {
         this.user = new User(user);
         this.config.user = user;
-        this.setCookiesAfterLogin(user);
+        if (!environment.production) {
+            this.setCookiesAfterLogin(user);
+        }
     }
 
     redirectUser() {
