@@ -9,7 +9,8 @@ import {UserOnboardingGuard} from "./guards/on-boarding.guard";
 const routes: Routes = [
     { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] },
     { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] },
-    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] }
+    { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full', canActivate: [AuthChildrenPlatformGuard, UserOnboardingGuard] },
+    { path: '**', redirectTo: 'dashboard'}
 ];
 
 @NgModule({

@@ -49,7 +49,7 @@ export class HelperService {
         return u;
     }
 
-    getUserReturnUrl(user: User, user_on_boarding_finished = false) {
+    getUserReturnUrl(user: User, user_on_boarding_finished: boolean) {
         let returnUrl = '';
         if (user.id && user.last_logged_platform && user_on_boarding_finished) {
             returnUrl = '/' + user.last_logged_platform + '/dashboard';

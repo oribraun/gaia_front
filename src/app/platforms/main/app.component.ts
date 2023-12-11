@@ -55,26 +55,23 @@ export class AppComponent implements OnInit {
             this.setupCredsFromServer();
         }
 
-        // TODO remove after demo
-        if (this.user.id && window.location.pathname === '/') {
-            this.redirectUser();
-        }
-
-        let redirectUser = false;
-        this.route.queryParams.subscribe((params) => {
-            if (params['redirectUser']) {
-                redirectUser = params['redirectUser'];
-            }
-            if (redirectUser) {
-                this.redirectUser();
-            }
-        });
+        // let redirectUser = false;
+        // let user_on_boarding_finished = false;
+        // this.route.queryParams.subscribe((params) => {
+        //     if (params['redirectUser']) {
+        //         redirectUser = params['redirectUser'];
+        //         user_on_boarding_finished = params['onBoardingFinished'];
+        //     }
+        //     if (redirectUser) {
+        //         this.redirectUser(user_on_boarding_finished);
+        //     }
+        // });
     }
 
-    redirectUser() {
-        const returnUrl = this.helperService.getUserReturnUrl(this.user);
-        this.router.navigateByUrl(returnUrl);
-    }
+    // redirectUser(user_on_boarding_finished: boolean) {
+    //     const returnUrl = this.helperService.getUserReturnUrl(this.user, user_on_boarding_finished);
+    //     this.router.navigateByUrl(returnUrl);
+    // }
 
     setupCredsFromCookies() {
         console.log('setupCredsFromCookies')

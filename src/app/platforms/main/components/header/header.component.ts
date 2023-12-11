@@ -649,7 +649,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     reloadSystemAndRedirect() {
-        window.location.href = window.location.origin + '?redirectUser=true';
+        const href = window.location.origin + '/' + this.selectedPlatform.name + '/redirect';
+        window.location.href = href;
     }
 
     setFormType(type: string) {
