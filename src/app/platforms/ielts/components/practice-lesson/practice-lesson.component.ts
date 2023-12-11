@@ -192,18 +192,27 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         if (!timer) {
             shouldContinue = false;
         }
-        if (this.presentation.timer_timeout_sec > -1) {
-            // handle presentation timer timeout
-        }
-        if (this.currentSlide.timer_timeout_sec > -1) {
-            // handle slide timer timeout
-            if (timer.counter_sec <= this.currentSlide.timer_timeout_sec) {
-                // we should stop timer and force next slide
-                this.timersHelper.stopTimer(this.test_timer_counter_id);
-                this.showTimerWarning();
-                this.blockAllSlideEvents = true;
-                shouldContinue = false;
+        if (timer) {
+            if (this.presentation.timer_timeout_sec > -1) {
+                // handle presentation timer timeout
             }
+            if (this.currentSlide.timer_timeout_sec > -1) {
+                // handle slide timer timeout
+                if (timer && timer.total_sec - timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
+                    // we should stop timer and force next slide
+                    this.timersHelper.stopTimer(this.test_timer_counter_id);
+                    this.showTimerWarning();
+                    if (timer.total_sec - timer.counter_sec !== this.presentation.timer_sec) {
+                        this.sendTimersToDb();
+                    }
+                    this.blockAllSlideEvents = true;
+                    shouldContinue = false;
+                }
+            }
+            if (shouldContinue) {
+                this.timersHelper.startTimer(this.test_timer_counter_id);
+            }
+            this.presentation.timer_sec = timer.total_sec - timer.counter_sec;
         }
         return shouldContinue;
     }
@@ -211,9 +220,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     showTimerWarning() {
         if (this.is_test_mode) {
             const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
-            if (timer.counter_sec <= this.currentSlide.timer_timeout_sec) {
+            if (timer.total_sec - timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
                 if (this.currentSlide.timer_timeout_msg) {
-                    this.alertService.warning(this.currentSlide.timer_timeout_msg);
+                    this.alertService.warning(this.currentSlide.timer_timeout_msg, false, 3000);
                 }
             }
         }
@@ -221,9 +230,14 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
 
     sendTimersToDb() {
         const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
+        const mark_as_done = this.presentation.timer_timeout_sec == timer.total_sec - timer.counter_sec;
+        if (mark_as_done) {
+            this.user_lesson_status = 'Finished';
+        }
         const data = {
             practice_lesson_id: this.user_lesson_id,
-            timer_sec: timer.total_sec - timer.counter_sec
+            timer_sec: timer.total_sec - timer.counter_sec,
+            mark_as_done: mark_as_done
         };
         this.apiService.saveTimers(data).subscribe({
             next: (response: any) => {
@@ -241,9 +255,10 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     setTestModeTimer(timer_sec: number = 0) {
-        const total_test_time = this.presentation.timer_total;
+        const total_test_time = this.presentation.timer_timeout_sec;
         const current_test_time_sec = total_test_time - timer_sec;
         this.timersHelper.handleTimer(this.test_timer_counter_id, current_test_time_sec, total_test_time);
+        this.timersHelper.stopTimer(this.test_timer_counter_id);
         // this.timersHelper.handleCounter(this.test_timer_counter_id, test_start_sec);
     }
 
@@ -333,9 +348,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
                     this.presentation = new Presentation(response.presentation);
                     this.lesson_group_type = response.lesson_group_type;
                     this.is_test_mode = this.lesson_group_type['name'] == 'test' || false;
-                    if(this.is_test_mode) {
-                        this.setTestModelLimitations();
-                    }
                     this.recommendedVideos = response.recommended_videos;
                     this.course_plan_id = response.course_plan_id;
                     this.current_base_lesson_id = response.current_base_lesson_id;
@@ -363,7 +375,7 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
                     console.log('this.currentSlide', this.currentSlide);
                     if (!this.mock) {
                         // this.restartCurrentSlide()
-                        this.getNewSlideReply();
+                        this.getNewSlideReply('getPresentation');
                     }
                 }
                 this.gettingPresentation = false;
@@ -453,7 +465,7 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         });
     }
 
-    async getNewSlideReply() {
+    async getNewSlideReply(from = "") {
         if (this.presentationNewSlideInProgress) {
             return;
         }
@@ -484,7 +496,13 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
                 } else {
                     this.currentData = response.data;
                     this.handleOnPresentationReplay('new_slide');
-
+                    if (from !== 'getPresentation') {
+                        // to clear any alerts after switching slides
+                        this.alertService.clearError();
+                    }
+                    if(this.is_test_mode) {
+                        this.setTestModelLimitations();
+                    }
                 }
             },
             error: (error) => {
@@ -843,8 +861,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     async resetPresentation(reason: string = '') {
-        console.log('this.gettingPresentation', this.gettingPresentation);
-        console.log('this.presentationResetIsInProgress', this.presentationResetIsInProgress);
         if (this.presentationResetIsInProgress || this.gettingPresentation) {
             return;
         }
@@ -1248,8 +1264,13 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             this.forceChangeSlideInfo = true;
             this.forcedChangeSlideInfo = target_slide_info;
         } else if (new_flat_index < 0) {
-            this.resetPresentation();
-
+            this.currentSectionIndex = -1;
+            this.currentSlideIndex = 0;
+            this.currentObjectiveIndex = 0;
+            this.changeSlideReply();
+            // this.resetPresentation();
+            // this.stopAudio();
+            // this.changeSlideReply();
         }
     }
 
@@ -1448,6 +1469,10 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         this.lessonService.ClearAllEvents();
         this.clearSocketRecorderServices();
         if (this.is_test_mode) {
+            const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
+            if (timer.total_sec - timer.counter_sec !== this.presentation.timer_sec) {
+                // this.sendTimersToDb();
+            }
             this.timersHelper.removeTimer(this.test_timer_counter_id);
         }
     }

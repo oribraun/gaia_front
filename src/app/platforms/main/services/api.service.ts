@@ -443,7 +443,7 @@ export class ApiService {
         );
     }
     resetPresentation(platform: string, obj: any) {
-        return this.http.post(this.serverBase + this.baseApiUser + platform + '/us/reset-presentation', obj,
+        return this.http.post(this.serverBase + this.baseApi + platform + '/us/reset-presentation', obj,
             this.httpOptions
         );
     }

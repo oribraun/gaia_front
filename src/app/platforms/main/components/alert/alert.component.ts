@@ -37,6 +37,6 @@ export class AlertComponent {
     }
 
     clear() {
-        this.message = "";
+        this.message = {};
     }
 }

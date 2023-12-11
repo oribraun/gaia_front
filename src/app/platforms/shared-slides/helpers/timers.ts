@@ -141,6 +141,7 @@ export class TimersHelper {
         const timer = this.timers[timer_idx];
         if (timer && timer.intervalId) {
             clearInterval(timer.intervalId);
+            timer.intervalId = null;
         }
     }
 

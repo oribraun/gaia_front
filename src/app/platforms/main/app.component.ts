@@ -41,10 +41,6 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = this.config.user;
-        // TODO remove after demo
-        if (this.user.id && window.location.pathname === '/') {
-            this.redirectUser();
-        }
         this.config.user_subject.subscribe((user) => {
             this.user = user;
             if (!environment.production) {
@@ -57,6 +53,11 @@ export class AppComponent implements OnInit {
             this.setupCredsFromCookies();
         } else {
             this.setupCredsFromServer();
+        }
+
+        // TODO remove after demo
+        if (this.user.id && window.location.pathname === '/') {
+            this.redirectUser();
         }
 
         let redirectUser = false;
