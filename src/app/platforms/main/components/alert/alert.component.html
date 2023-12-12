@@ -26,6 +26,6 @@
                 <span [innerHTML]="tempMessage.text"></span>
             </div>
         </div>
-        <button type="button" class="btn-close btn-close-white" (click)="clear()" data-bs-dismiss="my-alert" aria-label="Close"></button>
+        <button type="button" *ngIf="tempMessage.dismiss" class="btn-close btn-close-white" (click)="clear()" data-bs-dismiss="my-alert" aria-label="Close"></button>
     </div>
 </div>

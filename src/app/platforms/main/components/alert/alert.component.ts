@@ -85,7 +85,9 @@ export class AlertComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.animationDisabled = false;
+        setTimeout(() => {
+            this.animationDisabled = false;
+        });
     }
 
     animationDone(event: any) {

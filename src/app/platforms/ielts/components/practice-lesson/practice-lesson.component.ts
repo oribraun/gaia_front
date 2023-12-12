@@ -35,7 +35,9 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     vocabulary_was_added:boolean = true;
     slide_uid!: string;
     is_test_mode: boolean = false;
-    test_timer_counter_id:number = 1001101;
+    test_presentation_timer_id:number = 1001101;
+    test_slide_timer_id:number = 1001102;
+    loop_timer_timeout: any;
     blockAllSlideEvents = false;
 
     socketRecorderEvents: any = {};
@@ -165,86 +167,129 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     setTestModelLimitations() {
-        this.setTestModeTimer(this.presentation.timer_sec);
-        this.watchTotalTimer();
+        if (this.presentation.timer_timeout_sec === -1 || this.currentSlide.timer_timeout_sec === -1) {
+            this.showTestCorrupted();
+            this.blockAllSlideEvents = true;
+            return;
+        }
+        this.setTestModeTimer();
+        this.watchTimers();
     }
 
-    watchTotalTimer(loop_counter = 0) {
-        const timeout = 15; // every 15 seconds
+    watchTimers(loop_counter = 1) {
+        const timeout = 1; // every 15 seconds
         if(this.checkTimer()) {
-            setTimeout(() => {
+            this.loop_timer_timeout = setTimeout(() => {
                 if (this.checkTimer()) {
                     if (loop_counter >= timeout) {
                         this.sendTimersToDb();
-                        loop_counter = 0;
+                        loop_counter = 1;
                     } else {
                         loop_counter++;
                     }
-                    this.watchTotalTimer(loop_counter);
+                    this.watchTimers(loop_counter);
                 }
             }, 1000);
         }
     }
 
+    clearTimerInterval() {
+        if (this.loop_timer_timeout) {
+            clearTimeout(this.loop_timer_timeout);
+        }
+    }
+
     checkTimer() {
         let shouldContinue = true;
-        const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
-        if (!timer) {
+        const timer = this.timersHelper.getTimer(this.test_presentation_timer_id);
+        const slide_timer = this.timersHelper.getTimer(this.test_slide_timer_id);
+        if (!timer || !slide_timer) {
             shouldContinue = false;
         }
-        if (timer) {
+        if (timer && slide_timer) {
             if (this.presentation.timer_timeout_sec > -1) {
                 // handle presentation timer timeout
             }
             if (this.currentSlide.timer_timeout_sec > -1) {
                 // handle slide timer timeout
-                if (timer && timer.total_sec - timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
+                if (slide_timer && slide_timer.total_sec - slide_timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
                     // we should stop timer and force next slide
-                    this.timersHelper.stopTimer(this.test_timer_counter_id);
-                    this.showTimerWarning();
-                    if (timer.total_sec - timer.counter_sec !== this.presentation.timer_sec) {
+                    this.timersHelper.stopTimer(this.test_presentation_timer_id);
+                    this.timersHelper.stopTimer(this.test_slide_timer_id);
+                    if (this.user_lesson_status == 'Finished') {
+                        this.showTestSuccess();
+                    } else {
+                        this.showTimerWarning();
+                    }
+                    if (slide_timer.total_sec - slide_timer.counter_sec !== this.currentSlide.timer_sec) {
                         this.sendTimersToDb();
                     }
+                    this.clearTimerInterval();
                     this.blockAllSlideEvents = true;
                     shouldContinue = false;
                 }
             }
             if (shouldContinue) {
-                this.timersHelper.startTimer(this.test_timer_counter_id);
+                this.timersHelper.startTimer(this.test_slide_timer_id);
+                this.timersHelper.startTimer(this.test_presentation_timer_id);
             }
             this.presentation.timer_sec = timer.total_sec - timer.counter_sec;
+            const slide_timer_sec = slide_timer.total_sec - slide_timer.counter_sec;
+            this.presentation.sections[this.currentSectionIndex].slides[this.currentSlideIndex].timer_sec = slide_timer_sec;
         }
         return shouldContinue;
     }
 
     showTimerWarning() {
         if (this.is_test_mode) {
-            const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
-            if (timer.total_sec - timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
+            const timer = this.timersHelper.getTimer(this.test_presentation_timer_id);
+            if (timer && timer.total_sec - timer.counter_sec >= this.currentSlide.timer_timeout_sec) {
                 if (this.currentSlide.timer_timeout_msg) {
-                    this.alertService.warning(this.currentSlide.timer_timeout_msg, false, 3000);
+                    if (this.user_lesson_status == 'Finished') {
+                        this.alertService.warning("Test already Finished", false, 3000);
+                    } else {
+                        this.alertService.warning(this.currentSlide.timer_timeout_msg, false, 3000);
+                    }
                 }
             }
         }
     }
+    showTestSuccess() {
+        if (this.is_test_mode) {
+            this.alertService.success('Congratulations you finished the test', false, -1);
+        }
+    }
+    showTestCorrupted() {
+        if (this.is_test_mode) {
+            this.alertService.error('this test is corrupted, please contact customer support.', false, -1, false);
+        }
+    }
 
     sendTimersToDb() {
-        const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
-        const mark_as_done = this.presentation.timer_timeout_sec == timer.total_sec - timer.counter_sec;
-        if (mark_as_done) {
+        const timer = this.timersHelper.getTimer(this.test_presentation_timer_id);
+        const slide_timer = this.timersHelper.getTimer(this.test_slide_timer_id);
+        if (!timer || !slide_timer) {
+            return;
+        }
+        const test_is_done = this.presentation.timer_timeout_sec == timer.total_sec - timer.counter_sec;
+        if (test_is_done) {
             this.user_lesson_status = 'Finished';
+
+            this.showTestSuccess();
         }
         const data = {
             practice_lesson_id: this.user_lesson_id,
-            timer_sec: timer.total_sec - timer.counter_sec,
-            mark_as_done: mark_as_done
+            presentation_timer_sec: timer.total_sec - timer.counter_sec,
+            slide_timer_sec: slide_timer.total_sec - slide_timer.counter_sec,
+            slide_idx: this.currentSlideIndex,
+            mark_as_done: test_is_done
         };
         this.apiService.saveTimers(data).subscribe({
             next: (response: any) => {
                 if (response.err) {
                     console.log('sendTimersToDb err', response);
                 } else {
-                    console.log('sendTimersToDb success');
+                    // console.log('sendTimersToDb success');
                 }
             },
             error: (error) => {
@@ -254,12 +299,20 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
 
     }
 
-    setTestModeTimer(timer_sec: number = 0) {
+    setTestModeTimer() {
+        // presentation timer
         const total_test_time = this.presentation.timer_timeout_sec;
-        const current_test_time_sec = total_test_time - timer_sec;
-        this.timersHelper.handleTimer(this.test_timer_counter_id, current_test_time_sec, total_test_time);
-        this.timersHelper.stopTimer(this.test_timer_counter_id);
-        // this.timersHelper.handleCounter(this.test_timer_counter_id, test_start_sec);
+        const current_test_time_sec = total_test_time - this.presentation.timer_sec;
+        this.timersHelper.handleTimer(this.test_presentation_timer_id, current_test_time_sec, total_test_time, true);
+        this.timersHelper.stopTimer(this.test_presentation_timer_id);
+
+        // slide timer
+        console.log('this.currentSlide.timer_sec', this.currentSlide.timer_sec)
+        const total_slide_time = this.currentSlide.timer_timeout_sec;
+        const current_test_slide_time_sec = total_slide_time - this.currentSlide.timer_sec;
+        this.timersHelper.handleTimer(this.test_slide_timer_id, current_test_slide_time_sec, total_slide_time, false);
+        this.timersHelper.stopTimer(this.test_slide_timer_id);
+
     }
 
     getUser() {
@@ -1104,11 +1157,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
             this.stopAudio();
         });
         this.lessonService.ListenFor("slideDestroy").subscribe((obj: any) => {
-            if (this.is_test_mode && this.blockAllSlideEvents) {
-                this.showTimerWarning();
-                this.lessonService.Broadcast('blockAllSlideEvents');
-                return;
-            }
             console.log('slideDestroy Event');
         });
         this.lessonService.ListenFor("slideAddToVocab").subscribe((obj: any) => {
@@ -1328,6 +1376,10 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     onNextSlide(e: any) {
+        if (this.is_test_mode) {
+            this.timersHelper.removeTimer(this.test_slide_timer_id);
+            this.clearTimerInterval();
+        }
         this.setForcedSlide(0);
         if(this.forceChangeSlideInfo) {
             this.stopAudio();
@@ -1336,6 +1388,10 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
     }
 
     onPrevSlide(e: any) {
+        if (this.is_test_mode) {
+            this.timersHelper.removeTimer(this.test_slide_timer_id);
+            this.clearTimerInterval();
+        }
         this.setForcedSlide(-2);
         if(this.forceChangeSlideInfo) {
             this.stopAudio();
@@ -1522,11 +1578,12 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         this.lessonService.ClearAllEvents();
         this.clearSocketRecorderServices();
         if (this.is_test_mode) {
-            const timer = this.timersHelper.getTimer(this.test_timer_counter_id);
-            if (timer.total_sec - timer.counter_sec !== this.presentation.timer_sec) {
+            const timer = this.timersHelper.getTimer(this.test_presentation_timer_id);
+            if (timer && timer.total_sec - timer.counter_sec !== this.presentation.timer_sec) {
                 // this.sendTimersToDb();
             }
-            this.timersHelper.removeTimer(this.test_timer_counter_id);
+            this.timersHelper.removeTimer(this.test_presentation_timer_id);
+            this.timersHelper.removeTimer(this.test_slide_timer_id);
         }
     }
 

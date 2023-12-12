@@ -29,24 +29,24 @@ export class AlertService {
         });
     }
 
-    success(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+    success(message: string, keepAfterNavigationChange = false, timeout = 3000, dismiss = true) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'success', text: message, timeout: timeout });
+        this._subject.next({ type: 'success', text: message, timeout: timeout, dismiss: dismiss });
     }
 
-    info(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+    info(message: string, keepAfterNavigationChange = false, timeout = 3000, dismiss = true) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'info', text: message, timeout: timeout });
+        this._subject.next({ type: 'info', text: message, timeout: timeout, dismiss: dismiss });
     }
 
-    warning(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+    warning(message: string, keepAfterNavigationChange = false, timeout = 3000, dismiss = true) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'warning', text: message, timeout: timeout });
+        this._subject.next({ type: 'warning', text: message, timeout: timeout, dismiss: dismiss });
     }
 
-    error(message: string, keepAfterNavigationChange = false, timeout = 3000) {
+    error(message: string, keepAfterNavigationChange = false, timeout = 3000, dismiss = true) {
         this._keepAfterNavigationChange = keepAfterNavigationChange;
-        this._subject.next({ type: 'error', text: message, timeout: timeout });
+        this._subject.next({ type: 'error', text: message, timeout: timeout, dismiss: dismiss });
     }
     clearError():void {
         this._subject.next("");
