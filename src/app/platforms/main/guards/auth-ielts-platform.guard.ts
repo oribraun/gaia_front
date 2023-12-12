@@ -6,7 +6,7 @@ import {Config} from "../config";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthTestPrepPlatformGuard  {
+export class AuthIeltsPlatformGuard {
 
     constructor(
         private config: Config,

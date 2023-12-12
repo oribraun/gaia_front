@@ -9,7 +9,7 @@ import {AuthGuard} from "./guards/auth.guard";
 import {BuyComponent} from "./components/buy/buy.component";
 import {OnBoardingComponent} from "./components/on-boarding/on-boarding.component";
 import {AuthChildrenPlatformGuard} from "./guards/auth-children-platform.guard";
-import {AuthTestPrepPlatformGuard} from "./guards/auth-test-prep-platform.guard";
+import {AuthIeltsPlatformGuard} from "./guards/auth-ielts-platform.guard";
 import {PrivacyComponent} from "./components/privacy/privacy.component";
 
 const routes: Routes = [

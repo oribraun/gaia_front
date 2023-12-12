@@ -1,20 +1,92 @@
 @import "../../../../../vars";
 
-.my-alert {
+.my-alert-wrapper {
     position: absolute;
-    top:0;
+    right: 0;
     width: 100%;
-    max-width: @max-width;
-    margin:0 auto;
-    z-index: 999;
+    max-width: 100%;
+    margin: 0 auto;
+    //margin-left: calc(100% - 350px);
+    z-index: 9999;
+    overflow: hidden;
+    background: #77a2e5;
+    @radius: 10px;
+    padding-top: 0;
+    border-radius: @radius;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    @media(min-width: 768px) {
+         max-width: 300px;
+    }
+    //&-fixed {
+    //    position: fixed;
+    //    top: @header-height-mobile;
+    //    @media (min-width: 768px) {
+    //        top: @header-height;
+    //    }
+    //}
+    .my-alert {
+        padding: 0.7em 0.7em;
+        overflow: hidden;
+        color: #fff;
 
-    &-fixed {
-        position: fixed;
-        width: 96%;
-        margin-left: 2%;
-        top:@header-height-mobile;
-        @media (min-width: 768px) {
-            top:@header-height;
+        .btn-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            padding: 0.8em;
+            font-size: 0.7em;
+            opacity: 1;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .header {
+            font-size: .9em;
+            color: #000;
+        }
+
+        .notifications {
+            .notification {
+                font-size: .9em;
+                padding: 5px;
+                border-radius: @radius;
+                color: #000;
+                box-shadow: 0 0 5px #8d8a8a;
+
+                &-success {
+                    border: solid 1px;
+                    color: var(--bs-success-text-emphasis);
+                    background: var(--bs-success-bg-subtle);
+                    border-color: var(--bs-success-border-subtle);
+                }
+
+                &-warning {
+                    border: solid 1px;
+                    color: var(--bs-warning-text-emphasis);
+                    background: var(--bs-warning-bg-subtle);
+                    border-color: var(--bs-warning-border-subtle);
+                }
+
+                &-info {
+                    border: solid 1px;
+                    color: var(--bs-info-text-emphasis);
+                    background: var(--bs-info-bg-subtle);
+                    border-color: var(--bs-info-border-subtle);
+                }
+
+                &-danger {
+                    border: solid 1px;
+                    color: var(--bs-danger-text-emphasis);
+                    background: var(--bs-danger-bg-subtle);
+                    border-color: var(--bs-danger-border-subtle);
+                }
+            }
+
+            .notification:not(:first-child) {
+                margin-top: .7em;
+            }
         }
     }
 }

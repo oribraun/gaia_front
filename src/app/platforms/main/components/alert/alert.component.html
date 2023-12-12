@@ -1,12 +1,31 @@
 
-<div class="my-alert my-alert-fixed fade show" [ngClass]="{
-'alert': message.type,
-'alert-success': message.type === 'success',
-'alert-danger': message.type === 'error',
-'alert-info': message.type === 'info',
-'alert-warning': message.type === 'warning',
-'alert-dismissible': message.timeout === -1
-}">
-    <span [innerHTML]="message.text"></span>
-    <button *ngIf="message.timeout === -1" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!--<div class="my-alert my-alert-fixed fade show" [ngClass]="{-->
+<!--'alert': message.type,-->
+<!--'alert-success': message.type === 'success',-->
+<!--'alert-danger': message.type === 'error',-->
+<!--'alert-info': message.type === 'info',-->
+<!--'alert-warning': message.type === 'warning',-->
+<!--'alert-dismissible': message.timeout === -1-->
+<!--}">-->
+<!--    <span [innerHTML]="message.text"></span>-->
+<!--    <button *ngIf="message.timeout === -1" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--</div>-->
+<div class="my-alert-wrapper" [@openClose]="message.type ? 'open' : 'closed'"
+     [@.disabled]="animationDisabled"
+     (@openClose.done)="animationDone($event)">
+    <div class="my-alert" *ngIf="tempMessage.type">
+        <div class="header">Notifications</div>
+        <div class="notifications">
+            <div class="notification"
+                 [ngClass]="{
+                    'notification-success': tempMessage.type === 'success',
+                    'notification-danger': tempMessage.type === 'error',
+                    'notification-info': tempMessage.type === 'info',
+                    'notification-warning': tempMessage.type === 'warning',
+                 }">
+                <span [innerHTML]="tempMessage.text"></span>
+            </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" (click)="clear()" data-bs-dismiss="my-alert" aria-label="Close"></button>
+    </div>
 </div>

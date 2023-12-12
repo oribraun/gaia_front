@@ -1,91 +1,94 @@
-<nav class="navbar navbar-expand-md navbar-light fixed-top">
-    <div class="container-fluid">
-        <div class="brand">
-            <a class="navbar-brand" href="#" [routerLink]="['/']">
-                <img [src]="imageSrc + '/assets/images/Generative_Ai_Logo.png'" alt="">
-            </a>
-        </div>
-        <div class="right-items d-flex d-md-none align-self-center">
-            <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
-        </div>
-        <!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">-->
-        <!--            <span class="navbar-toggler-icon"></span>-->
-        <!--        </button>-->
-        <div class="collapse navbar-collapse show" id="navbarColor03">
-            <ul class="navbar-nav me-auto flex-row justify-content-between">
-                <!--                <li class="nav-item">-->
-                <!--                    <a class="nav-link rounded-0"-->
-                <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"-->
-                <!--                       [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                <!--                        <i class="bi bi-house-door"></i> <span>Home</span>-->
-                <!--                    </a>-->
-                <!--                </li>-->
-                <!--                <li class="nav-item">-->
-                <!--                    <a class="nav-link rounded-0"-->
-                <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="About" data-bs-custom-class="gaia-tooltip"-->
-                <!--                       [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                <!--                        <i class="bi bi-info"></i> <span>About</span>-->
-                <!--                    </a>-->
-                <!--                </li>-->
-                <!--                <li class="nav-item" *ngIf="user.id">-->
-                <!--                    <a class="nav-link rounded-0"-->
-                <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"-->
-                <!--                       (click)="initOnBoarding()"-->
-                <!--                       [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                <!--                        <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>-->
-                <!--                    </a>-->
-                <!--                </li>-->
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">
-                    <a class="nav-link rounded-0"
-                       [routerLink]="['/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                        <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
-                        <div class="title">Dashboard</div>
-                        <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">
-                    <a class="nav-link rounded-0"
-                       [routerLink]="['/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                        <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
-                        <div class="title">My Lesson</div>
-                        <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                    <a class="nav-link rounded-0"
-                       [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                        <div class="title">My Vocabulary</div>
-                        <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                    <a class="nav-link rounded-0"
-                       [routerLink]="['/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                        <div class="title">My Work</div>
-                        <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                    <a class="nav-link rounded-0"
-                       [routerLink]="['/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                        <div class="title">Materials</div>
-                        <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Learning_Materials_Icon.svg'" alt="">
-                    </a>
-                </li>
-                <!--                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">-->
-                <!--                    <a class="nav-link rounded-0"-->
-                <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"-->
-                <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">-->
-                <!--                        <i class="bi bi-award-fill"></i> <span>Lesson</span>-->
-                <!--                    </a>-->
-                <!--                </li>-->
-            </ul>
-            <div class="right-items d-none d-md-flex">
+<div class="navigation">
+    <nav class="navbar navbar-expand-md navbar-light fixed-top">
+        <div class="container-fluid">
+            <div class="brand">
+                <a class="navbar-brand" href="#" [routerLink]="['/']">
+                    <img [src]="imageSrc + '/assets/images/Generative_Ai_Logo.png'" alt="">
+                </a>
+            </div>
+            <div class="right-items d-flex d-md-none align-self-center">
                 <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
             </div>
+            <!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">-->
+            <!--            <span class="navbar-toggler-icon"></span>-->
+            <!--        </button>-->
+            <div class="collapse navbar-collapse show" id="navbarColor03">
+                <ul class="navbar-nav me-auto flex-row justify-content-between">
+                    <!--                <li class="nav-item">-->
+                    <!--                    <a class="nav-link rounded-0"-->
+                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"-->
+                    <!--                       [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                    <!--                        <i class="bi bi-house-door"></i> <span>Home</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                    <!--                <li class="nav-item">-->
+                    <!--                    <a class="nav-link rounded-0"-->
+                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="About" data-bs-custom-class="gaia-tooltip"-->
+                    <!--                       [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                    <!--                        <i class="bi bi-info"></i> <span>About</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                    <!--                <li class="nav-item" *ngIf="user.id">-->
+                    <!--                    <a class="nav-link rounded-0"-->
+                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"-->
+                    <!--                       (click)="initOnBoarding()"-->
+                    <!--                       [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                    <!--                        <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">
+                        <a class="nav-link rounded-0"
+                           [routerLink]="['/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                            <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
+                            <div class="title">Dashboard</div>
+                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
+                        </a>
+                    </li>
+                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">
+                        <a class="nav-link rounded-0"
+                           [routerLink]="['/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                            <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
+                            <div class="title">My Lesson</div>
+                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
+                        </a>
+                    </li>
+                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                        <a class="nav-link rounded-0"
+                           [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                            <div class="title">My Vocabulary</div>
+                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">
+                        </a>
+                    </li>
+                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                        <a class="nav-link rounded-0"
+                           [routerLink]="['/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                            <div class="title">My Work</div>
+                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
+                        </a>
+                    </li>
+                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                        <a class="nav-link rounded-0"
+                           [routerLink]="['/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                            <div class="title">Materials</div>
+                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Learning_Materials_Icon.svg'" alt="">
+                        </a>
+                    </li>
+                    <!--                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">-->
+                    <!--                    <a class="nav-link rounded-0"-->
+                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"-->
+                    <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">-->
+                    <!--                        <i class="bi bi-award-fill"></i> <span>Lesson</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                </ul>
+                <div class="right-items d-none d-md-flex">
+                    <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+    <app-alert></app-alert>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
