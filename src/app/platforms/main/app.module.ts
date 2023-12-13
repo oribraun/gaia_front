@@ -19,12 +19,8 @@ import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { AboutComponent } from './components/about/about.component';
 import {PrivacyComponent} from "./components/privacy/privacy.component";
-import {RangePipe} from "./pipes/range/range.pipe";
-import { DatetimeFormatPipe } from './pipes/datetime-format/datetime-format.pipe';
-import { SafePipe } from './pipes/safe.pipe';
 import { LessonComponent } from './components/lesson/lesson.component';
 import { WhiteBoardComponent } from './components/lesson/white-board/white-board.component';
 import { PanelBoardComponent } from './components/lesson/panel-board/panel-board.component';
@@ -33,7 +29,6 @@ import { ScreenBoardComponent } from './components/lesson/screen-board/screen-bo
 import { ChatBoardComponent } from './components/lesson/chat-board/chat-board.component';
 import { HelpComponent } from './components/lesson/panel-board/help/help.component';
 
-import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 import { BuyComponent } from './components/buy/buy.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
@@ -51,12 +46,8 @@ import { AlertComponent } from './components/alert/alert.component';
         SidebarComponent,
         LoginComponent,
         DragAndDropDirective,
-        SafeHtmlPipe,
-        RangePipe,
         AboutComponent,
         PrivacyComponent,
-        DatetimeFormatPipe,
-        SafePipe,
         LessonComponent,
         WhiteBoardComponent,
         PanelBoardComponent,
@@ -64,7 +55,6 @@ import { AlertComponent } from './components/alert/alert.component';
         ScreenBoardComponent,
         ChatBoardComponent,
         HelpComponent,
-        CapitalizePipe,
         BuyComponent,
         HeaderComponent,
         OnBoardingComponent,
@@ -85,10 +75,6 @@ import { AlertComponent } from './components/alert/alert.component';
         // {provide: APP_BASE_HREF, useValue: '/static/client/'},
         Config,
         httpInterceptorProviders
-    ],
-    exports: [
-        SafePipe,
-        SafeHtmlPipe
     ],
     bootstrap: [AppComponent]
 })

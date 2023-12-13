@@ -3,21 +3,21 @@ import {ElementRef, Injectable} from "@angular/core";
 import {TestBed} from "@angular/core/testing";
 @Injectable()
 export class MockElementRef {
-  nativeElement: {} | undefined;
+    nativeElement: {} | undefined;
 }
 let elRef: ElementRef;
-beforeEach(() => {
-    TestBed.configureTestingModule({
-      // ...
-      providers: [{provide: ElementRef, useValue: new MockElementRef()}]
-    });
-
-    // ...
-    elRef = TestBed.get(ElementRef);
-});
 describe('DynamicFontSizeDirective', () => {
-  it('should create an instance', () => {
-    const directive = new DynamicFontSizeDirective(elRef);
-    expect(directive).toBeTruthy();
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            // ...
+            providers: [{provide: ElementRef, useValue: new MockElementRef()}]
+        });
+
+        // ...
+        elRef = TestBed.get(ElementRef);
+    });
+    it('should create an instance', () => {
+        const directive = new DynamicFontSizeDirective(elRef);
+        expect(directive).toBeTruthy();
+    });
 });
