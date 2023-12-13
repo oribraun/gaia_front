@@ -238,6 +238,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     clearSlideEvents() {
         this.lessonService.ClearEvent("slideEventReply");
         this.lessonService.ClearEvent("slideEventReplyError");
+        this.lessonService.ClearEvent("blockAllSlideEvents");
     }
 
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {

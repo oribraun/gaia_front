@@ -162,6 +162,7 @@ export class HearingComponent extends BaseSlideComponent implements OnInit, OnDe
     clearSlideEvents() {
         this.lessonService.ClearEvent("slideEventReply");
         this.lessonService.ClearEvent("slideEventReplyError");
+        this.lessonService.ClearEvent("blockAllSlideEvents");
     }
 
     setUpUnseenTextHtml(startIndex: any = null, endIndex: any = null, words: any[] = []) {

@@ -209,6 +209,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.lessonService.ClearEvent("student_reply_response");
         this.lessonService.ClearEvent("recognitionText");
         this.lessonService.ClearEvent("slideEventReplyError");
+        this.lessonService.ClearEvent("blockAllSlideEvents");
         this.lessonService.ClearEvent("student_reply_error");
     }
 

@@ -29,23 +29,23 @@
             </div>
         </div>
     </div>
-    <div class="ptt-button">
-        <!-- <button class="btn"
-                [ngClass]="{'btn-primary': speechRecognitionService.PTTInProgress, 'btn-default': !speechRecognitionService.PTTInProgress}"
-                (mousedown)="onPTTPressDown()"
-                (mouseup)="onPTTPressUp()"
-                (touchstart)="onPTTPressDown()"
-                (touchend)="onPTTPressUp()"
-        >Press To Talk</button> -->
-    </div>
 
     <div class="main-btn_rec">
-        <div class="btn-rec-container" >
-            <input type="checkbox" id="btn" />
-            <label for="btn"></label>
-            <ng-container *ngIf="recordingIsActive"><button (click)="stopAsr()" id="recording" class="Rec">Click to Stop</button></ng-container>
-            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording"  [ngClass]="{'start_session':!session_started, 'notRec':session_started}" [innerText]="session_started ? 'Click to Record':'Start'"></button></ng-container>
-
+        <div class="btn-rec-container">
+            <div class="btn-rec-border">
+                <button *ngIf="recordingIsActive" (click)="stopAsr()" class="recording Rec">Click to Stop</button>
+                <button *ngIf="!recordingIsActive && session_started"  (click)="startAsr()" class="recording notRec">Click to Record</button>
+                <button *ngIf="!recordingIsActive && !session_started"  (click)="startSession()" class="recording start_session">Start</button>
+<!--            <ng-container *ngIf="recordingIsActive"><button (click)="waitForFinalResultsAndStop()" id="recording" class="Rec">Click to Stop</button></ng-container>-->
+<!--            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording"  [ngClass]="{'start_session':!session_started, 'notRec':session_started}" [innerText]="session_started ? 'Click to Record':'Start'"></button></ng-container>-->
+            <div class="generic-loader-wrapper" *ngIf="needToStopAsrOnFinal">
+                <div class="loader">
+                    <div class="spinner-border">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
     <div class="buttons">
@@ -61,20 +61,20 @@
 <!--modals-->
 <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
     <div>
-       <a  title="Close"  (click)="closeModel()"class="close">X</a>
-       <h2>Speaking Review</h2>
-       <div [innerHTML]="grades"></div>
-       <br>
-       <h2>Score</h2>
-       <p [innerHTML]="score"></p>
-     </div>
- </div>
+        <a  title="Close"  (click)="closeModel()"class="close">X</a>
+        <h2>Speaking Review</h2>
+        <div [innerHTML]="grades"></div>
+        <br>
+        <h2>Score</h2>
+        <p [innerHTML]="score"></p>
+    </div>
+</div>
 
- <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':showDetailedQuestionReviewActive}">
+<div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':showDetailedQuestionReviewActive}">
     <div>
-       <a  title="Close"  (click)="closeModel()"class="close">X</a>
-       <h2>Speaking Detailed Questions/Answers Review</h2>
-       <ng-container *ngFor="let item of detailedQuestionsReviewList; let i = index">
+        <a  title="Close"  (click)="closeModel()"class="close">X</a>
+        <h2>Speaking Detailed Questions/Answers Review</h2>
+        <ng-container *ngFor="let item of detailedQuestionsReviewList; let i = index">
             <div>
                 <div class="review_span"><span class="review_span question_span" >Question: </span><span class="" >{{item.teacher_question}}</span></div>
                 <div class="review_span"><span class="review_span answer_span" >Answer: </span><span class="" >{{item.student_response}}</span></div>
@@ -83,5 +83,5 @@
             </div>
             <span class="" >---</span>
         </ng-container>
-     </div>
- </div>
+    </div>
+</div>

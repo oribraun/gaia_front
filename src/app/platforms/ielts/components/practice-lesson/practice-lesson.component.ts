@@ -884,7 +884,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         return new Promise(async (resolve, reject) => {
             if (this.audioBlobQue.length) {
                 console.log('playUsingBlob arrayBuffer length', this.audioBlobQue.length);
-
                 const currentBlobItem: BlobItem | undefined = this.audioBlobQue.shift();
                 const loop = (blobItem: BlobItem) => {
                     if (blobItem.action == 'speakNative') {
@@ -954,12 +953,14 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
                                 }
                             }
                             this.speakInProgress = false;
+                            this.lessonService.Broadcast('speakInProgress', false);
                             // this.resetSpeechRecognition();
                             resolve(true);
                         }
                     };
                 };
                 if (currentBlobItem) {
+                    this.lessonService.Broadcast('speakInProgress', true);
                     loop(currentBlobItem);
                 }
             }

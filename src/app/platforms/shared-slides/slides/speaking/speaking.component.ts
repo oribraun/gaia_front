@@ -37,10 +37,15 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     question_idx:number | undefined;
     all_questions_answered: any;
     recordingIsActive:boolean = false;
+    asrResultsInProgress:boolean = false;
+    needToStopAsrOnFinal:boolean = false;
     modalActive: boolean = false;
     session_started: boolean = false;
     current_counter:any = {};
     private timers:any = {};
+    replayInProgress = false;
+    showSpinner = false;
+    speakInProgress = false;
 
     constructor(
         protected override config: Config,
@@ -68,6 +73,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.handleCounter(1, this.pace);
         this.pauseAllCounters();
         this.listenToSlideEvents();
+        this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
 
     }
 
@@ -87,6 +93,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                     this.all_questions_answered =  resp_data.all_questions_answered;
                     if (!this.all_questions_answered) {
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
+                        this.scrollToBottom2();
                     } else {
                         alert('Session Ended');
                         this.restartSession();
@@ -105,6 +112,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                     this.all_questions_answered =  resp_data.all_questions_answered;
                     if (!this.all_questions_answered) {
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
+                        this.scrollToBottom2();
                     } else {
                         alert('Session Ended');
                         this.restartSession();
@@ -144,11 +152,17 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                 this.spinnerEnabled = false;
             }
         });
+
+        this.lessonService.ListenFor("speakInProgress").subscribe((val: boolean) => {
+            this.speakInProgress = val;
+        });
     }
 
     clearSlideEvents() {
         this.lessonService.ClearEvent("slideEventReply");
         this.lessonService.ClearEvent("slideEventReplyError");
+        this.lessonService.ClearEvent("blockAllSlideEvents");
+        this.lessonService.ClearEvent("recognitionText");
     }
 
     updateDetailedQuestionReview(obj:any) {
@@ -168,7 +182,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
             }
 
         }
-        this.scrollToBottom2();
+        setTimeout(() => {
+            this.scrollToBottom2();
+        })
     }
 
     isEmpty(obj:any) {
@@ -213,19 +229,6 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         });
     }
 
-    onRecognitionPTTResults = (results: any) => {
-        console.log("onRecognitionPTTResults results", results);
-        const recognitionText = results.text;
-        if (results.isFinal) {
-            console.log('onRecognitionPTTResults final', recognitionText);
-            // this.onButtonClick(recognitionText);
-            this.messages.push(
-                new ChatMessage({type: 'user', message: recognitionText})
-            );
-            this.scrollToBottom2();
-        }
-    };
-
     initQnaReview(qna_review_list:any[]) {
         this.detailedQuestionsReviewList = [];
 
@@ -239,37 +242,59 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
     }
 
-    //===== ASR Daniel
-    onRecognitionResults = (results: any) => {
-        if(results.isFinal) {
+
+    startAsr() {
+        if (this.asrResultsInProgress || this.speakInProgress) {
+            return;
+        }
+        this.recordingIsActive = true;
+        this.speechRecognitionService.PTTInProgress = true;
+        this.lessonService.Broadcast('startListenToAsr');
+    }
+
+    stopAsr() {
+        if (!this.asrResultsInProgress) {
+            this.recordingIsActive = false;
+            this.lessonService.Broadcast('stopListenToAsr');
+            this.speechRecognitionService.PTTInProgress = false;
+            this.sendUserReplay();
+        } else {
+            this.needToStopAsrOnFinal = true;
+        }
+    }
+
+    onRecognitionPTTResults = (results: any) => {
+        console.log("onRecognitionPTTResults results", results);
+        const recognitionText = results.text;
+        this.asrResultsInProgress = true;
+        if (results.isFinal) {
+            console.log('this.studentActiveASR.length', this.studentActiveASR.length)
             if(!this.studentActiveASR.length) {
                 this.messages.push(
                     new ChatMessage({type: 'user', message:''})
                 );
-                this.scrollToBottom2();
             }
-            this.studentActiveASR.push(results.text);
+            this.studentActiveASR.push(recognitionText);
             this.messages[this.messages.length - 1]['message'] = this.studentActiveASR.join('. ');
-
+            this.scrollToBottom2();
+            if (this.needToStopAsrOnFinal) {
+                this.needToStopAsrOnFinal = false;
+                this.lessonService.Broadcast('stopListenToAsr');
+                this.recordingIsActive = false;
+                this.sendUserReplay();
+            }
+            this.asrResultsInProgress = false;
         }
     };
 
-    startAsr() {
+    startSession() {
         if(!this.session_started) {
             this.speakTheText();
             this.session_started = true;
-            return;
         }
-        this.studentActiveASR = [];
-        this.recognitionResultsSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
-        this.speechRecognitionService.startListening();
-        this.recordingIsActive = true;
-        this.handleCounter(1);
     }
 
-    stopAsr() {
-        this.speechRecognitionService.stopListening();
-        this.recognitionResultsSubscribe.unsubscribe(this.onRecognitionResults);
+    sendUserReplay() {
         const srudent_resp = this.studentActiveASR.join('. ').trim();
         if(srudent_resp.length) {
             const data = {
@@ -279,6 +304,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                 "student_response":srudent_resp
             };
             this.spinnerEnabled  = true;
+            this.replayInProgress = true;
             this.lessonService.Broadcast("slideEventRequest", data);
         }
         this.studentActiveASR = [];
@@ -376,22 +402,12 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     onPTTPressDown() {
         if (!this.disableButton) {
-            this.speechRecognitionService.PTTInProgress = true;
-            this.recognitionPPTSubscribe = this.speechRecognitionService.onPTTResults.subscribe(this.onRecognitionPTTResults);
-            this.speechRecognitionService.startListening();
-            // this.speechRecognitionService.activateNativeLang(true);
+            this.startAsr();
         }
     }
     onPTTPressUp () {
         if (!this.disableButton) {
-            // this.speechRecognitionService.resetToOrigLang();
-            if (this.recognitionPPTSubscribe) {
-                setTimeout(() => {
-                    this.speechRecognitionService.PTTInProgress = false;
-                    this.speechRecognitionService.stopListening();
-                    this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
-                }, 500);
-            }
+            this.stopAsr();
         }
     }
     showDetailedQuestionReview() {
@@ -459,6 +475,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     override ngOnDestroy(): void {
         this.clearSlideEvents();
+        this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
         super.ngOnDestroy();
     }
 }
