@@ -307,7 +307,7 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         this.timersHelper.stopTimer(this.test_presentation_timer_id);
 
         // slide timer
-        console.log('this.currentSlide.timer_sec', this.currentSlide.timer_sec)
+        console.log('this.currentSlide.timer_sec', this.currentSlide.timer_sec);
         const total_slide_time = this.currentSlide.timer_timeout_sec;
         const current_test_slide_time_sec = total_slide_time - this.currentSlide.timer_sec;
         this.timersHelper.handleTimer(this.test_slide_timer_id, current_test_slide_time_sec, total_slide_time, false);

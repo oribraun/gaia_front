@@ -184,7 +184,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
         setTimeout(() => {
             this.scrollToBottom2();
-        })
+        });
     }
 
     isEmpty(obj:any) {
@@ -268,7 +268,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         const recognitionText = results.text;
         this.asrResultsInProgress = true;
         if (results.isFinal) {
-            console.log('this.studentActiveASR.length', this.studentActiveASR.length)
+            console.log('this.studentActiveASR.length', this.studentActiveASR.length);
             if(!this.studentActiveASR.length) {
                 this.messages.push(
                     new ChatMessage({type: 'user', message:''})

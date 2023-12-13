@@ -3,7 +3,7 @@ import {
   style,
   animate,
   trigger,
-  animation,
+  animation
 } from '@angular/animations';
 
 export const Fade = trigger('fade', [
@@ -14,7 +14,7 @@ export const Fade = trigger('fade', [
       animate(
         '0.3s cubic-bezier(0.59, 0.32, 0.38, 1.13)',
         style({ opacity: 1 })
-      ),
+      )
     ])
   ),
   transition(
@@ -24,7 +24,7 @@ export const Fade = trigger('fade', [
       animate(
         '0.3s cubic-bezier(0.59, 0.32, 0.38, 1.13)',
         style({ opacity: 0 })
-      ),
+      )
     ])
-  ),
+  )
 ]);

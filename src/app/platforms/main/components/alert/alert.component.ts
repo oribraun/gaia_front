@@ -16,11 +16,11 @@ import {bounceIn, bounceOut} from "../../../shared-slides/animations/bounce.anim
     animations: [
         trigger('openClose', [
             state('open', style({
-                height: '*',
+                height: '*'
                 // opacity: 1
             })),
             state('closed', style({
-                height: '0',
+                height: '0'
                 // opacity: 0
             })),
             transition('* => closed', [
@@ -53,8 +53,8 @@ import {bounceIn, bounceOut} from "../../../shared-slides/animations/bounce.anim
                 useAnimation(bounceOut, {
                     params: { timing: 0.6 }
                 })
-            ),
-        ]),
+            )
+        ])
     ]
 })
 

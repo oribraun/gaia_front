@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
     // }
 
     setupCredsFromCookies() {
-        console.log('setupCredsFromCookies')
+        console.log('setupCredsFromCookies');
         const csrftoken = this.config.getCookie('csrftoken');
         if (csrftoken) {
             this.config.csrf_token = csrftoken;
