@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from "../../../../../environments/environment";
-import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
+import {Presentation, PresentationSection, PresentationSlide} from "../../../shared/entities/presentation";
 
 @Injectable({
     providedIn: 'root'

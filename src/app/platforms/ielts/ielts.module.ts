@@ -7,7 +7,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { IeltsRoutingModule } from './ielts-routing.module';
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
-import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
+import {SharedModule} from "../shared/shared.module";
 import { VocabularyComponent } from './components/vocabulary/vocabulary.component';
 import { ReviewComponent } from './components/review/review.component';
 import { PlanComponent } from './components/plan/plan.component';
@@ -31,7 +31,7 @@ import { DonutChartComponent } from './components/charts/donut-chart/donut-chart
     imports: [
         CommonModule,
         FormsModule,
-        SharedSlidesModule,
+        SharedModule,
         IeltsRoutingModule,
 
         NgxEchartsModule.forRoot({

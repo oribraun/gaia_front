@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {User} from "../../shared-slides/entities/user";
+import {User} from "../../shared/entities/user";
 const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 
 declare let $: any;

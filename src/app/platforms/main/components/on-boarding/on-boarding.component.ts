@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Config} from "../../config";
-import {User} from "../../../shared-slides/entities/user";
-import {OnStateChangeEvent, PlayerState} from "../../../shared-slides/slides/video/video.component";
+import {User} from "../../../shared/entities/user";
+import {OnStateChangeEvent, PlayerState} from "../../../shared/slides/video/video.component";
 import {ApiService} from "../../services/api.service";
 import {Router} from "@angular/router";
 import {KeyValue} from "@angular/common";

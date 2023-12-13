@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger, state} from "@angular/animations";
-import {User} from "../../../shared-slides/entities/user";
+import {User} from "../../../shared/entities/user";
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";

@@ -8,11 +8,11 @@ import {
     Output,
     SimpleChanges, ViewChild
 } from '@angular/core';
-import {PresentationSection, PresentationSlide} from "../../../../shared-slides/entities/presentation";
+import {PresentationSection, PresentationSlide} from "../../../../shared/entities/presentation";
 import {ApiService} from "../../../services/api.service";
 import {Config} from "../../../config";
 import {LessonService} from "../../../services/lesson/lesson.service";
-import {User} from "../../../../shared-slides/entities/user";
+import {User} from "../../../../shared/entities/user";
 
 
 @Component({

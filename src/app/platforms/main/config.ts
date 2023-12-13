@@ -1,6 +1,6 @@
 import {Subject} from "rxjs";
 import * as CryptoJS from 'crypto-js';
-import {User} from "../shared-slides/entities/user";
+import {User} from "../shared/entities/user";
 
 const key = "My Secret Passphrase";
 

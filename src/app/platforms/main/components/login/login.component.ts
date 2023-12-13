@@ -5,7 +5,7 @@ import {ApiService} from "../../services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {lastValueFrom} from "rxjs";
 import {environment} from "../../../../../environments/environment";
-import {User} from "../../../shared-slides/entities/user";
+import {User} from "../../../shared/entities/user";
 
 @Component({
     selector: 'app-login',

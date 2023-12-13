@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router} from "@angular/router";
-import {User} from "../../../shared-slides/entities/user";
+import {User} from "../../../shared/entities/user";
 import {Config} from "../../config";
 import {ApiService} from "../../services/api.service";
 import {HelperService} from "../../services/helper.service";

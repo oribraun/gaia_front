@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
-import {User} from "../shared-slides/entities/user";
+import {User} from "../shared/entities/user";
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {WebSocketService} from "./services/web-sockets/web-socket.service";
 import {HelperService} from "./services/helper.service";

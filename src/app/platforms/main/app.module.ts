@@ -39,7 +39,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { OnBoardingComponent } from './components/on-boarding/on-boarding.component';
 
 import {YouTubePlayerModule} from '@angular/youtube-player';
-import {SharedSlidesModule} from "../shared-slides/shared-slides.module";
+import {SharedModule} from "../shared/shared.module";
 import {IeltsModule} from "../ielts/ielts.module";
 import {ChildrensModule} from "../childrens/childrens.module";
 import { AlertComponent } from './components/alert/alert.component';
@@ -77,7 +77,7 @@ import { AlertComponent } from './components/alert/alert.component';
         HttpClientModule,
         AppRoutingModule,
         YouTubePlayerModule,
-        SharedSlidesModule,
+        SharedModule,
         IeltsModule,
         ChildrensModule
     ],

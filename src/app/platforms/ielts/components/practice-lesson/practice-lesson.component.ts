@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {ApiService} from "../../../main/services/api.service";
-import {TimersHelper} from "../../../shared-slides/helpers/timers";
+import {TimersHelper} from "../../../shared/helpers/timers";
 import {Config} from "../../../main/config";
 import {AnimationsService} from "../../../main/services/animations/animations.service";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
@@ -9,11 +9,11 @@ import {SocketSpeechRecognitionService} from "../../../main/services/socket-spee
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {SpeechRecognitionEnhancerService} from "../../../main/services/speech-recognition/speech-recognition-enhancer.service";
 import {SocketRecorderService} from "../../../main/services/socket-recorder/socket-recorder.service";
-import {User} from "../../../shared-slides/entities/user";
+import {User} from "../../../shared/entities/user";
 import {environment} from "../../../../../environments/environment";
-import {Presentation, PresentationSection, PresentationSlide} from "../../../shared-slides/entities/presentation";
-import {BlobItem} from "../../../shared-slides/entities/blob_item";
-import {ChatMessage} from "../../../shared-slides/entities/chat_message";
+import {Presentation, PresentationSection, PresentationSlide} from "../../../shared/entities/presentation";
+import {BlobItem} from "../../../shared/entities/blob_item";
+import {ChatMessage} from "../../../shared/entities/chat_message";
 import {AlertService} from "../../../main/services/alert.service";
 import {GeneralService} from "../../services/general/general.service";
 

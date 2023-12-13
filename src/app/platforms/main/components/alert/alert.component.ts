@@ -5,7 +5,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AlertService} from "../../services/alert.service";
 import {animate, keyframes, state, style, transition, trigger, useAnimation} from "@angular/animations";
-import {bounceIn, bounceOut} from "../../../shared-slides/animations/bounce.animation";
+import {bounceIn, bounceOut} from "../../../shared/animations/bounce.animation";
 
 
 @Component({

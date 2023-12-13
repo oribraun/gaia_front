@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../../shared-slides/entities/user";
+import {User} from "../../../shared/entities/user";
 
 @Component({
   selector: 'app-vocabulary',
