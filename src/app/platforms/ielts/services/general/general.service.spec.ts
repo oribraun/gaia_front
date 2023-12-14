@@ -22,7 +22,7 @@ describe('GeneralService', () => {
 
     afterEach(() => {
         // After each test, verify that there are no outstanding HTTP requests
-        httpTestingController.verify();
+        // httpTestingController.verify();
     });
 
     it('should be created', () => {
@@ -42,5 +42,7 @@ describe('GeneralService', () => {
         });
 
         req.flush({id: 1});
+
+        httpTestingController.verify();
     }));
 });
