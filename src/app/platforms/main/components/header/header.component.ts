@@ -337,6 +337,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             gender = genders[genders.length - 1].value;
         } catch (e) {
+            //
         }
         try {
             for (const b of birthdays) {
@@ -346,6 +347,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 }
             }
         } catch (e) {
+            //
         }
 
         return {gender: gender, birthday: birthday};
@@ -380,6 +382,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+        const n = '';
         // google.accounts.id.initialize({
         //     client_id: "",
         //     callback: (window as any)['handleCredentialResponse'] =

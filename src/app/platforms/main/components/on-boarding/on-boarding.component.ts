@@ -279,6 +279,7 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
+        const n = 0;
         // this.setUpYoutubeVideo();
     }
 
@@ -403,8 +404,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onBoardingObject.area_of_interest.splice(0, 1);
                 this.onBoardingObject.area_of_interest.push(itemText);
             }
-            if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
-            }
+            // if (this.onBoardingObject.area_of_interest.length == this.maxItems.area_of_interest) {
+            // }
         }
         this.resetBeMoreSpecific();
     }
@@ -444,8 +445,8 @@ export class OnBoardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onBoardingObject.familiar_words.splice(0, 1);
                 this.onBoardingObject.familiar_words.push(itemText);
             }
-            if (this.onBoardingObject.familiar_words.length == this.maxItems.familiar_words) {
-            }
+            // if (this.onBoardingObject.familiar_words.length == this.maxItems.familiar_words) {
+            // }
         }
     }
 

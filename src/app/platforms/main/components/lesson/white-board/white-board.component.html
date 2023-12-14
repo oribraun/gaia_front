@@ -75,7 +75,7 @@
         *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
         [currentSlide]="model.currentSlide"
         [slideData]="model.slideData"
-    ></app-unseen>   
+    ></app-unseen>
     <app-embed-game
         *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
         [currentSlide]="model.currentSlide"
@@ -112,7 +112,7 @@
                         >
                             <div class="slide {{currentSlide.slide_type}}"
                                  [ngClass]="{
-                                  'active-slide':id==currentSlide.index_in_bundle && data.length > 1,
+                                  'active-slide':id === currentSlide.index_in_bundle && data.length > 1,
                                   'slide-board-full-height':  data.length > 1,
                                   'slide-board-bundle':  data.length > 1
                                  }"
@@ -121,8 +121,8 @@
                                     model: {
                                         currentSlide: slide,
                                         slideData: {
-                                            slide_done: id<currentSlide.index_in_bundle && data.length > 1,
-                                            is_active: id==currentSlide.index_in_bundle && data.length > 1,
+                                            slide_done: id < currentSlide.index_in_bundle && data.length > 1,
+                                            is_active: id === currentSlide.index_in_bundle && data.length > 1,
                                         },
                                     }
                                 }"></ng-container>
@@ -172,7 +172,8 @@
             </div>
         </div>
         <div class="image">
-            <img src="{{imageSrc}}assets/images/icons/speak_icon.png"  (click)="speakNative(currentSlide.native_language_text?.he)">
+            <img src="{{imageSrc}}assets/images/icons/speak_icon.png"
+                 (click)="speakNative(currentSlide.native_language_text?.he)" alt="">
         </div>
     </div>
     <div class="disabled-board" *ngIf="isPause"></div>

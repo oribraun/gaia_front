@@ -1,9 +1,9 @@
-import {AfterViewInit, Directive, ElementRef, HostListener, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, HostListener, Input} from '@angular/core';
 
 @Directive({
     selector: '[appDynamicFontSize]'
 })
-export class DynamicFontSizeDirective implements OnInit, AfterViewInit {
+export class DynamicFontSizeDirective implements AfterViewInit {
 
     @Input() fontSize!: number;
     @Input() maxFontSizePx!: number;
@@ -14,10 +14,6 @@ export class DynamicFontSizeDirective implements OnInit, AfterViewInit {
     constructor(
         private element: ElementRef
     ) { }
-
-    ngOnInit() {
-
-    }
 
     ngAfterViewInit() {
         this.setFont();

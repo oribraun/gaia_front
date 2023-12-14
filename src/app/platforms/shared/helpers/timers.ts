@@ -39,8 +39,6 @@ export class TimersHelper {
     current_counter!: Timer;
     current_timer!: Timer;
 
-    constructor() { }
-
     clearAllCounters() {
         this.counters = {};
     }

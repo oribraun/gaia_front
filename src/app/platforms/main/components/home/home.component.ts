@@ -6,7 +6,7 @@ import {environment} from "../../../../../environments/environment";
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements AfterViewInit {
 
     @ViewChild('videoplayer') videoplayer!: ElementRef;
     videoUrl = environment.staticUrl + 'assets/videos/loop_video..mp4';
@@ -14,10 +14,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_Logo.png';
     title = 'frontend';
     staticServerPath = '';
-    constructor() {}
-
-    ngOnInit(): void {
-    }
 
     ngAfterViewInit(): void {
         if (this.videoplayer) {

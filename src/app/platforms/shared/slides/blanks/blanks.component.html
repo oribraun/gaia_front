@@ -19,9 +19,9 @@
         </div>
     </div>
     <div class="background-image" *ngIf="currentSlide.background_image">
-        <img src="{{currentSlide.background_image}}">
+        <img src="{{currentSlide.background_image}}" alt="">
     </div>
      <div class="image" *ngIf="currentSlide.teacher_image_path">
-        <img [src]="currentSlide.teacher_image_path">
+        <img [src]="currentSlide.teacher_image_path" alt="">
     </div>
 </div>

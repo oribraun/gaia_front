@@ -23,10 +23,10 @@
         <h2 class="text-center">{{coursesType | capitalize: 'word': true}}</h2>
         <div class="courses-items" *ngIf="courses.length">
             <div class="course" *ngFor="let course of courses;"
-                 [ngClass]="{'course-active': course.id == currentCourseClicked.id}"
+                 [ngClass]="{'course-active': course.id === currentCourseClicked.id}"
                  (click)="onCourseClick(course)">
                 <div class="course-background">
-                    <img [src]="course.background_image ? course.background_image : imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                    <img [src]="course.background_image ? course.background_image : imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'" alt="course-background">
                 </div>
                 <div class="course-title">
                     {{course.title}}
@@ -43,7 +43,7 @@
         <h2 class="text-center">Lessons</h2>
         <div class="lessons-items" *ngIf="lessons.length">
             <div class="lesson" *ngFor="let lesson of lessons;"
-                 [ngClass]="{'lesson-active': lesson.id == currentLessonClicked.id}"
+                 [ngClass]="{'lesson-active': lesson.id === currentLessonClicked.id}"
                  (click)="onLessonsClick(lesson)">
                 <div class="lesson-background">
                     <img [src]="lesson.background_image ? lesson.background_image : imageSrc + 'assets/images/lesson/lesson_placeholder.jpg'" alt="">

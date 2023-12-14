@@ -179,8 +179,6 @@ export class LessonComponent implements OnInit, OnDestroy {
                 await this.stopSpeechRecognition();
             }
             // this.lessonService.ClearAllEvents();
-        } else {
-
         }
     }
 

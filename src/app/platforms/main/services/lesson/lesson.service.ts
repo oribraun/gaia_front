@@ -13,8 +13,6 @@ export class LessonService {
 
     helpMode = 'disabled';
 
-    constructor() { }
-
     /**
      * Broadcast - emmit specific event changes
      * param {string} eventName

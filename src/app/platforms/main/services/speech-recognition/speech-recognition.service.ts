@@ -23,8 +23,6 @@ export class SpeechRecognitionService {
 
     public PTTInProgress = false;
 
-    constructor() {}
-
     setupSpeechRecognition(lang:string = 'en-US', nativeLang = 'he-IL') {
         this.originalLang = lang;
         console.log('this.originalLan', this.originalLang);

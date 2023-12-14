@@ -57,6 +57,4 @@ export class BaseSlideComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
 }

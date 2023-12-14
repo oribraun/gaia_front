@@ -1,9 +1,9 @@
 <div class="header">
     <div class="logo">
-        <img src="{{imageSrc}}assets/images/icons/logo.png">
+        <img src="{{imageSrc}}assets/images/icons/logo.png" alt="">
     </div>
     <div class="exit" (click)="resetPresentation()">
-        <img src="{{imageSrc}}assets/images/icons/exit_icon.png"> <span>Exit</span>
+        <img src="{{imageSrc}}assets/images/icons/exit_icon.png" alt=""> <span>Exit</span>
     </div>
 </div>
 <div class="screen-board" [ngClass]="{'screen-board-full-screen1': currentSlide.full_screen || isMobile,

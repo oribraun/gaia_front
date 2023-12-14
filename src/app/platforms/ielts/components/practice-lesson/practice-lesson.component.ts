@@ -22,7 +22,7 @@ import {GeneralService} from "../../services/general/general.service";
     templateUrl: './practice-lesson.component.html',
     styleUrls: ['./practice-lesson.component.less']
 })
-export class PracticeLessonComponent implements OnInit, AfterViewInit {
+export class PracticeLessonComponent implements OnInit {
 
     private user!: User;
     mock = environment.is_mock;
@@ -160,10 +160,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
                 this.slide_uid = s_uid;
             }
         });
-    }
-
-    ngAfterViewInit(): void {
-
     }
 
     setTestModelLimitations() {
@@ -345,8 +341,6 @@ export class PracticeLessonComponent implements OnInit, AfterViewInit {
         if (!this.mock) {
             this.stopAudio();
             this.unsubscribeAllHttpEvents();
-        } else {
-
         }
     }
 

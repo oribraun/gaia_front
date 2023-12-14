@@ -20,15 +20,15 @@
         </div>
     </div>
     <div class="background-image" *ngIf="currentSlide.background_image">
-        <img src="{{currentSlide.background_image}}">
+        <img src="{{currentSlide.background_image}}" alt="">
     </div>
     <div class="background-image" *ngIf="!currentSlide.background_image">
-        <img src="{{imageSrc}}assets/images/lesson/living_room.jpg">
+        <img src="{{imageSrc}}assets/images/lesson/living_room.jpg" alt="">
     </div>
     <div class="tv-image">
-        <img src="{{imageSrc}}assets/images/lesson/tv_screen.png">
+        <img src="{{imageSrc}}assets/images/lesson/tv_screen.png" alt="">
         <div class="generated-image" *ngIf="imagePathGenerated">
-            <img [src]="imagePathGenerated">
+            <img [src]="imagePathGenerated" alt="">
             <div class="generic-loader-wrapper" *ngIf="generatingImageInProgress">
                 <div class="loader">
                     <div class="spinner-border">

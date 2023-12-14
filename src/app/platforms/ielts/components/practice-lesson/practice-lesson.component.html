@@ -55,7 +55,7 @@
                             >
                                 <div class="slide {{currentSlide.slide_type}}"
                                      [ngClass]="{
-                                  'active-slide':id==currentSlide.index_in_bundle && slidesData.length > 1,
+                                  'active-slide':id === currentSlide.index_in_bundle && slidesData.length > 1,
                                   'slide-board-full-height':  slidesData.length > 1,
                                   'slide-board-bundle':  slidesData.length > 1
                                  }"
@@ -64,8 +64,8 @@
                                     model: {
                                         currentSlide: slide,
                                         slideData: {
-                                            slide_done: id<currentSlide.index_in_bundle && slidesData.length > 1,
-                                            is_active: id==currentSlide.index_in_bundle && slidesData.length > 1,
+                                            slide_done: id < currentSlide.index_in_bundle && slidesData.length > 1,
+                                            is_active: id === currentSlide.index_in_bundle && slidesData.length > 1,
                                             is_test_mode: is_test_mode
                                         },
                                     }

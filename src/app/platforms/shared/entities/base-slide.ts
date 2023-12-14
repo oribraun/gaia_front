@@ -1,7 +1,7 @@
 export class BaseSlide {
-    constructor(obj?: any) {
-        if (obj) {
-
-        }
-    }
+    // constructor(obj?: any) {
+    //     if (obj) {
+    //
+    //     }
+    // }
 }

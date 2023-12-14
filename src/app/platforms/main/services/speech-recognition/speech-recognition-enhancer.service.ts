@@ -22,12 +22,6 @@ export class SpeechRecognitionEnhancerService {
     line_index:number = 0;
     asr_queue:string[] = [];
 
-
-
-
-    constructor() {
-    }
-
     countNumWordsInString(text:string) {
         return text.split(/(\s+)/).filter((x) => x.trim().length > 0).length;
     }

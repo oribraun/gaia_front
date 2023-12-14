@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {User} from "../../shared/entities/user";
-const { v4: uuidv4, v5: uuidv5 } = require('uuid');
+import * as uuid from 'uuid';
 
 declare let $: any;
 @Injectable({
@@ -9,8 +9,6 @@ declare let $: any;
 export class HelperService {
 
     tooltipTimeout: any = null;
-
-    constructor() { }
 
     applyTooltip() {
         $(() => {
@@ -35,7 +33,7 @@ export class HelperService {
         if (hash) {
             MY_NAMESPACE = hash;
         }
-        const u = uuidv5(str, MY_NAMESPACE);
+        const u = uuid.v5(str, MY_NAMESPACE);
         return u;
     }
 
@@ -45,7 +43,7 @@ export class HelperService {
         if (hash) {
             MY_NAMESPACE = hash;
         }
-        const u = uuidv5(str, MY_NAMESPACE);
+        const u = uuid.v5(str, MY_NAMESPACE);
         return u;
     }
 

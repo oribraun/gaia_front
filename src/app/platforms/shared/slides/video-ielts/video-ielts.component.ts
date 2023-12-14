@@ -180,7 +180,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                     }
                 }
                 this.showSpinner = false;
-            } catch (e) {}
+            } catch (e) {
+                console.log('video-ielts student_reply_response e', e);
+            }
         });
         this.lessonService.ListenFor("recognitionText").subscribe((recognitionText:string) => {
             this.messages.push(
@@ -200,7 +202,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             }
         });
         this.lessonService.ListenFor("student_reply_error").subscribe((resp:any) => {
-
+            console.log('video-ielts student_reply_error', resp);
         });
     }
 
@@ -589,7 +591,9 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
             try {
                 this.deleteSessionId();
                 await this.stopSession(session_id);
-            } catch (e) {}
+            } catch (e) {
+                console.log('video-ielts start heyGen e', e);
+            }
         }
         // call the new interface to get the server's offer SDP and ICE server to create a new RTCPeerConnection
         this.sessionInfo = await this.newSession("high", avatar, voice);
@@ -601,21 +605,21 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         // When ICE candidate is available, send to the server
         this.peerConnection.onicecandidate = ({ candidate }: any) => {
             // console.log("Received ICE candidate:", candidate);
-            if (candidate) {
+            // if (candidate) {
                 // this.handleICE(this.sessionInfo.session_id, candidate.toJSON());
-            }
+            // }
         };
 
         // When ICE connection state changes, display the new state
-        this.peerConnection.oniceconnectionstatechange = (event: any) => {
-
-        };
+        // this.peerConnection.oniceconnectionstatechange = (event: any) => {
+        //
+        // };
 
         // When audio and video streams are received, display them in the video element
         const mediaElement: any = document.querySelector("#mediaElement");
         this.peerConnection.ontrack = (event: any) => {
             console.log("ontrack Received the track", event);
-            if (event.track.kind === "audio" || event.track.kind === "video") {}
+            // if (event.track.kind === "audio" || event.track.kind === "video") {}
             if (event.track.kind === "video") {
                 mediaElement.srcObject = event.streams[0];
             }
