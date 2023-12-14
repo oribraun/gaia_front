@@ -3,7 +3,10 @@
 
 .slide-board {
     position: relative;
-    height: 100%;
+    height: 96%;
+    background-color: white;
+    margin: 15px;
+    border-radius: 15px;
     @greenColor: var(--gaia-success-color);
     @blueColor: var(--gaia-header-color);
     //@greenColor: #4caf50;
@@ -107,7 +110,9 @@
         }
 
         &-questions {
-            background-color: #f2f2f2;
+            // background-color: #f2f2f2;
+            background-color: #ffd34f8a;
+            border-radius: 15px;   
             .questions {
                 display: flex;
                 flex-direction: column;
@@ -134,6 +139,7 @@
                         position: relative;
                     }
                     #textarea {
+                        border-radius: 10px;
                         padding: 10px;
                         position: relative;
                         height: 100%;
@@ -285,18 +291,18 @@
                             justify-content: center;
                             a {
                                 text-decoration: none;
-                                padding: 0.5em 0.1em;
+                                padding: 0.1em 0.1em;
                                 border-radius: 100%;
                                 margin: 0 4px;
-                                color: #2e6d6f;
-                                width: 42px;
-                                height: 42px;
+                                color: #686868;
+                                width: 29px;
+                                height: 29px;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 flex-grow: 0;
                                 flex-shrink: 0;
                                 &.circle {
-                                    border: 1px solid #2e6d6f;
+                                    border: 1px solid #686868;
                                     &.active {
                                         background-color: #548be217;
                                         //color: #FFF;
@@ -387,6 +393,7 @@
         .timers {
             align-self: end;
             .question_timer {
+                margin-top: 5px;
                 font-size: 1.1em;
                 color: var(--gaia-header-color);
                 font-family: 'Digital Numbers', sans-serif;
@@ -478,7 +485,7 @@
     @media (max-width: 769px) {
         overflow-y: auto;
         .box-questions {
-            margin-top: @gap;
+            margin-top: @gap;         
         }
     }
 }
