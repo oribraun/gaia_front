@@ -3,7 +3,7 @@ import {ElementRef, Injectable} from "@angular/core";
 import {TestBed} from "@angular/core/testing";
 @Injectable()
 export class MockElementRef {
-    nativeElement: {} | undefined;
+    nativeElement: object | undefined;
 }
 let elRef: ElementRef;
 describe('DynamicFontSizeDirective', () => {
