@@ -36,7 +36,7 @@ export class ReviewComponent implements OnInit {
     questions!: any[];
     gettingQuestions = false;
 
-    showFilters = false;
+    showFilters = true;
 
     gotFirstQuestions = false;
 
