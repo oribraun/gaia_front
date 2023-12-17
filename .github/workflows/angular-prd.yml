@@ -28,9 +28,9 @@ jobs:
     - name: Fund
       run: |
         npm fund
-    - name: Audit Fix
-      run: |
-        npm audit fix --force
+#    - name: Audit Fix
+#      run: |
+#        npm audit fix --force
     - name: Lint
       run: |
         npm run lint-quiet
