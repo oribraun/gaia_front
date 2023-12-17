@@ -30,7 +30,7 @@ jobs:
         npm fund
     - name: Audit Fix
       run: |
-        npm audit fix
+        npm audit fix --force
     - name: Lint
       run: |
         npm run lint-quiet
