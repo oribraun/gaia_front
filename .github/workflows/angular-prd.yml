@@ -36,4 +36,4 @@ jobs:
         npm run lint-quiet
     - name: Test
       run: |
-        npm run test -- --browsers=ChromeHeadless
+        npm run test
