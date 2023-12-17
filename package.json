@@ -10,7 +10,7 @@
     "build-prod-server": "ng test --watch=false && ng build --configuration production --aot --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
     "build-stg-server": "ng build --configuration staging --aot --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false",
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
     "lint-quiet": "ng lint --quiet",
     "lint-fix": "ng lint --fix",
