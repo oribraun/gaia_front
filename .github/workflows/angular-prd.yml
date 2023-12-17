@@ -30,4 +30,4 @@ jobs:
         npm run lint-quiet
     - name: Test
       run: |
-        npm run test
+        ng test --watch=false --browsers=ChromeHeadless
