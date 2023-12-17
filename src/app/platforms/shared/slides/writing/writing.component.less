@@ -3,7 +3,10 @@
 
 .slide-board {
     position: relative;
-    height: 100%;
+    height: 96%;
+    background-color: white;
+    margin: 15px;
+    border-radius: 15px;
     @greenColor: var(--gaia-header-color);
     @blueColor: var(--gaia-header-color);
     //@greenColor: #4caf50;
@@ -57,7 +60,8 @@
         scrollbar-color: @blueColor #F5F5F5;
 
         &-questions {
-            background-color: #f2f2f2;
+            background-color: #ffd34f8a;
+            border-radius: 15px;  
             .questions {
                 display: flex;
                 flex-direction: column;
@@ -84,6 +88,7 @@
                         position: relative;
                     }
                     #textarea {
+                        border-radius: 10px;
                         padding: 10px;
                         position: relative;
                         height: 100%;
@@ -337,6 +342,7 @@
         .timers {
             align-self: end;
             .question_timer {
+                margin-top: 5px;
                 font-size: 1.1em;
                 color: var(--gaia-header-color);
                 font-family: 'Digital Numbers', sans-serif;

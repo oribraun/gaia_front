@@ -25,8 +25,8 @@
                     <div class="question-wrapper">
                         <textarea id="textarea" [(ngModel)]="essayText" placeholder="Write your answer here"></textarea>
                         <div><b>Note:</b>&nbsp;<small>you should spend up to {{currentSlide.time_in_minutes}} minutes</small></div>
-                        <h4> # words: {{essayText.split(" ").length-1}} / {{currentSlide.min_number_of_words}}</h4>
-                        <h3 *ngIf="grades"> your score: {{score}} </h3>
+                        <h4> words: {{essayText.split(" ").length-1}} / {{currentSlide.min_number_of_words}}</h4>
+                        <h4 *ngIf="grades"> score: {{score}} </h4>
                         <!--                        <div class="hint-popup" (click)="closeHints($event)" [ngClass]="{'hint-popup-show': showHint}">-->
                         <!--                            <div class="hint-popup-main alert-dismissible alert-success">-->
                         <!--                                <h4 class="alert-heading">Hint!</h4>-->
