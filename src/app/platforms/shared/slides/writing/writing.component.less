@@ -61,7 +61,7 @@
 
         &-questions {
             background-color: #ffd34f8a;
-            border-radius: 15px;  
+            border-radius: 15px;
             .questions {
                 display: flex;
                 flex-direction: column;
@@ -96,7 +96,7 @@
                         resize: none;
                         outline: none;
                         border: none;
-                        margin-top: @marginTop;
+                        //margin-top: @marginTop;
                         &::-webkit-scrollbar {
                             width: 0;
                         }
@@ -339,22 +339,34 @@
             color: #0b4746;
             font-size: 20px;
         }
-        .timers {
+        .top-panel {
             align-self: end;
-            .question_timer {
-                margin-top: 5px;
-                font-size: 1.1em;
-                color: var(--gaia-header-color);
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 1.1em;
+            margin-top: 5px;
+            .timers {
+                align-self: center;
+                .question_timer {
+                    color: var(--gaia-header-color);
+                    font-family: 'Digital Numbers', sans-serif;
+                    letter-spacing: 0px;
+                    //border: solid 1px #2e6d6f;
+                    display: inline-block;
+                    vertical-align: top;
+                    padding: 2px;
+                    margin-right: 5px;
+                }
+
+                .question_timer:last-child {
+                    margin-right: 0;
+                }
+            }
+            .score {
+                align-self: center;
                 font-family: 'Digital Numbers', sans-serif;
                 letter-spacing: 0px;
-                //border: solid 1px #2e6d6f;
-                display: inline-block;
-                vertical-align: top;
-                padding: 2px;
-                margin-right: 5px;
-            }
-            .question_timer:last-child {
-                margin-right: 0;
             }
         }
         .icons {
