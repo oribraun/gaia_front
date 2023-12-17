@@ -25,6 +25,12 @@ jobs:
     - name: Build
       run: |
         npm install
+    - name: Fund
+      run: |
+        npm fund
+    - name: Audit Fix
+      run: |
+        npm audit fix
     - name: Lint
       run: |
         npm run lint-quiet
