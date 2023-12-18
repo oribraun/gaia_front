@@ -6,6 +6,7 @@
             </div>
         </div>
     </div>
+    <h2 class="title"> {{title_text}}</h2>
     <div class="chat general-box">
         <!-- <div class="question_timer">08:26</div> -->
         <div class="timer-wrapper">
@@ -49,13 +50,14 @@
         </div>
     </div>
     <div class="buttons">
+        
+        <!-- <button id="speak_the_text" class="btn btn-primary" (click)="speakTheText()">Speak The Question</button> -->
+        <!-- <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button> -->
+        <button class="btn btn-primary" (click)="showDetailedQuestionReview()">Question by Question Review</button>
+        <button *ngIf="all_questions_answered && !grades" class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
         <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">Show Report</button>
-        <button class="btn btn-primary">Continue</button>
-        <button class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
-        <button id="speak_the_text" class="btn btn-primary" (click)="speakTheText()">Speak The Question</button>
-        <button class="btn btn-primary" (click)="showDetailedQuestionReview()">Detailed Review</button>
-        <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button>
         <button class="btn btn-primary" (click)="restartSession()">Restart</button>
+        <button *ngIf="grades" class="btn btn-primary" (click)="endSlide()">Continue</button>
     </div>
 </div>
 <!--modals-->

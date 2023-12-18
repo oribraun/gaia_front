@@ -32,6 +32,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     recognitionPPTSubscribe: any;
     recognitionResultsSubscribe: any;
     question: any;
+    title_text: string = '';
     hint_used:boolean = false;
     pace:number = 0;
     question_idx:number | undefined;
@@ -41,6 +42,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     needToStopAsrOnFinal:boolean = false;
     modalActive: boolean = false;
     session_started: boolean = false;
+    endSpeakingInProgress: boolean = false;
     current_counter:any = {};
     private timers:any = {};
     replayInProgress = false;
@@ -69,6 +71,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.score = this.currentSlide.score;
         this.pace = this.currentSlide.pace;
         this.hint_used = this.currentSlide.hint_used;
+        this.title_text = this.currentSlide.text;
         this.initQnaReview(this.currentSlide.qna_review);
         this.handleCounter(1, this.pace);
         this.pauseAllCounters();
@@ -95,8 +98,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
                         this.scrollToBottom2();
                     } else {
-                        alert('Session Ended');
-                        this.restartSession();
+                        // alert('Session Ended');
+                        // this.restartSession();
                     }
                 } else if (resp_data.source  == 'next_question') {
                     if(resp_data.need_to_generate_questions) {
@@ -114,8 +117,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
                         this.scrollToBottom2();
                     } else {
-                        alert('Session Ended');
-                        this.restartSession();
+                        // alert('Session Ended');
+                        // this.restartSession();
                     }
                 } else if (resp_data.source  == 'generate_questions') {
                     console.log(resp_data);
@@ -134,6 +137,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                     this.gradeConversationInProgress = false;
                     this.grades = resp_data.llm_reply.conversation_review;
                     this.score = resp_data.llm_reply.score;
+                } else if(resp_data.source == 'continue_to_next_slide_click') {
+                    this.endSpeakingInProgress = false;
                 }
                 this.spinnerEnabled  = false;
 
@@ -289,6 +294,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     startSession() {
         if(!this.session_started) {
+            // this.nextQuestion();
             this.speakTheText();
             this.session_started = true;
         }
@@ -332,6 +338,19 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
             // "background":true,
             'stopAudio': true
         };
+        this.lessonService.Broadcast("slideEventRequest", data);
+    }
+
+    endSlide() {
+        if (this.endSpeakingInProgress) {
+            return;
+        }
+        const data = {
+            "source": "continue_to_next_slide_click",
+            'stopAudio': true
+        };
+        this.endSpeakingInProgress = true;
+        // this.spinnerEnabled  = true;
         this.lessonService.Broadcast("slideEventRequest", data);
     }
 
