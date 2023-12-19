@@ -103,12 +103,12 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         // this.restartSession();
                     }
                 } else if (resp_data.source  == 'next_question') {
-                    this.onNextQuestion(resp_data)
+                    this.onNextQuestion(resp_data);
                 } else if (resp_data.source  == 'generate_questions') {
                     console.log(resp_data);
                 } else if (resp_data.source == 'restart_session') {
                     console.log(resp_data);
-                    this.onNextQuestion(resp_data)
+                    this.onNextQuestion(resp_data);
                     // this.nextQuestion();
                 } else if(resp_data.source == 'student_response') {
                     const response_review_obj:any = {};
