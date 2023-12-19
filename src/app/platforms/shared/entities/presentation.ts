@@ -128,6 +128,7 @@ export class PresentationSlide {
     word_image_path!: string;
     background_image!: string;
     image_path!: string;
+    all_questions_answered!: boolean;
     mode!: string;
     multiple_choice_question!:any;
     answer_options!: string[];

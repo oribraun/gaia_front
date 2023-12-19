@@ -71,7 +71,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.score = this.currentSlide.score;
         this.pace = this.currentSlide.pace;
         this.hint_used = this.currentSlide.hint_used;
-        this.title_text = this.currentSlide.text;
+        this.title_text = this.currentSlide.slide_title;
+        this.all_questions_answered = this.currentSlide.all_questions_answered;
         this.initQnaReview(this.currentSlide.qna_review);
         this.handleCounter(1, this.pace);
         this.pauseAllCounters();
@@ -102,29 +103,13 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                         // this.restartSession();
                     }
                 } else if (resp_data.source  == 'next_question') {
-                    if(resp_data.need_to_generate_questions) {
-                        const data = {
-                            "source": "generate_questions",
-                            'stopAudio': true
-                        };
-                        this.lessonService.Broadcast("slideEventRequest", data);
-                    }
-
-                    this.question = resp_data.question;
-                    this.question_idx = resp_data.question_idx;
-                    this.all_questions_answered =  resp_data.all_questions_answered;
-                    if (!this.all_questions_answered) {
-                        this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
-                        this.scrollToBottom2();
-                    } else {
-                        // alert('Session Ended');
-                        // this.restartSession();
-                    }
+                    this.onNextQuestion(resp_data)
                 } else if (resp_data.source  == 'generate_questions') {
                     console.log(resp_data);
                 } else if (resp_data.source == 'restart_session') {
                     console.log(resp_data);
-                    this.nextQuestion();
+                    this.onNextQuestion(resp_data)
+                    // this.nextQuestion();
                 } else if(resp_data.source == 'student_response') {
                     const response_review_obj:any = {};
                     response_review_obj['student_response'] = resp_data.student_response;
@@ -151,6 +136,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
             if (this.spinnerEnabled) {
                 this.spinnerEnabled = false;
             }
+            if (this.recordingIsActive) {
+                this.lessonService.Broadcast('stopListenToAsr');
+            }
         });
         this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
             if (this.spinnerEnabled) {
@@ -161,6 +149,29 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.lessonService.ListenFor("speakInProgress").subscribe((val: boolean) => {
             this.speakInProgress = val;
         });
+    }
+
+    onNextQuestion(resp_data: any) {
+        if(resp_data.need_to_generate_questions) {
+            const data = {
+                "source": "generate_questions",
+                'stopAudio': true
+            };
+            this.lessonService.Broadcast("slideEventRequest", data);
+        }
+
+        this.question = resp_data.question;
+        this.question_idx = resp_data.question_idx;
+        this.all_questions_answered =  resp_data.all_questions_answered;
+        console.log('this.all_questions_answered', this.all_questions_answered);
+        if (!this.all_questions_answered) {
+            this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
+            this.scrollToBottom2();
+        } else {
+            // alert('Session Ended');
+            // this.restartSession();
+        }
+
     }
 
     clearSlideEvents() {
@@ -186,6 +197,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                 this.question = el.content;
             }
 
+        }
+        if (this.messages.length) {
+            this.session_started = true;
         }
         setTimeout(() => {
             this.scrollToBottom2();
@@ -295,8 +309,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     startSession() {
         if(!this.session_started) {
             // this.nextQuestion();
-            this.speakTheText();
+            // this.speakTheText();
             this.session_started = true;
+            this.restartSession();
         }
     }
 
