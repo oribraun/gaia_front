@@ -5,7 +5,7 @@
                 <h4 class="header">
                     My Plan
                 </h4>
-                <div class="text-body" [innerHTML]="coursePlan.description"></div>
+                <!-- <div class="text-body" [innerHTML]="coursePlan.description"></div> -->
                 <div class="text-body plan-parts">
                     <div class="date"><small>Starting</small><br>{{coursePlan.start_date}}</div>
                     <div class="items">
@@ -15,7 +15,7 @@
                     </div>
                     <div class="date"><small>Exam Date</small><br>{{coursePlan.end_date}}</div>
                 </div>
-                <div style="font-style:italic;" class="text-body" *ngIf="coursePlan.tip">Tip: {{coursePlan.tip}}</div>
+                <div style="font-style:italic;" class="text-body" *ngIf="coursePlan.tip">Tip:  {{coursePlan.tip}}</div>
             </div>
             <div class="dynamic-part-area d-flex flex-row">
                 <div class="left flex-fill">
