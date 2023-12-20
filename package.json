@@ -7,7 +7,7 @@
     "start:mock": "ng serve --configuration=mock",
     "build": "ng build",
     "build-prod": "ng build --configuration production",
-    "build-prod-server": "ng test --watch=false && ng lint --quiet && ng build --configuration production --aot --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
+    "build-prod-server": "npm run test && npm run lint-quiet && ng build --configuration production --aot --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
     "build-stg-server": "ng build --configuration staging --aot --deploy-url=/static/client/ --output-path ../backend/main_app/static/client",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false --browsers=ChromeHeadless",
