@@ -8,10 +8,12 @@ describe('AudioPlayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AudioPlayerComponent]
+      declarations: [ AudioPlayerComponent ]
     })
     .compileComponents();
-    
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(AudioPlayerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

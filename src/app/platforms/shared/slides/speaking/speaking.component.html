@@ -24,12 +24,13 @@
                                 <i class="text" *ngIf="!item.showTranslated">{{item.message}}</i>
                                 <i class="text" *ngIf="item.showTranslated">{{item.translatedMessage}}</i>
                             </div>
-                            <div class="audio" *ngIf="item.audio || item.audioBlob" [ngClass]="{'audio-personal': item.type === 'user'}">
+                            <div class="audio" *ngIf="item.audio_path || item.audioBlob" [ngClass]="{'audio-personal': item.type === 'user'}">
                                 <div class="item" [ngClass]="{'item-end': item.type === 'user'}">
                                     <app-audio-player
                                         [text]="(item.type !== 'user' ? 'Gaia' : user.username)"
-                                        [audioSource]="item.audio"
+                                        [audioSource]="item.audio_path"
                                         (onAudioLoaded)="onAudioLoaded($event)"
+                                        [autoPlay]="item.type !== 'user'"
                                         [audioBlob]="item.audioBlob">
 
                                     </app-audio-player>

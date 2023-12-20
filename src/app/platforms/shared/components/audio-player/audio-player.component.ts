@@ -10,6 +10,7 @@ export class AudioPlayerComponent implements AfterViewInit {
     @Input() text: string;
     @Input() audioSource: string;
     @Input() audioBlob: Blob;
+    @Input() autoPlay: boolean = false;
     @Output() onAudioLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @ViewChild('waveform') waveform: ElementRef;
@@ -44,6 +45,9 @@ export class AudioPlayerComponent implements AfterViewInit {
             }
             this.wavesurfer.on('ready', () => {
                 this.onAudioLoaded.next(true);
+                if (this.autoPlay) {
+                    this.play();
+                }
             });
             // https://wavesurfer.xyz/docs/types/wavesurfer.WaveSurferEvents
             this.wavesurfer.on('interaction', () => {

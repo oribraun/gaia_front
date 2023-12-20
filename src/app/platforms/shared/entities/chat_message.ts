@@ -3,7 +3,8 @@ import {Entity} from "./entity";
 export class ChatMessage {
     type!: string;
     message!: string;
-    audio!: string;
+    audio_path: string = "";
+    audio_text: string = "";
     audioBlob!: Blob;
     translatedMessage: string = '';
     isFinal!: boolean;

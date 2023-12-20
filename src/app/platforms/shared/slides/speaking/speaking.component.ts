@@ -42,7 +42,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     asrResultsInProgress:boolean = false;
     needToStopAsrOnFinal:boolean = false;
 
-    userBlob: any;
+    userAudioBuffer: any;
     audioChunks: any[] = [];
     mediaRecorder: MediaRecorder | null;
 
@@ -67,10 +67,10 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         if (environment.is_mock) {
             this.messages = [
                 new ChatMessage({type: 'computer', message: 'Hi'}),
-                new ChatMessage({type: 'computer', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
-                new ChatMessage({type: 'user', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
-                new ChatMessage({type: 'computer', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
-                new ChatMessage({type: 'user', audio: 'https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3'})
+                new ChatMessage({type: 'computer', audio_path: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'user', audio_path: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'computer', audio_path: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'user', audio_path: 'https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3'})
             ];
         }
     }
@@ -124,6 +124,8 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                     //     // this.restartSession();
                     // }
                 } else if (resp_data.source  == 'next_question') {
+                    this.onNextQuestion(resp_data);
+                } else if (resp_data.source  == 'next_question_blob') {
                     this.onNextQuestion(resp_data);
                 } else if (resp_data.source  == 'generate_questions') {
                     console.log(resp_data);
@@ -186,8 +188,16 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.all_questions_answered =  resp_data.all_questions_answered;
         console.log('this.all_questions_answered', this.all_questions_answered);
         if (!this.all_questions_answered) {
-            this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
-            this.scrollToBottom2();
+            if (resp_data.question_audio_path) {
+                this.messages.push(
+                    new ChatMessage({type: 'computer', audio_path: resp_data.question_audio_path})
+                );
+            } else {
+                this.messages.push(
+                    new ChatMessage({type: 'computer', message: resp_data.question})
+                );
+            }
+            this.scrollToBottom2(false, 900);
         } else {
             // alert('Session Ended');
             // this.restartSession();
@@ -212,9 +222,17 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.question = '';
         for(const el of  slideChat) {
             if(el.speaker == 'student') {
-                this.messages.push(new ChatMessage({type: 'user', message: el.content}));
+                if (el.content) {
+                    this.messages.push(new ChatMessage({type: 'user', message: el.content}));
+                } else {
+                    this.messages.push(new ChatMessage({type: 'user', audio_path: el.audio_path, audio_text: el.audio_text}));
+                }
             } else if(el.speaker == 'teacher') {
-                this.messages.push(new ChatMessage({type: 'computer', message: el.content}));
+                if (el.content) {
+                    this.messages.push(new ChatMessage({type: 'computer', message: el.content}));
+                } else {
+                    this.messages.push(new ChatMessage({type: 'computer', audio_path: el.audio_path, audio_text: el.audio_text}));
+                }
                 this.question = el.content;
             }
 
@@ -283,12 +301,16 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     }
 
     async startRecording() {
-        if (this.recordingIsActive) {
+        if (this.recordingIsActive || this.speakInProgress) {
             return;
         }
+        const startTime = Date.now();
         this.recordingIsActive = true;
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         this.mediaRecorder = new MediaRecorder(stream);
+        // if (this.mediaRecorder.state == 'inactive') {
+        //
+        // }
         this.mediaRecorder.ondataavailable = event => {
             if (event.data.size > 0) {
                 this.audioChunks.push(event.data);
@@ -300,8 +322,17 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
             this.messages.push(
                 new ChatMessage({type: 'user', audioBlob: audioBlob})
             );
-            this.userBlob = audioBlob;
-            this.sendUserBlob();
+            const fileReader = new FileReader();
+            fileReader.onloadend = () => {
+                if (fileReader.result) {
+                    const results: any = fileReader.result;
+                    console.log('results', results);
+                    const audioBase64 = results.split(',')[1]; // Extract the base64 data
+                    this.userAudioBuffer = audioBase64;
+                    this.sendUserAudioBuffer();
+                }
+            };
+            fileReader.readAsDataURL(audioBlob);
         };
 
         this.mediaRecorder.start();
@@ -312,7 +343,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     }
 
     stopRecording() {
-        if (!this.recordingIsActive) {
+        if (!this.recordingIsActive || this.speakInProgress) {
             return;
         }
         if (this.mediaRecorder) {
@@ -394,19 +425,20 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.pauseAllCounters();
     }
 
-    sendUserBlob() {
-        if (this.userBlob) {
+    sendUserAudioBuffer() {
+        if (this.userAudioBuffer) {
+            // console.log('this.userAudioBuffer', this.userAudioBuffer);
             const data = {
-                "source": "next_question",
+                "source": "next_question_blob",
                 "question_index":this.question_idx,
                 'stopAudio': true,
-                "student_response_blob":this.userBlob
+                "student_response_base64":this.userAudioBuffer
             };
             this.spinnerEnabled  = true;
             this.replayInProgress = true;
             this.lessonService.Broadcast("slideEventRequest", data);
             this.recordingIsActive = false;
-            this.userBlob = null;
+            this.userAudioBuffer = null;
             this.audioChunks = [];
             this.pauseAllCounters();
         }
