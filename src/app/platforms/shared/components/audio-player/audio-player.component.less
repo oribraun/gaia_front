@@ -1,0 +1,96 @@
+.audio-player {
+    text-align: center;
+    width: 100%;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    color: #000;
+    button {
+        border: none;
+        background: none;
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+    }
+    .text {
+        line-height: 1;
+        margin-bottom: 2px;
+    }
+    .volume {
+        position: relative;
+        input[type=range] {
+            transition: all 0.3s ease-in-out;
+            width: 0;
+            opacity: 0;
+        }
+        &:hover {
+            input[type=range] {
+                opacity: 1;
+                width: 60px;
+            }
+        }
+    }
+    i {
+        font-size: 24px;
+        margin: 0 2px;
+        cursor: pointer;
+    }
+}
+
+.my-progress-bar {
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    #waveform {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+//.volume-control, .progress-bar {
+//    margin-top: 10px;
+//}
+
+.zigzag-progress {
+    position: relative;
+    height: 10px;
+    background-color: #ccc;
+    overflow: hidden;
+}
+
+.zigzag-line {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 5%;
+    background-color: #333;
+    transform: skew(45deg);
+
+    .zigzag-line {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 5%;
+        background-color: #333;
+        animation: zigzag 1s infinite linear;
+    }
+
+    @keyframes zigzag {
+        0% {
+            transform: skew(45deg);
+        }
+        50% {
+            transform: skew(-45deg);
+        }
+        100% {
+            transform: skew(45deg);
+        }
+    }
+}
+
+
+.zigzag-progress {
+    border-radius: 5px;
+}

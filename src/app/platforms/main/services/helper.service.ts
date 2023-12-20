@@ -107,5 +107,53 @@ export class HelperService {
         };
     }
 
+    joinAsrAndRemoveDuplicates(inputArray: string[]) {
+        // Split each string into an array of words
+        console.log('inputArray', inputArray);
+        const outputArray = [];
+        for (let i = 0; i < inputArray.length; i++) {
+            const a_prev = inputArray[i - 1];
+            const a = inputArray[i];
+            if (a_prev) {
+                const a_split: any[] = a.split(' ');
+                if (a_split.length) {
+                    let lastIndexFound: any = null;
+                    const indexsToRemove: any[] = [];
+                    const a_prev_split: any[] = a_prev.split(' ');
+                    for (const item of a_split) {
+                        const index_in_prev_a = a_prev_split.indexOf(item);
+                        if (index_in_prev_a > -1) {
+                            const index_in_a = a_split.indexOf(item);
+                            if (lastIndexFound === null) {
+                                lastIndexFound = index_in_prev_a;
+                                indexsToRemove.push(index_in_a);
+                            } else {
+                                if (index_in_prev_a === lastIndexFound + 1) {
+                                    lastIndexFound = index_in_prev_a;
+                                    indexsToRemove.push(index_in_a);
+                                }
+                            }
+                        } else {
+                            if (lastIndexFound === null) {
+                                outputArray.push(a);
+                                break;
+                            }
+                        }
+                    }
+                    if (indexsToRemove.length) {
+                        const resultArray = a_split.filter((_, index) => !indexsToRemove.includes(index));
+                        outputArray.push(resultArray.join(' '));
+                    }
+                } else {
+                    outputArray.push(a);
+                }
+            } else {
+                outputArray.push(a);
+            }
+        }
+        console.log('outputArray', outputArray);
+        return outputArray.join(' ');
+    }
+
 
 }

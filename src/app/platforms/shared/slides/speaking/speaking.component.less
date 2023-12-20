@@ -128,9 +128,10 @@
     .chat {
         //width: 80%;
         height: 60%;
-        background: var(--white-background-color);
+        //background: var(--white-background-color);
         border-radius: @border-radius;
         margin:auto;
+        max-width: 500px;
         //margin-bottom: 10px;
         //margin-top: 45px;
 
@@ -222,26 +223,6 @@
                     }
                 }
 
-                &.message-personal {
-                    //float: right;
-                    //color: #fff;
-                    //text-align: right;
-                    // background: var(--pink-background-color);
-                    background: var(--orange-background-color);
-
-                    float: right;
-                    //border-radius: 10px 10px 10px 10px;
-
-                    //&::before {
-                    //    left: auto;
-                    //    right: 0;
-                    //    border-right: none;
-                    //    border-left: 7px solid transparent;
-                    //    border-top: 6px solid #257287;
-                    //    bottom: -4px;
-                    //}
-                }
-
                 &:last-child {
                     //margin-bottom: 30px;
                 }
@@ -324,6 +305,46 @@
                     }
                 }
 
+            }
+            .message-personal {
+                //float: right;
+                //color: #fff;
+                //text-align: right;
+                // background: var(--pink-background-color);
+                background: var(--orange-background-color);
+
+                float: right;
+                //border-radius: 10px 10px 10px 10px;
+
+                //&::before {
+                //    left: auto;
+                //    right: 0;
+                //    border-right: none;
+                //    border-left: 7px solid transparent;
+                //    border-top: 6px solid #257287;
+                //    bottom: -4px;
+                //}
+            }
+            .audio {
+                position: relative;
+                display: flex;
+                //clear: both;
+                &:not(:first-child) {
+                    margin-top: 10px;
+                }
+                .item {
+                    box-shadow: 0 0 5px #ccc;
+                    padding: 10px;
+                    margin: 2.5px;
+                    border-radius: 5px;
+                    width: 158px;
+                    background: var(--white-background-color);
+                }
+            }
+            .audio-personal {
+                //float: right;
+                //text-align: right;
+                justify-content: right;
             }
         }
     }

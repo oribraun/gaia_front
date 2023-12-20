@@ -5,6 +5,8 @@ import {FormsModule} from "@angular/forms";
 import {AngularEditorModule} from "@kolkov/angular-editor";
 import {YouTubePlayerModule} from "@angular/youtube-player";
 
+import {AudioPlayerComponent} from "./components/audio-player/audio-player.component";
+
 import {GreetingComponent} from "./slides/greeting/greeting.component";
 import {BaseSlideComponent} from "./slides/base-slide.component";
 import {AgendaComponent} from "./slides/agenda/agenda.component";
@@ -41,6 +43,8 @@ import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-f
 
 @NgModule({
     declarations: [
+        AudioPlayerComponent,
+
         BaseSlideComponent,
         AgendaComponent,
         BlanksComponent,
@@ -78,6 +82,8 @@ import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-f
         // LottieModule.forRoot({ player: playerFactory })
     ],
     exports: [
+        AudioPlayerComponent,
+
         AgendaComponent,
         BlanksComponent,
         EmbedGameComponent,

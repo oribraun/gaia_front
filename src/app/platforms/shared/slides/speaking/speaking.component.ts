@@ -7,6 +7,7 @@ import {ChatMessage} from "../../entities/chat_message";
 import {environment} from "../../../../../environments/environment";
 import {SpeechRecognitionService} from "../../../main/services/speech-recognition/speech-recognition.service";
 import { NONE_TYPE } from '@angular/compiler';
+import {User} from "../../entities/user";
 
 declare let $: any;
 
@@ -40,6 +41,11 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     recordingIsActive:boolean = false;
     asrResultsInProgress:boolean = false;
     needToStopAsrOnFinal:boolean = false;
+
+    userBlob: any;
+    audioChunks: any[] = [];
+    mediaRecorder: MediaRecorder | null;
+
     modalActive: boolean = false;
     session_started: boolean = false;
     endSpeakingInProgress: boolean = false;
@@ -48,6 +54,7 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
     replayInProgress = false;
     showSpinner = false;
     speakInProgress = false;
+    user: User = new User();
 
     constructor(
         protected override config: Config,
@@ -59,14 +66,21 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
         if (environment.is_mock) {
             this.messages = [
-                new ChatMessage({type: 'computer', message: 'Hi'})
+                new ChatMessage({type: 'computer', message: 'Hi'}),
+                new ChatMessage({type: 'computer', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'user', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'computer', audio: 'https://wavesurfer.xyz/wavesurfer-code/examples/audio/audio.wav'}),
+                new ChatMessage({type: 'user', audio: 'https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3'})
             ];
         }
     }
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.buildChat();
+        this.getUser();
+        if (!environment.is_mock) {
+            this.buildChat();
+        }
         this.grades = this.currentSlide.grades;
         this.score = this.currentSlide.score;
         this.pace = this.currentSlide.pace;
@@ -81,6 +95,13 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     }
 
+    getUser() {
+        this.user = this.config.user;
+        this.config.user_subject.subscribe((user) => {
+            this.user = user;
+        });
+    }
+
     listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             try {
@@ -90,18 +111,18 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
                 } else if (resp_data.source == "get_hints") {
                     console.log('get_hints', resp_data);
                 } else if (resp_data.source == "fix_asr") {
-                    this.handleStudentResponse(resp_data.llm_reply['corrected_text']);
-                    this.messages[this.messages.length - 1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']});
-                    this.question = resp_data.question;
-                    this.question_idx = resp_data.question_idx;
-                    this.all_questions_answered =  resp_data.all_questions_answered;
-                    if (!this.all_questions_answered) {
-                        this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
-                        this.scrollToBottom2();
-                    } else {
-                        // alert('Session Ended');
-                        // this.restartSession();
-                    }
+                    // this.handleStudentResponse(resp_data.llm_reply['corrected_text']);
+                    // this.messages[this.messages.length - 1] =  new ChatMessage({type: 'user', message: resp_data.llm_reply['corrected_text']});
+                    // this.question = resp_data.question;
+                    // this.question_idx = resp_data.question_idx;
+                    // this.all_questions_answered =  resp_data.all_questions_answered;
+                    // if (!this.all_questions_answered) {
+                    //     this.messages.push(new ChatMessage({type: 'computer', message: resp_data.question }));
+                    //     this.scrollToBottom2();
+                    // } else {
+                    //     // alert('Session Ended');
+                    //     // this.restartSession();
+                    // }
                 } else if (resp_data.source  == 'next_question') {
                     this.onNextQuestion(resp_data);
                 } else if (resp_data.source  == 'generate_questions') {
@@ -261,6 +282,46 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         }
     }
 
+    async startRecording() {
+        if (this.recordingIsActive) {
+            return;
+        }
+        this.recordingIsActive = true;
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                this.audioChunks.push(event.data);
+            }
+        };
+
+        this.mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+            this.messages.push(
+                new ChatMessage({type: 'user', audioBlob: audioBlob})
+            );
+            this.userBlob = audioBlob;
+            this.sendUserBlob();
+        };
+
+        this.mediaRecorder.start();
+    }
+
+    onAudioLoaded(val: boolean) {
+        this.scrollToBottom2();
+    }
+
+    stopRecording() {
+        if (!this.recordingIsActive) {
+            return;
+        }
+        if (this.mediaRecorder) {
+            this.recordingIsActive = false;
+            this.mediaRecorder.stop();
+            this.mediaRecorder = null;
+        }
+    }
+
 
     startAsr() {
         if (this.asrResultsInProgress || this.speakInProgress) {
@@ -331,6 +392,24 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
         this.studentActiveASR = [];
         this.recordingIsActive = false;
         this.pauseAllCounters();
+    }
+
+    sendUserBlob() {
+        if (this.userBlob) {
+            const data = {
+                "source": "next_question",
+                "question_index":this.question_idx,
+                'stopAudio': true,
+                "student_response_blob":this.userBlob
+            };
+            this.spinnerEnabled  = true;
+            this.replayInProgress = true;
+            this.lessonService.Broadcast("slideEventRequest", data);
+            this.recordingIsActive = false;
+            this.userBlob = null;
+            this.audioChunks = [];
+            this.pauseAllCounters();
+        }
     }
 
     // === End Asr Daniel
@@ -509,7 +588,9 @@ export class SpeakingComponent extends BaseSlideComponent implements OnInit, OnD
 
     override ngOnDestroy(): void {
         this.clearSlideEvents();
-        this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+        if (this.recognitionPPTSubscribe) {
+            this.recognitionPPTSubscribe.unsubscribe(this.onRecognitionPTTResults);
+        }
         super.ngOnDestroy();
     }
 }
