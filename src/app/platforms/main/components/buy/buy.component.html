@@ -1,0 +1,26 @@
+<div class="course" *ngIf="course">
+    <h1 class="title text-center">{{course.title}}</h1>
+    <p class="description">{{course.description}}</p>
+    <div class="background-image">
+        <img [src]="course.background_image" alt="">
+    </div>
+    <div class="cost">
+        Cost {{course.cost_amount}}{{course.cost_currency}}
+    </div>
+    <div class="lessons">
+        <h2 class="text-center">Lessons</h2>
+        <div class="lessons-items" *ngIf="course.lessons.length">
+            <div class="lesson" *ngFor="let lesson of course.lessons;">
+                <div class="lesson-background">
+                    <img [src]="lesson.background_image ? lesson.background_image : 'assets/images/lesson/lesson_placeholder.jpg'" alt="">
+                </div>
+                <div class="lesson-title">
+                    {{lesson.title}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pay text-center">
+        <div class="btn btn-primary">Pay</div>
+    </div>
+</div>

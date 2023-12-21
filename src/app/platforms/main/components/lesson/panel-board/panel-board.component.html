@@ -1,0 +1,56 @@
+<div class="right-panel" [ngClass]="{
+    'right-panel-closed1': currentSlide.full_screen && !isMobile,
+    'right-panel-full': isMobile
+}">
+    <div class="cam-board">
+        <div class="teacher">
+            <div class="gif-box">
+                <div class="user" #user
+                     [ngClass]="{
+                        'user-mobile': isMobile
+                     }"
+                ></div>
+                <img src="{{imageSrc}}{{currentIcon}}" alt="">
+            </div>
+            <div class="user-box">
+                <div class="user" #user>
+                    <div class="icon">
+                        <img src="{{imageSrc}}{{currentIcon}}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="student">
+            <video #videoElement autoplay playsinline [muted]="'muted'"></video>
+            <canvas #canvasElement style="display: none;"></canvas>
+        </div>
+        <div class="today-plan">
+            <h4 class="text-center">Today's plan</h4>
+            <div class="plan">
+                <div class="outer-scroller">
+                    <div class="inner-scroller">
+                        <!--                                <div class="table-line done">Greeting</div>-->
+                        <!--                                <div class="table-line active">Vocabulary</div>-->
+                        <div class="table-line"
+                             [ngClass]="{'active': currentSectionIndex === i}"
+                             *ngFor="let s of presentation.sections; let i = index">{{s.section_title}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="help-container"><app-help></app-help></div>
+            <div class="buttons">
+                <span class="my-button prev-button"(click)="prevSlide()">
+                    <i class="bi bi-chevron-left"></i>
+                </span>
+                <button class="my-button button" (click)="togglePauseLesson()">
+                    <img src="{{imageSrc}}assets/images/icons/take_a_break_icon.png" alt="" /> <span>{{pauseButtonText}}</span>
+                </button>
+                <span class="my-button next-button"(click)="nextSlide()">
+                    <i class="bi bi-chevron-right"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,228 @@
+@import "../../../../../vars";
+
+.on-boarding {
+    padding: 5px;
+    height: 100%;
+    overflow: hidden;
+    #onBoardingCarousel {
+        height: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        .carousel-inner {
+            height: 100%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            //.carousel-item:not(.carousel-item-start):not(.carousel-item-end) {
+            .carousel-item {
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+        }
+    }
+    .page {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            .eng {
+                flex: 0 0 50%;
+            }
+            .native {
+                flex: 0 0 50%;
+                direction: rtl;
+            }
+        }
+        .interest {
+            //display: flex;
+            //gap: 10px;
+            @gap: 5px;
+            .box-wrap {
+                padding: 0 @gap;
+                width: 20%;
+                display: inline-block;
+                margin: @gap 0;
+                vertical-align: top;
+
+                .box {
+                    padding: 35%;
+                    background: #ccc;
+                    position: relative;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    // filter: brightness(0.8);
+                    cursor: pointer;
+                    .text {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: #fff;
+                        font-weight: bold;
+                        text-shadow: 0px 0px 8px #ffffff, 0px 0px 5px #000000;
+                        width: 100%;
+                        text-align: center;
+                        padding: 0 5px;
+                        font-size: x-large;
+                        z-index: 1;
+                    }
+                    .text-no-wrap {
+                        white-space: nowrap;
+                    }
+                    &.box-hover {
+                        &:hover {
+                            //box-shadow: 0 0 5px #6c6c6c;
+                            //background-color: #939393;
+                            filter: brightness(1.2);
+                        }
+                    }
+                    &.active {
+                        box-shadow: 0 0 0px 4px var(--gaia-main-border-color);
+                    }
+                    &.not-active {
+                        filter: grayscale(100%);
+                    }
+                    z-index: 0;
+                }
+                .specific {
+                    .item {
+                        text-align: center;
+                        padding: 5px 0;
+                        background: #ccc;
+                        margin: 10px 0;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        height: 34px;
+                        &.active {
+                            background: var(--gaia-header-color);
+                            color:#fff;
+                        }
+                    }
+                    .specific-input {
+                        background: transparent;
+                        border: none;
+                        height: 100%;
+                        padding: 1px 5px;
+                        box-shadow: 0px 4px 2px -3px #999;
+                        color: inherit;
+                    }
+                }
+            }
+        }
+        .buttons {
+            button {
+                margin: 0 5px;
+            }
+        }
+        .prev-button {
+            position: absolute;
+            top: 50%;
+            left:0;
+            transform: translateY(-50%);
+            font-size: 3.5em;
+            color: #858585;
+            cursor: pointer;
+            &:hover {
+                color: #a6a6a6;
+            }
+        }
+        .next-button {
+            position: absolute;
+            top: 50%;
+            right:0;
+            transform: translateY(-50%);
+            font-size: 3.5em;
+            color: #858585;
+            cursor: pointer;
+            &:hover {
+                color: #a6a6a6;
+            }
+        }
+        .video {
+            height: 400px;
+            max-width: 90%;
+            margin: 10px auto;
+            overflow: hidden;
+            text-align: center;
+        }
+        .sentence {
+            height: 400px;
+            max-width: 90%;
+            margin: 10px auto;
+            overflow: hidden;
+            .row {
+                height: 100%;
+            }
+            .textarea {
+                width: 100%;
+                height: 100%;
+                textarea {
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    resize: none;
+                    background: #dbdbdb;
+                    padding: 5px;
+                    &:active, &:focus {
+                        border: none;
+                        outline: none;
+                    }
+                }
+            }
+            .image {
+                width: 100%;
+                height: 100%;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+        .questions {
+            margin-bottom: @gap;
+            .question-group {
+                margin-top: @gap;
+                .question {
+                    position: relative;
+                    padding-left: @gap;
+                    padding-bottom: @gap;
+                    .text {
+
+                    }
+                    .options {
+                        margin-bottom: @gap;
+                        text-align: center;
+                        .input-error {
+                            border-color: var(--gaia-error-color);
+                        }
+                    }
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        right: 0%;
+                        left: calc(15px + 0%);
+                        bottom: @gap;
+                        border-bottom: 1px solid #d6e5fd;
+                    }
+                }
+                h4 {
+                    text-align: center;
+                    margin-bottom: calc(@gap*2);
+                }
+            }
+        }
+
+    }
+}
+
+#privacyPolicyModal {
+    .modal-dialog {
+        max-width: 100%;
+        margin: @gap;
+    }
+}

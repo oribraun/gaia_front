@@ -1,0 +1,112 @@
+<div class="vocabulary">
+    <div class="panel" *ngIf="!gettingQuestions">
+        <div class="header">
+            <h2>Review</h2>
+            <p>
+                Here you can review all your hard work. Each question you have ever submitted exists in the table below. You can filter it by Type, Difficulty, Pace or Score. You can also click itto navigate directly to the relevant practice.
+            </p>            
+        </div>
+        <div class="filters">
+            <div>
+                <small class="pointer" (click)="toggleFilters()">
+                    <i *ngIf="!showFilters" class="bi bi-caret-up-fill"></i>
+                    <i *ngIf="showFilters" class="bi bi-caret-down-fill"></i>
+                </small>
+                Filters
+            </div>
+            <div class="filters-panel" [@openClose]="showFilters ? 'open' : 'closed'" [@.disabled]="!gotFirstQuestions">
+                <div class="filter-group">
+                    <div class="head">Date</div>
+                    <div class="options">
+                        <div class="form-check" *ngFor="let o of dateOptions">
+                            <input class="form-check-input" [checked]="o === filters.date" (change)="filters.date = o" type="radio">
+                            <label class="form-check-label">
+                                {{o}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="head">Sections</div>
+                    <div class="options">
+                        <div class="form-check" *ngFor="let o of groupTypeOptions">
+                            <input class="form-check-input" [checked]="o === filters.group_type" (change)="filters.group_type = o" type="radio">
+                            <label class="form-check-label">
+                                {{o.value}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="head">Difficulty</div>
+                    <div class="options">
+                        <div *ngFor="let d of difficultyOptions">
+                            <div class="form-check" (click)="filter('difficulty', d.key)">
+                                <input type="checkbox" class="form-check-input" [checked]="filters.difficulty.indexOf(d.key) > -1">
+                                <label class="form-check-label">{{d.value}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vocab-table">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Difficulty</th>
+                    <th scope="col">Pace</th>
+                    <th scope="col">Avg Pace</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let question of getFilterQuestions()">
+                    <td>
+                        <a [routerLink]="['/ielts/practice/'+question.user_lesson_id]" [queryParams]="{q_id: question.presentation_question_id, s_uid: question.presentation_slide_id}">
+                            {{question.title}}
+                        </a>
+                    </td>
+                    <td>{{question.section}}</td>
+                    <td>{{question.difficulty}}</td>
+                    <td>{{question.pace}}</td>
+                    <td>{{question.avg_pace}}</td>
+                    <td>{{question.score}}</td>
+                    <td>{{question.type}}</td>
+                    <td>{{question.created | datetimeFormat}}</td>
+                    <!--                     'id': v.id,-->
+                    <!--            'created': v.created,-->
+                    <!--            'title': v.title,-->
+                    <!--            'type': v.type,-->
+                    <!--            'score': v.score,-->
+                    <!--            'difficulty': v.difficulty,-->
+                    <!--            'presentation_question_id': v.presentation_question_id,-->
+                    <!--            'pace': v.pace,-->
+                    <!--            'hint_used': v.hint_used,-->
+                    <!--            'user_lesson_id': v.user_lesson.id,-->
+                    <!--            'lesson_title': v.user_lesson.lesson.title,-->
+                </tr>
+                <tr class="text-center" *ngIf="!questions || !questions.length">
+                    <td colspan="100%">No Questions</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="buttons">
+            <button class="btn btn-primary">Remove vocabs</button>
+            <button class="btn btn-primary">Practice vocabs</button>
+            <button class="btn btn-primary">Print</button>
+        </div>
+    </div>
+    <div class="generic-loader-wrapper" *ngIf="gettingQuestions">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+</div>

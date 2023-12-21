@@ -1,0 +1,23 @@
+<div class="slide-board">
+    <div class="outer-scroller-gameslide" #wrapper>
+        <div class="inner-scroller">
+            <div>
+                <h1>{{currentSlide.slide_title}}</h1>
+            </div>
+            <div class="text text-pre-line">
+                <span>{{"<"}}{{minutes}}</span><span>:</span><span>{{seconds}}{{">"}}</span>
+                <!-- <p class="no-style">{{currentSlide.text}}</p> -->
+            </div>
+        </div>
+    </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{currentSlide.background_image}}" alt="">
+    </div>
+
+    <!--    <div class="image image-right" *ngIf="currentSlide.video_url" [innerHtml]="embeddedVideo">-->
+
+    <!--    </div>-->
+    <div class="game_container" >
+        <iframe [ngClass]="{'iframe-blur':blurIframe}" class="responsive-iframe" id="frame" [src]="iframe_url" #iframe></iframe>
+    </div>
+</div>

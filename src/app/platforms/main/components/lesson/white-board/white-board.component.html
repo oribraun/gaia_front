@@ -1,0 +1,181 @@
+
+<ng-template #selected_slide_container let-model="model">
+    <app-greeting
+        *ngIf="model.currentSlide.slide_type === sectionTitles.greeting"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-greeting>
+    <app-reading
+        *ngIf="model.currentSlide.slide_type === sectionTitles.reading"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-reading>
+    <app-template
+        *ngIf="model.currentSlide.slide_type === sectionTitles.template"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-template>
+    <app-writing
+        *ngIf="model.currentSlide.slide_type === sectionTitles.writing"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-writing>
+    <app-word-repeater
+        *ngIf="model.currentSlide.slide_type === sectionTitles.word_repeater"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+        [recognitionText]="recognitionText"
+    ></app-word-repeater>
+    <app-image-generator
+        *ngIf="model.currentSlide.slide_type === sectionTitles.image_generator"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-image-generator>
+    <app-agenda
+        *ngIf="model.currentSlide.slide_type === sectionTitles.agenda"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-agenda>
+    <app-ending
+        *ngIf="model.currentSlide.slide_type === sectionTitles.ending"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-ending>
+    <app-blanks
+        *ngIf="model.currentSlide.slide_type === sectionTitles.blanks"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-blanks>
+    <app-video
+        *ngIf="model.currentSlide.slide_type === sectionTitles.video"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-video>
+    <app-title
+        *ngIf="model.currentSlide.slide_type === sectionTitles.title"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-title>
+    <app-word-translator
+        *ngIf="model.currentSlide.slide_type === sectionTitles.word_translator"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-word-translator>
+    <app-random-selector
+        *ngIf="model.currentSlide.slide_type === sectionTitles.random_selector"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-random-selector>
+    <app-generic
+        *ngIf="model.currentSlide.slide_type === sectionTitles.generic_slide"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-generic>
+    <app-unseen
+        *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-unseen>
+    <app-embed-game
+        *ngIf="model.currentSlide.slide_type === sectionTitles.embed_game"
+        [currentSlide]="model.currentSlide"
+        [slideData]="model.slideData"
+    ></app-embed-game>
+
+</ng-template>
+<div class="white-board">
+    <!-- If it is a bundle -->
+    <div class="container slides" #slides
+         [ngClass]="{
+            'slides-bundle':  data.length > 1
+         }"
+    >
+        <div class="outer-scroller"
+             [ngStyle]="{
+                'height': (slideHeight !== -1 ? slideHeight + 'px' : ''),
+                'width': (slideWidth !== -1 ? slideWidth + 'px' : '')
+             }"
+        >
+            <div class="inner-scroller">
+                <div class="d-flex flex-wrap"
+                     [ngClass]="{
+                       'd-flex-bundle': data.length > 1,
+                     }"
+                >
+                    <ng-container *ngFor="let slide of data; let id=index;">
+                        <div class="flex-item"
+                             [ngClass]="{
+                               'flex-item-full-width': data.length === 1,
+                               'flex-item-full-height': data.length === 1,
+                               'flex-item-bundle': data.length > 1,
+                             }"
+                        >
+                            <div class="slide {{currentSlide.slide_type}}"
+                                 [ngClass]="{
+                                  'active-slide':id === currentSlide.index_in_bundle && data.length > 1,
+                                  'slide-board-full-height':  data.length > 1,
+                                  'slide-board-bundle':  data.length > 1
+                                 }"
+                            >
+                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {
+                                    model: {
+                                        currentSlide: slide,
+                                        slideData: {
+                                            slide_done: id < currentSlide.index_in_bundle && data.length > 1,
+                                            is_active: id === currentSlide.index_in_bundle && data.length > 1,
+                                        },
+                                    }
+                                }"></ng-container>
+                            </div>
+                        </div>
+                        <div class="flex-break" *ngIf="id%2 !== 0"></div>
+                    </ng-container>
+                </div>
+<!--                <div class="row">-->
+<!--                    <ng-container *ngFor="let slide of data; let id=index;">-->
+<!--                        <div class="col-12"-->
+<!--                             [ngClass]="{-->
+<!--                              'col-lg-6 mb-4':data.length > 1,-->
+<!--                             }">-->
+<!--                            <div class="slide {{currentSlide.slide_type}}"-->
+<!--                                 [ngClass]="{-->
+<!--                                  'active-slide':id==currentSlide.index_in_bundle && data.length > 1,-->
+<!--                                  'slide-board-full-height':  data.length > 1,-->
+<!--                                  'slide-board-bundle':  data.length > 1-->
+<!--                                 }"-->
+<!--                            >-->
+<!--                                <ng-container *ngTemplateOutlet="selected_slide_container;context: {-->
+<!--                                    model: {-->
+<!--                                        currentSlide: slide,-->
+<!--                                        slideData: {-->
+<!--                                            slide_done: id<currentSlide.index_in_bundle && data.length > 1,-->
+<!--                                            is_active: id==currentSlide.index_in_bundle && data.length > 1-->
+<!--                                        },-->
+<!--                                    }-->
+<!--                                }"></ng-container>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- Add also native language instructions -->
+    <div class="text-board">
+        <div class="text">
+            <div class="outer-scroller">
+                <div class="inner-scroller dir-rtl">
+                    <span [ngClass]="{'native-speak-bold':lessonService.speakNativeOnProgress}" class="text">
+                        {{currentSlide.native_language_text?.he}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="image">
+            <img src="{{imageSrc}}assets/images/icons/speak_icon.png"
+                 (click)="speakNative(currentSlide.native_language_text?.he)" alt="">
+        </div>
+    </div>
+    <div class="disabled-board" *ngIf="isPause"></div>
+</div>
+

@@ -1,0 +1,18 @@
+<div class="slide-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="text text-pre-line">
+                <h2>{{currentSlide.text}}</h2>
+            </div>
+            <!-- <div class="text text-dubb" style="position:absolute; bottom:15%">
+                <p>{{recognitionText}}</p>
+            </div> -->
+        </div>
+    </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img [src]="currentSlide.background_image" alt="">
+    </div>
+    <div class="image image-right" *ngIf="currentSlide.word_image_path">
+        <img [src]="currentSlide.word_image_path" alt="">
+    </div>
+</div>

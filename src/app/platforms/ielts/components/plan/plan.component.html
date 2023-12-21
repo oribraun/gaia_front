@@ -1,0 +1,70 @@
+<div class="plans container" *ngIf="!gettingPlans">
+    <div class="row mb-4">
+        <h1 class="text-center">Choose Your Plan</h1>
+        <h4 class="text-center">Gaia has helped thousands of students succeed on the IELTS. We have the perfect plan for you.</h4>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Start of 1 month plan -->
+        <div class="col-md-5" *ngFor="let p of plans">
+            <div class="pricing-column">
+                <div class="pricing-column-title primary-background">
+                    <h3>{{p.title}}</h3>
+                </div>
+                <div class="pricing-column-header">
+                    <div class="pricing-column-price">
+                        {{p.currency}}{{p.price}}
+                        <small>{{p.currency}}{{p.price + 20}}</small>
+                    </div>
+                    <small class="small-no-line-through">{{p.description}}</small>
+                </div>
+
+                <div class="pricing-column-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-12">
+                            <h4>Content</h4>
+                            <ul class="pricing-column-features" [innerHTML]="p.content | safeHtml"></ul>
+                        </div>
+                        <div class="col-sm-6 col-md-12">
+                            <h4>Features</h4>
+                            <ul class="pricing-column-features" [innerHTML]="p.features | safeHtml"></ul>
+                        </div>
+                        <div class="col-sm-6 col-md-12">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-column-header pricing-footer">
+                    <a href="#" (click)="selectedItem($event, p.id)" class="btn btn-secondary btn-default btn-lg">Academic - Sign Up Now</a>
+                </div>
+                <div class="pricing-column-footer pricing-footer">
+                    <a href="#" (click)="selectedItem($event, p.id)" class="btn btn-secondary btn-default btn-lg">General Training - Sign Up Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row u-margin-B-xl">
+            <h3 class="text-center">Try Gaia for 7 days</h3>
+            <ul class="col-md-12 free-trial-column-features text-center">
+                <li>
+                    <i class="bi bi-check-circle"></i>
+                    No Credit Card
+                </li>
+                <li>
+                    <i class="bi bi-check-circle"></i>
+                    No Commitment
+                </li>
+            </ul>
+            <ul class="col-md-12 free-trial-column-features text-center">
+                <li>
+                    <i class="bi bi-check-circle"></i>
+                    Over 20 questions and lessons
+                </li>
+            </ul>
+            <div class="col-md-12 text-center">
+                <a href="#" (click)="selectedItem($event, -1)" class="btn btn-default" style="width:222px;">Sign Up for a Free Trial</a>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,306 @@
+@import "../../../../../vars";
+.navigation {
+    position: relative;
+    display: block;
+    max-width: @max-width;
+    margin: 0 auto;
+}
+.navbar {
+    //background-color: var(--gaia-header-color);
+    padding: 0;
+    background-color: var(--gaia-header-color);
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+        background-color: var(--gaia-background-color);
+        align-items: stretch;
+        @media(min-width: @max-width) {
+            max-width: none;
+            padding-left: calc((100% - @max-width)/2);
+            margin-right: calc((100% - @max-width)/2);
+        }
+        .brand {
+            align-self: stretch;
+            height: @header-height;
+            background-color: var(--gaia-background-color);
+            padding-left: calc(var(--bs-gutter-x) * .5);
+
+            .navbar-brand {
+                img {
+                    height: 2em;
+                    vertical-align: top;
+                    margin-top: 0.2em;
+                }
+            }
+        }
+        .navbar-toggler {
+            box-shadow: none;
+        }
+        .navbar-collapse {
+            background-color: var(--gaia-header-color);
+            padding-right: calc(var(--bs-gutter-x) * .5);
+            @media (min-width: 768px) {
+                border-bottom-left-radius: 15px;
+            }
+            //border: solid 1px var(--gaia-main-border-color);
+            border-top: none;
+            border-right: none;
+            @media(min-width: 768px) {
+                .navbar-nav {
+                    margin-left: @header-height;
+                }
+            }
+        }
+        .navbar-collapse.collapsing {
+            background-color: var(--gaia-header-color);
+        }
+
+        .nav-item {
+            .nav-link {
+                white-space: nowrap;
+                text-align: center;
+                font-size: 0.44em;
+                padding: 2.5em 0.5em;
+                width: @header-height;
+                height: @header-height;
+                margin: 0 5px;
+                transition: all .1s ease-in-out;
+
+                .bi {
+                    //min-width: 40px;
+                    display: inline-block;
+                    text-align: center;
+
+                    &-no-min {
+                        min-width: 0;
+                    }
+                }
+
+                .title {
+                    margin-bottom: 3px;
+                }
+
+                span {
+                    padding-left: 17px;
+                    display: none;
+                }
+
+                &.dropdown-toggle {
+                    padding: 0.7rem 0.3rem;
+                }
+
+                &.active {
+                    box-shadow: 0 -6px 5px 0px #000;
+                    background-color: var(--gaia-background-color);
+                    transform: scale(1.03);
+                }
+                &:not(.active) {
+                    color: #fff;
+                    filter: brightness(999);
+                }
+                &:hover {
+                    box-shadow: 0 -6px 5px 0px #000;
+                    background-color: var(--gaia-background-color);
+                    color: initial;
+                    filter: brightness(1);
+                }
+            }
+            &:first-child {
+                position: relative;
+                a {
+                    //margin: 0 5px 0 0;
+                    &.active, &:hover {
+                        //border-bottom-left-radius: 15px !important;
+                    }
+                }
+            }
+        }
+
+        img.icon {
+            //padding: 0.2em 1em .1em 1em;
+            width: 22px;
+            height: 22px;
+            transform: scale(1.2);
+        }
+
+        .link {
+            text-decoration: none;
+        }
+
+        .right-items {
+            div {
+                margin: 0 5px;
+                white-space: nowrap;
+            }
+
+            .form-select {
+                outline: none;
+                box-shadow: none;
+                background-color: transparent;
+                border: none;
+                color: #fff;
+                filter: brightness(999);
+                option {
+                    color: initial;
+                }
+            }
+
+            .logout {
+                img {
+                    height: 1.2em;
+                    vertical-align: top;
+                    margin-top: 0.2em;
+                }
+            }
+            .platforms {
+                position: relative;
+                color: var(--gaia-main-border-color);
+                .dropdown-toggle {
+                    text-decoration: none;
+                    color:inherit;
+                }
+                .dropdown-menu {
+                    padding: 0;
+                    overflow: hidden;
+                    .dropdown-item {
+                        &:active, &focus {
+                            background: initial;
+                            color: initial;
+                        }
+                    }
+                }
+                @media (min-width: 768px) {
+                    color:#fff;
+                }
+            }
+            .profile {
+                position: relative;
+                color:var(--gaia-main-border-color);
+                .icon {
+                    filter: brightness(.8);
+                }
+                .dropdown-menu {
+                    padding: 0;
+                    overflow: hidden;
+                }
+                @media (min-width: 768px) {
+                    color:#fff;
+                    .icon {
+                        filter: brightness(999);
+                    }
+                }
+            }
+            .login, .join {
+                a {
+                    color: #fff;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+#loginModal {
+    .modal-dialog {
+        max-width: 400px;
+    }
+    .modal-body {
+        .relative-content {
+            position: relative;
+
+            .login {
+                max-width: 540px;
+                //background: #fff;
+                padding: 10px;
+                border-radius: 5px;
+
+                a {
+                    cursor: pointer;
+                }
+
+                .logo {
+                    position: relative;
+                    text-align: center;
+                    width: 90%;
+                    margin: 0 auto;
+                    padding: 10px;
+                    box-sizing: border-box;
+
+                    img {
+                        position: relative;
+                        max-width: 500px;
+                        width: 100%;
+                    }
+                }
+                .forgot-password, .sign-up, .log-in {
+                    color: rgb(24, 89, 169);
+                    text-decoration: none;
+                    cursor: pointer;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+                .forgot-password {
+                    font-size: .8em;
+                }
+                .divider {
+                    -webkit-box-align: center;
+                    -webkit-box-pack: justify;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    hr {
+                        height: 1px;
+                        border: none;
+                        flex: 1 1 0%;
+                        background-color: #aaaaaa;
+                        margin: 24px 0px;
+                    }
+                    span {
+                        font-size: 12px;
+                        line-height: 18px;
+                        padding: 0px 10px;
+                    }
+                }
+                .providers {
+                    position: relative;
+                    display: grid;
+                    gap: 16px;
+                    margin-bottom: 10px;
+                    button {
+                        background: transparent;
+                        border-radius: 4px;
+                        font-size: .9em;
+                        font-weight: bold;
+                        padding: 12px 16px;
+                        border: 1px solid #dee2e6;
+                        position: relative;
+                        width: 100%;
+                        .svg {
+                            position: absolute;
+                            height: 18px;
+                            width: 18px;
+                            left: 24px;
+                            top: 15px;
+                            &.google {
+                                fill: rgb(54, 59, 66);
+                            }
+                            &.facebook {
+                                fill: rgb(59, 89, 152);
+                            }
+                        }
+                        asl-google-signin-button {
+                            position: absolute;
+                            inset: 0;
+                            iframe {
+                                position: relative !important;
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

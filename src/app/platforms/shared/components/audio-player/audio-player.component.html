@@ -1,0 +1,25 @@
+<div class="audio-player">
+<!--    <audio #audio [src]="audioSource" (timeupdate)="updateProgressBar()" (ended)="onAudioEnded()"></audio>-->
+
+    <div class="controls">
+        <div class="text" *ngIf="text">
+            <b>{{text}}</b>
+        </div>
+        <div class="button">
+            <button (click)="playPause()">
+                <i *ngIf="!isPlaying" class="bi bi-play-fill"></i>
+                <i *ngIf="isPlaying" class="bi bi-pause-fill"></i>
+            </button>
+        </div>
+        <div class="button">
+            <button class="volume">
+                <i [class]="isMuted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill'"></i>
+                <input type="range" min="0" max="100" [(ngModel)]="volume" (input)="setVolume(volume)">
+            </button>
+        </div>
+    </div>
+
+    <div class="my-progress-bar">
+        <div id="waveform" #waveform></div>
+    </div>
+</div>

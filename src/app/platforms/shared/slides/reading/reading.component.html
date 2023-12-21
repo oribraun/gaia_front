@@ -1,0 +1,22 @@
+<div class="slide-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="text text-pre-line">
+                <ng-container *ngFor="let sentence of sentences; let index=index">
+                    <p class="no-style no-indent" [ngClass]="{'target_sentnece': index === currentSentenceIndex}">
+                        <ng-container *ngFor="let word of sentence.split(' '); let j=index">
+                            <span [ngClass]="{'correct_word': correct_words.includes(remove_punct(word).toLowerCase()) && index<=currentSentenceIndex}">{{word}}&nbsp;</span>
+                        </ng-container>
+                    </p>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{currentSlide.background_image}}" alt="">
+    </div>
+    <div class="image" *ngIf="currentSlide.teacher_image_path">
+        <img [src]="currentSlide.teacher_image_path" alt="">
+    </div>
+</div>
+

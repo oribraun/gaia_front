@@ -1,0 +1,102 @@
+<div class="vocabulary">
+    <div class="panel" *ngIf="!gettingVocabulary">
+        <div class="header">
+            <h2>My Vocabulary</h2>
+            <p>
+                Here you can see all the important words learned during the course with links to the relevant text.
+                <a href="" (click)="print($event)" >Click</a> here to print in out.
+            </p>
+        </div>
+        <div class="vocab-table">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-2">Date</th>
+                    <th scope="col" class="col-2">
+                        Lesson
+                        <div class="dropdown">
+                            <a class="dropdown-toggle"
+                               [ngClass]="{'active': this.filters.lessons.length}"
+                               href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="dropdown-item" *ngFor="let l of lessonOptions">
+                                        <div class="form-check" (click)="filter('lessons', l.key)">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.lessons.indexOf(l.key) > -1">
+                                            <label class="form-check-label">{{l.value}}</label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">Word</th>
+                    <th scope="col" class="col-2">
+                        Difficulty
+                        <div class="dropdown">
+                            <a class="dropdown-toggle"
+                               [ngClass]="{'active': this.filters.difficulty.length}"
+                               href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="dropdown-item" *ngFor="let d of difficultyOptions">
+                                        <div class="form-check" (click)="filter('difficulty', d.key)">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.difficulty.indexOf(d.key) > -1">
+                                            <label class="form-check-label">{{d.value}}</label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">Translate</th>
+                    <th scope="col" class="col-2">
+                        Type
+                        <div class="dropdown">
+                            <a class="dropdown-toggle"
+                               [ngClass]="{'active': this.filters.types.length}"
+                               href="#" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="dropdown-item" *ngFor="let t of typeOptions">
+                                        <div class="form-check" (click)="filter('types', t)">
+                                            <input type="checkbox" class="form-check-input" [checked]="filters.types.indexOf(t) > -1">
+                                            <label class="form-check-label">{{t}}</label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let voocab of getFilterVocabs()">
+                    <td>{{voocab.created | datetimeFormat}}</td>
+                    <td>{{voocab.lesson_title}}</td>
+                    <!--                    <td>{{voocab.user_lesson_id}}-{{voocab.lesson_title}}</td>-->
+                    <td>{{voocab.word}}</td>
+                    <td>{{voocab.difficulty}}</td>
+                    <td>{{voocab.translation}}</td>
+                    <td>{{voocab.presentation_slide_uuid ? 'User': 'System'}}</td>
+                </tr>
+                <tr class="text-center" *ngIf="!vocabulary || !getFilterVocabs().length">
+                    <td colspan="100%">No Vocabulary</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="buttons">
+            <button class="btn btn-primary">Remove vocabs</button>
+            <button class="btn btn-primary">Practice vocabs</button>
+            <button class="btn btn-primary">Print</button>
+        </div>
+    </div>
+    <div class="generic-loader-wrapper" *ngIf="gettingVocabulary">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+</div>

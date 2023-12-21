@@ -1,0 +1,341 @@
+@import "../../../../../vars";
+
+.plans {
+    padding: @gap;
+    .pricing-column {
+        margin-bottom: 12px;
+        .pricing-column-title {
+            color: #363437;
+            background-color: #dddcde;
+            border-top-right-radius: 6px;
+            border-top-left-radius: 6px;
+            text-align: center;
+            padding: 18px;
+            h3 {
+                margin: 0;
+                color: inherit
+            }
+        }
+        .pricing-column-header {
+            text-align: center;
+            padding: 12px;
+            border: 1px solid #dddcde;
+            border-top-width: 0px;
+            .pricing-column-price {
+                height: 49.2px;
+                font-size: 41px;
+                line-height: 49.2px;
+                color: #363437;
+                small {
+                    font-size: 16px;
+                    color: #4e4b50;
+                    text-decoration: line-through;
+                }
+            }
+        }
+        .pricing-column-body {
+            color: #363437;
+            background-color: #fff;
+            border-color: #dddcde;
+            padding: 24px 24px 0;
+            border-style: solid;
+            border-width: 0 1px 1px 1px;
+            .pricing-column-features {
+                padding: 0;
+                margin: 12px 0 24px 0;
+                list-style: none;
+                li {
+                    margin: 3px 0;
+                    a.not-a-link {
+                        color: #363437;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        .pricing-footer {
+            padding: 12px 36px;
+            .btn-secondary.btn-default, .btn-secondary.btn-default:before {
+                color: #4d2079;
+                background-color: #fff;
+                border-color: #4d2079;
+            }
+            .btn-secondary, .btn-secondary:before {
+                color: #fff;
+                background-color: #4d2079;
+                border-color: #522281;
+            }
+            .btn-lg {
+                padding: 10px 16px;
+                font-size: 16px;
+                line-height: 1.33333;
+                width: 100%;
+                border-radius: 6px;
+                height: 49px;
+                font-weight: bold;
+                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.33);
+            }
+            .btn-default, .btn-default:before {
+                color: #706d74;
+                background-color: #fff;
+                border-color: #a19ea3;
+            }
+        }
+        @media (max-width: 480px) {
+            .pricing-footer {
+                padding: 12px 24px;
+            }
+        }
+        .pricing-column-footer {
+            border-bottom-right-radius: 6px;
+            border-bottom-left-radius: 6px;
+            padding: 12px;
+            border: 1px solid #dddcde;
+            border-top-width: 0px;
+            text-align: center;
+        }
+    }
+    .free-trial-column-features {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+        li {
+            display: inline;
+            padding-left: 10px;
+        }
+    }
+    .btn-default, .btn-default:before {
+        color: #706d74;
+        background-color: #fff;
+        border-color: #a19ea3;
+    }
+    .primary-background {
+        background: var(--gaia-main-border-color);
+    }
+    .primary-border-color {
+        border-color: var(--gaia-main-border-color);
+    }
+    .primary-text-color {
+        color: var(--gaia-main-border-color);
+    }
+    //.pricing-column-primary-purple {
+    //    background-color:#EDE8F1;
+    //    color:#4D2079;
+    //    border-radius: 6px;
+    //}
+    //.pricing-column-title-primary-purple {
+    //    background-color: #4D2079;
+    //    color:#ffffff;
+    //}
+    //.pricing-column-price-primary-purple {
+    //    height: 49.2px;
+    //    font-size: 41px;
+    //    line-height: 49.2px;
+    //    color: #4D2079;
+    //}
+    //.pricing-column-price-primary-purple small {
+    //    font-size: 16px;
+    //    vertical-align: baseline;
+    //    font-weight: normal;
+    //    text-decoration: line-through;
+    //    color: #4D2079;
+    //}
+    //.pricing-column-body-primary-purple {
+    //    color: #4D2079;
+    //    background-color:#EDE8F1;
+    //    border-color: #dddcde;
+    //    padding: 24px 24px 0;
+    //    border-style: solid;
+    //    border-width: 0 1px 1px 1px;
+    //}
+    //.pricing-column-body-primary-purple h4 {
+    //    color: #4D2079;
+    //}
+    //.pricing-column-body-primary-purple .fa {
+    //    color: #4D2079;
+    //}
+    //.pricing-column-body-primary-purple [data-toggle="tooltip"] {
+    //    border-bottom: 1px dashed #dddcde;
+    //}
+    //.pricing-column-body-primary-purple h4 {
+    //    margin: 0px;
+    //    font-size: 14px;
+    //    font-weight: bold;
+    //    text-transform: uppercase;
+    //    letter-spacing: 1px;
+    //}
+    //.pricing-ribbon {
+    //    position: absolute;
+    //    left: 0px;
+    //    width: 100%;
+    //    top:88px;
+    //}
+    //.pricing-ribbon-inner {
+    //    background-color: #fad955;
+    //    margin-top: 3px;
+    //    color: #4D2079;
+    //    text-transform: none;
+    //    line-height: 2.2em;
+    //    font-weight: 600;
+    //    font-size: 14px;
+    //}
+    //
+    //.pricing-column-body h4 {
+    //    color: #424044
+    //}
+    //
+    //.pricing-column-body .fa {
+    //    color: #424044
+    //}
+    //
+    //.pricing-column-body [data-toggle="tooltip"] {
+    //    border-bottom: 1px dashed #dddcde
+    //}
+    //
+    //.pricing-column-body h4 {
+    //    margin: 0px;
+    //    font-size: 14px;
+    //    font-weight: bold;
+    //    text-transform: uppercase;
+    //    letter-spacing: 1px
+    //}
+    //
+    //.pricing-column-price {
+    //    height: 49.2px;
+    //    font-size: 41px;
+    //    line-height: 49.2px;
+    //    color: #363437
+    //}
+    //
+    //.pricing-column-price small {
+    //    font-size: 16px;
+    //    color: #4e4b50;
+    //    text-decoration: line-through
+    //}
+    //
+    //.pricing-column-feature-disabled {
+    //    color: #b8b6ba;
+    //    text-decoration: line-through
+    //}
+    //
+    //.pricing-column-primary .pricing-column-title {
+    //    color: #fff;
+    //    background-color: #26b67c
+    //}
+    //
+    //.pricing-column-primary .pricing-column-header {
+    //    color: #363437;
+    //    background-color: #dbf0e8;
+    //    border-color: #a6d9c4
+    //}
+    //
+    //.pricing-column-primary .pricing-column-price {
+    //    color: #24ad76
+    //}
+    //
+    //.pricing-column-primary .pricing-column-price small {
+    //    color: #4e4b50
+    //}
+    //
+    //.pricing-column-primary .pricing-column-body {
+    //    color: #363437;
+    //    background-color: #dbf0e8;
+    //    border-color: #a6d9c4
+    //}
+    //
+    //.pricing-column-primary .pricing-column-body h4 {
+    //    color: #26b67c
+    //}
+    //
+    //.pricing-column-primary .pricing-column-body .fa {
+    //    color: #26b67c
+    //}
+    //
+    //.pricing-column-primary .pricing-column-body [data-toggle="tooltip"] {
+    //    border-bottom: 1px dashed #a6d9c4
+    //}
+    //
+    //.pricing-column-primary .pricing-column-footer {
+    //    background-color: #dbf0e8;
+    //    border-color: #a6d9c4
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-title {
+    //    color: #817e85;
+    //    background-color: #dddcde
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-header {
+    //    color: #817e85;
+    //    background-color: #eeeeef;
+    //    border-color: #dddcde
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-price {
+    //    color: #817e85
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-price small {
+    //    color: #817e85
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-body {
+    //    color: #817e85;
+    //    background-color: #eeeeef;
+    //    border-color: #dddcde
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-body h4 {
+    //    color: #817e85
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-body .fa {
+    //    color: #817e85
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-body [data-toggle="tooltip"] {
+    //    border-bottom: 1px dashed #dddcde
+    //}
+    //
+    //.pricing-column-disabled .pricing-column-footer {
+    //    background-color: #eeeeef;
+    //    border-color: #dddcde
+    //}
+    //
+    //.btn-secondary.btn-default, .btn-secondary.btn-default:before {
+    //    color: #4d2079;
+    //    background-color: #fff;
+    //    border-color: #4d2079;
+    //}
+    //.btn-secondary, .btn-secondary:before {
+    //    color: #fff;
+    //    background-color: #4d2079;
+    //    border-color: #522281;
+    //}
+    //.btn-lg {
+    //    padding: 10px 16px;
+    //    font-size: 16px;
+    //    line-height: 1.33333;
+    //    width: 100%;
+    //    border-radius: 6px;
+    //    height: 49px;
+    //    font-weight: bold;
+    //    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.33);
+    //}
+    //.btn-default, .btn-default:before {
+    //    color: #706d74;
+    //    background-color: #fff;
+    //    border-color: #a19ea3;
+    //}
+    //
+    //
+    //.free-trial-column-features {
+    //    padding: 0px;
+    //    margin: 0px;
+    //    list-style: none;
+    //}
+    //.free-trial-column-features li {
+    //    display: inline;
+    //    padding-left: 10px;
+    //}
+}

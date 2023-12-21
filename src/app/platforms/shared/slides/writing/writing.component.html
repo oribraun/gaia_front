@@ -1,0 +1,131 @@
+<div class="slide-board">
+    <div class="row">
+        <div class="col-md-6 visible-on-print">
+            <div class="box">
+                <div class="background-image" *ngIf="currentSlide.background_image">
+                    <img [src]="currentSlide.background_image" alt="">
+                </div>
+                <div class="content">
+                    <h2>{{currentSlide.slide_title}}</h2>
+                    <p>{{currentSlide.text}}</p>
+                    <p *ngIf="loaded_text">{{loaded_text}}</p>
+
+                    <div class="image-wrapper" *ngIf="currentSlide.image_path">
+                        <img [src]="currentSlide.image_path" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 visible-on-screen">
+            <div class="box box-questions">
+                <section class="questions" #questions>
+                    <div class="top-panel">
+                        <div class="score" *ngIf="grades">
+                            score:{{score}}
+                        </div>
+                        <div class="timers">
+                            <div class="question_timer">{{timer.minutesStr}}:{{timer.secondsStr}}</div>
+                        </div>
+                    </div>
+                    <div class="question-wrapper">
+                        <div><b>Note:</b>&nbsp;<small>you should spend up to {{currentSlide.time_in_minutes}} minutes</small></div>
+                        <textarea id="textarea" [(ngModel)]="essayText" placeholder="Write your answer here"></textarea>
+                        <div class="text-center"><b>words:</b>&nbsp;<small>{{essayText.split(" ").length-1}} / {{currentSlide.min_number_of_words}}</small></div>
+                        <!--                        <div class="hint-popup" (click)="closeHints($event)" [ngClass]="{'hint-popup-show': showHint}">-->
+                        <!--                            <div class="hint-popup-main alert-dismissible alert-success">-->
+                        <!--                                <h4 class="alert-heading">Hint!</h4>-->
+                        <!--                                <div class="body">{{currentHint}}</div>-->
+                        <!--                                <button type="button" (click)="closeHints()" class="close btn-close no-box-shadow no-outline" aria-label="Close"></button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="bottom-panel">
+                            <div class="question-buttons">
+                                <button *ngIf="!is_test_mode" class="btn btn-primary"
+                                        (click)="boostEssay()">
+                                    AI boost
+                                </button>
+                                <button class="btn btn-primary"
+                                        [disabled]="is_test_mode && currentSlide.writing"
+                                        (click)="checkEssay()">
+                                    Check Essay
+                                </button>
+                                <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">
+                                    Show report
+                                </button>
+                                <button *ngIf="grades" class="btn btn-primary" (click)="endSlide()">
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">
+                        <div class="loader">
+                            <div class="spinner-border">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="slide-board slide-board-one-column">-->
+<!--    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">-->
+<!--        <div class="loader">-->
+<!--            <div class="spinner-border">-->
+<!--                <span class="sr-only"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="box">-->
+<!--        <h2>{{currentSlide.slide_title}}</h2>-->
+<!--        <p>{{currentSlide.text}}</p>-->
+<!--        <p *ngIf="loaded_text">{{loaded_text}}</p>-->
+<!--        <div class="background-image" *ngIf="currentSlide.background_image">-->
+<!--            <img [src]="currentSlide.background_image">-->
+<!--        </div>-->
+
+<!--        <div class="image-wrapper" *ngIf="currentSlide.image_path">-->
+<!--            <img [src]="currentSlide.image_path">-->
+<!--        </div>-->
+
+<!--        <div class="text">-->
+<!--            <textarea class="textarea" [(ngModel)]="essayText"></textarea>-->
+<!--            &lt;!&ndash;            <angular-editor [placeholder]="'Enter text here...'" [config]="editorConfig" [(ngModel)]="essayText"></angular-editor>&ndash;&gt;-->
+<!--            <h3> {{timer.minutes}}:{{timer.seconds}} / you should spend up to {{currentSlide.time_in_minutes}} minutes</h3>-->
+<!--            <h3> # words: {{essayText.split(" ").length}} / {{currentSlide.min_number_of_words}}</h3>-->
+<!--            <h3 *ngIf="grades"> your score: {{score}} </h3>-->
+<!--        </div>-->
+<!--        <div class="buttons_wrapper">-->
+<!--            <button class="btn btn-primary" (click)="boostEssay()">-->
+<!--                AI boost-->
+<!--            </button>-->
+<!--            &lt;!&ndash; <button class="btn btn-light" (click)="improveEssay()">-->
+<!--                Improve Essay-->
+<!--            </button> &ndash;&gt;-->
+<!--            <button class="btn btn-primary" (click)="checkEssay()">-->
+<!--                Check Essay-->
+<!--            </button>-->
+<!--            <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">-->
+<!--                Show report-->
+<!--            </button>-->
+<!--            <button *ngIf="grades" class="btn btn-primary" (click)="endSlide()">-->
+<!--                Continue-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--modals-->
+<div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
+    <div>
+        <a  title="Close"  (click)="closeModel()" class="close">X</a>
+        <h2>{{essayTopic}}</h2>
+        <div [innerHTML]="essayText"></div>
+        <br>
+        <h2>Results</h2>
+        <p [innerHTML]="grades_html"></p>
+    </div>
+</div>

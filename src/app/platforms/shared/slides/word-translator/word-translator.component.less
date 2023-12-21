@@ -1,0 +1,138 @@
+@import "../../../../../slide-board";
+
+.slide-board {
+    padding: 0;
+
+    .outer-scroller {
+        position: relative;
+        display: block;
+        width: 100%;
+        z-index: 1;
+        text-align: center;
+        height: auto;
+
+        .inner-scroller {
+            .text {
+                p {
+                    background: none;
+                    font-size: 1.55em;
+                    &:before {
+                        content: none !important;
+                    }
+                }
+                h2 {
+                    background: rgba(255, 255, 255, 0.7);
+                    margin: 5px;
+                    padding: 2px 0;
+                    overflow: hidden;
+                    font-size: 1.8em;
+                    line-height: 1;
+                }
+            }
+        }
+    }
+
+    .images {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        .image {
+            top: 50%;
+            transform: translate(0, -50%);
+            img {
+                transform: none;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                cursor: pointer;
+                &.active {
+                    box-shadow: 0 0 10px 2px #ff0000;
+                    //border-radius: 5px;
+                    //overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .texts {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        .text-box {
+            position: relative;
+            font-size: 1.5em;
+            display: inline-block;
+            top: 50%;
+            transform: translate(0, -50%);
+            padding: 5px;
+            .text {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                vertical-align: middle;
+                box-shadow: 0 0 5px #ccc;
+                cursor: pointer;
+                span {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+                &.active {
+                    box-shadow: 0 0 10px 2px #ff0000;
+                    //border-radius: 5px;
+                    //overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        button {
+            border-radius: 100%;
+            padding: 50px;
+        }
+    }
+
+    //.image {
+    //    //position: absolute;
+    //    top: 0;
+    //    left: 0;
+    //    right: 0;
+    //    bottom: 0;
+    //    float: none;
+    //    display: block;
+    //    width: 100%;
+    //    padding: 0;
+    //    position: absolute;
+    //
+    //    img {
+    //        transform: none;
+    //        top: 0;
+    //        left: 0;
+    //        right: 0;
+    //        bottom: 0;
+    //        //position: absolute;
+    //        width: 100%;
+    //        height: 100%;
+    //        object-fit: cover;
+    //    }
+    //}
+}

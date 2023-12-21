@@ -1,13 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+@import "animations.less";
+@import "vars.less";
+@import url('https://fonts.cdnfonts.com/css/digital-numbers');
+@import url('https://fonts.googleapis.com/css?family=Open Sans');
+
 html {
     height: 100%;
     width: 100%;
+
     body {
         height: 100%;
         width: 100%;
         margin: 0;
         padding: 0;
-        background: #efefef;
+        background: var(--gaia-background-color);
+        font-family: sans-serif, 'Open Sans';
+        overflow: hidden;
         //&:not(.modal-open){
         //    padding-right: 0px !important;
         //    overflow: inherit !important;
@@ -18,13 +26,102 @@ html {
         .no-pointer {
             cursor: inherit;
         }
+        .no-outline {
+            outline: none !important;
+        }
+        .no-box-shadow {
+            box-shadow: none !important;
+        }
 
         .gaia-tooltip {
-            --bs-tooltip-bg: #fff;
-            --bs-tooltip-color: #000;
+            --bs-tooltip-bg: #081a3b;
+            --bs-tooltip-color: #ffffff;
         }
         .pre-wrap {
             white-space: pre-wrap;
+        }
+        .vertical-align-middle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            .message {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .dir-rtl {
+            direction: rtl;
+        }
+        .dir-ltr {
+            direction: ltr;
+        }
+
+        .outer-scroller {
+            overflow: hidden;
+            height: 100%;
+            .inner-scroller {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                height: 100%;
+                //margin-right: -19px;
+                white-space: initial;
+                overflow-wrap: break-word;
+                word-break: break-word;
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+                &::-webkit-scrollbar { /* WebKit */
+                    width: 0;
+                    height: 0;
+                }
+                &.dir-rtl {
+                    margin-right: 0;
+                    margin-left: -19px;
+                }
+            }
+        }
+        .generic-loader-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            background: rgba(255, 255,255, .8);
+            .loader {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .text-break-spaces {
+            white-space: break-spaces;
+        }
+        .text-pre-line {
+            white-space: pre-line;
+        }
+        .general-box {
+            box-shadow: var(--gaia-shadow);
+            padding: @gap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space:nowrap;
+        }
+        .general-box-border {
+            border: 1px solid var(--gaia-main-border-color);
+            padding: @gap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space:nowrap;
+        }
+        .general-box-no-edge {
+            border: none;
+            box-shadow: none;
         }
     }
 
@@ -50,7 +147,7 @@ html {
         --bs-btn-bg: #0f3460;
         --bs-btn-border-color: #0f3460;
         --bs-btn-hover-color: #fff;
-        --bs-btn-hover-bg: #0e3059;
+        --bs-btn-hover-bg: #134076;
         --bs-btn-hover-border-color: #0a203d;
         --bs-btn-focus-shadow-rgb: 49,132,253;
         --bs-btn-active-color: #fff;
@@ -61,6 +158,12 @@ html {
         --bs-btn-disabled-bg: #0f3460;
         --bs-btn-disabled-border-color: #0f3460;
     }
+
+    //.btn:hover {
+    //    color: var(--bs-btn-hover-color);
+    //    background-color: var(--bs-btn-hover-bg);
+    //    border-color: var(--bs-btn-hover-border-color);
+    //}
 
     .form-check-input:checked {
         background-color: #0f3460;
@@ -78,6 +181,63 @@ html {
     }
     .dropdown-item.active, .dropdown-item:active {
         background-color: #0f3460;
+    }
+
+    .pre-inline {
+        text-align: left;
+        white-space: pre-line;
+        .code-wrapper {
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            word-break: break-word;
+            .code {
+                color: #0005ff;
+            }
+        }
+    }
+    .pre-wrap {
+        text-align: left;
+        white-space: pre-wrap;
+        .code-wrapper {
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            word-break: break-word;
+            .code {
+                color: #0005ff;
+            }
+        }
+    }
+    .code-inline {
+        text-align: left;
+        white-space: pre-line;
+    }
+    .code-wrap {
+        text-align: left;
+        white-space: pre-wrap;
+    }
+
+    .echart-bar-weekly-sales {
+        width: 136px;
+        height: 61px
+    }
+    .echart-default-total-order {
+        width: 138px;
+        height: 90px
+    }
+    .echart-market-share-wrapper {
+        position: relative;
+        width: 106px;
+        height: 106px;
+        .echart-market-share {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .echart-line-total-sales {
+        width: 436px;
+        height: 282px;
     }
 }
 

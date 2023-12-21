@@ -1,0 +1,79 @@
+.course {
+    .title {
+
+    }
+    .description {
+
+    }
+    .background-image {
+
+    }
+    .cost {
+        
+    }
+    .lessons {
+        position: relative;
+        margin-bottom: 10px;
+
+        .lessons-items {
+            white-space: nowrap;
+            width: 100%;
+            overflow-y: hidden;
+            box-shadow: 2px 8px 4px -6px #ccc;
+            @width: 200px;
+
+            .lesson {
+                position: relative;
+                width: @width;
+                height: @width;
+                margin: 10px;
+                border-radius: 5px;
+                overflow: hidden;
+                display: inline-block;
+                cursor: pointer;
+
+                .lesson-background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .lesson-title {
+                    position: absolute;
+                    text-align: center;
+                    background: rgba(255, 255, 255, .9);
+                    width: 100%;
+                    bottom: 0;
+                }
+            }
+            .lesson-active {
+                box-shadow: 0 0 10px #272727;
+            }
+
+            .empty-list {
+                width: 100%;
+                height: @width;
+                text-align: center;
+
+                span {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
+
+    .pay {
+
+    }
+}

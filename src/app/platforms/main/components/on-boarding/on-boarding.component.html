@@ -1,0 +1,265 @@
+<section class="on-boarding" *ngIf="gotUserOnBoarding">
+    <div id="onBoardingCarousel" class="carousel slide" data-bs-ride="false" data-target="#onBoardingCarousel">
+        <div class="carousel-inner">
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'questions'}">
+                <div class="page">
+                    <div class="questions">
+                        <div class="question-group" *ngFor="let item of questions | keyvalue: originalOrder">
+                            <h4>{{item.key}}</h4>
+                            <ng-container *ngIf="item.key">
+                                <div class="question"  *ngFor="let q of questions[item.key.toString()]; let i = index;">
+                                    <ng-container *ngIf="q.type === 'input'">
+                                        <p class="text" [innerHTML]="q.text"></p>
+                                        <div class="options">
+                                            <input class="form-control" type="text"
+                                                   [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                   [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                   (ngModelChange)="onQuestionsChange()">
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'radio'">
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
+                                        <div class="options">
+                                            <div class="form-check form-check-inline" *ngFor="let o of q.options">
+                                                <input class="form-check-input" type="radio"
+                                                       [name]="o"
+                                                       [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                       [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                       (ngModelChange)="onQuestionsChange()"
+                                                       [value]="o">
+                                                <label class="form-check-label">{{o}}</label>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'radio-switch'">
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
+                                        <div class="options">
+                                            <div class="options">
+                                                <div class="form-check form-check-inline form-switch" *ngFor="let o of q.options">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                           [checked]="onBoardingObject.questions[item.key.toString()][i] === o"
+                                                           (change)="onBoardingObject.questions[item.key.toString()][i] ? onBoardingObject.questions[item.key.toString()][i] = '' : onBoardingObject.questions[item.key.toString()][i] = o; onQuestionsChange()"
+                                                           [value]="o">
+                                                    <label class="form-check-label">{{o}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'checkbox'">
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
+                                        <div class="options">
+                                            <div class="form-check form-check-inline" *ngFor="let o of q.options">
+                                                <input class="form-check-input" type="checkbox"
+                                                       [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                       [checked]="onBoardingObject.questions[item.key.toString()][i].indexOf(o) > -1"
+                                                       (change)="onQuestionCheckboxChanged(item.key.toString(), i, o); onQuestionsChange();"
+                                                       [value]="o">
+                                                <label class="form-check-label">{{o}}</label>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'select-box'">
+                                        <p class="text" [innerHTML]="q.text | safeHtml"></p>
+                                        <div class="options">
+                                            <select class="form-select"
+                                                    [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                    [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                    (ngModelChange)="onQuestionsChange()">
+                                                <option value="">-- Select --</option>
+                                                <option *ngFor="let o of q.options" [value]="o">{{o}}</option>
+                                            </select>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="q.type === 'date'">
+                                        <p class="text" [innerHTML]="q.text"></p>
+                                        <div class="options">
+                                            <input class="form-control" type="date"
+                                                   [ngClass]="{'input-error': this.questions_required_errors[item.key.toString()][i]}"
+                                                   [(ngModel)]="onBoardingObject.questions[item.key.toString()][i]"
+                                                   onkeydown="return false"
+                                                   (ngModelChange)="onQuestionsChange()">
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="onQuestionsNextButton('area_of_interest')">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'area_of_interest'}">
+                <div class="page">
+                    <div class="header">
+                        <div class="eng">Select your area of interest: (up to 5 topics)</div>
+                        <div class="native">סמן את התחומים שמעניינים אותך (עד 5 נושאים)</div>
+                    </div>
+                    <div class="interest">
+                        <div class="box-wrap" *ngFor="let item of areaOfInterestItems | keyvalue">
+                            <div class="box box-hover"
+                                 [ngClass]="{'active': onBoardingObject.area_of_interest.indexOf(item.key) > -1, 'not-active': onBoardingObject.area_of_interest.indexOf(item.key) === -1}"
+                                 [ngStyle]="{'background-image': 'url(' + areaOfInterestItems[getString(item.key)].image + ')'}"
+                                 (click)="selectInterest(item.key)">
+                                <div class="text">{{item.key}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="goToPrevPage('questions')">Prev</button>
+                        <button
+                            *ngIf="onBoardingObject.area_of_interest.length > 0"
+                            class="btn btn-primary" (click)="goToNextPage('be_more_specific')">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'be_more_specific'}">
+                <div class="page">
+                    <div class="header">
+                        <div class="eng">Be more specific please</div>
+                        <div class="native">תהיה יותר ספציפי. הסיבה שאנחנו שואלים כי אנחנו רוצים להתאים את תוכן הקורס לתחומי העניין שלך.</div>
+                    </div>
+                    <div class="interest text-center">
+                        <div class="box-wrap" *ngFor="let item of onBoardingObject.be_more_specific | keyvalue">
+                            <div class="box"
+                                 [ngStyle]="{'background-image': 'url(' + areaOfInterestItems[getString(item.key)].image + ')'}"
+                            >
+                                <div class="text">{{item.key}}</div>
+                            </div>
+                            <div class="specific">
+                                <div class="item"
+                                     *ngFor="let specificItem of areaOfInterestItems[getString(item.key)].specific"
+                                     (click)="selectBeMoreSpecific(item ,specificItem)"
+                                     [ngClass]="{'active': this.onBoardingObject.be_more_specific[getString(item.key)].indexOf(specificItem) > -1}">
+                                    {{specificItem}}
+                                </div>
+                                <div class="item"
+                                         *ngFor="let specificItem of areaOfInterestItems[getString(item.key)].custom; let i = index;"
+                                         [ngClass]="{'active': onBoardingObject.be_more_specific_custom[getString(item.key)][i]}">
+                                        <input type="text" class="specific-input form-control"
+                                               [(ngModel)]="onBoardingObject.be_more_specific_custom[getString(item.key)][i]"
+                                               (ngModelChange)="onCustomBeMoreSpecific(getString(item.key), i)">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="goToPrevPage('area_of_interest')">Prev</button>
+                        <button
+                            *ngIf="beMoreSpecificSelected"
+                            class="btn btn-primary" (click)="goToNextPage('familiar_words')">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'familiar_words'}">
+                <div class="page">
+                    <div class="header">
+                        <div class="eng">Please select words you are familiar with</div>
+                        <div class="native">סמן את המילים שאתה מכיר</div>
+                    </div>
+                    <div class="interest">
+                        <div class="box-wrap" *ngFor="let word of familiarWords">
+                            <div class="box box-hover"
+                                 [ngClass]="{'active': onBoardingObject.familiar_words.indexOf(word) > -1}"
+                                 (click)="selectFamiliarWords(word)">
+                                <div class="text">{{word}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="goToPrevPage('be_more_specific')">Prev</button>
+                        <button
+                            *ngIf="onBoardingObject.familiar_words.length > 0"
+                            class="btn btn-primary" (click)="goToNextPage('video_answer')">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'video_answer'}">
+                <div class="page">
+                    <div class="header">
+                        <div class="eng">Watch the video and answer the questions</div>
+                        <div class="native">צפה בוידאו וענה על השאלה</div>
+                    </div>
+                    <div class="video" #video>
+                        <youtube-player
+                            *ngIf="videoDetails"
+                            [videoId]="videoDetails.id"
+                            [startSeconds]="videoDetails.start_time"
+                            [endSeconds]="videoDetails.end_time"
+                            [height]="videoDetails.height"
+                            [width]="videoDetails.width"
+                            (ready)="onPlayerReady($event)"
+                            (stateChange)="onPlayerStateChange($event)"
+                        >
+                        </youtube-player>
+                    </div>
+                    <div>{{"What Ross is tring to do?"}}"</div>
+                    <div class="interest text-center">
+                        <div class="box-wrap" *ngFor="let word of videoAnswers">
+                            <div class="box box-hover"
+                                 [ngClass]="{'active': onBoardingObject.video_answer === word}"
+                                 (click)="selectVideoAnswer(word)">
+                                <div class="text">{{word}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="goToPrevPage('familiar_words')">Prev</button>
+                        <button
+                            *ngIf="onBoardingObject.video_answer"
+                            class="btn btn-primary" (click)="goToNextPage('picture_sentence')">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" [ngClass]="{'active': current_page === 'picture_sentence'}">
+                <div class="page">
+                    <div class="header">
+                        <div class="eng">Write a sentence about the following picture</div>
+                        <div class="native">כתוב מספר משפטים באנגלית לגבי התמונה</div>
+                    </div>
+                    <div class="sentence">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="textarea">
+                                    <textarea
+                                        [(ngModel)]="onBoardingObject.picture_sentence"
+                                        (ngModelChange)="onChangePictureSentence()"
+                                        name="" id="" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="image">
+                                    <img [src]="image" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    <div class="prev-button">-->
+                    <!--                        <i class="bi bi-chevron-left"></i>-->
+                    <!--                    </div>-->
+                    <div class="buttons text-center">
+                        <button class="btn btn-primary" (click)="goToPrevPage('video_answer')">Prev</button>
+                        <button
+                            *ngIf="onBoardingObject.picture_sentence.length"
+                            class="btn btn-primary" (click)="onFinish()">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="privacyPolicyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-privacy></app-privacy>
+            </div>
+        </div>
+    </div>
+</div>

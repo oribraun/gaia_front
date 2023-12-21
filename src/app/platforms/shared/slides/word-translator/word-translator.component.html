@@ -1,0 +1,52 @@
+<div class="slide-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="text text-pre-line">
+                <h2>{{currentSlide.text}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img [src]="currentSlide.background_image" alt="">
+    </div>
+    <!-- mode can be "word_to_picture" or "word_to_native_text" or "word_to_native_audio" -->
+
+    <!-- answer_options [urls\native text] -->
+<!--    <div class="image image-right" *ngIf="currentSlide.mode.toLowerCase() === 'word_to_picture'">-->
+<!--        {{currentSlide.answer_options | json}}-->
+<!--        {{currentSlide.word}}-->
+<!--        &lt;!&ndash; answer_options are urls of pic &ndash;&gt;-->
+<!--    </div>-->
+    <ng-container *ngIf="currentSlide.mode && currentSlide.mode.toLowerCase() === 'word_to_picture'">
+        <div class="images">
+            <div class="image" [ngStyle]="{
+            'width': (100 / currentSlide.answer_options.length) + '%',
+            'height': (100 / currentSlide.answer_options.length) + '%'
+            }" *ngFor="let url of currentSlide.answer_options; let i = index;">
+                <img [src]="url" (click)="selectImage(i)" [ngClass]="{'active': url === selectedImage}" alt="">
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="currentSlide.mode && currentSlide.mode.toLowerCase() === 'word_to_native_text'">
+        <div class="texts">
+            <div class="text-box" [ngStyle]="{
+                'width': (100 / currentSlide.answer_options.length) + '%',
+                'height': (100 / currentSlide.answer_options.length) + '%'
+                }" *ngFor="let url of currentSlide.answer_options; let i = index;">
+                <div class="text" (click)="selectText(i)" [ngClass]="{'active': url === selectedText}">
+                    <span>{{url}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="currentSlide.mode && currentSlide.mode.toLowerCase() === 'word_to_native_audio'">
+        <div class="button">
+            <button class="btn btn-primary"
+                    (mousedown)="onPTTPressDown()"
+                    (mouseup)="onPTTPressUp()"
+                    (touchstart)="onPTTPressDown()"
+                    (touchend)="onPTTPressUp()"
+            >PTT</button>
+        </div>
+    </ng-container>
+</div>

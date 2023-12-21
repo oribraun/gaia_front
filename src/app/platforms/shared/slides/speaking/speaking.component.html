@@ -1,0 +1,106 @@
+<div class="speaking">
+    <div class="generic-loader-wrapper" *ngIf="spinnerEnabled">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+    <h2 class="title"> {{title_text}}</h2>
+    <div class="chat general-box">
+        <!-- <div class="question_timer">08:26</div> -->
+        <div class="timer-wrapper">
+            <div class="question_timer">{{current_counter.minutesStr}}:{{current_counter.secondsStr}}</div>
+
+            <div class="outer-scroller">
+                <div class="inner-scroller" #scroller>
+                    <div class="messages">
+                        <ng-container *ngFor="let item of messages; let i = index">
+                            <div class="message" *ngIf="item.message" [ngClass]="{'message-personal': item.type === 'user'}">
+                                <!--                        <figure *ngIf="item.type != 'user'" class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>-->
+                                <span class="translate-icon"(click)="translate(i)">
+                                    <i class="bi bi-translate"></i>
+                                </span>
+                                <i class="text" *ngIf="!item.showTranslated">{{item.message}}</i>
+                                <i class="text" *ngIf="item.showTranslated">{{item.translatedMessage}}</i>
+                            </div>
+                            <div class="audio" *ngIf="item.audio_path || item.audioBlob" [ngClass]="{'audio-personal': item.type === 'user'}">
+                                <div class="item" [ngClass]="{'item-end': item.type === 'user'}">
+                                    <app-audio-player
+                                        [text]="(item.type !== 'user' ? 'Gaia' : user.username)"
+                                        [audioSource]="item.audio_path"
+                                        (onAudioLoaded)="onAudioLoaded($event)"
+                                        [autoPlay]="item.type !== 'user'"
+                                        [audioBlob]="item.audioBlob">
+
+                                    </app-audio-player>
+                                </div>
+<!--                                <audio controls>-->
+<!--                                    <source [src]="item.audio" type="audio/mpeg">-->
+<!--                                    Your browser does not support the audio element.-->
+<!--                                </audio>-->
+<!--                                <audio [src]="item.audio"></audio>-->
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-btn_rec">
+        <div class="btn-rec-container">
+            <div class="btn-rec-border">
+                <button *ngIf="recordingIsActive" (click)="stopRecording()" class="recording Rec">Click to Stop</button>
+                <button *ngIf="!recordingIsActive && session_started"  (click)="startRecording()" class="recording notRec">Click to Record</button>
+                <button *ngIf="!recordingIsActive && !session_started"  (click)="startSession()" class="recording start_session">Start</button>
+                <!--            <ng-container *ngIf="recordingIsActive"><button (click)="waitForFinalResultsAndStop()" id="recording" class="Rec">Click to Stop</button></ng-container>-->
+                <!--            <ng-container *ngIf="!recordingIsActive"><button  (click)="startAsr()"  id="recording"  [ngClass]="{'start_session':!session_started, 'notRec':session_started}" [innerText]="session_started ? 'Click to Record':'Start'"></button></ng-container>-->
+                <div class="generic-loader-wrapper" *ngIf="needToStopAsrOnFinal">
+                    <div class="loader">
+                        <div class="spinner-border">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+
+        <!-- <button id="speak_the_text" class="btn btn-primary" (click)="speakTheText()">Speak The Question</button> -->
+        <!-- <button class="btn btn-primary" (click)="nextQuestion()">Next Question</button> -->
+        <button class="btn btn-primary" (click)="showDetailedQuestionReview()">Question by Question Review</button>
+        <button *ngIf="all_questions_answered && !grades" class="btn btn-primary" (click)="gradeConversation()">Grade Conversation</button>
+        <button *ngIf="grades" class="btn btn-primary" (click)="openModal()">Show Report</button>
+        <button class="btn btn-primary" (click)="restartSession()">Restart</button>
+        <button *ngIf="grades" class="btn btn-primary" (click)="endSlide()">Continue</button>
+    </div>
+</div>
+<!--modals-->
+<div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
+    <div>
+        <a  title="Close"  (click)="closeModel()"class="close">X</a>
+        <h2>Speaking Review</h2>
+        <div [innerHTML]="grades"></div>
+        <br>
+        <h2>Score</h2>
+        <p [innerHTML]="score"></p>
+    </div>
+</div>
+
+<div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':showDetailedQuestionReviewActive}">
+    <div>
+        <a  title="Close"  (click)="closeModel()"class="close">X</a>
+        <h2>Speaking Detailed Questions/Answers Review</h2>
+        <ng-container *ngFor="let item of detailedQuestionsReviewList; let i = index">
+            <div>
+                <div class="review_span"><span class="review_span question_span" >Question: </span><span class="" >{{item.teacher_question}}</span></div>
+                <div class="review_span"><span class="review_span answer_span" >Answer: </span><span class="" >{{item.student_response}}</span></div>
+                <div class="review_span"><span class="review_span answer_review_span" >Review: </span><span class="" >{{item.student_response_review}}</span></div>
+                <div class="review_span"><span class="review_span alternative_ans_span" >Alternative Improved Answer:</span><span class="" >{{item.alternative_response}}</span></div>
+            </div>
+            <span class="" >---</span>
+        </ng-container>
+    </div>
+</div>

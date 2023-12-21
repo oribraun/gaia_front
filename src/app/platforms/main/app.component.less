@@ -1,0 +1,47 @@
+@import "../../../vars";
+
+.main-window-sidebar {
+    padding-left: 48px;
+    margin-left: 5px;
+    position: relative;
+    height: 100%;
+    margin-right: 5px;
+}
+.main-window-header {
+    position: relative;
+    height: calc(100% - @header-height);
+    max-width: @max-width;
+    margin: 0 auto;
+    @media(min-width: @max-width) {
+        max-width: none;
+        padding-left: calc((100% - @max-width)/2);
+        padding-right: calc((100% - @max-width)/2);
+    }
+}
+.main-window-header-fixed {
+    position: relative;
+    height: calc(100% - @header-height-mobile);
+    max-width: @max-width;
+    margin: 0 auto;
+    overflow: auto;
+    margin-top: @header-height-mobile;
+    @media(min-width: @max-width) {
+        max-width: none;
+        padding-left: calc((100% - @max-width)/2);
+        padding-right: calc((100% - @max-width)/2);
+    }
+
+    @media (min-width: 768px) {
+        margin-top: @header-height;
+        height: calc(100% - @header-height);
+    }
+}
+.lesson {
+    margin: 0;
+    padding: 0;
+}
+.chat {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

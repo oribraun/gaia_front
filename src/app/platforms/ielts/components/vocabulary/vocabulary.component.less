@@ -1,0 +1,51 @@
+.vocabulary {
+    position: relative;
+    height: 100%;
+    padding: 0.75rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    @marginTop: 15px;
+    .panel {
+        background: #fff;
+        padding: 0.75rem;
+        .vocab-table {
+            position: relative;
+            margin-top: @marginTop;
+            width: 95%;
+            padding-left: 5%;
+            padding-top: 10px;
+            th, td {
+                background: #ffebaf8a;
+                border-radius: 5px;
+                border-width: 3px;
+                border-color: #fff;
+                position: relative;
+            }
+            .dropdown {
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 0 5px;
+                .dropdown-menu {
+                    position: relative;
+                }
+                .dropdown-toggle {
+                    color: inherit;
+                    &.active {
+                        color: #0d6efd;
+                    }
+                }
+            }
+        }
+        .buttons {
+            @marginTop: 15px;
+            text-align: center;
+            button {
+                margin:0 5px;
+            }
+        }
+        .no-vocabs {
+            text-align: center;
+        }
+    }
+}

@@ -1,0 +1,170 @@
+<div class="practice-lesson">
+    <ng-template #selected_slide_container let-model="model">
+        <app-writing
+            *ngIf="model.currentSlide.slide_type === sectionTitles.writing"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-writing>
+        <app-unseen
+            *ngIf="model.currentSlide.slide_type === sectionTitles.unseen"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-unseen>
+        <app-hearing
+            *ngIf="model.currentSlide.slide_type === sectionTitles.hearing"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-hearing>
+        <app-speaking
+            *ngIf="model.currentSlide.slide_type === sectionTitles.speaking"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-speaking>
+        <app-video-ielts
+            *ngIf="model.currentSlide.slide_type === sectionTitles.video"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-video-ielts>
+    </ng-template>
+    <div class="white-board">
+        <!-- If it is a bundle -->
+        <div class="container slides" #slides
+             [ngClass]="{
+            'slides-bundle':  slidesData.length > 1
+         }"
+        >
+            <div class="outer-scroller"
+                 [ngStyle]="{
+                'height': (slideHeight !== -1 ? slideHeight + 'px' : ''),
+                'width': (slideWidth !== -1 ? slideWidth + 'px' : '')
+             }"
+            >
+                <div class="inner-scroller">
+                    <div class="d-flex flex-wrap"
+                         [ngClass]="{
+                       'd-flex-bundle': slidesData.length > 1,
+                     }"
+                    >
+                        <ng-container *ngFor="let slide of slidesData; let id=index;">
+                            <div class="flex-item"
+                                 [ngClass]="{
+                               'flex-item-full-width': slidesData.length === 1,
+                               'flex-item-full-height': slidesData.length === 1,
+                               'flex-item-bundle': slidesData.length > 1,
+                             }"
+                            >
+                                <div class="slide {{currentSlide.slide_type}}"
+                                     [ngClass]="{
+                                  'active-slide':id === currentSlide.index_in_bundle && slidesData.length > 1,
+                                  'slide-board-full-height':  slidesData.length > 1,
+                                  'slide-board-bundle':  slidesData.length > 1
+                                 }"
+                                >
+                                    <ng-container *ngTemplateOutlet="selected_slide_container;context: {
+                                    model: {
+                                        currentSlide: slide,
+                                        slideData: {
+                                            slide_done: id < currentSlide.index_in_bundle && slidesData.length > 1,
+                                            is_active: id === currentSlide.index_in_bundle && slidesData.length > 1,
+                                            is_test_mode: is_test_mode
+                                        },
+                                    }
+                                }"></ng-container>
+                                </div>
+                            </div>
+                            <div class="flex-break" *ngIf="id%2 !== 0"></div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="disabled-board" *ngIf="isPause"></div>
+    </div>
+
+    <div class="finish-board" [ngClass]="{'finish-board-show': enable_end_lesson_button}">
+        <div class="text">
+            <h5>Good Job, You have completed this lesson</h5>
+            <h5>Head back to the dashboard to continue the journey</h5>
+        </div>
+        <div class="buttons">
+            <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()">Review Vocabulary</button>
+            <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()">Back to Dashboard</button>
+        </div>
+        <button type="button" class="btn-close" (click)="enable_end_lesson_button = false;"></button>
+    </div>
+
+    <div class="bottom-panel" *ngIf="gotFirstPresentation">
+        <div class="title">
+            {{currentSlide.slide_title}}
+        </div>
+        <ng-container *ngIf="currentSlide.slide_type !== 'video'">
+            <div class="slide-buttons">
+                <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
+                    <i class="bi bi-caret-left-fill"></i>
+                </button>
+                <div>Slide {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
+                <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
+                    <i class="bi bi-caret-right-fill"></i>
+                </button>
+            </div>
+            <div class="timer-status">
+                <span *ngIf="timersHelper.timers[test_presentation_timer_id]">
+                    Time Left <span [ngClass]="{
+                    'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
+                    }">
+                    {{timersHelper.timers[test_presentation_timer_id].getTime()}}
+                </span>
+                    Time Passed <span [ngClass]="{
+                    'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
+                    }">
+                    {{timersHelper.timers[test_presentation_timer_id].getCounter()}}
+                </span> |
+                </span> status:
+                <span>{{user_lesson_status}}</span>
+            </div>
+        </ng-container>
+        <ng-container  *ngIf="currentSlide.slide_type === 'video'">
+            <button class="mark-as-finished" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()">
+                Mark as watched
+            </button>
+            <div *ngIf="currentSlide.video_completed">
+                Lesson Completed
+            </div>
+
+            <div class="slide-buttons" [ngStyle]="!recommendedVideos.length ? {'visibility': 'hidden'} : {}">
+                <div>Previous Video</div>
+                <button class="prev" [disabled]="recommendedVideos[0].id === current_base_lesson_id"
+                        (click)="recommendedVideos.length && onPrevLesson($event)">
+                    <i class="bi bi-caret-left-fill"></i>
+                </button>
+                <button class="next" [disabled]="recommendedVideos[recommendedVideos.length - 1].id === current_base_lesson_id"
+                        (click)="recommendedVideos.length && onNextLesson($event)">
+                    <i class="bi bi-caret-right-fill"></i>
+                </button>
+                <div>Next Video</div>
+            </div>
+        </ng-container>
+    </div>
+
+    <!--    <div class="floating-buttons" *ngIf="currentSection.slides && currentSection.slides.length > 1">-->
+    <!--        <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">-->
+    <!--            <i class="bi bi-chevron-left"></i>-->
+    <!--        </button>-->
+    <!--        <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">-->
+    <!--            <i class="bi bi-chevron-right"></i>-->
+    <!--        </button>-->
+    <!--    </div>-->
+
+    <!--modals-->
+    <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
+        <div>
+            <a  title="Close"  (click)="closeModel()"class="close">X</a>
+            <h2>Lesson Complete</h2>
+            <!-- <div [innerHTML]="presentation.ended_text"></div> -->
+            <!-- <div [innerHTML]="grades"></div> -->
+            <br>
+            <!-- <h2>Score</h2> -->
+            <!-- <p [innerHTML]="score"></p> -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="slide-board">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <div class="text text-pre-line">
+                <p>{{currentSlide.text}}</p>
+            </div>
+        </div>
+    </div>
+<!--    <div class="image image-right" *ngIf="currentSlide.word_image_path">-->
+<!--        <img [src]="currentSlide.word_image_path">-->
+<!--    </div>-->
+    <div class="background-image" *ngIf="currentSlide.background_image">
+        <img src="{{currentSlide.background_image}}" alt="">
+    </div>
+    <div class="background-image" *ngIf="!currentSlide.background_image">
+        <img src="{{imageSrc}}assets/images/lesson/class_end3.jpeg" alt="">
+    </div>
+    <div class="gif">
+        <img src="{{imageSrc}}assets/gifs/wave_hi.gif" alt="">
+    </div>
+</div>
