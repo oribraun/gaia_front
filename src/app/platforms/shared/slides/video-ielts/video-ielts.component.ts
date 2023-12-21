@@ -135,10 +135,10 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         this.setUpHeygenListeners();
         this.setUpTeacherSize();
         this.messages.push(
-            new ChatMessage({type: 'computer', message: "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question."})
+            new ChatMessage({type: 'computer', message: "Welcome. you can start the video lesson by pressing the play button. Feel free to pause it and ask me questions."})
         );
         if (this.unsDemo) {
-            this.setUpHeyGenVideoByText("Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
+            this.setUpHeyGenVideoByText("Welcome. you can start the video lesson by pressing the play button. Feel free to pause it and ask me questions.");
         } else {
             this.startHeyGen();
         }
@@ -565,8 +565,28 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                     });
                 }
                 this.videoIsPlaying = true;
-            } else if (text === "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.") {
-                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_2.mp4";
+            } else if (text === "Welcome. you can start the video lesson by pressing the play button. Feel free to pause it and ask me questions.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_5.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
+                const playPromise = this.heygenMediaElement.nativeElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch((error: any) => {
+                        // Automatic playback failed.
+                    });
+                }
+                this.videoIsPlaying = true;
+            } else if (text === "Comprehension is the ability to understand and interpret the meaning of the text.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_6.mp4";
+                this.heygenMediaElement.nativeElement.loop = false;
+                const playPromise = this.heygenMediaElement.nativeElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch((error: any) => {
+                        // Automatic playback failed.
+                    });
+                }
+                this.videoIsPlaying = true;
+            } else if (text === "It is not recommanded, but if you really want to, just head over to the dashboard and hit the 'start practive' button.") {
+                this.heygenMediaElement.nativeElement.src = this.imageSrc + "assets/d-id/responses_7.mp4";
                 this.heygenMediaElement.nativeElement.loop = false;
                 const playPromise = this.heygenMediaElement.nativeElement.play();
                 if (playPromise !== undefined) {
@@ -740,11 +760,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         console.log("Session started successfully");
         const data = await this.makeSureSessionIsConnected();
         if (data.state === 'connected') {
-            this.startSessionTask(this.sessionInfo.session_id, "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
+            this.startSessionTask(this.sessionInfo.session_id, "Welcome. you can start the video lesson by pressing the play button. Feel free to pause it and ask me questions.");
         }
-        // setTimeout(() => {
-        //     this.startSessionTask(this.sessionInfo.session_id, "Let's see a short video in order to explore the ielts reading section. You can start it by pressing the play button. Feel free to pause the video and to ask me any question.");
-        // }, 10000)
     }
 
     async startSession(session_id: any, sdp: any) {
