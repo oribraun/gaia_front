@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     coursePlan: any = null;
     // courseAchievements: Partial<{ [key in SomeArray]: string[] }> = null;
     // courseAchievements!: Partial<{[key: string]: number[]}>;
+    practiceLessons: any = [];
     recommendedVideos: any = [
         // {'presentation_data': {'presentation_lesson_data':
         //             { presentation_thumbnail: "https://unseen-audio-files.s3.amazonaws.com/videos/reading+overview+thumb.png", presentation_title: ' example desc'}
@@ -116,6 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 } else {
                     this.groupTypes = response.group_types;
                     this.recommendedVideos = response.recommended_videos;
+                    this.practiceLessons = response.practice_lessons;
                     this.userTests = response.user_tests;
                     this.courses = response.courses;
                     this.statusMapping = response.status_mapping;

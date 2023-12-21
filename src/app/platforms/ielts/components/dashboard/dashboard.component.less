@@ -608,3 +608,33 @@
         }
     }
 }
+
+#lessonsCarousel {
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 300px;
+
+    .carousel-inner {
+        height: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        //.carousel-item:not(.carousel-item-start):not(.carousel-item-end) {
+        .carousel-item {
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            .video {
+                height: 100%;
+                text-align: center;
+                img {
+                    height: 100%;
+                }
+            }
+        }
+
+    }
+    span[class*=carousel-control-] {
+        filter: brightness(0.5);
+    }
+}
