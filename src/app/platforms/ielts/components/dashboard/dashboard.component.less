@@ -6,8 +6,8 @@
     padding: 0.75rem 0;
     //max-width: 1200px;
     //margin: 0 @gap;
-    @plan0Background: #588ee4;
-    @plan1Background: #f1727d;
+    @plan0Background: #08337f;
+    @plan1Background: #dc3545;
     @plan2Background: #fa8939;
     @plan3Background: #b08b8a;
     @plan4Background: #8bb3b2;
@@ -72,10 +72,12 @@
                     white-space: nowrap;
                 }
                 .items {
+                    width: 55%;
+                    margin: 21px;
                     display: flex;
                     flex-direction: row;
                     justify-content: center;
-                    width: 100%;
+                    // width: 100%;
                     .item {
                         padding: 5px 5px;
                         background: var(--gaia-header-color);
@@ -88,6 +90,9 @@
                         transition: all .3s ease-in-out;
                         &:nth-child(1) {
                             background: @plan0Background;
+                            border-radius: 10px;
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
                         }
                         &:nth-child(2) {
                             background: @plan1Background;
@@ -101,6 +106,12 @@
                         &:nth-child(5) {
                             background: @plan4Background;
                         }
+                        &:last-child{
+                            border-radius: 10px;
+                            border-top-left-radius: 0;
+                            border-bottom-left-radius: 0;
+                        }
+
                         &:hover {
                             box-shadow: 2px 3px 6px -3px #000;
                             transform: translateY(-2px);
@@ -321,8 +332,8 @@
                     .video {
                         position: relative;
                         display: inline-block;
-                        width: 100px;
-                        height: 50px;
+                        width: 150px;
+                        height: 75px;
                         cursor: pointer;
                         transition: all .3s ease-in-out;
                         &:not(:last-child) {
