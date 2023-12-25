@@ -78,7 +78,7 @@ export class AlertComponent implements OnInit, AfterViewInit {
             }
             if (this.message.timeout > -1) {
                 this.messageTimeout = setTimeout(() => {
-                    // this.clear();
+                    this.clear();
                 }, this.message.timeout);
             }
         });
