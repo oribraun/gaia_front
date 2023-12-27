@@ -1,10 +1,11 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Config} from "./config";
 import {User} from "../shared/entities/user";
-import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, NavigationStart, Params, Router, RoutesRecognized} from "@angular/router";
 import {WebSocketService} from "./services/web-sockets/web-socket.service";
 import {HelperService} from "./services/helper.service";
 import {environment} from "../../../environments/environment";
+import {TranslateService} from "@ngx-translate/core";
 
 // declare var STATIC_URL: any;
 declare let USER: any;
@@ -21,10 +22,14 @@ export class AppComponent implements OnInit {
     user!: User;
 
     currentRoute = '';
+
+    availableLangs = ['en', 'he'];
+    currentLang: string = "";
     constructor(
         private config: Config,
         private webSocketService: WebSocketService,
         private helperService: HelperService,
+        private translate: TranslateService,
         private route: ActivatedRoute,
         private router: Router
     ) {
@@ -66,6 +71,23 @@ export class AppComponent implements OnInit {
         //         this.redirectUser(user_on_boarding_finished);
         //     }
         // });
+        this.listenToGlobalChangeLang();
+    }
+
+    changeGlobalLang(lang: string) {
+        this.config.lang_change = lang;
+    }
+
+    listenToGlobalChangeLang() {
+        this.config.lang_change.subscribe({
+            next:(value: string) => {
+                this.translate.use(value).subscribe({
+                    next: () => {
+                        this.currentLang = this.translate.currentLang;
+                    }
+                });
+            }
+        });
     }
 
     // redirectUser(user_on_boarding_finished: boolean) {
@@ -145,14 +167,37 @@ export class AppComponent implements OnInit {
 
     getCurrentRoute() {
         this.router.events.subscribe((routerEvent) => {
+            if (routerEvent instanceof RoutesRecognized) {
+                if (routerEvent.state.root.firstChild) {
+                    const lang = routerEvent.state.root.firstChild.params['lang'];
+                    if (lang && this.availableLangs.indexOf(lang) > -1) {
+                        this.changeGlobalLang(lang);
+                    } else {
+                        this.changeGlobalLang(this.translate.getDefaultLang());
+                    }
+                }
+            }
             if(routerEvent instanceof NavigationEnd) {
                 // Get your url
                 const l = routerEvent.url.split('/');
                 if (l && l.length > 1) {
                     this.currentRoute = l[1];
                 }
+                // setTimeout(() =>{
+                //     this.checkLang();
+                // });
             }
         });
+    }
+
+    checkLang() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang');
+        if (lang && this.availableLangs.indexOf(lang) > -1) {
+            this.changeGlobalLang(lang);
+        } else {
+            this.config.lang_change = this.translate.getDefaultLang();
+        }
     }
 
 }

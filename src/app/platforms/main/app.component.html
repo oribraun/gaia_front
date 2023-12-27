@@ -1,5 +1,8 @@
-<app-header></app-header>
-<div class="main-window-header main-window-header-fixed" [ngClass]="currentRoute">
-    <router-outlet></router-outlet>
+<div class="main-body" [ngStyle]="!currentLang ? {'visibility': 'hidden'} : {}">
+    <app-header></app-header>
+    <div class="main-window-header main-window-header-fixed"
+         [ngClass]="currentRoute && {'main-window-header-rtl': currentLang === 'he'}">
+        <router-outlet></router-outlet>
+    </div>
 </div>
 <!--<app-chat *ngIf="user.company_admin && user.company_name == 'gaialabs'"></app-chat>-->

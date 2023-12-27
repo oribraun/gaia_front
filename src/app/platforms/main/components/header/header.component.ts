@@ -7,6 +7,7 @@ import {HelperService} from "../../services/helper.service";
 import {environment} from "../../../../../environments/environment";
 import {lastValueFrom} from "rxjs";
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
+import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 
 
 declare let $: any;
@@ -67,12 +68,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         errMessage: ''
     };
 
+    availableLangs = ['en', 'he'];
+    currentLang: string = "";
+
     constructor(
         private config: Config,
         private apiService: ApiService,
         private router: Router,
         private helperService: HelperService,
         private route: ActivatedRoute,
+        private translate: TranslateService,
         private ref: ChangeDetectorRef,
         private ngZone: NgZone
     ) {
@@ -108,6 +113,17 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             this.user_on_boarding_finished = this.config.user_on_boarding && this.config.user_on_boarding.finished;
         });
         this.checkIfPlansPage();
+        this.listenToGlobalChangeLang();
+    }
+
+    listenToGlobalChangeLang() {
+        this.currentLang = this.translate.getDefaultLang();
+        this.config.lang_change.subscribe({
+            next:(value: string) => {
+                console.log('listenToGlobalChangeLang value', value);
+                this.currentLang = value;
+            }
+        });
     }
 
     initOnBoarding(redirectUser = false) {
@@ -405,7 +421,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         const response = await this.apiService.logout().toPromise();
         this.config.resetCookies();
         this.config.resetUserCreds();
-        this.router.navigate(['/']);
+        this.router.navigate([this.currentLang + '/']);
     }
 
     async login() {
@@ -595,7 +611,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     redirectUser(user_on_boarding_finished: boolean) {
-        const returnUrl = this.helperService.getUserReturnUrl(this.user, user_on_boarding_finished);
+        const returnUrl = this.helperService.getUserReturnUrl(this.user, this.currentLang, user_on_boarding_finished);
         this.router.navigateByUrl(returnUrl);
     }
 
@@ -652,7 +668,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     reloadSystemAndRedirect() {
-        const href = window.location.origin + '/' + this.selectedPlatform.name + '/';
+        const href = window.location.origin + '/' +  this.currentLang + '/' + this.selectedPlatform.name + '/';
         window.location.href = href;
     }
 
@@ -674,7 +690,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     goTo(page: string) {
-        this.router.navigate(['/' + page]);
+        this.router.navigate([this.currentLang + '/' + page]);
     }
 
     resetPassword() {

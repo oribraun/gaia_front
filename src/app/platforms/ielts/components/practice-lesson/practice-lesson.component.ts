@@ -85,6 +85,8 @@ export class PracticeLessonComponent implements OnInit {
 
     initApplicationDone = false;
 
+    currentLang = "";
+
 
     public sectionTitles = {
         bundle:'bundle',
@@ -148,6 +150,11 @@ export class PracticeLessonComponent implements OnInit {
                 } else {
                     this.initApplication();
                 }
+            }
+
+            const lang = params.get('lang');
+            if (lang) {
+                this.currentLang = lang;
             }
         });
         this.route.queryParams.subscribe((params) => {
@@ -388,7 +395,7 @@ export class PracticeLessonComponent implements OnInit {
             next: (response: any) => {
                 if (response.err) {
                     if (response.errMessage.indexOf('lesson does not exist') > -1) {
-                        this.router.navigate(['ielts/dashboard']);
+                        this.router.navigate([this.currentLang + '/ielts/dashboard']);
                     }
                     console.log('getPresentation err', response);
                 } else {
@@ -1400,7 +1407,7 @@ export class PracticeLessonComponent implements OnInit {
         if (index > -1 && index < this.recommendedVideos.length - 1) {
             const next_lesson = this.recommendedVideos[index + 1];
             this.generalService.getOrGenerateLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id]);
+                this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
             }).catch((error: any) => {
                 this.alertService.error(error);
             });
@@ -1413,7 +1420,7 @@ export class PracticeLessonComponent implements OnInit {
         if (index > -1 && index > 0) {
             const prev_lesson = this.recommendedVideos[index - 1];
             this.generalService.getOrGenerateLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id]);
+                this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
             }).catch((error: any) => {
                 this.alertService.error(error);
             });
@@ -1509,7 +1516,7 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
     backToDashboard() {
-        this.router.navigate(['/ielts/dashboard']);
+        this.router.navigate([this.currentLang + '/ielts/dashboard']);
     }
 
     openVocabularyModal() {

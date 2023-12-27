@@ -29,6 +29,7 @@
                         "assets": [
                             "src/favicon.ico",
                             "src/assets",
+                            "src/translations",
                             "src/static",
                             {
                                 "glob": "**/*",
@@ -149,7 +150,8 @@
                         "inlineStyleLanguage": "less",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets"
+                            "src/assets",
+                            "src/translations"
                         ],
                         "styles": [
                             "src/styles.less"

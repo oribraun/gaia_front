@@ -17,6 +17,8 @@ export class PlanComponent implements OnInit {
     plans: any[] = [];
     gettingPlans = false;
 
+    currentLang = "";
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -28,6 +30,12 @@ export class PlanComponent implements OnInit {
     ngOnInit(): void {
         this.getUser();
         this.getPlans();
+        this.route.paramMap.subscribe((params) => {
+            const lang = params.get('lang');
+            if (lang) {
+                this.currentLang = lang;
+            }
+        });
     }
 
     getUser() {
@@ -58,9 +66,9 @@ export class PlanComponent implements OnInit {
 
     selectedItem(e: any, plan_id: number) {
         e.preventDefault();
-        this.router.navigate(['.'], { relativeTo: this.route, queryParams: { }});
+        this.router.navigate([this.currentLang], { relativeTo: this.route, queryParams: { }});
         setTimeout(() => {
-            this.router.navigate(['.'], { relativeTo: this.route, queryParams: { authType: 'signup', plan: plan_id}});
+            this.router.navigate([this.currentLang], { relativeTo: this.route, queryParams: { authType: 'signup', plan: plan_id}});
         });
     }
 

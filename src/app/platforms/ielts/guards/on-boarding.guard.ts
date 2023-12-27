@@ -16,14 +16,14 @@ export class UserOnboardingGuard  {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
+        const lang = route.paramMap.get('lang');
         return new Promise((resolve, reject) => {
             console.log('this.config.user_on_boarding canActivate', this.config.user_on_boarding);
             if (this.config.user_on_boarding) {
                 if (this.config.user_on_boarding.finished) {
                     resolve(true);
                 } else {
-                    this.router.navigate(['/onBoarding']);
+                    this.router.navigate([lang + '/onBoarding']);
                 }
             }
             this.config.user_on_boarding_subject.subscribe(() => {
@@ -31,7 +31,7 @@ export class UserOnboardingGuard  {
                     resolve(true);
                 }
                 if (!this.config.user_on_boarding || !this.config.user_on_boarding.finished) {
-                    this.router.navigate(['/onBoarding']);
+                    this.router.navigate([lang + '/onBoarding']);
                 }
             });
         });
