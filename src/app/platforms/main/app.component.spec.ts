@@ -11,6 +11,7 @@ import {HeaderComponent} from "./components/header/header.component";
 import {AlertComponent} from "./components/alert/alert.component";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('AppComponent', () => {
     beforeEach(async () => {
@@ -19,7 +20,8 @@ describe('AppComponent', () => {
                 RouterTestingModule,
                 HttpClientTestingModule,
                 NoopAnimationsModule,
-                FormsModule
+                FormsModule,
+                TranslateModule.forRoot()
             ],
             declarations: [
                 AppComponent,

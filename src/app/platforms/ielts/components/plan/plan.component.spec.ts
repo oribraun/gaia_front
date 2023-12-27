@@ -17,7 +17,7 @@ describe('PlanComponent', () => {
             providers: [Config, {
                 provide: ActivatedRoute,
                 useValue: {
-                    queryParams: of(convertToParamMap({ })) // Provide any route parameter values you need for testing
+                    paramMap: of(convertToParamMap({ })) // Provide any route parameter values you need for testing
                 }
             }]
         });
