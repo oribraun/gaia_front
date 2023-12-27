@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="recommended-videos" *ngIf="recommendedVideos && recommendedVideos.length">
                                     <!-- <p>Recommended videos for this part:</p> -->
-                                    <h5 class="practice_headline" translate>Theory Lessons</h5>
+                                    <h5 class="practice_headline" translate>Video Lessons</h5>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of recommendedVideos">
                                             <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"

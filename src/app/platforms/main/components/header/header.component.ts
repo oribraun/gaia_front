@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     user_on_boarding_finished = false;
     tooltipTimeout: any = null;
 
-    logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_Logo.png';
+    logoUrl = environment.staticUrl + 'assets/images/Generative_Ai_White_Logo.png';
 
     formType = 'login';
     formTypeOptions = ['login', 'signup', 'forgot'];
