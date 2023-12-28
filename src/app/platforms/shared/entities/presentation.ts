@@ -16,6 +16,7 @@ export class Presentation {
     timer_sec: number = 0;
     timer_timeout_msg: string = "test times up - please move on";
     timer_timeout_sec: number = -1;
+    lang: string = "";
 
     constructor(obj?: any) {
         if (obj) {

@@ -26,7 +26,6 @@ declare let $: any;
 
 export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDestroy {
     @ViewChild('unseen_text_box') unseen_text_box!: ElementRef;
-    @ViewChild('unseen_text') unseen_text!: ElementRef;
     @ViewChild('questions') questions!: ElementRef;
 
     current_counter:any = {};
@@ -157,14 +156,24 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     }
 
     handleMenuTranslateClick() {
-        console.log(`handleMenuTranslateClick Clicked on ${this.currentMenuWord.word}`);
-        this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
+        // console.log(`handleMenuTranslateClick Clicked on ${this.currentMenuWord.word}`);
+        let sourceLang = 'en', targetLang = 'he';
+        if (this.slideData.lang !== sourceLang) {
+            sourceLang = 'he';
+            targetLang = 'en';
+        }
+        this.helperService.translateGoogle(this.currentMenuWord.word, sourceLang, targetLang).then((translate_word) => {
             this.currentMenuWord.translate = translate_word;
             // this.closeContextMenu();
         });
     }
     handleMenuAddVocabClick() {
-        this.helperService.translateGoogle(this.currentMenuWord.word).then((translate_word) => {
+        let sourceLang = 'en', targetLang = 'he';
+        if (this.slideData.lang !== sourceLang) {
+            sourceLang = 'he';
+            targetLang = 'en';
+        }
+        this.helperService.translateGoogle(this.currentMenuWord.word, sourceLang, targetLang).then((translate_word) => {
             this.currentMenuWord.translate = translate_word;
             this.lessonService.Broadcast("slideAddToVocab", {word: this.currentMenuWord.word, translate: translate_word });
             this.closeContextMenu();
@@ -245,7 +254,7 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
         // const words = this.unseen_text.split(/[ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+/);
         const word_ids = words.map(o => o.id);
         const tokens = this.currentSlide.unseen_text.split(/([\s.,!?;:]+)/);
-        // console.log('tokens', tokens)
+        console.log('tokens', tokens);
         const spanList = [];
         let wordCount = 0;
         let currentIndex = 0;
@@ -265,7 +274,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
                     startedHintHighlight = null;
                 }
             }
-            if (/\w+/.test(token)
+            if (
+                (/\w+/.test(token) || /[a-z\u0590-\u05fe]/.test(token))
                 && token.length >= this.wordLength
                 && this.excludeWords.indexOf(token.toLowerCase()) == -1) {
                 // Create a <span> element for words

@@ -1,99 +1,3 @@
-<!--<div class="navigation">-->
-<!--    <nav class="navbar navbar-expand-md navbar-light fixed-top">-->
-<!--        <div class="container-fluid">-->
-<!--            <div class="brand">-->
-<!--                <a class="navbar-brand" href="#" [routerLink]="['/']">-->
-<!--                    <img [src]="imageSrc + '/assets/images/Generative_Ai_White_Logo.png'" alt="">-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="right-items d-flex d-md-none align-self-center">-->
-<!--                <ng-template [ngTemplateOutlet]="rightItems"></ng-template>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">&ndash;&gt;-->
-<!--            &lt;!&ndash;            <span class="navbar-toggler-icon"></span>&ndash;&gt;-->
-<!--            &lt;!&ndash;        </button>&ndash;&gt;-->
-<!--            <div class="collapse navbar-collapse show" id="navbarColor03">-->
-<!--                <ul class="navbar-nav me-auto flex-row justify-content-between">-->
-<!--                    &lt;!&ndash;                <li class="nav-item">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    <a class="nav-link rounded-0"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <i class="bi bi-house-door"></i> <span>Home</span>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                <li class="nav-item">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    <a class="nav-link rounded-0"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="About" data-bs-custom-class="gaia-tooltip"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <i class="bi bi-info"></i> <span>About</span>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                <li class="nav-item" *ngIf="user.id">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    <a class="nav-link rounded-0"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       (click)="initOnBoarding()"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
-<!--                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">-->
-<!--                        <a class="nav-link rounded-0"-->
-<!--                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard" data-bs-custom-class="gaia-tooltip"-->
-<!--                           [routerLink]="['/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-<!--                            &lt;!&ndash;                        <i class="bi bi-view-list"></i> <span>Dashboard</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="title">Dashboard</div>&ndash;&gt;-->
-<!--                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">-->
-<!--                        <a class="nav-link rounded-0"-->
-<!--                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Lesson" data-bs-custom-class="gaia-tooltip"-->
-<!--                           [routerLink]="['/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-<!--                            &lt;!&ndash;                        <i class="bi bi-view-list"></i> <span>Dashboard</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="title">My Lesson</div>&ndash;&gt;-->
-<!--                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">-->
-<!--                        <a class="nav-link rounded-0"-->
-<!--                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Vocabulary" data-bs-custom-class="gaia-tooltip"-->
-<!--                           [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-<!--&lt;!&ndash;                            <div class="title">My Vocabulary</div>&ndash;&gt;-->
-<!--                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">-->
-<!--                        <a class="nav-link rounded-0"-->
-<!--                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Work" data-bs-custom-class="gaia-tooltip"-->
-<!--                           [routerLink]="['/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-<!--&lt;!&ndash;                            <div class="title">My Work</div>&ndash;&gt;-->
-<!--                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">-->
-<!--                        <a class="nav-link rounded-0"-->
-<!--                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Materials" data-bs-custom-class="gaia-tooltip"-->
-<!--                           [routerLink]="['/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-<!--&lt;!&ndash;                            <div class="title">Materials</div>&ndash;&gt;-->
-<!--                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Learning_Materials_Icon.svg'" alt="">-->
-<!--                        </a>-->
-<!--                    </li>-->
-<!--                    &lt;!&ndash;                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    <a class="nav-link rounded-0"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <i class="bi bi-award-fill"></i> <span>Lesson</span>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
-<!--                </ul>-->
-<!--                <div class="right-items d-none d-md-flex">-->
-<!--                    <ng-template [ngTemplateOutlet]="rightItems"></ng-template>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </nav>-->
-<!--    <app-alert></app-alert>-->
-<!--</div>-->
 <div [ngClass]="{'rtl': currentLang === 'he'}">
     <div class="navigation">
         <nav class="navbar navbar-expand-md navbar-light fixed-top">
@@ -151,7 +55,7 @@
                                [attr.data-bs-original-title]="'My Lesson' | translate"
                                [title]="'My Lesson' | translate"
                                data-bs-custom-class="gaia-tooltip"
-                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildren">
                                 <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
     <!--                            <div class="title">My Lesson</div>-->
                                 <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
@@ -193,7 +97,7 @@
                         <!--                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">-->
                         <!--                    <a class="nav-link rounded-0"-->
                         <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"-->
-                        <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">-->
+                        <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildren">-->
                         <!--                        <i class="bi bi-award-fill"></i> <span>Lesson</span>-->
                         <!--                    </a>-->
                         <!--                </li>-->
@@ -204,7 +108,7 @@
                 </div>
             </div>
         </nav>
-        <app-alert></app-alert>
+        <app-alert [lang]="currentLang"></app-alert>
     </div>
 
     <!-- Modal -->
@@ -322,13 +226,17 @@
 
     <ng-template #rightItems>
         <div class="platforms dropdown"
-             *ngIf="platforms.length > 1 && !isPlansPage"
+             *ngIf="!isPlansPage"
             [ngClass]="{'dropdown-rtl': currentLang === 'he'}">
-            <a class="dropdown-toggle pointer" data-bs-toggle="dropdown"
+            <a
+               [ngClass]="{'dropdown-toggle pointer': platforms.length > 1}"
+               data-bs-toggle="dropdown"
                [innerHTML]="selectedPlatform.display_name">
             </a>
 
-            <ul class="dropdown-menu" [ngClass]="{'dropdown-menu-start': currentLang === 'he', 'dropdown-menu-end': currentLang !== 'he'}">
+            <ul class="dropdown-menu"
+                *ngIf="platforms.length > 1"
+                [ngClass]="{'dropdown-menu-start': currentLang === 'he', 'dropdown-menu-end': currentLang !== 'he'}">
                 <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
                     <a class="dropdown-item pointer"
                        [ngClass]="{'active': selectedPlatform.name === p.name}"

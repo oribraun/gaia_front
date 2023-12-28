@@ -57,10 +57,8 @@ export class HelperService {
         return returnUrl;
     }
 
-    translateGoogle(message: string): Promise<string> {
+    translateGoogle(message: string, sourceLang = 'en', targetLang = 'he'): Promise<string> {
         return new Promise((resolve, reject) => {
-            const sourceLang = 'en';
-            const targetLang = 'he';
 
             const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(message);
 

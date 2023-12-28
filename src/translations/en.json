@@ -56,5 +56,30 @@
     "Old Password": "Old Password",
     "New Password": "New Password",
     "Confirm Password": "Confirm Password",
-    "Submit": "Submit"
+    "Submit": "Submit",
+
+    "Good Job, You have completed this lesson": "Good Job, You have completed this lesson",
+    "Head back to the dashboard to continue the journey": "Head back to the dashboard to continue the journey",
+    "Review Vocabulary": "Review Vocabulary",
+    "Back to Dashboard": "Back to Dashboard",
+    "Slide": "Slide",
+    "Time Left": "Time Left",
+    "Time Passed": "Time Passed",
+    "Status": "Status",
+    "Mark as watched": "Mark as watched",
+    "Lesson Completed": "Lesson Completed",
+    "Previous Video": "Previous Video",
+    "Next Video": "Next Video",
+
+    "Hint": "Hint",
+    "Marker": "Marker",
+    "Zoom": "Zoom",
+    "Print": "Print",
+    "Translate": "Translate",
+    "Add To Vocabulary": "Add To Vocabulary",
+    "Mark all the correct answers": "Mark all the correct answers",
+
+    "Finished": "Finished",
+    "In Progress": "In Progress",
+    "To Be Started": "To Be Started"
 }

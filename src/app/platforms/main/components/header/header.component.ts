@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         queryParams: 'subset',
         matrixParams: 'subset'
     };
-    routerLinkActiveOptionsWithChildrens: IsActiveMatchOptions = {
+    routerLinkActiveOptionsWithChildren: IsActiveMatchOptions = {
         fragment: "exact",
         paths: "subset",
         queryParams: 'subset',
@@ -780,5 +780,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+    }
+
+    myLessonClick(event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
+        console.log('event.target', event.target);
     }
 }

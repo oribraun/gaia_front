@@ -16,6 +16,7 @@ import {BlobItem} from "../../../shared/entities/blob_item";
 import {ChatMessage} from "../../../shared/entities/chat_message";
 import {AlertService} from "../../../main/services/alert.service";
 import {GeneralService} from "../../services/general/general.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-practice-lesson',
@@ -134,6 +135,7 @@ export class PracticeLessonComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
+        protected translate: TranslateService,
         private generalService: GeneralService
     ) {
         this.imageSrc = this.config.staticImagePath;
@@ -154,7 +156,7 @@ export class PracticeLessonComponent implements OnInit {
 
             const lang = params.get('lang');
             if (lang) {
-                this.currentLang = lang;
+                this.changeLang(lang);
             }
         });
         this.route.queryParams.subscribe((params) => {
@@ -167,6 +169,11 @@ export class PracticeLessonComponent implements OnInit {
                 this.slide_uid = s_uid;
             }
         });
+    }
+
+    changeLang(lang: string) {
+        this.currentLang = lang;
+        this.translate.use(this.currentLang);
     }
 
     setTestModelLimitations() {
@@ -400,6 +407,10 @@ export class PracticeLessonComponent implements OnInit {
                     console.log('getPresentation err', response);
                 } else {
                     this.presentation = new Presentation(response.presentation);
+                    // change lang by presentation data
+                    // if (this.presentation.lang) {
+                    //     this.changeLang(this.currentSlide.lang);
+                    // }
                     this.lesson_group_type = response.lesson_group_type;
                     this.is_test_mode = this.lesson_group_type['name'] == 'test' || false;
                     this.recommendedVideos = response.recommended_videos;

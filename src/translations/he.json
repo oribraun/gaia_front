@@ -56,5 +56,30 @@
     "Old Password": "סיסמה ישנה",
     "New Password": "סיסמה חדשה",
     "Confirm Password": "אימות סיסמה",
-    "Submit": "שלח"
+    "Submit": "שלח",
+
+    "Good Job, You have completed this lesson": "כל הכבוד, השיעור הסתיים בהצלחה",
+    "Head back to the dashboard to continue the journey": "חזרה לדשבורד להמשך הקורס",
+    "Review Vocabulary": "צפה באוצר מילים",
+    "Back to Dashboard": "חזרה לדשבורד",
+    "Slide": "שיעור",
+    "Time Left": "זמן שנשאר",
+    "Time Passed": "זמן שעבר",
+    "Status": "סטטוס",
+    "Mark as watched": "סמן שנצפה",
+    "Lesson Completed": "השיעור הסתיים",
+    "Previous Video": "וידאו קודם",
+    "Next Video": "וידאו הבא",
+
+    "Hint": "רמז",
+    "Marker": "סמן",
+    "Zoom": "זום",
+    "Print": "הדפס",
+    "Translate": "תרגם",
+    "Add To Vocabulary": "הוסף לאוצר מילים",
+    "Mark all the correct answers": "סמן את כל התשובות הנכונות",
+
+    "Finished": "הסתיים",
+    "In Progress": "בעיצומו",
+    "To Be Started": "עוד לא התחיל"
 }

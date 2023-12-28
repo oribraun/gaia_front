@@ -13,7 +13,7 @@
 <div class="my-alert-wrapper" [@openClose]="message.type ? 'open' : 'closed'"
      [@.disabled]="animationDisabled"
      (@openClose.done)="animationDone($event)">
-    <div class="my-alert" *ngIf="tempMessage.type">
+    <div class="my-alert" *ngIf="tempMessage.type" [ngClass]="{'rtl': lang === 'he'}">
         <div class="header">Notifications</div>
         <div class="notifications">
             <div class="notification"
