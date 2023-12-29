@@ -63,6 +63,15 @@
                                 <textarea id="textarea" [(ngModel)]="unseenAnswers[q.question_id].answer_text" placeholder="Write your answer here"></textarea>
                                 <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
                             </ng-container>
+                            <ng-container *ngIf="q.question_type === questionTypes.order && i === question_index">
+                                <h4 class="question-title" id="question">{{q.question}}</h4>
+                                <ul id="items-list" class="moveable">
+                                    <ng-container *ngFor="let option of q.question.answers; let index=index;">                               
+                                        <li>option.answer</li>
+                                    </ng-container>
+                                </ul>
+                                <div id="explanation">{{unseenAnswers[q.question_id].explanation}}</div>
+                            </ng-container>                            
                             <ng-container *ngIf="q.question_type === questionTypes.multiple_choice && i === question_index">
                                 <div class="row">
                                     <div class="col-12">

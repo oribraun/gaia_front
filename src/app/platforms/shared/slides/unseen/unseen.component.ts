@@ -76,7 +76,8 @@ export class UnseenComponent extends BaseSlideComponent implements OnInit, OnDes
     public questionTypes = {
         sentence_completion:'sentence_completion',
         multiple_choice: 'multiple_choice',
-        open_question: 'open_question'
+        open_question: 'open_question',
+        order: 'order'
     };
 
     constructor(
