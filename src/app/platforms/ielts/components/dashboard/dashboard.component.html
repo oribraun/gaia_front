@@ -1,19 +1,19 @@
-<div class="dashboard" *ngIf="coursePlan">
+<div class="dashboard" *ngIf="coursePlan" [ngClass]="{'dashboard-rtl': currentLang === 'he'}">
     <div class="my-row">
         <div class="my-col">
             <div class="panel-box panel-box-no-margin">
-                <h4 class="header">
+                <h4 class="header" translate>
                     My Plan
                 </h4>
                 <!-- <div class="text-body" [innerHTML]="coursePlan.description"></div> -->
                 <div class="text-body plan-parts">
-                    <div class="date"><small>Starting</small><br>{{coursePlan.start_date}}</div>
+                    <div class="date"><small translate>Starting</small><br>{{coursePlan.start_date}}</div>
                     <div class="items">
                         <div class="item"
                              [ngClass]="{'active': currentCoursePlanPartIndex === i}"
-                             (click)="selectCoursePart(i)" *ngFor="let p of coursePlan.parts; let i = index;">{{p.title}}</div>
+                             (click)="selectCoursePart(i)" *ngFor="let p of coursePlan.parts; let i = index;" translate>{{p.title}}</div>
                     </div>
-                    <div class="date"><small>Exam Date</small><br>{{coursePlan.end_date}}</div>
+                    <div class="date"><small translate>Exam Date</small><br>{{coursePlan.end_date}}</div>
                 </div>
                 <div style="font-style:italic;" class="text-body" *ngIf="coursePlan.tip">Tip:  {{coursePlan.tip}}</div>
             </div>
@@ -22,12 +22,12 @@
                     <div class="d-flex flex-column">
                         <div class="part flex-fill" [ngClass]="'part-' + currentCoursePlanPartIndex">
                             <div class="panel-box">
-                                <h4 class="header">
+                                <h4 class="header" translate>
                                     {{coursePlan.parts[currentCoursePlanPartIndex].title}}
                                 </h4>
                                 <div class="recommended-videos" *ngIf="practiceLessons && practiceLessons.length">
                                     <!-- <p>Recommended videos for this part:</p> -->
-                                    <h5 class="practice_headline">Practice Lessons</h5>
+                                    <h5 class="practice_headline" translate>Practice Lessons</h5>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of practiceLessons">
                                             <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="recommended-videos" *ngIf="recommendedVideos && recommendedVideos.length">
                                     <!-- <p>Recommended videos for this part:</p> -->
-                                    <h5 class="practice_headline">Video Lessons</h5>
+                                    <h5 class="practice_headline" translate>Video Lessons</h5>
                                     <div class="videos-list">
                                         <div class="video" (click)="startVideoLesson(item.id, item.lesson_group_type_id)" *ngFor="let item of recommendedVideos">
                                             <img [src]="item.presentation_data.presentation_lesson_data.presentation_thumbnail"
@@ -60,18 +60,17 @@
                         <div class="achievements flex-fill">
                             <div class="panel-box">
                                 <h4 class="header d-flex justify-content-between">
-                                    <span>Achievements</span>
+                                    <span translate>Achievements</span>
                                     <span class="float-end">
-                                            <button class="btn btn-light" (click)="gotTo('/ielts/review')">Review my work</button>
-                                        </span>
+                                        <button class="btn btn-light" (click)="gotTo('/ielts/review')" translate>Review my work</button>
+                                    </span>
                                 </h4>
                                 <div class="text-body">
                                     <div class="d-flex flex-column flex-sm-row">
                                         <div class="lst">
                                             <ul>
                                                 <li *ngFor="let l of achievements.labels; let i = index;" [ngStyle]="{'color':  achievements.colors[i]}">
-                                                        <span class="text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="{{l.tip}}" data-bs-custom-class="gaia-tooltip">{{l.name}}
-                                                        </span>
+                                                    <span class="text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="{{l.tip}}" data-bs-custom-class="gaia-tooltip">{{l.name}}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -98,10 +97,10 @@
                 <div class="right flex-fill">
                     <div class="test-yourself">
                         <div class="panel-box">
-                            <h4 class="header">
+                            <h4 class="header" translate>
                                 Test yourself
                             </h4>
-                            <div class="text-body">
+                            <div class="text-body" translate>
                                 Taking test will help you better prepare to the upcoming exam and will help us customize the practice level.
                             </div>
                             <div class="text-body text-center">
@@ -109,21 +108,21 @@
                                     <div class="icon" (click)="startNewUserLessonByName('test', $event)">
                                         <i class="bi bi-play-fill"></i>
                                     </div>
-                                    <p>Take a test</p>
+                                    <p translate>Take a test</p>
                                     <div class="table-responsive">
                                         <table class="table" *ngIf="userTests && userTests.length">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Grade</th>
-                                                <th scope="col">Review</th>
+                                                <th scope="col" translate>Date</th>
+                                                <th scope="col" translate>Grade</th>
+                                                <th scope="col" translate>Review</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr *ngFor="let test of userTests">
                                                 <td>{{test.created}}</td>
                                                 <td>{{test.score}}</td>
-                                                <td><a href="#" (click)="goToLesson(test.id, $event)">Test {{test.id}}</a></td>
+                                                <td><a href="#" (click)="goToLesson(test.id, $event)"><span translate>Test</span> {{test.id}}</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -258,10 +257,10 @@
                         <thead>
                         <tr>
                             <th scope="col">&nbsp;</th>
-                            <th scope="col">Started Count</th>
-                            <th scope="col">last Started</th>
-                            <th scope="col">status</th>
-                            <th scope="col">score</th>
+                            <th scope="col" translate>Started Count</th>
+                            <th scope="col" translate>last Started</th>
+                            <th scope="col" translate>status</th>
+                            <th scope="col" translate>score</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>

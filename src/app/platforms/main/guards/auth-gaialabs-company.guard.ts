@@ -17,6 +17,7 @@ export class AuthGaialabsCompanyGuard  {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
+        const lang = route.paramMap.get('lang');
         const user = this.config.user;
         if (user && user.gaia_admin) {
             return true;
@@ -26,7 +27,7 @@ export class AuthGaialabsCompanyGuard  {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
+            this.router.navigate([user.id ? lang + '/' : lang + '/'], { queryParams: queryParams});
             return false;
         }
     }

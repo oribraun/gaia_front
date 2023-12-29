@@ -183,6 +183,19 @@ html {
         background-color: #0f3460;
     }
 
+    .dropdown-rtl {
+        direction: rtl;
+        .dropdown-toggle {
+            &:after {
+                margin-right: 0.255em;
+                margin-left: 0;
+            }
+        }
+        .dropdown-menu {
+            text-align: right;
+        }
+    }
+
     .pre-inline {
         text-align: left;
         white-space: pre-line;

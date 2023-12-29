@@ -1,4 +1,4 @@
-<div class="practice-lesson">
+<div class="practice-lesson" [ngClass]="{'practice-lesson-rtl': currentLang === 'he'}">
     <ng-template #selected_slide_container let-model="model">
         <app-writing
             *ngIf="model.currentSlide.slide_type === sectionTitles.writing"
@@ -66,7 +66,8 @@
                                         slideData: {
                                             slide_done: id < currentSlide.index_in_bundle && slidesData.length > 1,
                                             is_active: id === currentSlide.index_in_bundle && slidesData.length > 1,
-                                            is_test_mode: is_test_mode
+                                            is_test_mode: is_test_mode,
+                                            lang: currentLang
                                         },
                                     }
                                 }"></ng-container>
@@ -83,65 +84,65 @@
 
     <div class="finish-board" [ngClass]="{'finish-board-show': enable_end_lesson_button}">
         <div class="text">
-            <h5>Good Job, You have completed this lesson</h5>
-            <h5>Head back to the dashboard to continue the journey</h5>
+            <h5 translate>Good Job, You have completed this lesson</h5>
+            <h5 translate>Head back to the dashboard to continue the journey</h5>
         </div>
         <div class="buttons">
-            <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()">Review Vocabulary</button>
-            <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()">Back to Dashboard</button>
+            <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()" translate>Review Vocabulary</button>
+            <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()" translate>Back to Dashboard</button>
         </div>
         <button type="button" class="btn-close" (click)="enable_end_lesson_button = false;"></button>
     </div>
 
-    <div class="bottom-panel" *ngIf="gotFirstPresentation">
+    <div class="bottom-panel" *ngIf="gotFirstPresentation"  [ngClass]="{'bottom-panel-rtl': currentLang === 'he'}">
         <div class="title">
             {{currentSlide.slide_title}}
         </div>
         <ng-container *ngIf="currentSlide.slide_type !== 'video'">
             <div class="slide-buttons">
                 <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
-                    <i class="bi bi-caret-left-fill"></i>
+                    <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
                 </button>
-                <div>Slide {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
+                <div><span translate>Slide</span> {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
                 <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
-                    <i class="bi bi-caret-right-fill"></i>
+                    <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>
             </div>
             <div class="timer-status">
                 <span *ngIf="timersHelper.timers[test_presentation_timer_id]">
-                    Time Left <span [ngClass]="{
+                    <span translate>Time Left</span> <span [ngClass]="{
                     'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
                     }">
                     {{timersHelper.timers[test_presentation_timer_id].getTime()}}
                 </span>
-                    Time Passed <span [ngClass]="{
+                    <span translate>Time Passed</span> <span [ngClass]="{
                     'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
                     }">
                     {{timersHelper.timers[test_presentation_timer_id].getCounter()}}
                 </span> |
-                </span> status:
-                <span>{{user_lesson_status}}</span>
+                </span> <span translate>Status</span>:
+                <span translate>{{user_lesson_status}}</span>
             </div>
         </ng-container>
         <ng-container  *ngIf="currentSlide.slide_type === 'video'">
-            <button class="mark-as-finished" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()">
+            <button class="mark-as-finished" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()" translate>
                 Mark as watched
             </button>
-            <div *ngIf="currentSlide.video_completed">
+            <div *ngIf="currentSlide.video_completed" translate>
                 Lesson Completed
             </div>
 
             <div class="slide-buttons" [ngStyle]="!recommendedVideos.length ? {'visibility': 'hidden'} : {}">
-                <div>Previous Video</div>
+                <div translate>Previous Video</div>
                 <button class="prev" [disabled]="recommendedVideos[0].id === current_base_lesson_id"
                         (click)="recommendedVideos.length && onPrevLesson($event)">
-                    <i class="bi bi-caret-left-fill"></i>
+                    <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
                 </button>
                 <button class="next" [disabled]="recommendedVideos[recommendedVideos.length - 1].id === current_base_lesson_id"
                         (click)="recommendedVideos.length && onNextLesson($event)">
-                    <i class="bi bi-caret-right-fill"></i>
+                    <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>
-                <div>Next Video</div>
+                <div translate>Next Video</div>
             </div>
         </ng-container>
     </div>
@@ -159,7 +160,7 @@
     <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
         <div>
             <a  title="Close"  (click)="closeModel()"class="close">X</a>
-            <h2>Lesson Complete</h2>
+            <h2 translate>Lesson Completed</h2>
             <!-- <div [innerHTML]="presentation.ended_text"></div> -->
             <!-- <div [innerHTML]="grades"></div> -->
             <br>

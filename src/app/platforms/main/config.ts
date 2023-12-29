@@ -17,6 +17,8 @@ export class Config {
     private _csrf_token_subject: Subject<string> = new Subject<string>();
     private _staticImagePath = '';
 
+    private _lang_change: Subject<string> = new Subject<string>();
+
     get user(): User {
         return this._user;
     }
@@ -109,6 +111,14 @@ export class Config {
 
     set staticImagePath(value: string) {
         this._staticImagePath = value;
+    }
+
+    get lang_change(): Subject<any> {
+        return this._lang_change;
+    }
+
+    set lang_change(value: string) {
+        this._lang_change.next(value);
     }
 
     resetUserCreds() {

@@ -16,6 +16,7 @@ import {BlobItem} from "../../../shared/entities/blob_item";
 import {ChatMessage} from "../../../shared/entities/chat_message";
 import {AlertService} from "../../../main/services/alert.service";
 import {GeneralService} from "../../services/general/general.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-practice-lesson',
@@ -85,6 +86,8 @@ export class PracticeLessonComponent implements OnInit {
 
     initApplicationDone = false;
 
+    currentLang = "";
+
 
     public sectionTitles = {
         bundle:'bundle',
@@ -132,6 +135,7 @@ export class PracticeLessonComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
+        protected translate: TranslateService,
         private generalService: GeneralService
     ) {
         this.imageSrc = this.config.staticImagePath;
@@ -149,6 +153,11 @@ export class PracticeLessonComponent implements OnInit {
                     this.initApplication();
                 }
             }
+
+            const lang = params.get('lang');
+            if (lang) {
+                this.changeLang(lang);
+            }
         });
         this.route.queryParams.subscribe((params) => {
             const q_id = params['q_id'];
@@ -160,6 +169,11 @@ export class PracticeLessonComponent implements OnInit {
                 this.slide_uid = s_uid;
             }
         });
+    }
+
+    changeLang(lang: string) {
+        this.currentLang = lang;
+        this.translate.use(this.currentLang);
     }
 
     setTestModelLimitations() {
@@ -388,11 +402,15 @@ export class PracticeLessonComponent implements OnInit {
             next: (response: any) => {
                 if (response.err) {
                     if (response.errMessage.indexOf('lesson does not exist') > -1) {
-                        this.router.navigate(['ielts/dashboard']);
+                        this.router.navigate([this.currentLang + '/ielts/dashboard']);
                     }
                     console.log('getPresentation err', response);
                 } else {
                     this.presentation = new Presentation(response.presentation);
+                    // change lang by presentation data
+                    // if (this.presentation.lang) {
+                    //     this.changeLang(this.currentSlide.lang);
+                    // }
                     this.lesson_group_type = response.lesson_group_type;
                     this.is_test_mode = this.lesson_group_type['name'] == 'test' || false;
                     this.recommendedVideos = response.recommended_videos;
@@ -1400,7 +1418,7 @@ export class PracticeLessonComponent implements OnInit {
         if (index > -1 && index < this.recommendedVideos.length - 1) {
             const next_lesson = this.recommendedVideos[index + 1];
             this.generalService.getOrGenerateLesson(next_lesson.lesson_group_type_id, this.course_plan_id, next_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id]);
+                this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
             }).catch((error: any) => {
                 this.alertService.error(error);
             });
@@ -1413,7 +1431,7 @@ export class PracticeLessonComponent implements OnInit {
         if (index > -1 && index > 0) {
             const prev_lesson = this.recommendedVideos[index - 1];
             this.generalService.getOrGenerateLesson(prev_lesson.lesson_group_type_id, this.course_plan_id, prev_lesson.id).then((id) => {
-                this.router.navigate(['ielts/practice/' + id]);
+                this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
             }).catch((error: any) => {
                 this.alertService.error(error);
             });
@@ -1509,7 +1527,7 @@ export class PracticeLessonComponent implements OnInit {
         }
     }
     backToDashboard() {
-        this.router.navigate(['/ielts/dashboard']);
+        this.router.navigate([this.currentLang + '/ielts/dashboard']);
     }
 
     openVocabularyModal() {

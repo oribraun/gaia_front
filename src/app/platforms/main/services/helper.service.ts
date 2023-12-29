@@ -47,20 +47,18 @@ export class HelperService {
         return u;
     }
 
-    getUserReturnUrl(user: User, user_on_boarding_finished: boolean) {
+    getUserReturnUrl(user: User, lang: string, user_on_boarding_finished: boolean) {
         let returnUrl = '';
         if (user.id && user.last_logged_platform && user_on_boarding_finished) {
-            returnUrl = '/' + user.last_logged_platform + '/dashboard';
+            returnUrl = '/' + lang + '/' + user.last_logged_platform + '/dashboard';
         } else {
-            returnUrl = '/onBoarding';
+            returnUrl = lang + '/' + '/onBoarding';
         }
         return returnUrl;
     }
 
-    translateGoogle(message: string): Promise<string> {
+    translateGoogle(message: string, sourceLang = 'en', targetLang = 'he'): Promise<string> {
         return new Promise((resolve, reject) => {
-            const sourceLang = 'en';
-            const targetLang = 'he';
 
             const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(message);
 

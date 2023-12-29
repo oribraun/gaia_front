@@ -112,7 +112,7 @@
         &-questions {
             // background-color: #f2f2f2;
             background-color: #ffd34f8a;
-            border-radius: 15px;   
+            border-radius: 15px;
             .questions {
                 display: flex;
                 flex-direction: column;
@@ -366,6 +366,12 @@
                         right: 0;
                     }
                 }
+                &.rtl {
+                    .close {
+                        right: auto;
+                        left: 0;
+                    }
+                }
             }
             .hint-popup-show {
                 top: 10%;
@@ -485,7 +491,7 @@
     @media (max-width: 769px) {
         overflow-y: auto;
         .box-questions {
-            margin-top: @gap;         
+            margin-top: @gap;
         }
     }
 }

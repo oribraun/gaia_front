@@ -11,6 +11,7 @@ import {of} from "rxjs";
 import {AlertComponent} from "../alert/alert.component";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('HeaderComponent', () => {
     let component: HeaderComponent;
@@ -18,7 +19,7 @@ describe('HeaderComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, NoopAnimationsModule, FormsModule, RouterModule.forRoot([])],
+            imports: [HttpClientTestingModule, NoopAnimationsModule, FormsModule, RouterModule.forRoot([]), TranslateModule.forRoot()],
             declarations: [HeaderComponent, AlertComponent],
             providers: [
                 Config,

@@ -1,294 +1,318 @@
-<div class="navigation">
-    <nav class="navbar navbar-expand-md navbar-light fixed-top">
-        <div class="container-fluid">
-            <div class="brand">
-                <a class="navbar-brand" href="#" [routerLink]="['/']">
-                    <img [src]="imageSrc + '/assets/images/Generative_Ai_White_Logo.png'" alt="">
-                </a>
-            </div>
-            <div class="right-items d-flex d-md-none align-self-center">
-                <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
-            </div>
-            <!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">-->
-            <!--            <span class="navbar-toggler-icon"></span>-->
-            <!--        </button>-->
-            <div class="collapse navbar-collapse show" id="navbarColor03">
-                <ul class="navbar-nav me-auto flex-row justify-content-between">
-                    <!--                <li class="nav-item">-->
-                    <!--                    <a class="nav-link rounded-0"-->
-                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"-->
-                    <!--                       [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                    <!--                        <i class="bi bi-house-door"></i> <span>Home</span>-->
-                    <!--                    </a>-->
-                    <!--                </li>-->
-                    <!--                <li class="nav-item">-->
-                    <!--                    <a class="nav-link rounded-0"-->
-                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="About" data-bs-custom-class="gaia-tooltip"-->
-                    <!--                       [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                    <!--                        <i class="bi bi-info"></i> <span>About</span>-->
-                    <!--                    </a>-->
-                    <!--                </li>-->
-                    <!--                <li class="nav-item" *ngIf="user.id">-->
-                    <!--                    <a class="nav-link rounded-0"-->
-                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"-->
-                    <!--                       (click)="initOnBoarding()"-->
-                    <!--                       [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
-                    <!--                        <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>-->
-                    <!--                    </a>-->
-                    <!--                </li>-->
-                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">
-                        <a class="nav-link rounded-0"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard" data-bs-custom-class="gaia-tooltip"
-                           [routerLink]="['/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                            <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
-<!--                            <div class="title">Dashboard</div>-->
-                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
-                        </a>
-                    </li>
-                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">
-                        <a class="nav-link rounded-0"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Lesson" data-bs-custom-class="gaia-tooltip"
-                           [routerLink]="['/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-                            <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
-<!--                            <div class="title">My Lesson</div>-->
-                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
-                        </a>
-                    </li>
-                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                        <a class="nav-link rounded-0"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Vocabulary" data-bs-custom-class="gaia-tooltip"
-                           [routerLink]="['/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-<!--                            <div class="title">My Vocabulary</div>-->
-                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">
-                        </a>
-                    </li>
-                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                        <a class="nav-link rounded-0"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="My Work" data-bs-custom-class="gaia-tooltip"
-                           [routerLink]="['/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-<!--                            <div class="title">My Work</div>-->
-                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
-                        </a>
-                    </li>
-                    <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
-                        <a class="nav-link rounded-0"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Materials" data-bs-custom-class="gaia-tooltip"
-                           [routerLink]="['/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
-<!--                            <div class="title">Materials</div>-->
-                            <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Learning_Materials_Icon.svg'" alt="">
-                        </a>
-                    </li>
-                    <!--                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">-->
-                    <!--                    <a class="nav-link rounded-0"-->
-                    <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"-->
-                    <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildrens">-->
-                    <!--                        <i class="bi bi-award-fill"></i> <span>Lesson</span>-->
-                    <!--                    </a>-->
-                    <!--                </li>-->
-                </ul>
-                <div class="right-items d-none d-md-flex">
+<div [ngClass]="{'rtl': currentLang === 'he'}">
+    <div class="navigation">
+        <nav class="navbar navbar-expand-md navbar-light fixed-top">
+            <div class="container-fluid">
+                <div class="brand">
+                    <a class="navbar-brand" href="#" [routerLink]="[currentLang + '/']">
+                        <img [src]="imageSrc + '/assets/images/Generative_Ai_Logo.png'" alt="">
+                    </a>
+                </div>
+                <div class="right-items d-flex d-md-none align-self-center">
                     <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
                 </div>
+                <!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">-->
+                <!--            <span class="navbar-toggler-icon"></span>-->
+                <!--        </button>-->
+                <div class="collapse navbar-collapse show" id="navbarColor03">
+                    <ul class="navbar-nav me-auto flex-row justify-content-between">
+                        <!--                <li class="nav-item">-->
+                        <!--                    <a class="nav-link rounded-0"-->
+                        <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home" data-bs-custom-class="gaia-tooltip"-->
+                        <!--                       [routerLink]="['/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                        <!--                        <i class="bi bi-house-door"></i> <span>Home</span>-->
+                        <!--                    </a>-->
+                        <!--                </li>-->
+                        <!--                <li class="nav-item">-->
+                        <!--                    <a class="nav-link rounded-0"-->
+                        <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="About" data-bs-custom-class="gaia-tooltip"-->
+                        <!--                       [routerLink]="['/about']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                        <!--                        <i class="bi bi-info"></i> <span>About</span>-->
+                        <!--                    </a>-->
+                        <!--                </li>-->
+                        <!--                <li class="nav-item" *ngIf="user.id">-->
+                        <!--                    <a class="nav-link rounded-0"-->
+                        <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="On Boarding" data-bs-custom-class="gaia-tooltip"-->
+                        <!--                       (click)="initOnBoarding()"-->
+                        <!--                       [routerLink]="['/onBoarding']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">-->
+                        <!--                        <i class="bi bi-file-bar-graph"></i> <span>On Boarding</span>-->
+                        <!--                    </a>-->
+                        <!--                </li>-->
+                        <li class="nav-item" *ngIf="user.id && user_on_boarding_finished">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'Dashboard' | translate"
+                               [title]="'Dashboard' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+                                <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
+    <!--                            <div class="title">Dashboard</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts' && user.last_lesson_id">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'My Lesson' | translate"
+                               [title]="'My Lesson' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/practice/' + user.last_lesson_id]" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildren">
+                                <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
+    <!--                            <div class="title">My Lesson</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Lessons_icon.svg'" alt="">
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'My Vocabulary' | translate"
+                               [title]="'My Vocabulary' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/vocabulary']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+    <!--                            <div class="title">My Vocabulary</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Vocabulary_icon.svg'" alt="">
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'My Work' | translate"
+                               [title]="'My Work' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/review']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+    <!--                            <div class="title">My Work</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="user.id && user_on_boarding_finished && user.last_logged_platform === 'ielts'">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'Materials' | translate"
+                               [title]="'Materials' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="[currentLang + '/' + user.last_logged_platform + '/']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptions">
+    <!--                            <div class="title">Materials</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Learning_Materials_Icon.svg'" alt="">
+                            </a>
+                        </li>
+                        <!--                <li class="nav-item" *ngIf="user.id  && user.gaia_admin">-->
+                        <!--                    <a class="nav-link rounded-0"-->
+                        <!--                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lesson" data-bs-custom-class="gaia-tooltip"-->
+                        <!--                       [routerLink]="['/lesson']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildren">-->
+                        <!--                        <i class="bi bi-award-fill"></i> <span>Lesson</span>-->
+                        <!--                    </a>-->
+                        <!--                </li>-->
+                    </ul>
+                    <div class="right-items d-none d-md-flex">
+                        <ng-template [ngTemplateOutlet]="rightItems"></ng-template>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
-    <app-alert></app-alert>
-</div>
+        </nav>
+        <app-alert [lang]="currentLang"></app-alert>
+    </div>
 
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="relative-content">
-                    <div class="login container">
-                        <div class="form-group">
-                            <form [ngSwitch]="formType">
-                                <div *ngSwitchCase="'login'">
-                                    <h3 class="text-center">Welcome back</h3>
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
-                                    <a class="forgot-password" (click)="formType='forgot'; resetMessages();">Forgot Password?</a>
-                                    <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
-                                    <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
-                                    <div class="text-center text-success" *ngIf="showVerify">
-                                        <a href="#" (click)="resendVerifyEmail($event)">Resend</a>
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="relative-content">
+                        <div class="login container">
+                            <div class="form-group">
+                                <form [ngSwitch]="formType">
+                                    <div *ngSwitchCase="'login'">
+                                        <h3 class="text-center" translate>Welcome back</h3>
+                                        <label for="email" translate>Email</label>
+                                        <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                                        <label for="password" translate>Password</label>
+                                        <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                                        <a class="forgot-password" (click)="formType='forgot'; resetMessages();"><span translate>Forgot Password</span>?</a>
+                                        <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
+                                        <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
+                                        <div class="text-center text-success" *ngIf="showVerify">
+                                            <a href="#" (click)="resendVerifyEmail($event)" translate>Resend</a>
+                                        </div>
+                                        <br>
+                                        <div class="text-center">
+                                            <button class="btn btn-primary" (click)="login()" translate>Log In</button>
+                                        </div>
                                     </div>
-                                    <br>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" (click)="login()">Log in</button>
+                                    <div *ngSwitchCase="'signup'">
+                                        <h3 class="text-center" translate>Sign up</h3>
+                                        <label for="username" translate>Username</label>
+                                        <input type="text" name="username" class="form-control" id="username" [(ngModel)]="username" required>
+                                        <label for="email" translate>Email</label>
+                                        <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                                        <label for="password" translate>Password</label>
+                                        <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
+                                        <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
+                                        <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
+                                        <br>
+                                        <div class="text-center">
+                                            <button class="btn btn-primary" (click)="signup()" translate>Sign up</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div *ngSwitchCase="'signup'">
-                                    <h3 class="text-center">Sign up</h3>
-                                    <label for="username">Username</label>
-                                    <input type="text" name="username" class="form-control" id="username" [(ngModel)]="username" required>
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required>
-                                    <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
-                                    <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
-                                    <br>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" (click)="signup()">Sign up</button>
+                                    <div *ngSwitchCase="'forgot'">
+                                        <h3 class="text-center" translate>Forgot Password</h3>
+                                        <label for="email" translate>Email</label>
+                                        <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
+                                        <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
+                                        <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
+                                        <br>
+                                        <div class="text-center">
+                                            <button class="btn btn-primary" (click)="forgot()" translate>Submit</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div *ngSwitchCase="'forgot'">
-                                    <h3 class="text-center">Forgot Password</h3>
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
-                                    <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
-                                    <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
-                                    <br>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" (click)="forgot()">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="divider">
-                            <hr>
-                            <span>or</span>
-                            <hr>
-                        </div>
-                        <ng-container *ngIf="formType === 'login' || formType === 'signup'">
-                            <div class="providers">
-                                <div id="googleButton"></div>
-                                <!--                                <div id="g_id_onload"-->
-                                <!--                                     data-client_id="10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com"-->
-                                <!--                                     data-cancel_on_tap_outside="false">-->
-                                <!--                                </div>-->
-                                <!--                                <div class="g_id_signin" data-type="standard"></div>-->
-                                <button type="button" (click)="logInGoogle()">
-                                    <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <title>Google</title>
-                                        <g fill="none" fill-rule="evenodd">
-                                            <path d="M23.52 12.273c0-.851-.076-1.67-.218-2.455H12v4.642h6.458a5.52 5.52 0 01-2.394 3.622v3.01h3.878c2.269-2.088 3.578-5.165 3.578-8.82z" fill="#4285F4" fill-rule="nonzero"></path><path d="M12 24c3.24 0 5.956-1.075 7.942-2.907l-3.878-3.011c-1.075.72-2.45 1.145-4.064 1.145-3.125 0-5.77-2.11-6.715-4.947H1.276v3.11A11.995 11.995 0 0012 24z" fill="#34A853" fill-rule="nonzero"></path><path d="M5.285 14.28A7.213 7.213 0 014.91 12c0-.79.136-1.56.376-2.28V6.61H1.276A11.995 11.995 0 000 12c0 1.936.464 3.77 1.276 5.39l4.01-3.11z" fill="#FBBC05" fill-rule="nonzero"></path><path d="M12 4.773c1.762 0 3.344.605 4.587 1.794l3.442-3.442C17.951 1.19 15.235 0 12 0 7.31 0 3.25 2.69 1.276 6.61l4.01 3.11C6.228 6.884 8.874 4.773 12 4.773z" fill="#EA4335" fill-rule="nonzero"></path><path d="M0 0h24v24H0z"></path>
-                                        </g>
-                                    </svg>
-                                    Continue with Google
-                                </button>
-                                <!--                                <button type="button">-->
-                                <!--                                    <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">-->
-                                <!--                                        <title>Facebook</title>-->
-                                <!--                                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">-->
-                                <!--                                        </path>-->
-                                <!--                                    </svg>-->
-                                <!--                                    Continue with Facebook-->
-                                <!--                                </button>-->
+                                </form>
                             </div>
-                        </ng-container>
-                        <ng-container *ngIf="formType === 'login'">
-                            <p class="text-center">
-                                New to Gaia? <a class="sign-up" (click)="formType='signup'; errMessage = '';">Sign up</a>
-                            </p>
-                        </ng-container>
-                        <ng-container *ngIf="formType === 'signup'">
-                            <p class="text-center">
-                                Already on Gaia? <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a>
-                            </p>
-                        </ng-container>
-                        <ng-container *ngIf="formType === 'forgot'">
-                            <p class="text-center">Back to <a class="log-in" (click)="formType='login'; resetMessages();">Log in</a></p>
-                        </ng-container>
+                            <div class="divider">
+                                <hr>
+                                <span translate>or</span>
+                                <hr>
+                            </div>
+                            <ng-container *ngIf="formType === 'login' || formType === 'signup'">
+                                <div class="providers">
+                                    <div id="googleButton"></div>
+                                    <!--                                <div id="g_id_onload"-->
+                                    <!--                                     data-client_id="10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com"-->
+                                    <!--                                     data-cancel_on_tap_outside="false">-->
+                                    <!--                                </div>-->
+                                    <!--                                <div class="g_id_signin" data-type="standard"></div>-->
+                                    <button type="button" (click)="logInGoogle()">
+                                        <svg class="svg google" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <title translate>Google</title>
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path d="M23.52 12.273c0-.851-.076-1.67-.218-2.455H12v4.642h6.458a5.52 5.52 0 01-2.394 3.622v3.01h3.878c2.269-2.088 3.578-5.165 3.578-8.82z" fill="#4285F4" fill-rule="nonzero"></path><path d="M12 24c3.24 0 5.956-1.075 7.942-2.907l-3.878-3.011c-1.075.72-2.45 1.145-4.064 1.145-3.125 0-5.77-2.11-6.715-4.947H1.276v3.11A11.995 11.995 0 0012 24z" fill="#34A853" fill-rule="nonzero"></path><path d="M5.285 14.28A7.213 7.213 0 014.91 12c0-.79.136-1.56.376-2.28V6.61H1.276A11.995 11.995 0 000 12c0 1.936.464 3.77 1.276 5.39l4.01-3.11z" fill="#FBBC05" fill-rule="nonzero"></path><path d="M12 4.773c1.762 0 3.344.605 4.587 1.794l3.442-3.442C17.951 1.19 15.235 0 12 0 7.31 0 3.25 2.69 1.276 6.61l4.01 3.11C6.228 6.884 8.874 4.773 12 4.773z" fill="#EA4335" fill-rule="nonzero"></path><path d="M0 0h24v24H0z"></path>
+                                            </g>
+                                        </svg>
+                                        <span translate>Continue with Google</span>
+                                    </button>
+                                    <!--                                <button type="button">-->
+                                    <!--                                    <svg class="svg facebook" aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">-->
+                                    <!--                                        <title>Facebook</title>-->
+                                    <!--                                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z">-->
+                                    <!--                                        </path>-->
+                                    <!--                                    </svg>-->
+                                    <!--                                    Continue with Facebook-->
+                                    <!--                                </button>-->
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="formType === 'login'">
+                                <p class="text-center">
+                                    <span translate>New to Gaia</span>? <a class="sign-up" (click)="formType='signup'; errMessage = '';" translate>Sign up</a>
+                                </p>
+                            </ng-container>
+                            <ng-container *ngIf="formType === 'signup'">
+                                <p class="text-center">
+                                    <span translate>Already on Gaia</span>? <a class="log-in" (click)="formType='login'; resetMessages();" translate>Log In</a>
+                                </p>
+                            </ng-container>
+                            <ng-container *ngIf="formType === 'forgot'">
+                                <p class="text-center"><span translate>Back to</span>&nbsp;<a class="log-in" (click)="formType='login'; resetMessages();" translate>Log In</a></p>
+                            </ng-container>
+                        </div>
                     </div>
-                </div>
-                <div class="generic-loader-wrapper" *ngIf="callInProgress">
-                    <div class="loader">
-                        <div class="spinner-border">
-                            <span class="sr-only"></span>
+                    <div class="generic-loader-wrapper" *ngIf="callInProgress">
+                        <div class="loader">
+                            <div class="spinner-border">
+                                <span class="sr-only"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<ng-template #rightItems>
-    <div class="platforms dropdown" *ngIf="platforms.length > 1 && !isPlansPage">
-        <a class="dropdown-toggle pointer" data-bs-toggle="dropdown"
-           [innerHTML]="selectedPlatform.display_name">
-        </a>
+    <ng-template #rightItems>
+        <div class="platforms dropdown"
+             *ngIf="!isPlansPage"
+            [ngClass]="{'dropdown-rtl': currentLang === 'he'}">
+            <a
+               [ngClass]="{'dropdown-toggle pointer': platforms.length > 1}"
+               data-bs-toggle="dropdown"
+               [innerHTML]="selectedPlatform.display_name">
+            </a>
 
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
-                <a class="dropdown-item pointer"
-                   [ngClass]="{'active': selectedPlatform.name === p.name}"
-                   [innerHTML]="p.display_name"></a>
-            </li>
-        </ul>
-    </div>
-    <ng-container *ngIf="!user.id">
-        <div class="login align-self-center">
-            <a class="link pointer"
-               (click)="setFormType('login')">Log In</a>
-        </div>
-        <div class="join align-self-center">
-            <!--                        <button class="btn btn-primary"-->
-            <!--                                (click)="setFormType('signup')">Join For Free</button>-->
-            <a class="link pointer"
-               (click)="setFormType('signup')">Join For Free</a>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="user.id">
-        <div class="profile dropdown">
-            <div class="align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
-                <!--                        Hello {{user.username}}-->
-                <img class="icon"
-                     [src]="imageSrc + '/assets/images/app_icons/Account_icon-cropped.svg'"
-                     [title]="'Hello ' + user.username"
-                     alt="">
-            </div>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item pointer" (click)="logout($event)">Sign out</a></li>
-                <li><a class="dropdown-item pointer" (click)="goTo('onBoarding')">Onboarding setting</a></li>
-                <li><a class="dropdown-item pointer" (click)="resetPassword()">Reset password</a></li>
-                <li><a class="dropdown-item pointer" (click)="goTo('billing')">Billing</a></li>
-                <li><a class="dropdown-item pointer" (click)="goTo('contactUs')">Contact us</a></li>
+            <ul class="dropdown-menu"
+                *ngIf="platforms.length > 1"
+                [ngClass]="{'dropdown-menu-start': currentLang === 'he', 'dropdown-menu-end': currentLang !== 'he'}">
+                <li *ngFor="let p of platforms" (click)="changePlatformValue(p, $event)">
+                    <a class="dropdown-item pointer"
+                       [ngClass]="{'active': selectedPlatform.name === p.name}"
+                       [innerHTML]="p.display_name"></a>
+                </li>
             </ul>
         </div>
-        <!--                    <div class="logout align-self-center">-->
-        <!--                        <a class="link" href="#"-->
-        <!--                           (click)="logout($event)">-->
-        <!--                            &lt;!&ndash;                        <i class="bi bi-box-arrow-right"></i>&ndash;&gt;-->
-        <!--                            <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">-->
-        <!--                        </a>-->
-        <!--                    </div>-->
-    </ng-container>
-</ng-template>
+        <ng-container *ngIf="!user.id">
+            <div class="login align-self-center">
+                <a class="link pointer"
+                   (click)="setFormType('login')" translate>Log In</a>
+            </div>
+            <div class="join align-self-center">
+                <!--                        <button class="btn btn-primary"-->
+                <!--                                (click)="setFormType('signup')">Join For Free</button>-->
+                <a class="link pointer"
+                   (click)="setFormType('signup')" translate>Join For Free</a>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="user.id">
+            <div class="profile dropdown"
+                [ngClass]="{'dropdown-rtl': currentLang === 'he'}">
+                <div class="align-self-center pointer dropdown-toggle" data-bs-toggle="dropdown">
+                    <!--                        Hello {{user.username}}-->
+                    <img class="icon"
+                         [src]="imageSrc + '/assets/images/app_icons/Account_icon-cropped.svg'"
+                         [title]="('Hello' | translate) + ' ' + user.username"
+                         alt="">
+                </div>
+                <ul class="dropdown-menu" [ngClass]="{'dropdown-menu-start': currentLang === 'he', 'dropdown-menu-end': currentLang !== 'he'}">
+                    <li><a class="dropdown-item pointer" (click)="logout($event)" translate>Sign out</a></li>
+                    <li><a class="dropdown-item pointer" (click)="goTo('onBoarding')" translate>Onboarding setting</a></li>
+                    <li><a class="dropdown-item pointer" (click)="resetPassword()" translate>Reset password</a></li>
+                    <li><a class="dropdown-item pointer" (click)="goTo('billing')" translate>Billing</a></li>
+                    <li><a class="dropdown-item pointer" (click)="goTo('contactUs')" translate>Contact us</a></li>
+                </ul>
+            </div>
+            <!--                    <div class="logout align-self-center">-->
+            <!--                        <a class="link" href="#"-->
+            <!--                           (click)="logout($event)">-->
+            <!--                            &lt;!&ndash;                        <i class="bi bi-box-arrow-right"></i>&ndash;&gt;-->
+            <!--                            <img [src]="imageSrc + 'assets/images/icons/exit_icon.png'">-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+        </ng-container>
+    </ng-template>
 
-<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="relative-content">
-                    <div class="login container">
-                        <div class="form-group">
-                            <form>
-                                <label for="password">Old Password</label>
-                                <input type="password" name="password" class="form-control" id="old_password" [(ngModel)]="resetPassDetails.old_password" required>
-                                <label for="password">New Password</label>
-                                <input type="password" name="password" class="form-control" id="password" [(ngModel)]="resetPassDetails.new_password" required>
-                                <label for="password">Confirm Password</label>
-                                <input type="password" name="password" class="form-control" id="confirm_password" [(ngModel)]="resetPassDetails.confirm_password" required>
-                                <div class="text-center text-danger" *ngIf="resetPassDetails.errMessage" [innerHTML]="resetPassDetails.errMessage"></div>
-                                <div class="text-center text-success" *ngIf="resetPassDetails.successMessage" [innerHTML]="resetPassDetails.successMessage"></div>
-                                <br>
-                                <div class="text-center">
-                                    <button class="btn btn-primary" (click)="changePassword()">Submit</button>
-                                </div>
-                            </form>
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="relative-content">
+                        <div class="login container">
+                            <div class="form-group">
+                                <form>
+                                    <label for="password" translate>Old Password</label>
+                                    <input type="password" name="password" class="form-control" id="old_password" [(ngModel)]="resetPassDetails.old_password" required>
+                                    <label for="password" translate>New Password</label>
+                                    <input type="password" name="password" class="form-control" id="password" [(ngModel)]="resetPassDetails.new_password" required>
+                                    <label for="password" translate>Confirm Password</label>
+                                    <input type="password" name="password" class="form-control" id="confirm_password" [(ngModel)]="resetPassDetails.confirm_password" required>
+                                    <div class="text-center text-danger" *ngIf="resetPassDetails.errMessage" [innerHTML]="resetPassDetails.errMessage"></div>
+                                    <div class="text-center text-success" *ngIf="resetPassDetails.successMessage" [innerHTML]="resetPassDetails.successMessage"></div>
+                                    <br>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary" (click)="changePassword()" translate>Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="generic-loader-wrapper" *ngIf="callInProgress">
-                    <div class="loader">
-                        <div class="spinner-border">
-                            <span class="sr-only"></span>
+                    <div class="generic-loader-wrapper" *ngIf="callInProgress">
+                        <div class="loader">
+                            <div class="spinner-border">
+                                <span class="sr-only"></span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,12 +21,12 @@ export class AuthBasicGuard  {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
+        const lang = route.paramMap.get('lang');
         this.config.user_subject.subscribe((user) => {
             if (this.config.user && 'role' in this.config.user && this.config.user.role >= this.TRAIL) {
                 return true;
             } else {
-                this.router.navigate([''], { queryParams: { returnUrl: state.url }});
+                this.router.navigate([lang + '/'], { queryParams: { returnUrl: state.url }});
                 return false;
             }
         });

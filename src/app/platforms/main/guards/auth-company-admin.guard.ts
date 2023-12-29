@@ -26,6 +26,7 @@ export class AuthCompanyAdminGuard  {
         //     }
         // })
         // return true
+        const lang = route.paramMap.get('lang');
         const user = this.config.user;
         if (user && user.company_admin) {
             return true;
@@ -35,7 +36,7 @@ export class AuthCompanyAdminGuard  {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
+            this.router.navigate([user.id ? lang + '/' : lang + '/'], { queryParams: queryParams});
             return false;
         }
     }

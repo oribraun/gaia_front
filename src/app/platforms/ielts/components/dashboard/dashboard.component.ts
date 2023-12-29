@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../main/services/alert.service";
 import {HelperService} from "../../../main/services/helper.service";
 import {GeneralService} from "../../services/general/general.service";
+import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 
 declare let $: any;
 
@@ -76,6 +77,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         strike_num: 0
     };
 
+    currentLang: string = "";
+
     constructor(
         private config: Config,
         private apiService: ApiService,
@@ -83,13 +86,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private alertService: AlertService,
         private helperService: HelperService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private translate: TranslateService
     ) {
         this.imageSrc = this.config.staticImagePath;
     }
 
     ngOnInit(): void {
         this.getUser();
+        this.route.paramMap.subscribe((params) => {
+            const lang = params.get('lang');
+            if (lang) {
+                this.currentLang = lang;
+                this.translate.use(this.currentLang);
+            }
+        });
         this.route.queryParams.subscribe((params) => {
             const available = ['in_progress', 'my_courses', 'suggested_courses'];
             const type = params['type'];
@@ -287,16 +298,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onStart() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id]);
+        this.router.navigate([this.currentLang + '/lesson/' + lesson_id]);
 
     }
     onContinue() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate(['/lesson/' + lesson_id]);
+        this.router.navigate([this.currentLang + '/lesson/' + lesson_id]);
     }
     onBuy() {
         const course_id = this.currentCourseClicked.id;
-        this.router.navigate(['/buy/' + course_id]);
+        this.router.navigate([this.currentLang + '/buy/' + course_id]);
     }
 
     reset() {
@@ -318,14 +329,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     gotTo(route: string) {
-        this.router.navigate([route]);
+        this.router.navigate([this.currentLang + '/' + route]);
     }
 
     goToLesson(id: number, event: any = null) {
         if (event) {
             event.preventDefault();
         }
-        this.router.navigate(['ielts/practice/' + id]);
+        this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
     }
 
     showStrikeToolTip() {

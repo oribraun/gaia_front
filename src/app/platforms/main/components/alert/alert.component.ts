@@ -2,7 +2,7 @@
  * Created by ori on 4/27/2017.
  */
 
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {AlertService} from "../../services/alert.service";
 import {animate, keyframes, state, style, transition, trigger, useAnimation} from "@angular/animations";
 import {bounceIn, bounceOut} from "../../../shared/animations/bounce.animation";
@@ -59,6 +59,7 @@ import {bounceIn, bounceOut} from "../../../shared/animations/bounce.animation";
 })
 
 export class AlertComponent implements OnInit, AfterViewInit {
+    @Input() lang: string;
     public message: any = {};
     public messageTimeout: any;
     public tempMessage: any = {};

@@ -1,6 +1,9 @@
 @import "../../../../../vars";
 
+@margin: 15px;
+
 .dashboard {
+    direction: ltr;
     position: relative;
     min-height: 100%;
     padding: 0.75rem 0;
@@ -16,7 +19,6 @@
         .my-col {
             position: relative;
         }
-        @margin: 15px;
         @borderRadius: 10px;
         .panel-box {
             position: relative;
@@ -605,6 +607,22 @@
             .buttons {
                 margin-top: @marginTop;
                 text-align: center;
+            }
+        }
+    }
+}
+
+.dashboard-rtl {
+    direction: rtl;
+    .my-row {
+        .dynamic-part-area {
+            .left {
+                margin-right: 0;
+                margin-left: @margin;
+            }
+
+            .right {
+
             }
         }
     }
