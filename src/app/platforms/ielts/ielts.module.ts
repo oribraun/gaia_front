@@ -44,7 +44,7 @@ import {HttpClient} from "@angular/common/http";
              */
             echarts: () => import('echarts') // or import('./path-to-my-custom-echarts')
         }),
-        TranslateModule.forRoot({
+        TranslateModule.forChild({
             defaultLanguage: 'en',
             loader: {
                 provide: TranslateLoader,

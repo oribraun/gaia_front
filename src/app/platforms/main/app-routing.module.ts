@@ -11,46 +11,43 @@ import {OnBoardingComponent} from "./components/on-boarding/on-boarding.componen
 import {AuthChildrenPlatformGuard} from "./guards/auth-children-platform.guard";
 import {AuthIeltsPlatformGuard} from "./guards/auth-ielts-platform.guard";
 import {PrivacyComponent} from "./components/privacy/privacy.component";
-import {langGuard} from "./guards/lang.guard";
 
 const routes: Routes = [
-    { path: ':lang', canActivate: [langGuard], children: [
-            { path: '', component: HomeComponent, pathMatch : 'full' },
-            // { path: 'login', component: LoginComponent, pathMatch : 'full' },
-            // { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
-            { path: 'about', component: AboutComponent, pathMatch : 'full' },
-            { path: 'privacy-policy', component: PrivacyComponent, pathMatch : 'full' },
-            { path: 'onBoarding', component: OnBoardingComponent, pathMatch : 'full', canActivate: [AuthGuard] },
+    { path: '', component: HomeComponent, pathMatch : 'full' },
+    // { path: 'login', component: LoginComponent, pathMatch : 'full' },
+    // { path: 'login/:type', component: LoginComponent, pathMatch : 'full' },
+    { path: 'about', component: AboutComponent, pathMatch : 'full' },
+    { path: 'privacy-policy', component: PrivacyComponent, pathMatch : 'full' },
+    { path: 'onBoarding', component: OnBoardingComponent, pathMatch : 'full', canActivate: [AuthGuard] },
 
-            // for children app only
-            // {path: 'childrens', children: [
-            //         { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full' },
-            //         { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full' },
-            //         { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full' },
-            //     ],
-            //     canActivate: [AuthChildrenPlatformGuard]
-            // },
-            {
-                path: 'childrens',
-                loadChildren: () => import('../childrens/childrens.module').then(m => m.ChildrensModule)
-            },
-            // for children app only
+    // for children app only
+    // {path: 'childrens', children: [
+    //         { path: 'lesson/:lesson_id', component: LessonComponent, pathMatch : 'full' },
+    //         { path: 'dashboard', component: ChildrensDashboardComponent, pathMatch : 'full' },
+    //         { path: 'buy/:course_id', component: BuyComponent, pathMatch : 'full' },
+    //     ],
+    //     canActivate: [AuthChildrenPlatformGuard]
+    // },
+    {
+        path: 'childrens',
+        loadChildren: () => import('../childrens/childrens.module').then(m => m.ChildrensModule)
+    },
+    // for children app only
 
-            // for ielts app only
-            {
-                path: 'ielts',
-                loadChildren: () => import('../ielts/ielts.module').then(m => m.IeltsModule)
-            },
-            // for ielts app only
+    // for ielts app only
+    {
+        path: 'ielts',
+        loadChildren: () => import('../ielts/ielts.module').then(m => m.IeltsModule)
+    },
+    // for ielts app only
 
-            // admin only for testing
-            { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] }
-            // admin only for testing
+    // admin only for testing
+    { path: 'lesson', component: LessonComponent, pathMatch : 'full', canActivate: [AuthGaialabsCompanyGuard] },
+    // admin only for testing
 
-            // { path: 'test', component: TestComponent, pathMatch : 'full' },
-            // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
-        ]},
-    { path: '**', redirectTo: '/en' }
+    // { path: 'test', component: TestComponent, pathMatch : 'full' },
+    // { path: 'test/:number', component: TestComponent, pathMatch : 'full' },
+    { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

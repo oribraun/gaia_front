@@ -16,6 +16,7 @@ export class Config {
     private _token_subject: Subject<string> = new Subject<string>();
     private _csrf_token_subject: Subject<string> = new Subject<string>();
     private _staticImagePath = '';
+    private _availableLangs = ['en', 'he'];
 
     private _lang_change: Subject<string> = new Subject<string>();
 
@@ -119,6 +120,14 @@ export class Config {
 
     set lang_change(value: string) {
         this._lang_change.next(value);
+    }
+
+    get availableLangs(): string[] {
+        return this._availableLangs;
+    }
+
+    set availableLangs(value: string[]) {
+        this._availableLangs = value;
     }
 
     resetUserCreds() {
