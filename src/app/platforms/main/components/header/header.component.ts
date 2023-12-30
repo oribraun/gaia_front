@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         errMessage: ''
     };
 
-    availableLangs = ['en', 'he'];
+    availableLangs: string[] = [];
     currentLang: string = "";
 
     constructor(
@@ -86,6 +86,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.getPlatforms();
+        this.availableLangs = this.config.availableLangs;
         this.user = this.config.user;
         this.config.user_subject.subscribe((user) => {
             this.user = user;
@@ -118,12 +119,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     listenToGlobalChangeLang() {
         this.currentLang = this.translate.getDefaultLang();
+        const lang = this.helperService.getLangFromLocalStorage();
+        if (lang) {
+            this.currentLang = lang;
+        }
         this.config.lang_change.subscribe({
             next:(value: string) => {
-                console.log('listenToGlobalChangeLang value', value);
+                console.log('listenToGlobalChangeLang header value', value);
                 this.currentLang = value;
             }
         });
+    }
+
+    changeLang(lang: string) {
+        this.config.lang_change = lang;
+        this.helperService.saveLangInLocalStorage(lang);
     }
 
     initOnBoarding(redirectUser = false) {
@@ -611,7 +621,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     redirectUser(user_on_boarding_finished: boolean) {
-        const returnUrl = this.helperService.getUserReturnUrl(this.user, this.currentLang, user_on_boarding_finished);
+        const returnUrl = this.helperService.getUserReturnUrl(this.user, user_on_boarding_finished);
         this.router.navigateByUrl(returnUrl);
     }
 

@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
     availableLangs = ['en', 'he'];
     currentLang: string = "";
+    previousUrl: string = "";
     constructor(
         private config: Config,
         private webSocketService: WebSocketService,
@@ -72,6 +73,11 @@ export class AppComponent implements OnInit {
         //     }
         // });
         this.listenToGlobalChangeLang();
+        this.currentLang = this.translate.getDefaultLang();
+        const lang = this.helperService.getLangFromLocalStorage();
+        if (lang) {
+            this.currentLang = lang;
+        }
     }
 
     changeGlobalLang(lang: string) {
@@ -167,16 +173,6 @@ export class AppComponent implements OnInit {
 
     getCurrentRoute() {
         this.router.events.subscribe((routerEvent) => {
-            if (routerEvent instanceof RoutesRecognized) {
-                if (routerEvent.state.root.firstChild) {
-                    const lang = routerEvent.state.root.firstChild.params['lang'];
-                    if (lang && this.availableLangs.indexOf(lang) > -1) {
-                        this.changeGlobalLang(lang);
-                    } else {
-                        this.changeGlobalLang(this.translate.getDefaultLang());
-                    }
-                }
-            }
             if(routerEvent instanceof NavigationEnd) {
                 // Get your url
                 const l = routerEvent.url.split('/');

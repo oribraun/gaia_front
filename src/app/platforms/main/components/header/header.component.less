@@ -163,7 +163,7 @@
                     }
                 }
 
-                .platforms {
+                .platforms, .lang {
                     position: relative;
                     color: var(--gaia-main-border-color);
 
@@ -175,6 +175,7 @@
                     .dropdown-menu {
                         padding: 0;
                         overflow: hidden;
+                        min-width: auto;
 
                         .dropdown-item {
                             &:active, &focus {
@@ -200,6 +201,22 @@
                     .dropdown-menu {
                         padding: 0;
                         overflow: hidden;
+                        .langs {
+                            text-align: center;
+                            &:active, &:hover {
+                                background-color: inherit;
+                            }
+                            span {
+                                padding: 5px;
+                                cursor: pointer;
+                                &:hover {
+                                    color: var(--gaia-header-color);
+                                }
+                                &.active {
+                                    color: var(--gaia-header-color);
+                                }
+                            }
+                        }
                     }
 
                     @media (min-width: 768px) {

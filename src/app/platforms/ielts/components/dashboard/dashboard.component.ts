@@ -94,13 +94,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getUser();
-        this.route.paramMap.subscribe((params) => {
-            const lang = params.get('lang');
-            if (lang) {
-                this.currentLang = lang;
-                this.translate.use(this.currentLang);
-            }
-        });
         this.route.queryParams.subscribe((params) => {
             const available = ['in_progress', 'my_courses', 'suggested_courses'];
             const type = params['type'];
@@ -109,6 +102,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
         });
         this.getPlatformDashboard();
+        this.listenToGlobalChangeLang();
+    }
+
+    listenToGlobalChangeLang() {
+        this.currentLang = this.translate.getDefaultLang();
+        const lang = this.helperService.getLangFromLocalStorage();
+        if (lang) {
+            this.currentLang = lang;
+        }
+        this.config.lang_change.subscribe({
+            next:(value: string) => {
+                console.log('listenToGlobalChangeLang header value', value);
+                this.currentLang = value;
+            }
+        });
     }
 
     getUser() {
@@ -298,16 +306,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onStart() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate([this.currentLang + '/lesson/' + lesson_id]);
+        this.router.navigate(['/lesson/' + lesson_id]);
 
     }
     onContinue() {
         const lesson_id = this.currentLessonClicked.id;
-        this.router.navigate([this.currentLang + '/lesson/' + lesson_id]);
+        this.router.navigate(['/lesson/' + lesson_id]);
     }
     onBuy() {
         const course_id = this.currentCourseClicked.id;
-        this.router.navigate([this.currentLang + '/buy/' + course_id]);
+        this.router.navigate(['/buy/' + course_id]);
     }
 
     reset() {
@@ -329,14 +337,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     gotTo(route: string) {
-        this.router.navigate([this.currentLang + '/' + route]);
+        this.router.navigate(['/' + route]);
     }
 
     goToLesson(id: number, event: any = null) {
         if (event) {
             event.preventDefault();
         }
-        this.router.navigate([this.currentLang + '/ielts/practice/' + id]);
+        this.router.navigate(['/ielts/practice/' + id]);
     }
 
     showStrikeToolTip() {
