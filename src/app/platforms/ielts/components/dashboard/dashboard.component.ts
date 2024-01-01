@@ -109,14 +109,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.currentLang = this.translate.getDefaultLang();
         const lang = this.helperService.getLangFromLocalStorage();
         if (lang) {
-            this.currentLang = lang;
+            this.changeLang(lang);
         }
         this.config.lang_change.subscribe({
             next:(value: string) => {
-                console.log('listenToGlobalChangeLang header value', value);
-                this.currentLang = value;
+               this.changeLang(value);
             }
         });
+    }
+
+    changeLang(lang: string) {
+        this.currentLang = lang;
+        this.translate.use(this.currentLang);
     }
 
     getUser() {

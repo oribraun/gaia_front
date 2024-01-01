@@ -3,10 +3,11 @@
 
 .slide-board {
     position: relative;
-    height: 96%;
+    height: calc(100% - (@gap * 2));
     background-color: white;
-    margin: 15px;
-    border-radius: 15px;
+    margin: 0 @gap;
+    top: @gap;
+    bottom: @gap;
     @greenColor: var(--gaia-success-color);
     @blueColor: var(--gaia-header-color);
     //@greenColor: #4caf50;
@@ -166,7 +167,7 @@
                             border-radius: 4px;
                             color: #666;
                             cursor: move;
-                        
+
                             &:hover {
                             background-color: #eee;
                             }

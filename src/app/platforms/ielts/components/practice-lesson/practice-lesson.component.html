@@ -103,32 +103,35 @@
                 <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
                 </button>
-                <div><span translate>Slide</span> {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
+                <div><span class="d-none d-md-inline" translate>Slide</span> {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
                 <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>
             </div>
             <div class="timer-status">
-                <span *ngIf="timersHelper.timers[test_presentation_timer_id]">
-                    <span translate>Time Left</span> <span [ngClass]="{
-                    'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
-                    }">
-                    {{timersHelper.timers[test_presentation_timer_id].getTime()}}
+                <span class="timers" *ngIf="timersHelper.timers[test_presentation_timer_id]">
+                    <span translate>Time Left</span>
+                    <span [ngClass]="{
+                        'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
+                        }">
+                        {{timersHelper.timers[test_presentation_timer_id].getTime()}}
+                    </span>
+                    <span translate>Time Passed</span>
+                    <span [ngClass]="{
+                        'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
+                        }">
+                        {{timersHelper.timers[test_presentation_timer_id].getCounter()}}<!--
+                 --></span>
                 </span>
-                    <span translate>Time Passed</span> <span [ngClass]="{
-                    'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
-                    }">
-                    {{timersHelper.timers[test_presentation_timer_id].getCounter()}}
-                </span> |
-                </span> <span translate>Status</span>:
+                <span><span translate>Status</span>:</span>
                 <span translate>{{user_lesson_status}}</span>
             </div>
         </ng-container>
         <ng-container  *ngIf="currentSlide.slide_type === 'video'">
-            <button class="mark-as-finished" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()" translate>
+            <button class="mark-as-finished status" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()" translate>
                 Mark as watched
             </button>
-            <div *ngIf="currentSlide.video_completed" translate>
+            <div class="status" *ngIf="currentSlide.video_completed" translate>
                 Lesson Completed
             </div>
 

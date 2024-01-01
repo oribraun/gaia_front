@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
         this.currentLang = this.translate.getDefaultLang();
         const lang = this.helperService.getLangFromLocalStorage();
         if (lang) {
-            this.currentLang = lang;
+            this.changeGlobalLang(lang);
         }
     }
 

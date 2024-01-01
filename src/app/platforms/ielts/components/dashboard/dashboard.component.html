@@ -22,8 +22,8 @@
                     <div class="d-flex flex-column">
                         <div class="part flex-fill" [ngClass]="'part-' + currentCoursePlanPartIndex">
                             <div class="panel-box">
-                                <h4 class="header" translate>
-                                    {{coursePlan.parts[currentCoursePlanPartIndex].title}}
+                                <h4 class="header">
+                                    {{coursePlan.parts[currentCoursePlanPartIndex].title | translate}}
                                 </h4>
                                 <div class="recommended-videos" *ngIf="practiceLessons && practiceLessons.length">
                                     <!-- <p>Recommended videos for this part:</p> -->

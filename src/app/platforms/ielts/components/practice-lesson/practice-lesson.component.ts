@@ -31,6 +31,7 @@ export class PracticeLessonComponent implements OnInit {
     user_lesson_id!: number;
     current_base_lesson_id!: number;
     user_lesson_status!: string;
+    presentation_lang!: string;
     question_id!: number;
     modalActive:boolean = false;
     enable_end_lesson_button:boolean = false;
@@ -183,8 +184,10 @@ export class PracticeLessonComponent implements OnInit {
         }
         this.config.lang_change.subscribe({
             next:(value: string) => {
-                console.log('listenToGlobalChangeLang header value', value);
-                this.currentLang = value;
+                if (!this.presentation_lang) {
+                    console.log('listenToGlobalChangeLang header value', value);
+                    this.currentLang = value;
+                }
             }
         });
     }
@@ -435,6 +438,10 @@ export class PracticeLessonComponent implements OnInit {
                     this.course_plan_id = response.course_plan_id;
                     this.current_base_lesson_id = response.current_base_lesson_id;
                     this.user_lesson_status = response.user_lesson_status;
+                    this.presentation_lang = response.presentation_lang;
+                    if (this.presentation_lang) {
+                        this.changeLang(this.presentation_lang);
+                    }
                     this.gotFirstPresentation = true;
                     console.log('this.presentation ', this.presentation);
                     if (this.question_id) {

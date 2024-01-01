@@ -27,11 +27,11 @@
             </div>
         </div>
     </div>
-    <div class="right-panel" [ngClass]="{'no-transition': dragStarted}"
+    <div class="right-panel right-panel-mobile" [ngClass]="{'no-transition': dragStarted, 'close': !openRightBoard}"
          [ngStyle]="{'width': showPanel ? drag.width + 'px' : ''}">
         <div class="panel">
             <div class="teacher">
-                <div class="circle" #teacher>
+                <div class="circle" #teacher (click)="toggleRightBoardMobile()">
                     <video #heygenMediaElement class="video" id="mediaElement" autoplay></video>
 <!--                    <img [src]="imageSrc + 'assets/gifs/teacher.png'">-->
                 </div>

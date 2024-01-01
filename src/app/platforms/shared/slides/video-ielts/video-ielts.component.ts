@@ -102,6 +102,8 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     unsDemo = true;
 
+    openRightBoard = false;
+
     constructor(
         protected override config: Config,
         private sanitizer: DomSanitizer,
@@ -840,6 +842,17 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
 
     deleteSessionId() {
         localStorage.removeItem('h_s_id');
+    }
+
+    toggleRightBoardMobile() {
+        this.openRightBoard = !this.openRightBoard;
+    }
+
+    openRightBoardMobile() {
+        this.openRightBoard = true;
+    }
+    closeRightBoardMobile() {
+        this.openRightBoard = true;
     }
 
     override ngOnDestroy(): void {

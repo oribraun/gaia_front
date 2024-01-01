@@ -14,7 +14,8 @@
         margin: 0 auto;
         height: 100%;
         .video {
-            height: 60%;
+            height: auto;
+            max-height: 60%;
             text-align: center;
 
             .player {
@@ -45,7 +46,7 @@
         }
 
         .notes {
-            height: 20%;
+            height: 100%;
             margin-top: @gap;
 
             textarea {
@@ -336,10 +337,54 @@
         }
     }
 
+    .right-panel-mobile {
+        @media(max-width: 768px) {
+            max-width: 100%;
+            transition: all .3s ease-in-out;
+            .panel {
+                .teacher {
+                    transition: all .3s ease-in-out;
+                    .circle {
+                        cursor: pointer;
+                    }
+                }
+
+                .chat {
+                    transition: all .3s ease-in-out;
+                }
+            }
+            &.close {
+                bottom: calc(100% - (100px + 15px)) !important;
+                width: 100px !important;
+                padding: 0;
+                border-radius: 100%;
+                overflow: hidden;
+                box-shadow: 0 0 15px #a2a2a2;
+
+                .panel {
+                    .teacher {
+                        height: 100%;
+                    }
+
+                    .chat {
+                        height: 0;
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+            }
+            &.open {}
+        }
+    }
+
     &-with-panel {
+        transition: all .3s ease-in-out;
         margin-right: @panelWidth;
         .right-panel {
             right:0;
+        }
+        @media(max-width: 768px) {
+            margin-right: 0 !important;
         }
     }
 }
