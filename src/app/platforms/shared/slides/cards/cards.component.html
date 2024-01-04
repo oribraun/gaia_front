@@ -1,0 +1,211 @@
+<div class="slide-board slide-board-one-column">
+    <div class="outer-scroller">
+        <div class="inner-scroller">
+            <h2 class="title">
+                {{currentSlide.text}}
+            </h2>
+            <div class="cards">
+                <ng-container *ngIf="cards_type === 'BROWSE_LIST'">
+                    <div class="card-wrapper" *ngFor="let item of cards; index as i">
+                        <div class="breadcrumbs">{{i + 1}}/{{cards.length}}</div>
+                        <div class="card">
+                            <div class="left">
+                                <div class="speech-icon" (click)="speak(item.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="text">{{item.a}}</div>
+                            </div>
+                            <div class="right">
+                                <div class="text">{{item.b}}</div>
+                                <!--                                <div class="speech-icon" (click)="speak(item.b)">-->
+                                <!--                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />-->
+                                <!--                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="cards_type === 'BROWSE_ONEBYONE'">
+                    <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
+                        <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
+                            <div class="flip-card flip-card-front">
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
+                                <div class="card-image" *ngIf="currentCard.a_image_path">
+                                    <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                                <div class="flip-icon" (click)="showBackCard = !showBackCard">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/flip_icon.png'" />
+                                </div>
+                            </div>
+                            <div class="flip-card flip-card-back">
+                                <div class="text" *ngIf="currentCard.b && !currentCard.b_image_path">{{currentCard.b}}</div>
+                                <div class="card-image" *ngIf="currentCard.b_image_path">
+                                    <img [src]="currentCard.b_image_path" alt="">
+                                </div>
+                                <div class="flip-icon" (click)="showBackCard = !showBackCard">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/flip_icon.png'" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
+                        </button>
+                        <div>{{currentCardIndex + 1}}/{{cards.length}}</div>
+                        <button class="next" [disabled]="currentCardIndex === cards.length - 1" (click)="onNextCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
+                        </button>
+                    </div>
+                    <div class="cards-bar" (click)="moveBar($event)">
+                        <div class="bar">
+                            <div class="inner-bar" [ngStyle]="{
+                            '--width': (100 / cards.length) + '%',
+                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="cards_type === 'PRACTICE_INPUT'">
+                    <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
+                        <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
+                            <div class="flip-card flip-card-front">
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
+                                <div class="card-image" *ngIf="currentCard.a_image_path">
+                                    <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
+                        <div class="input-group">
+                            <input type="text" #input class="form-control" placeholder="תרגם">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="bi bi-send" (click)="input.value ? (sendUserReplay(input.value)) : null; input.value = ''"></i>
+                            </span>
+                        </div>
+                        <div class="flex-timer">
+                            <div class="timer-container">
+                                <svg>
+                                    <circle r="50%" cx="50%" cy="50%"></circle>
+                                    <circle r="25%" cx="50%" cy="50%" [ngStyle]="{'stroke-dashoffset': timerCirclePercent + '%'}"></circle>
+                                </svg>
+                                <div class="time">{{timersHelper.timers[timer_id].getTime()}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
+                        </button>
+                        <div>{{currentCardIndex + 1}}/{{cards.length}}</div>
+                        <button class="next" [disabled]="currentCardIndex === cards.length - 1" (click)="onNextCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
+                        </button>
+                    </div>
+                    <div class="cards-bar" (click)="moveBar($event)">
+                        <div class="bar">
+                            <div class="inner-bar" [ngStyle]="{
+                            '--width': (100 / cards.length) + '%',
+                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="cards_type === 'PRACTICE_AUDIO_INPUT'">
+                    <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
+                        <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
+                            <div class="flip-card flip-card-front">
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
+                                <div class="card-image" *ngIf="currentCard.a_image_path">
+                                    <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
+                        <button class="btn btn-primary press-to-speak"
+                                (mousedown)="startAsr()"
+                                (mouseup)="stopAsr()"
+                                (touchstart)="startAsr()"
+                                (touchend)="stopAsr()"
+                        >{{'Press to speak' | translate}}</button>
+                        <div class="flex-timer">
+                            <div class="timer-container">
+                                <svg>
+                                    <circle r="50%" cx="50%" cy="50%"></circle>
+                                    <circle r="25%" cx="50%" cy="50%" [ngStyle]="{'stroke-dashoffset': timerCirclePercent + '%'}"></circle>
+                                </svg>
+                                <div class="time">{{timersHelper.timers[timer_id].getTime()}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
+                        </button>
+                        <div>{{currentCardIndex + 1}}/{{cards.length}}</div>
+                        <button class="next" [disabled]="currentCardIndex === cards.length - 1" (click)="onNextCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
+                        </button>
+                    </div>
+
+                    <div class="cards-bar" (click)="moveBar($event)">
+                        <div class="bar">
+                            <div class="inner-bar" [ngStyle]="{
+                            '--width': (100 / cards.length) + '%',
+                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="cards_type === 'PRACTICE_MULTIPLE_CHOICE'">
+                    <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
+                        <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
+                            <div class="flip-card flip-card-front">
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
+                                <div class="card-image" *ngIf="currentCard.a_image_path">
+                                    <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
+                        <div class="options">
+                            <div class="row">
+                                <div class="col-6" *ngFor="let item of currentCard.options">
+                                    <button class="option" (click)="sendUserReplay(item)">{{item}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
+                        </button>
+                        <div>{{currentCardIndex + 1}}/{{cards.length}}</div>
+                        <button class="next" [disabled]="currentCardIndex === cards.length - 1" (click)="onNextCard($event)">
+                            <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
+                        </button>
+                    </div>
+
+                    <div class="cards-bar" (click)="moveBar($event)">
+                        <div class="bar">
+                            <div class="inner-bar" [ngStyle]="{
+                            '--width': (100 / cards.length) + '%',
+                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

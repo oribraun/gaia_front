@@ -185,6 +185,12 @@ export class PresentationSlide {
     timer_timeout_msg: string = "test times up - please move on";
     timer_timeout_sec: number = -1;
 
+    cards_type: string;
+    shuffle: boolean;
+    enable_audio: boolean;
+    show_envelope: boolean;
+    cards: any[];
+
 
     constructor(obj?: any) {
         if (obj) {

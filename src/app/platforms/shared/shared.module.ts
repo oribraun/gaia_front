@@ -36,6 +36,7 @@ import { HearingComponent } from './slides/hearing/hearing.component';
 import { SpeakingComponent } from './slides/speaking/speaking.component';
 import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
 import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-font-size.directive";
+import {CardsComponent} from "./slides/cards/cards.component";
 // import { LottieModule } from 'ngx-lottie';
 //
 //
@@ -72,6 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HearingComponent,
         SpeakingComponent,
         VideoIeltsComponent,
+        CardsComponent,
 
         CapitalizePipe,
         DatetimeFormatPipe,
@@ -120,6 +122,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HearingComponent,
         SpeakingComponent,
         VideoIeltsComponent,
+        CardsComponent,
 
         CapitalizePipe,
         DatetimeFormatPipe,

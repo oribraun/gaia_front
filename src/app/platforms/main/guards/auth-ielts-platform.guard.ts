@@ -28,7 +28,6 @@ export class AuthIeltsPlatformGuard {
         // return true
         const lang = route.paramMap.get('lang');
         const user = this.config.user;
-        console.log('user.last_logged_platform test-prep', user.last_logged_platform);
         if (user && user.last_logged_platform === 'ielts') {
             return true;
         } else {

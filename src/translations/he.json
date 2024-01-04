@@ -48,7 +48,7 @@
     "Password": "סיסמה",
     "Forgot Password": "שכחת סיסמה",
     "Resend": "שלח שוב",
-    "Sign up": "התחבר",
+    "Sign up": "הרשם",
     "Username": "שם משתמש",
     "or": "או",
     "Google": "גוגל",
@@ -85,5 +85,7 @@
 
     "Finished": "הסתיים",
     "In Progress": "בעיצומו",
-    "To Be Started": "עוד לא התחיל"
+    "To Be Started": "עוד לא התחיל",
+
+    "Press to speak": "לחץ כדי לדבר"
 }

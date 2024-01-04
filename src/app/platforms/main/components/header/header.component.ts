@@ -107,13 +107,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (planId) {
                 this.planId = planId;
             }
+
+            const show = params['show'];
+            if (!type && show === 'reset-pass' && this.user.id) {
+                setTimeout(() => {
+                    this.showResetPasswordModel();
+                });
+            }
+
         });
         this.setUpGoogle();
 
         this.config.user_on_boarding_subject.subscribe(() => {
             this.user_on_boarding_finished = this.config.user_on_boarding && this.config.user_on_boarding.finished;
         });
-        this.checkIfPlansPage();
+        this.listenToNavigationEvents();
         this.listenToGlobalChangeLang();
     }
 
@@ -184,7 +192,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                     if (user_activity) {
                         this.user.last_lesson_id = user_activity.last_user_lesson;
                     }
-                    console.log('user_activity', user_activity);
+                    // console.log('user_activity', user_activity);
                 } else {
                     console.log('getUserActivity errMessage', response.errMessage);
                 }
@@ -694,9 +702,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
     hideLoginModel() {
         const el = $('#loginModal');
-        el.removeClass('show');
-        el.modal('hide');
-        $('.modal-backdrop').hide();
+        if (el.hasClass('show')) {
+            el.removeClass('show');
+            el.modal('hide');
+            $('.modal-backdrop').remove();
+        }
     }
 
     goTo(page: string) {
@@ -714,9 +724,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     hideResetPasswordModel() {
         const el = $('#resetPasswordModal');
-        el.removeClass('show');
-        el.modal('hide');
-        $('.modal-backdrop').hide();
+        if (el.hasClass('show')) {
+            el.removeClass('show');
+            el.modal('hide');
+            $('.modal-backdrop').remove();
+        }
     }
 
     async changePassword() {
@@ -778,7 +790,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.resetPassDetails.errMessage = '';
     }
 
-    checkIfPlansPage() {
+    listenToNavigationEvents() {
         this.router.events.subscribe((routerEvent) => {
             if(routerEvent instanceof NavigationEnd) {
                 // Get your url
@@ -788,6 +800,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 } else {
                     this.isPlansPage = false;
                 }
+                this.hideLoginModel();
+                this.hideResetPasswordModel();
             }
         });
     }

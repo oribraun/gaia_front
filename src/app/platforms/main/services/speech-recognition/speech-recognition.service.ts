@@ -25,7 +25,6 @@ export class SpeechRecognitionService {
 
     setupSpeechRecognition(lang:string = 'en-US', nativeLang = 'he-IL') {
         this.originalLang = lang;
-        console.log('this.originalLan', this.originalLang);
         this.nativeLang = nativeLang;
         let recognitionClass = null;
         if ('webkitSpeechRecognition' in window) {
@@ -68,7 +67,7 @@ export class SpeechRecognitionService {
             allResults.push(results[i]);
         }
         allResults.sort((o1: any, o2: any) => o2.confidence - o1.confidence);
-        console.log('allResults', allResults);
+        // console.log('allResults', allResults);
         const allTranscripts = allResults.map((o: any) => o.transcript);
         const mainSentence = allTranscripts.shift();
         const alternativeWords = allResults.map((o: any) => o.transcript);

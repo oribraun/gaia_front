@@ -5,6 +5,7 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {Config} from "../../../main/config";
 import {ActivatedRoute, convertToParamMap} from "@angular/router";
 import {of} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('PracticeLessonComponent', () => {
     let component: PracticeLessonComponent;
@@ -12,7 +13,7 @@ describe('PracticeLessonComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [HttpClientTestingModule, TranslateModule.forRoot()],
             declarations: [PracticeLessonComponent],
             providers: [Config, {
                 provide: ActivatedRoute,

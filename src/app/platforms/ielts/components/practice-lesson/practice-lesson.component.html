@@ -25,6 +25,11 @@
             [currentSlide]="model.currentSlide"
             [slideData]="model.slideData"
         ></app-video-ielts>
+        <app-cards
+            *ngIf="model.currentSlide.slide_type === sectionTitles.cards"
+            [currentSlide]="model.currentSlide"
+            [slideData]="model.slideData"
+        ></app-cards>
     </ng-template>
     <div class="white-board">
         <!-- If it is a bundle -->
@@ -84,12 +89,12 @@
 
     <div class="finish-board" [ngClass]="{'finish-board-show': enable_end_lesson_button}">
         <div class="text">
-            <h5 translate>Good Job, You have completed this lesson</h5>
-            <h5 translate>Head back to the dashboard to continue the journey</h5>
+            <h5>{{'Good Job, You have completed this lesson' | translate}}</h5>
+            <h5>{{'Head back to the dashboard to continue the journey' | translate}}</h5>
         </div>
         <div class="buttons">
-            <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()" translate>Review Vocabulary</button>
-            <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()" translate>Back to Dashboard</button>
+            <button class="btn" *ngIf="!vocabulary_was_added" (click)="openVocabularyModal()">{{'Review Vocabulary' | translate}}</button>
+            <button class="btn" *ngIf="vocabulary_was_added" (click)="backToDashboard()">{{'Back to Dashboard' | translate}}</button>
         </div>
         <button type="button" class="btn-close" (click)="enable_end_lesson_button = false;"></button>
     </div>
@@ -103,40 +108,40 @@
                 <button class="prev" [disabled]="currentSlideIndex === 0" (click)="onPrevSlide($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
                 </button>
-                <div><span class="d-none d-md-inline" translate>Slide</span> {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
+                <div><span class="d-none d-md-inline">{{'Slide' | translate}}</span> {{currentSlideIndex + 1}}/{{currentSection.slides.length}}</div>
                 <button class="next" [disabled]="currentSlideIndex === currentSection.slides.length - 1" (click)="onNextSlide($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>
             </div>
             <div class="timer-status">
                 <span class="timers" *ngIf="timersHelper.timers[test_presentation_timer_id]">
-                    <span translate>Time Left</span>
+                    <span>{{'Time Left' | translate}}</span>
                     <span [ngClass]="{
                         'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
                         }">
                         {{timersHelper.timers[test_presentation_timer_id].getTime()}}
                     </span>
-                    <span translate>Time Passed</span>
+                    <span>{{'Time Passed' | translate}}</span>
                     <span [ngClass]="{
                         'timer-status-warning': timersHelper.timers[test_presentation_timer_id].counter_sec <= 60
                         }">
                         {{timersHelper.timers[test_presentation_timer_id].getCounter()}}<!--
                  --></span>
                 </span>
-                <span><span translate>Status</span>:</span>
-                <span translate>{{user_lesson_status}}</span>
+                <span><span>{{'Status' | translate}}</span>:</span>
+                <span>{{user_lesson_status | translate}}</span>
             </div>
         </ng-container>
         <ng-container  *ngIf="currentSlide.slide_type === 'video'">
-            <button class="mark-as-finished status" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()" translate>
-                Mark as watched
+            <button class="mark-as-finished status" *ngIf="!currentSlide.video_completed" (click)="markVideoAsCompleted()">
+                {{'Mark as watched' | translate}}
             </button>
-            <div class="status" *ngIf="currentSlide.video_completed" translate>
-                Lesson Completed
+            <div class="status" *ngIf="currentSlide.video_completed">
+                {{'Lesson Completed' | translate}}
             </div>
 
             <div class="slide-buttons" [ngStyle]="!recommendedVideos.length ? {'visibility': 'hidden'} : {}">
-                <div translate>Previous Video</div>
+                <div>{{'Previous Video' | translate}}</div>
                 <button class="prev" [disabled]="recommendedVideos[0].id === current_base_lesson_id"
                         (click)="recommendedVideos.length && onPrevLesson($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
@@ -145,7 +150,7 @@
                         (click)="recommendedVideos.length && onNextLesson($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>
-                <div translate>Next Video</div>
+                <div>{{'Next Video' | translate}}</div>
             </div>
         </ng-container>
     </div>
@@ -163,7 +168,7 @@
     <div id="openModal-about" class="modalDialog" [ngClass]="{'modalDialog_target':modalActive}">
         <div>
             <a  title="Close"  (click)="closeModel()"class="close">X</a>
-            <h2 translate>Lesson Completed</h2>
+            <h2>{{'Lesson Completed' | translate}}</h2>
             <!-- <div [innerHTML]="presentation.ended_text"></div> -->
             <!-- <div [innerHTML]="grades"></div> -->
             <br>

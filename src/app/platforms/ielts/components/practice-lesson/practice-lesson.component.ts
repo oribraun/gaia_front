@@ -111,7 +111,8 @@ export class PracticeLessonComponent implements OnInit {
         hearing:'hearing',
         speaking:'speaking',
         generic_slide:'generic_slide',
-        embed_game:'embed_game'
+        embed_game:'embed_game',
+        cards:'cards'
     };
 
     @ViewChild('slides', { static: false }) slides!: ElementRef;
@@ -186,7 +187,7 @@ export class PracticeLessonComponent implements OnInit {
             next:(value: string) => {
                 if (!this.presentation_lang) {
                     console.log('listenToGlobalChangeLang header value', value);
-                    this.currentLang = value;
+                    this.changeLang(value);
                 }
             }
         });
@@ -422,16 +423,13 @@ export class PracticeLessonComponent implements OnInit {
         }).subscribe({
             next: (response: any) => {
                 if (response.err) {
-                    if (response.errMessage.indexOf('lesson does not exist') > -1) {
+                    if (response.errMessage.indexOf('does not exist') > -1) {
                         this.router.navigate(['/ielts/dashboard']);
                     }
                     console.log('getPresentation err', response);
                 } else {
                     this.presentation = new Presentation(response.presentation);
-                    // change lang by presentation data
-                    // if (this.presentation.lang) {
-                    //     this.changeLang(this.currentSlide.lang);
-                    // }
+
                     this.lesson_group_type = response.lesson_group_type;
                     this.is_test_mode = this.lesson_group_type['name'] == 'test' || false;
                     this.recommendedVideos = response.recommended_videos;
@@ -604,7 +602,6 @@ export class PracticeLessonComponent implements OnInit {
 
     async getSpeakNative() {
         let blob = null;
-        console.log('speakNative this.currentSlide', this.currentSlide);
         if (this.currentSlide.should_read_native &&
             (this.currentSlide.index_in_bundle == 0 || this.currentSlide.index_in_bundle == -1)) {
             blob = await this.speakNative({'text': this.currentSlide.native_language_text.he});
@@ -850,7 +847,7 @@ export class PracticeLessonComponent implements OnInit {
             this.stopAudio();
             return;
         }
-        console.log("all_presentation_tasks_completed", all_presentation_tasks_completed);
+
         if (all_presentation_tasks_completed) {
             this.enable_end_lesson_button = true;
             // this.modalActive=true;
@@ -882,7 +879,6 @@ export class PracticeLessonComponent implements OnInit {
                 return true;
             }
         } else {
-            console.log('coreFuncs', coreFuncs);
             if(coreFuncs.hasOwnProperty('asr') && !coreFuncs.asr) {
                 console.log('coreFuncs', 'Stopping ASR');
             }
@@ -1050,7 +1046,6 @@ export class PracticeLessonComponent implements OnInit {
         } else {
             this.currentSlide = new PresentationSlide(this.currentSection.slides[this.currentSlideIndex]);
         }
-        console.log('this.currentSlide', this.currentSlide);
     }
 
     setCurrentObjective(index: number = -1) {
@@ -1574,7 +1569,6 @@ export class PracticeLessonComponent implements OnInit {
     }
 
     onRecognitionResults = (results: any) => {
-        console.log("onRecognitionResults results", results);
         const recognitionText = results.text;
         if (results.isFinal) {
             console.log('onRecognitionResults final', recognitionText);

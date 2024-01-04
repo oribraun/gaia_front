@@ -18,7 +18,7 @@ export class UserOnboardingGuard  {
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         const lang = route.paramMap.get('lang');
         return new Promise((resolve, reject) => {
-            console.log('this.config.user_on_boarding canActivate', this.config.user_on_boarding);
+            // console.log('this.config.user_on_boarding canActivate', this.config.user_on_boarding);
             if (this.config.user_on_boarding) {
                 if (this.config.user_on_boarding.finished) {
                     resolve(true);
