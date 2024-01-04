@@ -111,13 +111,13 @@ export class HelperService {
         const outputArray = [];
         for (let i = 0; i < inputArray.length; i++) {
             const a_prev = inputArray[i - 1];
-            const a = inputArray[i];
+            const a = inputArray[i].toLowerCase().trim();
             if (a_prev) {
-                const a_split: any[] = a.split(' ');
+                const a_split: any[] = a.toLowerCase().trim().split(' ');
                 if (a_split.length) {
                     let lastIndexFound: any = null;
                     const indexsToRemove: any[] = [];
-                    const a_prev_split: any[] = a_prev.split(' ');
+                    const a_prev_split: any[] = a_prev.toLowerCase().trim().split(' ');
                     for (const item of a_split) {
                         const index_in_prev_a = a_prev_split.indexOf(item);
                         if (index_in_prev_a > -1) {
