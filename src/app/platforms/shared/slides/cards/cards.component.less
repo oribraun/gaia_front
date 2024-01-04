@@ -72,14 +72,21 @@
                 .flip-icon {
                     position: absolute;
                     bottom: 15px;
-                    left: 15px;
+                    right: 15px;
                     width: 20px;
                     height: 20px;
                     cursor: pointer;
+                    transform: scaleX(-1);
                     img {
                         width: 100%;
                         height: 100%;
                         vertical-align: top;
+                    }
+
+                    &.rtl {
+                        right: unset;
+                        left: 15px;
+                        transform: unset;
                     }
                 }
 
@@ -110,7 +117,9 @@
     }
 
     .breadcrumbs {
+        display: flex;
         font-size: .8em;
+        justify-content: end;
     }
 
     .speech-icon {
@@ -164,6 +173,7 @@
                 position: absolute;
                 top:0;
                 left:var(--left);
+                right:var(--right);
                 bottom: 0;
                 width: var(--width);
                 background: #e6e601;

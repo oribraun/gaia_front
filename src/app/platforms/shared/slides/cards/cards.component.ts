@@ -250,12 +250,22 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         } else {
             const clickXPos = event.clientX;
             const child = target.querySelector('.inner-bar');
-            const childLeftPosition = child.getBoundingClientRect().left;
-            const childRightPosition = childLeftPosition + child.clientWidth;
-            if (clickXPos < childLeftPosition && clickXPos < childRightPosition) {
-                this.onPrevCard(event);
-            } else if (clickXPos > childLeftPosition && clickXPos > childRightPosition) {
-                this.onNextCard(event);
+            if (this.slideData.lang !== 'he') {
+                const childLeftPosition = child.getBoundingClientRect().left;
+                const childRightPosition = childLeftPosition + child.clientWidth;
+                if (clickXPos < childLeftPosition && clickXPos < childRightPosition) {
+                    this.onPrevCard(event);
+                } else if (clickXPos > childLeftPosition && clickXPos > childRightPosition) {
+                    this.onNextCard(event);
+                }
+            } else {
+                const childLeftPosition = child.getBoundingClientRect().left;
+                const childRightPosition = childLeftPosition + child.clientWidth;
+                if (clickXPos < childLeftPosition && clickXPos < childRightPosition) {
+                    this.onNextCard(event);
+                } else if (clickXPos > childLeftPosition && clickXPos > childRightPosition) {
+                    this.onPrevCard(event);
+                }
             }
         }
     }

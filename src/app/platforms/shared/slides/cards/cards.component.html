@@ -7,19 +7,18 @@
             <div class="cards">
                 <ng-container *ngIf="cards_type === 'BROWSE_LIST'">
                     <div class="card-wrapper" *ngFor="let item of cards; index as i">
-                        <div class="breadcrumbs">{{i + 1}}/{{cards.length}}</div>
+                        <div class="breadcrumbs">
+                            <span>{{i + 1}}/{{cards.length}}</span>
+                        </div>
                         <div class="card">
+                            <div class="right">
+                                <div class="text">{{item.b}}</div>
+                            </div>
                             <div class="left">
+                                <div class="text">{{item.a}}</div>
                                 <div class="speech-icon" (click)="speak(item.a)">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
-                                <div class="text">{{item.a}}</div>
-                            </div>
-                            <div class="right">
-                                <div class="text">{{item.b}}</div>
-                                <!--                                <div class="speech-icon" (click)="speak(item.b)">-->
-                                <!--                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />-->
-                                <!--                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -28,14 +27,14 @@
                     <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
                         <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
                             <div class="flip-card flip-card-front">
-                                <div class="speech-icon" (click)="speak(currentCard.a)">
-                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
-                                </div>
                                 <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
                                 <div class="card-image" *ngIf="currentCard.a_image_path">
                                     <img [src]="currentCard.a_image_path" alt="">
                                 </div>
-                                <div class="flip-icon" (click)="showBackCard = !showBackCard">
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="flip-icon" [ngClass]="{'rtl': slideData.lang === 'he'}" (click)="showBackCard = !showBackCard">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/flip_icon.png'" />
                                 </div>
                             </div>
@@ -44,7 +43,7 @@
                                 <div class="card-image" *ngIf="currentCard.b_image_path">
                                     <img [src]="currentCard.b_image_path" alt="">
                                 </div>
-                                <div class="flip-icon" (click)="showBackCard = !showBackCard">
+                                <div class="flip-icon" [ngClass]="{'rtl': slideData.lang === 'he'}" (click)="showBackCard = !showBackCard">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/flip_icon.png'" />
                                 </div>
                             </div>
@@ -63,7 +62,9 @@
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
                             '--width': (100 / cards.length) + '%',
-                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                            '--left': slideData.lang !== 'he' ? currentCardIndex * (100 / cards.length) + '%' : '',
+                            '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
+                            }"></div>
                         </div>
                     </div>
                 </ng-container>
@@ -71,12 +72,12 @@
                     <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
                         <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
                             <div class="flip-card flip-card-front">
-                                <div class="speech-icon" (click)="speak(currentCard.a)">
-                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
-                                </div>
                                 <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
                                 <div class="card-image" *ngIf="currentCard.a_image_path">
                                     <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
                             </div>
                         </div>
@@ -111,7 +112,9 @@
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
                             '--width': (100 / cards.length) + '%',
-                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                            '--left': slideData.lang !== 'he' ? currentCardIndex * (100 / cards.length) + '%' : '',
+                            '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
+                            }"></div>
                         </div>
                     </div>
                 </ng-container>
@@ -119,12 +122,12 @@
                     <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
                         <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
                             <div class="flip-card flip-card-front">
-                                <div class="speech-icon" (click)="speak(currentCard.a)">
-                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
-                                </div>
                                 <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
                                 <div class="card-image" *ngIf="currentCard.a_image_path">
                                     <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
                             </div>
                         </div>
@@ -160,7 +163,9 @@
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
                             '--width': (100 / cards.length) + '%',
-                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                            '--left': slideData.lang !== 'he' ? currentCardIndex * (100 / cards.length) + '%' : '',
+                            '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
+                            }"></div>
                         </div>
                     </div>
                 </ng-container>
@@ -168,12 +173,12 @@
                     <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
                         <div class="flip-card-inner" [ngClass]="{'no-animation': disableFlipAnimation}">
                             <div class="flip-card flip-card-front">
-                                <div class="speech-icon" (click)="speak(currentCard.a)">
-                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
-                                </div>
                                 <div class="text" *ngIf="currentCard.a && !currentCard.a_image_path">{{currentCard.a}}</div>
                                 <div class="card-image" *ngIf="currentCard.a_image_path">
                                     <img [src]="currentCard.a_image_path" alt="">
+                                </div>
+                                <div class="speech-icon" (click)="speak(currentCard.a)">
+                                    <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
                             </div>
                         </div>
@@ -201,7 +206,9 @@
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
                             '--width': (100 / cards.length) + '%',
-                            '--left': currentCardIndex * (100 / cards.length) + '%'}"></div>
+                            '--left': slideData.lang !== 'he' ? currentCardIndex * (100 / cards.length) + '%' : '',
+                            '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
+                            }"></div>
                         </div>
                     </div>
                 </ng-container>
