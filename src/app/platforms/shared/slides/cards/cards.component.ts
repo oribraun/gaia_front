@@ -78,6 +78,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
 
     listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
+            console.log('slideEventReply', resp);
 
         });
         this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
@@ -307,14 +308,16 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         const data = {
             "source": 'check_answer',
             "answer": answer,
+            "card_idx": this.currentCardIndex,
+            "card_id": this.currentCard.id,
             "multiple_answers": [],
             'stopAudio': true
         };
         console.log('data', data);
-        // this.submitInProgress = true;
-        // const timer = this.timersHelper.getTimer(this.timer_id);
-        // timer.submited = true;
-        // this.lessonService.Broadcast("slideEventRequest", data);
+        this.submitInProgress = true;
+        const timer = this.timersHelper.getTimer(this.timer_id);
+        timer.submited = true;
+        this.lessonService.Broadcast("slideEventRequest", data);
     }
 
     startAsr() {
