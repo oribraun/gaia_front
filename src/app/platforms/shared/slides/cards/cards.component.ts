@@ -240,6 +240,15 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         }
     }
 
+    is_correct_option(option: string) {
+        if (this.cardAnswers[this.currentCard.id]) {
+            return this.cardAnswers[this.currentCard.id].answer_text === option;
+        }
+        else {
+            return false;
+        }
+    }
+
     onNextCard(event: Event) {
         if (this.showBackCard) {
             this.disableFlipAnimation = true;
