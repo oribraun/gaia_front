@@ -34,9 +34,10 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
     timerTotal: number;
     totalRoundPercent: number = 157;
     timerCirclePercent: number = this.totalRoundPercent;
+    cardAnswers: any = {};
+
 
     submitInProgress = false;
-
     recordingIsActive:boolean = false;
     speakInProgress:boolean = false;
 
@@ -55,7 +56,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         this.shuffle = this.currentSlide.shuffle;
         this.enable_audio = this.currentSlide.enable_audio;
         this.show_envelope = this.currentSlide.show_envelope;
-
+        this.initCardsAnswers();
         if (this.shuffle) {
             this.shuffleArray(this.cards);
         }
@@ -76,15 +77,65 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         this.listenToSlideEvents();
     }
 
+    initCardsAnswers() {
+        for (let i = 0; i < this.cards.length; i++) {
+            const q = this.cards[i];
+            if (this.currentSlide.all_answers[q.id]) {
+                this.cardAnswers[q.id] = JSON.parse(JSON.stringify(this.currentSlide.all_answers[q.id]));
+                this.cardAnswers[q.id].explanation = "";
+            } else {
+                this.cardAnswers[q.id] = {
+                    "pace": 0,
+                    "score": 0,
+                    "hint_used": false,
+                    "answer_text": "",
+                    "explanation": "",
+                    "card_idx": i,
+                    "cards_type": this.cards_type,
+                    "is_correct_answer": null
+                };
+            }
+        }
+        console.log('this.cardAnswers', this.cardAnswers);
+    }
+
+    setResponseAnswer(data: any) {
+        this.cardAnswers[this.currentCard.id].explanation = data.explanation;
+        this.cardAnswers[this.currentCard.id].is_correct_answer = data.is_correct_answer;
+    }    
+
     listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             console.log('slideEventReply', resp);
+            this.submitInProgress = false;
+            // ** for multiple choice: 
+            // if not test mode: 
+            //    if correct - mark correct answer with v and green, and after 3 sec move to next card
+            //    if wrong - mark wrong answer with x, and correct answer with v, and add button [continue]
+            // if test mode:
+            //    mark the selected answer and add button [continue]
+            // ** for input text:
+            // remember the text that was entered.
+            // if not test mode: 
+            //    if correct - mark correct text box with v and green background color and after 3 sec move to next card
+            //    if wrong - mark the text box with x and red background color, and and add button [continue]
+            // if test mode:
+            //    mark the text box and add button [continue]
+            try {
+                const resp_data = resp.data;
+                if (resp_data.source == "check_answer") {
+                    this.setResponseAnswer(resp_data.answer);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+
 
         });
         this.lessonService.ListenFor("slideEventReplyError").subscribe((resp:any) => {
-            if (this.submitInProgress) {
-                this.submitInProgress = false;
-            }
+            console.log('slideEventReplyError', resp);
+            this.submitInProgress = false;
         });
         this.lessonService.ListenFor("blockAllSlideEvents").subscribe((resp:any) => {
             if (this.submitInProgress) {
@@ -305,6 +356,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         // if (this.is_test_mode) {
         //     return;
         // }
+        // this.cardAnswers[this.currentCard.id].answer_text = answer
         const data = {
             "source": 'check_answer',
             "answer": answer,
