@@ -84,8 +84,8 @@
                     </div>
                     <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
                         <div class="input-group">
-                            <input type="text" #input class="form-control"  [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם">
-                            <span class="input-group-text" id="basic-addon1">
+                            <input type="text" #input class="form-control"  [ngStyle]="{'background-color': get_sucsess_color(cardAnswers[currentCard.id].is_correct_answer)}" [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם">
+                            <span class="input-group-text"  [ngStyle]="{'background-color': get_sucsess_color(cardAnswers[currentCard.id].is_correct_answer)}" id="basic-addon1">
                                 <i class="bi bi-send" (click)="input.value ? (sendUserReplay(input.value)) : null;"></i>
                             </span>
                         </div>
@@ -187,8 +187,7 @@
                         <div class="options">
                             <div class="row">
                                 <div class="col-6" *ngFor="let item of currentCard.options">
-                                    <button *ngIf="is_correct_option(item)"  class="correct-option" (click)="sendUserReplay(item)">{{item}}</button>
-                                    <button *ngIf="!is_correct_option(item)" class="option" (click)="sendUserReplay(item)">{{item}}</button>
+                                    <button class="option" [ngStyle]="{'background-color': get_sucsess_color(is_correct_option(item))}"(click)="sendUserReplay(item)">{{item}}</button>
                                 </div>
                             </div>
                         </div>

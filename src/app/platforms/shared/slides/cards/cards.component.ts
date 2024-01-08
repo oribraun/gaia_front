@@ -102,6 +102,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
     setResponseAnswer(data: any) {
         this.cardAnswers[this.currentCard.id].explanation = data.explanation;
         this.cardAnswers[this.currentCard.id].is_correct_answer = data.is_correct_answer;
+        console.log('this.cardAnswers', this.cardAnswers);
     }    
 
     listenToSlideEvents() {
@@ -240,12 +241,34 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         }
     }
 
+    get_sucsess_color(correct_answer: boolean | null) {
+        if (correct_answer === null) {
+            return '#e1e1e1';
+        } else if (correct_answer) {
+            return '#c0e6af';
+        } else {
+            return '#e6afaf';
+        }
+    }
+
+
     is_correct_option(option: string) {
+        // console.log('this.cardAnswers', this.cardAnswers);
         if (this.cardAnswers[this.currentCard.id]) {
-            return this.cardAnswers[this.currentCard.id].answer_text === option;
+            if (this.cardAnswers[this.currentCard.id].answer_text === option) {
+                if (this.cardAnswers[this.currentCard.id].is_correct_answer) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return null;
+            }
         }
         else {
-            return false;
+            return null;
         }
     }
 
@@ -362,10 +385,8 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         if (this.submitInProgress) {
             return;
         }
-        // if (this.is_test_mode) {
-        //     return;
-        // }
-        // this.cardAnswers[this.currentCard.id].answer_text = answer
+
+        this.cardAnswers[this.currentCard.id].answer_text = answer;
         const data = {
             "source": 'check_answer',
             "answer": answer,
