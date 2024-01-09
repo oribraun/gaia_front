@@ -79,13 +79,28 @@
                                 <div class="speech-icon" (click)="speak(currentCard.a)">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
+                                <div class="answer-icon correct" *ngIf="cardAnswers[currentCard.id].is_correct_answer">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <div class="answer-icon wrong" *ngIf="cardAnswers[currentCard.id].is_correct_answer === false">
+                                    <i class="bi bi-x-circle"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
                         <div class="input-group">
-                            <input type="text" #input class="form-control"  [ngStyle]="{'background-color': get_sucsess_color(cardAnswers[currentCard.id].is_correct_answer)}" [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם">
-                            <span class="input-group-text"  [ngStyle]="{'background-color': get_sucsess_color(cardAnswers[currentCard.id].is_correct_answer)}" id="basic-addon1">
+                            <input type="text" #input class="form-control"
+                                   [ngClass]="{
+                                       'correct-answer': cardAnswers[currentCard.id].is_correct_answer,
+                                       'wrong-answer': cardAnswers[currentCard.id].is_correct_answer === false
+                                   }"
+                                   [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם">
+                            <span class="input-group-text" id="basic-addon1"
+                                  [ngClass]="{
+                                       'correct-answer': cardAnswers[currentCard.id].is_correct_answer,
+                                       'wrong-answer': cardAnswers[currentCard.id].is_correct_answer === false
+                                   }">
                                 <i class="bi bi-send" (click)="input.value ? (sendUserReplay(input.value)) : null;"></i>
                             </span>
                         </div>
@@ -95,7 +110,7 @@
                                     <circle r="50%" cx="50%" cy="50%"></circle>
                                     <circle r="25%" cx="50%" cy="50%" [ngStyle]="{'stroke-dashoffset': timerCirclePercent + '%'}"></circle>
                                 </svg>
-                                <div class="time">{{timersHelper.timers[timer_id].getTime()}}</div>
+                                <div class="time">{{timersHelper.timers[timer_id].getCounter()}}</div>
                             </div>
                         </div>
                     </div>
@@ -117,6 +132,13 @@
                             }"></div>
                         </div>
                     </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
+                    </div>
                 </ng-container>
                 <ng-container *ngIf="cards_type === 'PRACTICE_AUDIO_INPUT'">
                     <div class="flip-card" [ngClass]="{'show-back': showBackCard}">
@@ -128,6 +150,12 @@
                                 </div>
                                 <div class="speech-icon" (click)="speak(currentCard.a)">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
+                                </div>
+                                <div class="answer-icon correct" *ngIf="cardAnswers[currentCard.id].is_correct_answer">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <div class="answer-icon wrong" *ngIf="cardAnswers[currentCard.id].is_correct_answer === false">
+                                    <i class="bi bi-x-circle"></i>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +173,7 @@
                                     <circle r="50%" cx="50%" cy="50%"></circle>
                                     <circle r="25%" cx="50%" cy="50%" [ngStyle]="{'stroke-dashoffset': timerCirclePercent + '%'}"></circle>
                                 </svg>
-                                <div class="time">{{timersHelper.timers[timer_id].getTime()}}</div>
+                                <div class="time">{{timersHelper.timers[timer_id].getCounter()}}</div>
                             </div>
                         </div>
                     </div>
@@ -167,6 +195,13 @@
                             '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
                             }"></div>
                         </div>
+                    </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="cards_type === 'PRACTICE_MULTIPLE_CHOICE'">
@@ -180,14 +215,28 @@
                                 <div class="speech-icon" (click)="speak(currentCard.a)">
                                     <img alt="" [src]="imageSrc + '/assets/images/icons/speech.png'" />
                                 </div>
+                                <div class="answer-icon correct" *ngIf="cardAnswers[currentCard.id].is_correct_answer">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <div class="answer-icon wrong" *ngIf="cardAnswers[currentCard.id].is_correct_answer === false">
+                                    <i class="bi bi-x-circle"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="input" [ngClass]="{'input-rtl': slideData.lang === 'he'}">
-                        <div class="options">
-                            <div class="row">
-                                <div class="col-6" *ngFor="let item of currentCard.options">
-                                    <button class="option" [ngStyle]="{'background-color': get_sucsess_color(is_correct_option(item))}"(click)="sendUserReplay(item)">{{item}}</button>
+                        <div class="input-group">
+                            <div class="options">
+                                <div class="row">
+                                    <div class="col-6" *ngFor="let item of currentCard.options">
+                                        <button class="option" (click)="sendUserReplay(item)"
+                                                [ngClass]="{
+                                                    'correct-answer': cardAnswers[currentCard.id].answer_text === item && cardAnswers[currentCard.id].is_correct_answer,
+                                                    'wrong-answer': cardAnswers[currentCard.id].answer_text === item && cardAnswers[currentCard.id].is_correct_answer === false
+                                                }">
+                                        {{item}}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -210,6 +259,13 @@
                             '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
                             }"></div>
                         </div>
+                    </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
                     </div>
                 </ng-container>
             </div>

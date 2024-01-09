@@ -1564,6 +1564,9 @@ export class PracticeLessonComponent implements OnInit {
             this.recognitionSubscribe = this.speechRecognitionService.onResults.subscribe(this.onRecognitionResults);
         }
         if (!this.speechRecognitionService.ASR_recognizing) {
+            if (this.presentation_lang === 'he') {
+                this.speechRecognitionService.changeToNativeLang();
+            }
             this.speechRecognitionService.startListening();
         }
     }
@@ -1580,6 +1583,9 @@ export class PracticeLessonComponent implements OnInit {
         if (this.recognitionSubscribe) {
             if (this.speechRecognitionService.ASR_recognizing) {
                 this.speechRecognitionService.stopListening();
+                if (this.presentation_lang === 'he') {
+                    this.speechRecognitionService.resetLang();
+                }
             }
             if (removeSubscribe) {
                 this.recognitionSubscribe.unsubscribe(this.onRecognitionResults);

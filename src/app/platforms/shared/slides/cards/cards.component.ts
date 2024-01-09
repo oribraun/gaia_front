@@ -103,21 +103,21 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         this.cardAnswers[this.currentCard.id].explanation = data.explanation;
         this.cardAnswers[this.currentCard.id].is_correct_answer = data.is_correct_answer;
         console.log('this.cardAnswers', this.cardAnswers);
-    }    
+    }
 
     listenToSlideEvents() {
         this.lessonService.ListenFor("slideEventReply").subscribe((resp:any) => {
             console.log('slideEventReply', resp);
             this.submitInProgress = false;
-            // ** for multiple choice: 
-            // if not test mode: 
+            // ** for multiple choice:
+            // if not test mode:
             //    if correct - mark correct answer with v and green, and after 3 sec move to next card
             //    if wrong - mark wrong answer with x, and correct answer with v, and add button [continue]
             // if test mode:
             //    mark the selected answer and add button [continue]
             // ** for input text:
             // remember the text that was entered.
-            // if not test mode: 
+            // if not test mode:
             //    if correct - mark correct text box with v and green background color and after 3 sec move to next card
             //    if wrong - mark the text box with x and red background color, and and add button [continue]
             // if test mode:
@@ -185,7 +185,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
     }
 
     watchTimers(loop_counter = 1) {
-        const timeout = 1; // every 15 seconds
+        const timeout = 1;
         if(this.checkTimer()) {
             this.loop_timer_timeout = setTimeout(() => {
                 if (this.checkTimer()) {
@@ -205,7 +205,7 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         let shouldContinue = true;
         const timer = this.timersHelper.getTimer(this.timer_id);
         if (timer) {
-            this.setCircleTimerFromTimerHelper();
+            // this.setCircleTimerFromTimerHelper();
             if (timer.counter_sec <= 0) {
                 shouldContinue = false;
             }
@@ -241,44 +241,13 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         }
     }
 
-    get_sucsess_color(correct_answer: boolean | null) {
-        if (correct_answer === null) {
-            return '#e1e1e1';
-        } else if (correct_answer) {
-            return '#c0e6af';
-        } else {
-            return '#e6afaf';
-        }
-    }
-
-
-    is_correct_option(option: string) {
-        // console.log('this.cardAnswers', this.cardAnswers);
-        if (this.cardAnswers[this.currentCard.id]) {
-            if (this.cardAnswers[this.currentCard.id].answer_text === option) {
-                if (this.cardAnswers[this.currentCard.id].is_correct_answer) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else {
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
     onNextCard(event: Event) {
         if (this.showBackCard) {
             this.disableFlipAnimation = true;
             this.showBackCard = false;
         }
-        this.renewQuestionTimers();
-        if (this.currentCardIndex < this.cards.length) {
+        if (this.currentCardIndex < this.cards.length - 1) {
+            this.renewQuestionTimers();
             this.currentCardIndex++;
             this.currentCard = this.cards[this.currentCardIndex];
             this.shuffleMultipleChoice();
@@ -288,13 +257,19 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         }
     }
 
+    onContinue(event: Event) {
+        if (this.currentCardIndex < this.cards.length - 1) {
+            this.onNextCard(event);
+        }
+    }
+
     onPrevCard(event: Event) {
         if (this.showBackCard) {
             this.disableFlipAnimation = true;
             this.showBackCard = false;
         }
-        this.renewQuestionTimers();
         if (this.currentCardIndex  > 0) {
+            this.renewQuestionTimers();
             this.currentCardIndex--;
             this.currentCard = this.cards[this.currentCardIndex];
             this.shuffleMultipleChoice();
@@ -387,17 +362,19 @@ export class CardsComponent extends BaseSlideComponent implements OnInit, OnDest
         }
 
         this.cardAnswers[this.currentCard.id].answer_text = answer;
+        const timer = this.timersHelper.getTimer(this.timer_id);
+        this.cardAnswers[this.currentCard.id].pace = timer.total_sec - timer.counter_sec;
         const data = {
             "source": 'check_answer',
             "answer": answer,
             "card_idx": this.currentCardIndex,
             "card_id": this.currentCard.id,
             "multiple_answers": [],
-            'stopAudio': true
+            'stopAudio': true,
+            "pace": this.cardAnswers[this.currentCard.id].pace
         };
         console.log('data', data);
         this.submitInProgress = true;
-        const timer = this.timersHelper.getTimer(this.timer_id);
         timer.submited = true;
         this.lessonService.Broadcast("slideEventRequest", data);
     }
