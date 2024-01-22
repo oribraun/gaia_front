@@ -439,7 +439,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         const response = await this.apiService.logout().toPromise();
         this.config.resetCookies();
         this.config.resetUserCreds();
-        this.router.navigate([this.currentLang + '/']);
+        this.router.navigate(['/']);
     }
 
     async login() {
@@ -686,7 +686,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     reloadSystemAndRedirect() {
-        const href = window.location.origin + '/' +  this.currentLang + '/' + this.selectedPlatform.name + '/';
+        const href = window.location.origin + '/' + this.selectedPlatform.name + '/';
         window.location.href = href;
     }
 
@@ -710,7 +710,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     goTo(page: string) {
-        this.router.navigate([this.currentLang + '/' + page]);
+        this.router.navigate([page]);
     }
 
     resetPassword() {

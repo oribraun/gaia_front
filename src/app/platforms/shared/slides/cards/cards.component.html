@@ -114,6 +114,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
+                    </div>
                     <div class="card-buttons">
                         <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
                             <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
@@ -131,13 +138,6 @@
                             '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
                             }"></div>
                         </div>
-                    </div>
-                    <div class="continue-button">
-                        <button class="btn btn-light"
-                                (click)="onContinue($event)"
-                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
-                            Continue
-                        </button>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="cards_type === 'PRACTICE_AUDIO_INPUT'">
@@ -177,6 +177,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
+                    </div>
                     <div class="card-buttons">
                         <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
                             <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
@@ -186,7 +193,6 @@
                             <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
                         </button>
                     </div>
-
                     <div class="cards-bar" (click)="moveBar($event)">
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
@@ -195,13 +201,6 @@
                             '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
                             }"></div>
                         </div>
-                    </div>
-                    <div class="continue-button">
-                        <button class="btn btn-light"
-                                (click)="onContinue($event)"
-                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
-                            Continue
-                        </button>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="cards_type === 'PRACTICE_MULTIPLE_CHOICE'">
@@ -241,6 +240,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="continue-button">
+                        <button class="btn btn-light"
+                                (click)="onContinue($event)"
+                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
+                            Continue
+                        </button>
+                    </div>
                     <div class="card-buttons">
                         <button class="prev" [disabled]="currentCardIndex === 0" (click)="onPrevCard($event)">
                             <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'left' : 'right'}}-fill"></i>
@@ -250,7 +256,6 @@
                             <i class="bi bi-caret-{{slideData.lang !== 'he' ? 'right' : 'left'}}-fill"></i>
                         </button>
                     </div>
-
                     <div class="cards-bar" (click)="moveBar($event)">
                         <div class="bar">
                             <div class="inner-bar" [ngStyle]="{
@@ -259,13 +264,6 @@
                             '--right': slideData.lang === 'he' ? currentCardIndex * (100 / cards.length) + '%' : ''
                             }"></div>
                         </div>
-                    </div>
-                    <div class="continue-button">
-                        <button class="btn btn-light"
-                                (click)="onContinue($event)"
-                                *ngIf="cardAnswers[currentCard.id].is_correct_answer !== null">
-                            Continue
-                        </button>
                     </div>
                 </ng-container>
             </div>
