@@ -1,0 +1,98 @@
+@import "../../../../../vars";
+
+.kit-base {
+    display: flex;
+    height: 100%;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    .panel {
+        position: relative;
+
+        flex: none;
+        margin-bottom: 20px;
+        background: var(--gaia-new-header-color);
+        border-top-right-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
+        padding: 10px;
+        overflow: hidden;
+
+        .title {
+
+        }
+        .dashboard {
+            margin-top: 15px;
+            button {
+                border: none;
+                width: 100%;
+                padding: 5px;
+                border-radius: 5px;
+                background: #8d6e47;
+                color: #fff;
+            }
+        }
+        .kit-part {
+            margin-top: 15px;
+            .title {
+                cursor: pointer;
+            }
+            .lessons {
+                overflow: hidden;
+                padding: 0 20px;
+                .lesson {
+                    display: flex;
+                    background: #fff;
+                    border-radius: @border-radius;
+                    margin-top: 5px;
+                    padding: 3px 10px;
+                    //padding-right: 0;
+                    //padding-left: 10px;
+                    .title {
+                        border:none;
+                        width: 100%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                    .status {
+                        flex: 0 0 30px;
+                        text-align: center;
+                    }
+                }
+                .lesson:first-child {
+                    //margin-top: 0;
+                }
+            }
+        }
+        .kit-part:first-child {
+            //margin-top: 0;
+        }
+    }
+    .content {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        min-height: 231px;
+        background: #fff;
+        border-radius: @border-radius;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    &.rtl {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
+    }
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        .panel {
+            flex: 0 0 300px;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+        .content {
+            margin-right: 20px;
+        }
+    }
+}

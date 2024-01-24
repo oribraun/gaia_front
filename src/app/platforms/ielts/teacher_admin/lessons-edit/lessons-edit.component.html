@@ -1,0 +1,174 @@
+<div class="lesson-edit">
+    <h2 class="headline">
+        Lessons
+        <button class="btn btn-primary" (click)="addLesson()"><i class="bi bi-plus"></i></button>
+    </h2>
+    <section>
+    <!--    <div class="lessons-buttons">-->
+    <!--        <button class="btn btn-primary" (click)="addLesson()"><i class="bi bi-plus"></i></button>-->
+    <!--    </div>-->
+    <ng-container *ngFor="let l of lessons; let lesson_i = index;">
+        <h4 class="group-header">
+            <i class="bi bi-trash pointer" (click)="removeLesson(lesson_i)"></i>
+            {{l.title || 'empty lesson title ' + lesson_i}}
+            <i class="bi pointer"
+               [ngClass]="{
+               'bi-arrow-up': !(expendManagement[lesson_i] === false),
+               'bi-arrow-down': expendManagement[lesson_i] === false}"
+               (click)="!(expendManagement[lesson_i] === false) ? collapse(lesson_i) : expend(lesson_i)"></i>
+        </h4>
+        <div class="lesson-wrapper" [@openClose]="!(expendManagement[lesson_i] === false) ? 'open' : 'closed'">
+            <div class="form-inline m-2">
+                <div class="form-group mb-2">
+                    <label class="sr-only">Uuid</label>
+                    <input type="text" placeholder="uuid" class="form-control" [(ngModel)]="l.uuid">
+                </div>
+                <div class="form-group mb-2">
+                    <label class="sr-only">Group type</label>
+                    <select class="form-select" [(ngModel)]="l.lesson_group_type">
+                        <option [value]="g.key" *ngFor="let g of slides_options; let i = index;">{{g.value}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="sr-only">Title</label>
+                    <input type="text" placeholder="Title" class="form-control" [(ngModel)]="l.title">
+                </div>
+                <div class="form-group mb-2">
+                    <label class="sr-only">Description</label>
+                    <!--                <textarea placeholder="Description" name="" id="" cols="30" rows="10"  [(ngModel)]="l.description"></textarea>-->
+                    <input type="text" placeholder="Description" class="form-control" [(ngModel)]="l.description">
+                </div>
+                <div class="form-group mb-2">
+                    <label class="sr-only">Presentation Title</label>
+                    <input type="text" placeholder="Presentation Title" class="form-control" [(ngModel)]="l.presentation_data.presentation_title">
+                </div>
+                <div class="form-group mb-2">
+                    <label class="sr-only">Presentation Topic</label>
+                    <input type="text" placeholder="Presentation Topic" class="form-control" [(ngModel)]="l.presentation_data.presentation_topic">
+                </div>
+                <h4 class="add-slide">
+                    Slides
+                    <select class="form-select" #curr_slide>
+                        <option [value]="g.key" *ngFor="let g of slides_options; let i = index;">{{g.value}}</option>
+                    </select>
+                    <button class="btn btn-primary" (click)="addSlide(lesson_i, curr_slide.value)"><i class="bi bi-plus"></i></button>
+                </h4>
+                <div class="slides-wrapper" *ngIf="l.presentation_data.presentation_lesson_data.sections[0].slides.length">
+                    <ng-container *ngFor="let s of l.presentation_data.presentation_lesson_data.sections[0].slides; let slide_i = index;">
+                        <h4 class="group-header">
+                            <i class="bi bi-trash pointer" (click)="removeSlide(lesson_i, slide_i)"></i>
+                            {{s.slide_title || 'empty slide title ' + slide_i}}
+                            <i class="bi pointer"
+                               [ngClass]="{
+                               'bi-arrow-up': !(expendManagement[lesson_i + '_' + slide_i] === false),
+                               'bi-arrow-down': expendManagement[lesson_i + '_' + slide_i] === false}"
+                               (click)="!(expendManagement[lesson_i + '_' + slide_i] === false) ? collapse(lesson_i, slide_i) : expend(lesson_i, slide_i)"></i>
+                        </h4>
+                        <div class="slide-wrapper" [@openClose]="!(expendManagement[lesson_i + '_' + slide_i] === false) ? 'open' : 'closed'">
+                            <div class="form-group mb-2">
+                                <label class="sr-only">Slide Uuid</label>
+                                <input type="text" placeholder="Slide Uuid" class="form-control" [(ngModel)]="s.slide_uuid">
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="sr-only">Slide Title</label>
+                                <input type="text" placeholder="Slide Title" class="form-control" [(ngModel)]="s.slide_title">
+                            </div>
+                            <ng-container *ngIf="s.slide_type === 'writing'">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Text</label>
+                                    <input type="text" placeholder="Text" class="form-control" [(ngModel)]="s.text">
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="s.slide_type === 'unseen' || s.slide_type === 'hearing'">
+                                <div class="form-group mb-2">
+                                    <label class="sr-only">Unseen Text</label>
+                                    <input type="text" placeholder="Unseen Text" class="form-control" [(ngModel)]="s.unseen_text">
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="s.slide_type === 'unseen' || s.slide_type === 'hearing' || s.slide_type === 'speaking'">
+                                <h4 class="add-question">
+                                    Questions
+                                    <select class="form-select" id="curr_question_{{slide_i}}">
+                                        <option [value]="g" *ngFor="let g of question_options; let i = index;">{{g}}</option>
+                                    </select>
+                                    <button class="btn btn-primary" (click)="addSlideQuestion(lesson_i, slide_i, 'curr_question_' + slide_i)"><i class="bi bi-plus"></i></button>
+                                </h4>
+                                <div class="questions-wrapper" *ngIf="l.presentation_data.presentation_lesson_data.sections[0].slides[slide_i].all_questions.length">
+                                    <ng-container *ngFor="let q of l.presentation_data.presentation_lesson_data.sections[0].slides[slide_i].all_questions; let question_i = index;">
+                                        <h4 class="group-header">
+                                            <i class="bi bi-trash pointer" (click)="removeSlideQuestion(lesson_i, slide_i, question_i)"></i>
+                                            {{q.question_type || 'empty question title ' + question_i}}
+                                            <i class="bi pointer"
+                                           [ngClass]="{
+                                           'bi-arrow-up': !(expendManagement[lesson_i + '_' + slide_i + '_' + question_i] === false),
+                                           'bi-arrow-down': expendManagement[lesson_i + '_' + slide_i + '_' + question_i] === false}"
+                                           (click)="!(expendManagement[lesson_i + '_' + slide_i + '_' + question_i] === false) ? collapse(lesson_i, slide_i, question_i) : expend(lesson_i, slide_i, question_i)"></i>
+                                        </h4>
+                                        <div class="question-wrapper" [@openClose]="!(expendManagement[lesson_i + '_' + slide_i + '_' + question_i] === false) ? 'open' : 'closed'">
+                                            <ng-container *ngIf="q.question_type === 'multiple_choice'">
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Question</label>
+                                                    <input type="text" placeholder="Question" class="form-control" [(ngModel)]="q.question.question">
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Quotes</label>
+                                                    <input type="text" placeholder="Quotes" class="form-control" [(ngModel)]="q.quotes">
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Correct Answers</label>
+                                                    <input type="number" placeholder="Number of Correct Answers" class="form-control" [(ngModel)]="q.n_correct_answers">
+                                                </div>
+                                                <h4 class="add-question-answer">
+                                                    Answers
+                                                    <button class="btn btn-primary" (click)="addSlideMultipleQuestionAnswer(lesson_i, slide_i, question_i)"><i class="bi bi-plus"></i></button>
+                                                </h4>
+                                                <div class="multiple-choice-wrapper">
+                                                    <ng-container *ngFor="let o of q.question.answers; let question_answer_i = index;">
+                                                        <h4 class="form-group group-header">
+                                                            <i class="bi bi-trash pointer" (click)="removeSlideMultipleQuestionAnswer(lesson_i, slide_i, question_i, question_answer_i)"></i>
+                                                        </h4>
+                                                        <div class="form-group mb-2">
+                                                            <label class="sr-only">Answer</label>
+                                                            <input type="text" placeholder="Answer" class="form-control" [(ngModel)]="o.answer">
+                                                        </div>
+                                                        <div class="form-group mb-2">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" [(ngModel)]="o.is_correct">
+                                                                <label class="form-check-label">
+                                                                    Is Correct
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="q.question_type === 'sentence_completion' || q.question_type === 'open_question'">
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Question</label>
+                                                    <input type="text" placeholder="Question" class="form-control" [(ngModel)]="q.question">
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Answer</label>
+                                                    <input type="text" placeholder="Answer" class="form-control" [(ngModel)]="q.correct_answer">
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Quotes</label>
+                                                    <input type="text" placeholder="Quotes" class="form-control" [(ngModel)]="q.quotes">
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label class="sr-only">Answer</label>
+                                                    <input type="number" placeholder="Answer" class="form-control" [(ngModel)]="q.level">
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</section>
+</div>

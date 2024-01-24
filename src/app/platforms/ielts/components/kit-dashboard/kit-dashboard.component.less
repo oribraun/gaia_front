@@ -1,0 +1,41 @@
+@import "../../../../../vars";
+
+@color: #d9ead3;
+.kit-dashboard {
+    position: relative;
+    font-size: .95em;
+    padding: 15px;
+    height: 100%;
+    .prep-progress {
+        .title {
+            padding-left: 5px;
+        }
+        .progress {
+            height: 30px;
+            border-radius: @border-radius;
+            .progress-bar {
+                background: @color;
+            }
+        }
+    }
+    .tests {
+        margin-top: 10px;
+        .title {
+
+        }
+        .test-boxs {
+            .box {
+                margin: 10px;
+                padding: 10px;
+                display: inline-block;
+                background: @color;
+                border-radius: @border-radius;
+                text-align: center;
+                width: 130px;
+                .number {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

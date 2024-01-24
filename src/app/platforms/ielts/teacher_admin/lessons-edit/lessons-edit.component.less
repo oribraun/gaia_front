@@ -1,0 +1,53 @@
+
+.lesson-edit {
+    .headline {
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        text-align: center;
+    }
+    padding-top: 40px;
+    .lesson-wrapper {
+        padding: 10px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+
+        .form-inline {
+            .form-group {
+                display: inline-block;
+            }
+        }
+
+        .add-slide, .add-question, add-question-answer {
+            select {
+                display: inline-block;
+                width: auto;
+            }
+        }
+
+        .slides-wrapper {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+
+            .slide-wrapper {
+                padding: 10px;
+                border-top: 1px solid #ccc;
+                overflow: hidden;
+                //border-bottom: 1px solid #ccc;
+                .questions-wrapper {
+                    padding: 10px;
+                    border-top: 1px solid #ccc;
+                    //border-bottom: 1px solid #ccc;
+                    .question-wrapper {
+                        padding: 10px;
+                        border-top: 1px solid #ccc;
+                        overflow: hidden;
+                        //border-bottom: 1px solid #ccc;
+                    }
+                }
+            }
+        }
+    }
+}

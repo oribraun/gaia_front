@@ -1,0 +1,28 @@
+<div class="home" [ngClass]="{'home-rtl': currentLang === 'he'}">
+    <div class="kits" *ngIf="!gettingUserKits">
+        <div class="header">
+            <div class="tab">
+                {{'Recently studying' | translate}}
+            </div>
+        </div>
+        <div class="body">
+            <div class="kit" *ngFor="let k of kits"
+                 [ngStyle]="{'direction': k.direction}">
+                <div class="details">
+                    <div class="title">{{k.title}}</div>
+                </div>
+                <div class="info">
+                    <button class="resume" (click)="gotToKit(k.id)">{{'Resume' | translate}}</button>
+                    <div class="status">{{k.status}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="generic-loader-wrapper" *ngIf="gettingUserKits">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+</div>

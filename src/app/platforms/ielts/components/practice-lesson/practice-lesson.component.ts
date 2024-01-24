@@ -29,6 +29,7 @@ export class PracticeLessonComponent implements OnInit {
     private user!: User;
     mock = environment.is_mock;
     user_lesson_id!: number;
+    kitId!: number;
     current_base_lesson_id!: number;
     user_lesson_status!: string;
     presentation_lang!: string;
@@ -173,6 +174,15 @@ export class PracticeLessonComponent implements OnInit {
                 this.changeLang(lang);
             }
         });
+        const parentParmMap = this.route.parent?.paramMap;
+        if (parentParmMap) {
+            parentParmMap.subscribe((params: ParamMap) => {
+                const id = params.get('id');
+                if (id) {
+                    this.kitId = parseInt(id);
+                }
+            });
+        }
         this.listenToGlobalChangeLang();
     }
 
@@ -424,7 +434,7 @@ export class PracticeLessonComponent implements OnInit {
             next: (response: any) => {
                 if (response.err) {
                     if (response.errMessage.indexOf('does not exist') > -1) {
-                        this.router.navigate(['/ielts/dashboard']);
+                        this.router.navigate([`/ielts/kit/${this.kitId}/dashboard`]);
                     }
                     console.log('getPresentation err', response);
                 } else {

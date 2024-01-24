@@ -498,6 +498,26 @@ export class ApiService {
             this.httpOptions
         );
     }
+    getUserKits(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-kits', obj,
+            this.httpOptions
+        );
+    }
+    getKit(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-kit', obj,
+            this.httpOptions
+        );
+    }
+    getKitDashboard(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-kit-dashboard', obj,
+            this.httpOptions
+        );
+    }
+    getLessonGroupTypes(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-lesson-group-types', obj,
+            this.httpOptions
+        );
+    }
     getUserLessons(obj: any) {
         return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-lessons', obj,
             this.httpOptions

@@ -1,0 +1,65 @@
+@import "../../../../../vars";
+
+@margin: 15px;
+
+.home {
+    direction: ltr;
+    position: relative;
+    min-height: 100%;
+    padding: 0.75rem 0;
+    .kits {
+        background: #fff;
+        border-radius: @border-radius;
+        overflow: hidden;
+        .header {
+            padding: 10px 30px;
+            padding-bottom: 0;
+            background: var(--gaia-new-header-color);
+            .tab {
+                background: #fff;
+                display: inline-block;
+                border-radius: @border-radius;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                padding: 10px;
+            }
+        }
+        .body {
+            padding: 10px;
+            .kit {
+                display: flex;
+                justify-content: space-between;
+                background: #e6e6e6;
+                padding: 5px 15px;
+                border-radius: @border-radius;
+                margin-bottom: 10px;
+                max-width: 50%;
+                .details {
+                    align-self: center;
+                    .title {
+
+                    }
+                }
+                .info {
+                    text-align: center;
+                    align-self: center;
+                    .resume {
+                        border: none;
+                        background: #fff;
+                        border-radius: @border-radius;
+                        padding: 0px 15px;
+                        margin-bottom: 5px;
+                        margin-top: 5px;
+                    }
+                    .status {
+                        font-size: .8em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.home-rtl {
+    direction: rtl;
+}

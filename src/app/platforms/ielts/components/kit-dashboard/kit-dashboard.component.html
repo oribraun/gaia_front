@@ -1,0 +1,26 @@
+<div class="kit-dashboard">
+    <ng-container *ngIf="!gettingKitDashboard">
+        <div class="prep-progress">
+            <div class="title">{{'Prep progress' | translate}}</div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{'width': prep_progress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="tests">
+            <div class="title">{{'Tests' | translate}}</div>
+            <div class="test-boxs">
+                <div class="box" *ngFor="let t of tests">
+                    <div class="title">{{t.title}}</div>
+                    <div class="number">{{t.value}}</div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div class="generic-loader-wrapper" *ngIf="gettingKitDashboard">
+        <div class="loader">
+            <div class="spinner-border">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+</div>

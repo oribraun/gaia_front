@@ -6,6 +6,9 @@ import { NgxEchartsModule } from 'ngx-echarts';
 
 import { IeltsRoutingModule } from './ielts-routing.module';
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
+import {HomeComponent} from "./components/home/home.component";
+import {KitBaseComponent} from "./components/kit-base/kit-base.component";
+import {KitDashboardComponent} from "./components/kit-dashboard/kit-dashboard.component";
 import {PracticeLessonComponent} from "./components/practice-lesson/practice-lesson.component";
 import {HttpLoaderFactory, SharedModule} from "../shared/shared.module";
 import { VocabularyComponent } from './components/vocabulary/vocabulary.component';
@@ -17,18 +20,23 @@ import { DonutChartComponent } from './components/charts/donut-chart/donut-chart
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
 
+import {LessonsEditComponent} from "./teacher_admin/lessons-edit/lessons-edit.component";
 
 
 @NgModule({
     declarations: [
         DashboardComponent,
+        HomeComponent,
+        KitBaseComponent,
+        KitDashboardComponent,
         PracticeLessonComponent,
         VocabularyComponent,
         ReviewComponent,
         PlanComponent,
         PieChartComponent,
         BarChartComponent,
-        DonutChartComponent
+        DonutChartComponent,
+        LessonsEditComponent
     ],
     imports: [
         CommonModule,

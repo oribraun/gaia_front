@@ -152,9 +152,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (index > -1) {
                 this.selectedPlatform = this.platforms[index];
             }
-            this.getUserOnBoarding(redirectUser);
+            // this.getUserOnBoarding(redirectUser);
             if (this.user.last_logged_platform === 'ielts') {
-                this.getUserActivity();
+                // this.getUserActivity();
             }
         }
     }

@@ -1,0 +1,43 @@
+<div class="kit-base" [ngClass]="{'rtl': currentLang === 'he'}">
+    <div class="panel">
+        <div class="outer-scroller">
+            <div class="inner-scroller">
+                <ng-container *ngIf="!gettingKits">
+                    <div class="title text-center">
+                        {{kit.description}}
+                    </div>
+                    <div class="dashboard text-center">
+                        <button routerLink="dashboard">Dashboard</button>
+                    </div>
+
+                    <div class="kit">
+                        <div class="kit-part" *ngFor="let p of kit.parts; let i = index;">
+                            <div class="title" (click)="openCloseParts(i)">
+                                <i class="bi" [ngClass]="{'bi-plus': partsState[i] === false, 'bi-dash': !(partsState[i] === false)}"></i>
+                                {{p.title}}
+                            </div>
+                            <div class="lessons" [@openClose]="partsState[i] === false ? 'closed' : 'open'">
+                                <div class="lesson" *ngFor="let l of p.lessons">
+                                    <div class="title" *ngIf="l.id" [routerLink]="'practice/' + l.id">{{l.title}}</div>
+    <!--                                <div class="status">-->
+    <!--                                    <i class="bi bi-check-lg"></i>-->
+    <!--                                </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="generic-loader-wrapper" *ngIf="gettingKits">
+                    <div class="loader">
+                        <div class="spinner-border">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>
