@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import {Config} from "../config";
+import {Config} from "../../main/config";
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthCompanyAdminGuard  {
+export class AuthTeacherGuard {
 
     constructor(
         private config: Config,
@@ -17,17 +17,8 @@ export class AuthCompanyAdminGuard  {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-        // this.config.user_subject.subscribe((user) => {
-        //     if (this.config.user) {
-        //         return true;
-        //     } else {
-        //         this.router.navigate([''])
-        //         return false;
-        //     }
-        // })
-        // return true
         const user = this.config.user;
-        if (user && user.company_admin) {
+        if (user && user.is_teacher) {
             return true;
         } else {
             const queryParams: any = {};

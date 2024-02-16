@@ -1,23 +1,81 @@
 
 .lesson-edit {
-    .headline {
-        position: absolute;
-        top:0;
-        left:0;
-        right:0;
-        text-align: center;
-    }
-    padding-top: 40px;
-    .lesson-wrapper {
-        padding: 10px;
-        border: 1px solid #ccc;
-        overflow: hidden;
-
-        .form-inline {
-            .form-group {
+    @padding: 10px;
+    .header {
+        .new-lessons, .new-kits {
+            .lesson, .kit {
                 display: inline-block;
+                border: 1px solid #ccc; padding: 5px;
+                background: #fff;
+                margin: 1px;
+                &.selected {
+                    border-color: blue;
+                }
             }
         }
+    }
+    padding-top: 40px;
+    .form-inline {
+        .form-group {
+            display: inline-block;
+        }
+    }
+    .input-group {
+        position: relative;
+        .spinner {
+            padding-top: 6px;
+            padding-left: 6px;
+            .spinner-border {
+                font-size: 10px;
+                width: 25px;
+                height: 25px;
+            }
+        }
+        .drop {
+            position: absolute;
+            top: 100%;
+            left:0;
+            right:0;
+            max-height: 300px;
+            overflow: auto;
+            background: #fff;
+            display: block;
+            border: 1px solid #ccc;
+            padding: 8px;
+            z-index: 1;
+            .drop-item {
+                cursor: pointer;
+                &:hover {
+                    background: #ccc;
+                }
+                &:after {
+                    content: '';
+                    height: 1px;
+                    width: 100%;
+                    border-bottom: 1px solid #ccc;
+                    display: block;
+                }
+            }
+            .drop-item:last-child {
+                &:after {
+                    border: none;
+                }
+            }
+        }
+        //input:focus, input:active {
+        //    ~ .drop {
+        //        display: block;
+        //        border: 1px solid #ccc;
+        //        padding: 8px;
+        //    }
+        //}
+
+    }
+    .lesson-wrapper {
+        padding: @padding;
+        border-top: 1px solid #ccc;
+        overflow: hidden;
+
 
         .add-slide, .add-question, add-question-answer {
             select {
@@ -27,27 +85,77 @@
         }
 
         .slides-wrapper {
-            padding: 10px;
+            padding: @padding;
             border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
+            //border-bottom: 1px solid #ccc;
 
             .slide-wrapper {
-                padding: 10px;
+                padding: @padding;
                 border-top: 1px solid #ccc;
                 overflow: hidden;
                 //border-bottom: 1px solid #ccc;
                 .questions-wrapper {
-                    padding: 10px;
+                    padding: @padding;
                     border-top: 1px solid #ccc;
                     //border-bottom: 1px solid #ccc;
                     .question-wrapper {
-                        padding: 10px;
+                        padding: @padding;
                         border-top: 1px solid #ccc;
                         overflow: hidden;
                         //border-bottom: 1px solid #ccc;
+                        .multiple-choice-wrapper {
+                            .multiple-choice-wrap {
+                                display: inline-block;
+                                vertical-align: bottom;
+                                margin: 0 10px;
+                                max-width: 22.9%;
+                                .form-group {
+                                    display: block;
+                                }
+                            }
+                        }
                     }
                 }
             }
+        }
+        .add-slide, .add-question {
+            display: flex;
+            gap: 9px;
+            align-items: center;
+            i[class*="bi-arrows-collapse"] {
+                margin-left: auto;
+            }
+        }
+    }
+    .kit-wrapper {
+        .part-lessons {
+            .sortable-wrapper {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-wrap: wrap;
+                .part-lesson {
+                    cursor: move;
+                    vertical-align: top;
+                    border: 1px solid #ccc;
+                    padding: 5px;
+                    background: #fff;
+                    margin: 1px;
+                }
+            }
+        }
+    }
+    .group-header {
+        color: var(--gaia-header-color);
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        i {
+            color: initial;
+        }
+        i[class*="bi-chevron"] {
+            margin-left: auto;
         }
     }
 }

@@ -61,6 +61,18 @@
                                 <img class="icon" [src]="imageSrc + '/assets/images/app_icons/Dashboard_icon.svg'" alt="">
                             </a>
                         </li>
+                        <li class="nav-item" *ngIf="user.id && user.is_teacher && user.last_logged_platform === 'ielts'">
+                            <a class="nav-link rounded-0"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               [attr.data-bs-original-title]="'Admin' | translate"
+                               [title]="'Admin' | translate"
+                               data-bs-custom-class="gaia-tooltip"
+                               [routerLink]="['/' + user.last_logged_platform + '/teacher-admin']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="routerLinkActiveOptionsWithChildren">
+                                <!--                        <i class="bi bi-view-list"></i> <span>Dashboard</span>-->
+    <!--                            <div class="title">Dashboard</div>-->
+                                <img class="icon" [src]="imageSrc + '/assets/images/app_icons/My_Work_icon.svg'" alt="">
+                            </a>
+                        </li>
 <!--                        <li class="nav-item" *ngIf="user.id && user.last_logged_platform === 'ielts' && user.last_lesson_id">-->
 <!--                            <a class="nav-link rounded-0"-->
 <!--                               data-bs-toggle="tooltip" data-bs-placement="bottom"-->

@@ -22,7 +22,8 @@
       "es2020",
       "dom"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": ["jqueryui"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

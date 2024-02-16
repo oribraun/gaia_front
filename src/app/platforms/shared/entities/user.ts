@@ -6,6 +6,7 @@ export class User {
     role_display!: string;
     company_name!: string;
     gaia_admin!: boolean;
+    is_teacher!: boolean;
     company_admin!: boolean;
     gmail_auth!: boolean;
     birthday!: string;

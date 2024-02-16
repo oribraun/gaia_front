@@ -155,6 +155,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             // this.getUserOnBoarding(redirectUser);
             if (this.user.last_logged_platform === 'ielts') {
                 // this.getUserActivity();
+                if (redirectUser) {
+                    const returnServerUrl = this.route.snapshot.queryParams['returnServerUrl'];
+                    if (!returnServerUrl) {
+                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.user.last_logged_platform + '/home';
+                        this.router.navigateByUrl(returnUrl);
+                    } else {
+                        let fullHostUrl = window.location.protocol + "//" + window.location.hostname;
+                        if (window.location.port) {
+                            fullHostUrl += ":" + window.location.port;
+                        }
+                        // console.log('fullHostUrl', fullHostUrl)
+                        const redirectUrl = fullHostUrl + returnServerUrl;
+                        // console.log('returnServerUrl', redirectUrl)
+                        window.location.href = returnServerUrl;
+                    }
+                }
             }
         }
     }

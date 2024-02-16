@@ -26,14 +26,13 @@ export class AuthGuard  {
         //     }
         // })
         // return true
-        const lang = route.paramMap.get('lang');
         if (this.config.user && this.config.user.id) {
             return true;
         } else {
             const queryParams: any = {};
             queryParams['returnUrl'] = state.url;
             queryParams['authType'] = 'login';
-            this.router.navigate([lang + '/'], { queryParams: queryParams});
+            this.router.navigate(['/'], { queryParams: queryParams});
             return false;
         }
     }

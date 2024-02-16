@@ -37,6 +37,8 @@ import { SpeakingComponent } from './slides/speaking/speaking.component';
 import {VideoIeltsComponent} from "./slides/video-ielts/video-ielts.component";
 import {DynamicFontSizeDirective} from "./directives/dynamic-font-size/dynamic-font-size.directive";
 import {CardsComponent} from "./slides/cards/cards.component";
+import {SortableDirective} from "./directives/sortable/sortable.directive";
+import {environment} from "../../../environments/environment";
 // import { LottieModule } from 'ngx-lottie';
 //
 //
@@ -45,7 +47,7 @@ import {CardsComponent} from "./slides/cards/cards.component";
 // }
 
 export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http, './translations/', '.json');
+    return new TranslateHttpLoader(http, environment.staticUrl + './translations/', '.json');
 }
 
 
@@ -81,7 +83,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         SafeHtmlPipe,
         SafePipe,
 
-        DynamicFontSizeDirective
+        DynamicFontSizeDirective,
+        SortableDirective
     ],
     imports: [
         CommonModule,
@@ -130,7 +133,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         SafeHtmlPipe,
         SafePipe,
 
-        DynamicFontSizeDirective
+        DynamicFontSizeDirective,
+        SortableDirective
     ]
 })
 export class SharedModule { }

@@ -13,8 +13,11 @@
                 </div>
                 <div class="info">
                     <button class="resume" (click)="gotToKit(k.id)">{{'Resume' | translate}}</button>
-                    <div class="status">{{k.status}}</div>
+                    <div class="status" [innerHTML]="k.status"></div>
                 </div>
+            </div>
+            <div *ngIf="!kits.length" class="text-center">
+                You dont have kits yet. please contact your teacher.
             </div>
         </div>
     </div>

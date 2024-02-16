@@ -19,9 +19,9 @@ export class HomeComponent implements OnInit {
 
     gettingUserKits = false;
 
-    kits = [
-        {id: 1, title: 'English January 2024', direction: 'ltr', status: 'last visited 2 month ago'},
-        {id: 2, title: 'English January 2023', direction: 'rtl',  status: 'last visited 2 month ago'}
+    kits: any = [
+        // {id: 1, title: 'English January 2024', direction: 'ltr', status: 'last visited 2 month ago'},
+        // {id: 2, title: 'English January 2023', direction: 'rtl',  status: 'last visited 2 month ago'}
     ];
 
     constructor(

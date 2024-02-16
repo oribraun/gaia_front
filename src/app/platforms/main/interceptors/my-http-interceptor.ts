@@ -57,6 +57,9 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     redirectToLogin(resetConf = false) {
         const queryParams: any = {};
+        if (this.router.url) {
+            queryParams['returnUrl'] = this.router.url;
+        }
         queryParams['authType'] = 'login';
         if (resetConf) {
             this.config.resetCookies();

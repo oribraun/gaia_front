@@ -12,6 +12,7 @@ import {KitDashboardComponent} from "./components/kit-dashboard/kit-dashboard.co
 import {KitBaseComponent} from "./components/kit-base/kit-base.component";
 
 import {LessonsEditComponent} from "./teacher_admin/lessons-edit/lessons-edit.component";
+import {AuthTeacherGuard} from "./guards/auth-teacher.guard";
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent, pathMatch : 'full', canActivate: [AuthIeltsPlatformGuard]},
@@ -27,8 +28,9 @@ const routes: Routes = [
     },
     { path: '**', redirectTo: 'dashboard'},
     { path: 'teacher-admin', children: [
-        { path: 'lessons', component: LessonsEditComponent, pathMatch : 'full'}
-        ]
+        { path: 'main', component: LessonsEditComponent, pathMatch : 'full'},
+        { path: '**', redirectTo: 'main'}
+        ], canActivate: [AuthIeltsPlatformGuard, AuthTeacherGuard]
     }
 
 ];

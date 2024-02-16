@@ -30,11 +30,8 @@ export class KitDashboardComponent implements OnInit {
     constructor(
         private config: Config,
         private apiService: ApiService,
-        private router: Router,
         private route: ActivatedRoute,
-        private alertService: AlertService,
         private helperService: HelperService,
-        private generalService: GeneralService,
         private translate: TranslateService
     ) {
         this.imageSrc = this.config.staticImagePath;

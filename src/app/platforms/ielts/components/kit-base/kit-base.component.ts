@@ -44,22 +44,7 @@ export class KitBaseComponent implements OnInit {
         description: 'sample kit',
         direction: 'ltr',
         last_lesson_id: 1,
-        parts: [
-            {
-                title: 'Day |',
-                lessons:[
-                    {id: 1, title: 'example lesson example less'},
-                    {id: 2, title: 'example lesson 2'}
-                ]
-            },
-            {
-                title: 'Day ||',
-                lessons:[
-                    {id: 3, title: 'example lesson'},
-                    {id: 4, title: 'example lesson 2'}
-                ]
-            }
-        ]
+        parts: []
     });
 
     partsState: any = {};
@@ -79,7 +64,7 @@ export class KitBaseComponent implements OnInit {
             const id = params.get('id');
             if (id) {
                 this.kitId = parseInt(id);
-                this.getKits();
+                this.getKit();
             }
         });
         this.listenToGlobalChangeLang();
@@ -110,7 +95,7 @@ export class KitBaseComponent implements OnInit {
         this.translate.use(this.currentLang);
     }
 
-    getKits() {
+    getKit() {
         this.gettingKits = true;
         this.apiService.getKit({id: this.kitId}).subscribe({
             next: (response: any) => {

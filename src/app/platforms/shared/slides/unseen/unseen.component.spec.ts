@@ -5,6 +5,7 @@ import {Config} from "../../../main/config";
 import {LessonService} from "../../../main/services/lesson/lesson.service";
 import {PresentationSlide} from "../../entities/presentation";
 import {SafeHtmlPipe} from "../../pipes/safe-html.pipe";
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('UnseenComponent', () => {
     let component: UnseenComponent;
@@ -12,6 +13,7 @@ describe('UnseenComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [TranslateModule.forRoot({})],
             declarations: [UnseenComponent, SafeHtmlPipe],
             providers: [Config, LessonService]
         });

@@ -26,7 +26,6 @@ export class AuthChildrenPlatformGuard  {
         //     }
         // })
         // return true
-        const lang = route.paramMap.get('lang');
         const user = this.config.user;
         if (user && user.last_logged_platform === 'childrens') {
             return true;
@@ -36,7 +35,7 @@ export class AuthChildrenPlatformGuard  {
                 queryParams['returnUrl'] = state.url;
                 queryParams['authType'] = 'login';
             }
-            this.router.navigate([user.id ? lang + '/' : lang + '/'], { queryParams: queryParams});
+            this.router.navigate([user.id ? '/' : '/'], { queryParams: queryParams});
             return false;
         }
     }

@@ -518,6 +518,42 @@ export class ApiService {
             this.httpOptions
         );
     }
+    getAdminLessons(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-admin-lessons', obj,
+            this.httpOptions
+        );
+    }
+    saveAdminLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/save-admin-lesson', obj,
+            this.httpOptions
+        );
+    }
+    deleteAdminLesson(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/delete-admin-lesson', obj,
+            this.httpOptions
+        );
+    }
+    getAdminKits(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-admin-kits', obj,
+            this.httpOptions
+        );
+    }
+    saveAdminKit(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/save-admin-kit', obj,
+            this.httpOptions
+        );
+    }
+    deleteAdminKit(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/delete-admin-kit', obj,
+            this.httpOptions
+        );
+    }
+
+    generateAdminKitLink(obj: any) {
+        return this.http.post(this.serverBase + this.baseApi + 'ielts/us/generate-admin-link', obj,
+            this.httpOptions
+        );
+    }
     getUserLessons(obj: any) {
         return this.http.post(this.serverBase + this.baseApi + 'ielts/us/get-user-lessons', obj,
             this.httpOptions
