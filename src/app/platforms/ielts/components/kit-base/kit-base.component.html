@@ -1,5 +1,5 @@
 <div class="kit-base" [ngClass]="{'rtl': currentLang === 'he'}" *ngIf="kit.parts.length">
-    <div class="panel">
+    <div class="panel kit-panel" [ngClass]="{'open': mobilePanelAnimation}" (click)="togglePanel($event)">
         <div class="outer-scroller">
             <div class="inner-scroller">
                 <ng-container *ngIf="!gettingKits">

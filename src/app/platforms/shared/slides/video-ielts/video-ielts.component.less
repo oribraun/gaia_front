@@ -337,13 +337,17 @@
         }
     }
 
-    .right-panel-mobile {
-        @media(max-width: 768px) {
+    @media (max-width: 768px) {
+        .wrapper {
+            margin-top: 100px;
+        }
+        .right-panel-mobile {
             max-width: 100%;
             transition: all .3s ease-in-out;
             .panel {
                 .teacher {
                     transition: all .3s ease-in-out;
+
                     .circle {
                         cursor: pointer;
                     }
@@ -353,6 +357,7 @@
                     transition: all .3s ease-in-out;
                 }
             }
+
             &.close {
                 bottom: calc(100% - (100px + 15px)) !important;
                 width: 100px !important;
@@ -360,6 +365,7 @@
                 border-radius: 100%;
                 overflow: hidden;
                 box-shadow: 0 0 15px #a2a2a2;
+                right: 15px;
 
                 .panel {
                     .teacher {
@@ -373,7 +379,10 @@
                     }
                 }
             }
-            &.open {}
+
+            &.open {
+            }
+
         }
     }
 

@@ -29,9 +29,9 @@
     </div>
     <div class="right-panel right-panel-mobile" [ngClass]="{'no-transition': dragStarted, 'close': !openRightBoard}"
          [ngStyle]="{'width': showPanel ? drag.width + 'px' : ''}">
-        <div class="panel">
+        <div class="panel video-panel">
             <div class="teacher">
-                <div class="circle" #teacher (click)="toggleRightBoardMobile()">
+                <div class="circle" #teacher (click)="toggleRightBoardMobile($event)">
                     <video #heygenMediaElement class="video" id="mediaElement" autoplay></video>
 <!--                    <img [src]="imageSrc + 'assets/gifs/teacher.png'">-->
                 </div>

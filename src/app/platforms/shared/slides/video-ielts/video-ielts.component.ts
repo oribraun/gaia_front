@@ -155,6 +155,7 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
                         new ChatMessage({type: 'computer', message: teacher_text})
                     );
                     this.scrollToBottom2();
+                    this.toggleRightBoardMobile(null);
                     if (this.unsDemo) {
                         this.setUpHeyGenVideoByText(teacher_text);
                     } else {
@@ -844,8 +845,18 @@ export class VideoIeltsComponent extends BaseSlideComponent implements OnInit, A
         localStorage.removeItem('h_s_id');
     }
 
-    toggleRightBoardMobile() {
+    toggleRightBoardMobile(event: any) {
+        // event.stopPropagation();
         this.openRightBoard = !this.openRightBoard;
+    }
+
+    @HostListener('document:click', ['$event'])
+    onWindowClick(event: any) {
+        const closest = event.target.closest('.video-panel');
+        const closestPanel = event.target.closest('.right-panel');
+        if (!closest || !closestPanel) {
+            this.openRightBoard = false;
+        }
     }
 
     openRightBoardMobile() {

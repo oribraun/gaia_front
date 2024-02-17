@@ -142,11 +142,11 @@
 
             <div class="slide-buttons" [ngStyle]="!recommendedVideos.length ? {'visibility': 'hidden'} : {}">
                 <div>{{'Previous Video' | translate}}</div>
-                <button class="prev" [disabled]="recommendedVideos[0].id === current_base_lesson_id"
+                <button class="prev" *ngIf="recommendedVideos.length" [disabled]="recommendedVideos[0].id === current_base_lesson_id"
                         (click)="recommendedVideos.length && onPrevLesson($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'left' : 'right'}}-fill"></i>
                 </button>
-                <button class="next" [disabled]="recommendedVideos[recommendedVideos.length - 1].id === current_base_lesson_id"
+                <button class="next" *ngIf="recommendedVideos.length" [disabled]="recommendedVideos[recommendedVideos.length - 1].id === current_base_lesson_id"
                         (click)="recommendedVideos.length && onNextLesson($event)">
                     <i class="bi bi-caret-{{currentLang !== 'he' ? 'right' : 'left'}}-fill"></i>
                 </button>

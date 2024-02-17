@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router, RouterOutlet} from "@angular/router";
 import {Config} from "../../../main/config";
 import {ApiService} from "../../../main/services/api.service";
@@ -48,6 +48,8 @@ export class KitBaseComponent implements OnInit {
     });
 
     partsState: any = {};
+
+    mobilePanelAnimation = false;
 
     constructor(
         private config: Config,
@@ -107,6 +109,7 @@ export class KitBaseComponent implements OnInit {
                     }
                 } else {
                     this.kit = new Kit(response.kit);
+                    this.setMobileFirstAnimation();
                 }
             },
             error: (err: any) => {
@@ -118,5 +121,32 @@ export class KitBaseComponent implements OnInit {
 
     openCloseParts(index: number) {
         this.partsState[index] = this.partsState[index] === false;
+    }
+
+    setMobileFirstAnimation() {
+        setTimeout(() => {
+            this.mobilePanelAnimation = true;
+            setTimeout(() => {
+                this.mobilePanelAnimation = false;
+            }, 1000);
+        });
+    }
+
+    togglePanel(event: any) {
+        // event.stopPropagation();
+        const closestKitPart = event.target.closest('.kit-part');
+        console.log('closestKitPart', closestKitPart);
+        if (!closestKitPart) {
+            this.mobilePanelAnimation = !this.mobilePanelAnimation;
+        }
+    }
+
+    @HostListener('document:click', ['$event'])
+    onWindowClick(event: any) {
+        const closest = event.target.closest('.kit-panel');
+        const closestKit = event.target.closest('.kit-base');
+        if (!closest || !closestKit) {
+            this.mobilePanelAnimation = false;
+        }
     }
 }
