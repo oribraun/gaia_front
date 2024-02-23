@@ -120,7 +120,7 @@ export class KitBaseComponent implements OnInit {
     }
 
     openCloseParts(index: number) {
-        this.partsState[index] = this.partsState[index] === false;
+        // this.partsState[index] = this.partsState[index] === false;
     }
 
     setMobileFirstAnimation() {

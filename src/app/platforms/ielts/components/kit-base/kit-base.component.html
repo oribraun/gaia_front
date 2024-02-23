@@ -1,5 +1,5 @@
 <div class="kit-base" [ngClass]="{'rtl': currentLang === 'he'}" *ngIf="kit.parts.length">
-    <div class="panel kit-panel" [ngClass]="{'open': mobilePanelAnimation}" (click)="togglePanel($event)">
+    <div class="panel kit-panel" [ngClass]="{'open': mobilePanelAnimation, 'rtl': currentLang === 'he'}" (click)="togglePanel($event)">
         <div class="outer-scroller">
             <div class="inner-scroller">
                 <ng-container *ngIf="!gettingKits">
@@ -17,7 +17,7 @@
                                 {{p.title}}
                             </div>
                             <div class="lessons" [@openClose]="partsState[i] === false ? 'closed' : 'open'">
-                                <div class="lesson" *ngFor="let l of p.lessons">
+                                <div class="lesson pointer" *ngFor="let l of p.lessons">
                                     <div class="title" *ngIf="l.id" [routerLink]="'practice/' + l.id">{{l.title}}</div>
     <!--                                <div class="status">-->
     <!--                                    <i class="bi bi-check-lg"></i>-->
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="content">
+    <div class="content" [ngClass]="{'rtl': currentLang === 'he'}">
         <router-outlet></router-outlet>
     </div>
 </div>

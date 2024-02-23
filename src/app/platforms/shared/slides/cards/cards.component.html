@@ -95,13 +95,13 @@
                                        'correct-answer': cardAnswers[currentCard.id].is_correct_answer,
                                        'wrong-answer': cardAnswers[currentCard.id].is_correct_answer === false
                                    }"
-                                   [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם">
+                                   [(ngModel)]="cardAnswers[currentCard.id].answer_text" placeholder="תרגם" (keydown.enter)="input.value && sendUserReplay(input.value)">
                             <span class="input-group-text" id="basic-addon1"
                                   [ngClass]="{
                                        'correct-answer': cardAnswers[currentCard.id].is_correct_answer,
                                        'wrong-answer': cardAnswers[currentCard.id].is_correct_answer === false
                                    }">
-                                <i class="bi bi-send" (click)="input.value ? (sendUserReplay(input.value)) : null;"></i>
+                                <i class="bi bi-send" (click)="input.value && sendUserReplay(input.value)"></i>
                             </span>
                         </div>
                         <div class="flex-timer">

@@ -293,10 +293,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             //     auto_select: true,
             //     cancel_on_tap_outside: false
             // });
+            const clientId = '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com';
+            const mainScope = 'profile email';
+            const secondScope = 'https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read';
             this.googleClient = google.accounts.oauth2.initTokenClient({
-                client_id: '10392832492-cvpba6i0s3sgontq9gqfb3fgfqf391l8.apps.googleusercontent.com',
-                scope: 'profile email https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read',
-                callback: (tokenResponse: any) => this.getGoogleUser(tokenResponse),
+                client_id: clientId,
+                scope: mainScope + ' ' + secondScope,
+                include_granted_scopes: true,
+                callback: async (tokenResponse: any) => {
+                    if (tokenResponse.error) {
+                        this.errMessage = 'You must approve gender and birthday.';
+                    } else {
+                        this.getGoogleUser(tokenResponse);
+                    }
+                },
                 error_callback: (err: any) => {
                     console.log('google error', err);
                 }
@@ -333,7 +343,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     async getGoogleUser(tokenResponse: any) {
-        console.log('tokenResponse', tokenResponse);
         const user: any = await this.getUserProfileData(tokenResponse.access_token);
         console.log('user', user);
         const user_details = {
@@ -350,10 +359,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             birthday: null
         };
         const userPeople = await this.getUserPeopleInfo(user_details.id, tokenResponse.access_token);
+        console.log('userPeople', userPeople);
         user_details.gender = userPeople.gender;
         user_details.birthday = userPeople.birthday;
         if (this.formType === 'login') {
-            this.loginSocial(user_details);
+            this.signupSocial(user_details);
         } else if (this.formType === 'signup') {
             this.signupSocial(user_details);
         }
@@ -560,7 +570,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         try {
             this.callInProgress = true;
             this.errMessage = '';
-            const response: any = await lastValueFrom(this.apiService.registerSocial({user_details: user_details, planId: this.planId}));
+            const response: any = await lastValueFrom(this.apiService.registerSocial({
+                user_details: user_details,
+                platform: this.selectedPlatform.name,
+                planId: this.planId
+            }));
             if (!response.err) {
                 const data = response.data;
                 console.log('data', data);

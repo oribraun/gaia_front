@@ -33,7 +33,8 @@
         .kit-part {
             margin-top: 15px;
             .title {
-                cursor: pointer;
+                //cursor: pointer;
+                display: inline-block;
             }
             .lessons {
                 overflow: hidden;
@@ -108,13 +109,30 @@
             margin: 0;
             width: 250px;
             left: -230px;
-            transition: left .3s ease-in-out;
+            transition: left,right .3s ease-in-out;
 
             &.open {
                 left: 0;
             }
             &:hover {
                 left: 0;
+            }
+
+            &.rtl {
+                left: auto;
+                right: -230px;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                &.open {
+                    left: auto;
+                    right: 0;
+                }
+                &:hover {
+                    left: auto;
+                    right: 0;
+                }
             }
         }
 
@@ -126,6 +144,10 @@
             width: calc(100% - 20px);
             //font-size: .7em;
             height: 100%;
+            &.rtl {
+                margin-left: auto;
+                margin-right: 20px;
+            }
         }
     }
 
