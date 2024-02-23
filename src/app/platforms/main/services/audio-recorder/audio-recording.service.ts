@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import * as RecordRTC from 'recordrtc';
+import RecordRTC from 'recordrtc';
 
 @Injectable({
     providedIn: 'root'
