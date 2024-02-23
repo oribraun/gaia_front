@@ -262,9 +262,10 @@
              *ngIf="!isPlansPage"
             [ngClass]="{'dropdown-rtl': currentLang === 'he'}">
             <a
-               [ngClass]="{'dropdown-toggle pointer': platforms.length > 1}"
-               data-bs-toggle="dropdown"
-               [innerHTML]="selectedPlatform.display_name">
+                *ngIf="platforms.length > 1"
+                [ngClass]="{'dropdown-toggle pointer': platforms.length > 1}"
+                data-bs-toggle="dropdown"
+                [innerHTML]="selectedPlatform.display_name">
             </a>
 
             <ul class="dropdown-menu"
