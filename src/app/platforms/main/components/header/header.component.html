@@ -146,7 +146,7 @@
                                 <form [ngSwitch]="formType">
                                     <div *ngSwitchCase="'login'">
                                         <h3 class="text-center">{{'Welcome back' | translate}}</h3>
-                                        <label for="email">{{'Email' | translate}}</label>
+                                        <label for="email">{{'Email' | translate}}/{{'Username' | translate}}/{{'Mobile' | translate}}</label>
                                         <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                                         <label for="password">{{'Password' | translate}}</label>
                                         <input type="password" name="password" class="form-control" id="password" [(ngModel)]="password" required autocomplete="on">
@@ -165,12 +165,21 @@
                                         <h3 class="text-center">{{'Sign up' | translate}}</h3>
                                         <label for="username">{{'Username' | translate}}</label>
                                         <input type="text" name="username" class="form-control" id="username" [(ngModel)]="username" required>
-                                        <label for="email">{{'Email' | translate}}</label>
+                                        <label for="email">{{'Email' | translate}}/{{'Mobile' | translate}}</label>
                                         <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                                         <label for="password">{{'Password' | translate}}</label>
                                         <input type="password" name="password" class="form-control" id="sign_password" [(ngModel)]="password" required>
                                         <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
                                         <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>
+                                        <ng-container *ngIf="showMobileVerify">
+                                            <div class="input-group">
+                                                <input type="number" name="code" class="form-control" id="code" [placeholder]="'Code' | translate" [(ngModel)]="code">
+                                                <button class="input-group-text" id="basic-addon2" (click)="verifyMobileCode($event)">Verify</button>
+                                            </div>
+                                            <div class="text-center text-success" *ngIf="showMobileVerify">
+                                                <a href="#" (click)="resendMobileCode($event)">{{'Resend' | translate}}</a>
+                                            </div>
+                                        </ng-container>
                                         <br>
                                         <div class="text-center">
                                             <button class="btn btn-primary" (click)="signup()">{{'Sign up' | translate}}</button>
@@ -178,7 +187,7 @@
                                     </div>
                                     <div *ngSwitchCase="'forgot'">
                                         <h3 class="text-center">{{'Forgot Password' | translate}}</h3>
-                                        <label for="email">{{'Email' | translate}}</label>
+                                        <label for="email">{{'Email' | translate}}/{{'Mobile' | translate}}</label>
                                         <input type="email" name="email" class="form-control" id="email" [(ngModel)]="email" required>
                                         <div class="text-center text-danger" *ngIf="errMessage" [innerHTML]="errMessage"></div>
                                         <div class="text-center text-success" *ngIf="successMessage" [innerHTML]="successMessage"></div>

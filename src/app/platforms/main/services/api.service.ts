@@ -132,6 +132,19 @@ export class ApiService {
         );
     }
 
+    resendMobileCode(email: string) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'resend-mobile-code', {
+                email: email
+            },
+            this.httpOptions
+        );
+    }
+    verifyMobileCode(obj: any) {
+        return this.http.post(this.serverBase + this.baseApiAuth + 'verify-mobile-code', obj,
+            this.httpOptions
+        );
+    }
+
     logout() {
         return this.http.post(this.serverBase + this.baseApiAuth + 'logout', {},
             this.httpOptions

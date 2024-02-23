@@ -51,6 +51,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     errMessage = '';
     successMessage = '';
     showVerify = false;
+    showMobileVerify = false;
+    code!: number;
 
     callInProgress = false;
 
@@ -532,6 +534,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             if (!response.err) {
                 const data = response.data;
                 const success_message = data.message;
+                const type = data.type;
+                if(type === 'mobile') {
+                    this.showMobileVerify = true;
+                }
                 this.successMessage = success_message;
             } else {
                 if (Array.isArray(response.errMessage)) {
@@ -588,7 +594,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             const response: any = await lastValueFrom(this.apiService.forgotPassword(this.email));
             if (!response.err) {
                 // console.log('email sent successfully, please check your email')
-                this.successMessage = 'email sent successfully, please check your email';
+                this.successMessage = response.errMessage;
             } else {
                 this.errMessage = response.errMessage;
             }
@@ -616,6 +622,55 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         }
     }
 
+    async resendMobileCode(event: Event) {
+        if(this.callInProgress) {
+            return;
+        }
+        event.preventDefault();
+        this.errMessage = '';
+        this.successMessage = '';
+        this.showMobileVerify = false;
+        this.callInProgress = true;
+        try {
+            const response: any = await lastValueFrom(this.apiService.resendMobileCode(this.email));
+            if (!response.err) {
+                // console.log('email sent successfully, please check your email')
+                const data = response.data;
+                this.successMessage = data.message;
+                this.showMobileVerify = true;
+            } else {
+                this.errMessage = response.errMessage;
+            }
+            this.callInProgress = false;
+        } catch (error) {
+            console.error(error);
+            this.callInProgress = false;
+        }
+    }
+
+    async verifyMobileCode(event: Event) {
+        event.preventDefault();
+        try {
+            const obj = {
+                mobile: this.email,
+                code: this.code
+            };
+            const response: any = await lastValueFrom(this.apiService.verifyMobileCode(obj));
+            if (!response.err) {
+                const data = response.data;
+                this.hideLoginModel();
+                this.setupUser(data);
+                this.user.last_logged_platform = this.selectedPlatform.name;
+                this.initOnBoarding(true);
+                this.resetMessages();
+            } else {
+                this.errMessage = response.errMessage;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     logInGoogle() {
         this.googleClient.requestAccessToken();
     }
@@ -624,6 +679,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.errMessage = '';
         this.successMessage = '';
         this.showVerify = false;
+        this.showMobileVerify = false;
     }
 
     setupUser(response: any) {
@@ -714,6 +770,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     showLoginModel() {
+        this.resetMessages();
         $('#loginModal').modal('show');
     }
     hideLoginModel() {
